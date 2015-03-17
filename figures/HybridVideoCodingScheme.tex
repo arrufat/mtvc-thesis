@@ -1,0 +1,100 @@
+% \documentclass{book}
+% \usepackage{tikz, libertine}
+% \begin{document}
+
+\pgfmathsetmacro{\nodebasesize}{1} % A node with a value of one will have this diameter
+\pgfmathsetmacro{\nodeinnersep}{0.1}
+
+\newcommand{\propnode}[5]{% position, name, options, value, label
+	\pgfmathsetmacro{\minimalwidth}{sqrt (#4*\nodebasesize)}
+	\node[#3,minimum width=\minimalwidth*1cm,inner sep=\nodeinnersep*0cm,circle,draw] 
+	(#2) at (#1) {#5};
+}
+
+\tikzstyle{bloq} = [rectangle, draw, text badly centered, minimum height=2.5em, inner sep=1mm]
+\newcommand{\bloq}[4]{% position, name options, label
+	\node[bloq,#3] (#2) at (#1) {\textsf{#4}}; 
+}
+\newcommand{\add}[2]{%position, name
+	\draw (4,4) circle [radius=0.3] node (add) {\textsf$+$};
+}
+
+
+\begin{tikzpicture}[scale=1.5,x=1em,y=1em]
+\tikzstyle{every node}=[font=\small]
+	\def\x{0}
+	\def\y{0}
+	\def\thickness{thick}
+	\def\h{2.0}
+	\def\v{1.0}
+
+\tikzstyle{frame} =
+[rectangle, fill=white, draw, text badly centered, minimum width=3*\h em,minimum height=3*\v em]
+% INPUT VIDEO SEQUENCE
+	\draw (\x-\h,\y+0.5*\v) node[above] {\textsf{Input Video Sequence}};
+	\draw (\x-\h,\y-3*\v) node[above] {\textsf{Split into blocks}};
+	\node[frame] at (\x-\h-0.3,\y-\v+0.3){};
+	\node[frame] at (\x-\h-0.2,\y-\v+0.2){};
+	\node[frame] at (\x-\h-0.1,\y-\v+0.1){};
+	\node[frame] (sequence) at (\x-\h,\y-\v){};
+	\draw[step=0.25,thin,help lines] (\x,\y) grid (-2*\h,-2*\v);
+	\draw[step=0.5,thin] (\x,\y) grid (-2*\h,-2*\v);
+	\draw[step=1.0,black,thick] (\x,\y) grid (-2*\h,-2*\v);
+
+	\filldraw[fill=blue!20, draw=blue!50,dashed,thick]
+	(\x+1.5,\y-2.25*\v) --++ (7.5*\h,0) --++ (0,-15.25*\v) --++ (-7.5*\h,0) -- cycle;
+	\node[above left] at (\x+4*\h,\y-6*\v) {\normalsize\textsf{Decoder}};
+
+	\propnode{\x+1*\h,\y-1*\v}{add1}{fill=green!50}{0}{$+$}
+	\propnode{\x+7*\h,\y-9*\v}{add2}{fill=green!50}{0}{$+$}
+	\propnode{\x+0.75*\h/2,\y-1*\v}{inter1}{fill=black}{0.005}{}
+	\propnode{2,\y-9*\v}{inter2}{fill=black}{0.005}{}
+	\propnode{2,\y-14*\v}{inter3}{fill=black}{0.005}{}
+	\propnode{3.5,\y-12*\v}{inter4}{}{0.005}{}
+	\propnode{3.5,\y-16*\v}{inter5}{}{0.005}{}
+	\propnode{8.5,\y-14*\v}{inter6}{fill=black}{0.005}{}
+	\propnode{\x+5*\h,\y-10*\v}{inter7}{fill=black}{0.005}{}
+	\propnode{\x+3*\h,\y-18.5*\v}{inter8}{fill=black}{0.005}{}
+
+	\draw (\x+1.25*\h,\y-0.75*\v) node[above] {\textsf{residuals}};
+
+	\bloq{\x+3*\h,\y-\v}{Transf}{text width=4.5em,fill=yellow!50}{Transform};
+	\bloq{\x+5.5*\h,\y-\v}{Quant}{text width=4.5em,fill=yellow!50}{Quant.};
+	\bloq{\x+7*\h,-\y-4*\v}{InvQuant}{text width=4.5em,fill=yellow!50}{Inv. Quant.};
+	\bloq{\x+7*\h,\y-7*\v}{InvTransf}{text width=4.5em,fill=yellow!50}{Inv. Transform};
+	\bloq{\x+3*\h,\y-12*\v}{IntraPred}{text width=4.5em,fill=yellow!50}{Intraframe\\Prediction};
+	\bloq{\x+3*\h,\y-16*\v}{InterPred}{text width=4.5em,fill=yellow!50}{Interframe\\Prediction};
+	\bloq{\x+3*\h,\y-20*\v}{MotionComp}{text width=4.5em,fill=yellow!50}{Motion\\Est./Comp.};
+	\bloq{\x+10*\h,\y-10*\v}{EntrCod}{text width=4.5em,fill=yellow!50}{Entropy\\Coding};
+	\bloq{\x+7*\h,\y-14*\v}{Reconst}{text width=6em,fill=white,minimum height=3em}{Reconst.\\images};
+
+	\draw[-latex,\thickness] (sequence) -- (add1) node [below right] {\textsf{$-$}};
+	\draw[-latex,\thickness] (add1) -- (Transf);
+	\draw[-latex,\thickness] (Transf) -- (Quant);
+	\draw[-latex,\thickness] (InvQuant) -- (InvTransf);
+	\draw[-latex,\thickness] (InvTransf) -- (add2);
+	\draw[-latex,\thickness] (add2) -- (Reconst);
+	\draw[-latex,\thickness] (inter2) -- (add2);
+	\draw[-latex,\thickness] (inter3) -- (add1);
+	\draw[-latex,\thickness] (IntraPred) -- (inter4);
+	\draw[-latex,\thickness] (InterPred) -- (inter5);
+	\draw[-latex,\thickness] (inter3) -- (inter4);
+	\draw[<->,help lines,\thickness] (inter3) ++(-45:\v) arc (-45:45:\v);
+	\draw[dotted,help lines, \thickness] (inter3) -- (inter5);
+	\draw[-latex,\thickness] (Reconst) --++ (2.5*\h,0) node [below,text width=3.5em,text badly centered] {\textsf{Output Video\\Signal}};
+	\draw[-latex,\thickness] (EntrCod) --++ (0,-2*\v) node[below] {\textsf{bitstream}};
+	\draw[-latex,\thickness] (Quant) -| (InvQuant);
+	\draw[-latex,\thickness] (Quant) -| (EntrCod);
+	\draw (\x+8.5*\h,\y-2.5*\v) node (TransCoeff) [right,text width=3em] {\textsf{Quant. Transf.\\Coeffs}};
+	\draw[\thickness] (Reconst) -- (inter6);
+	\draw[-latex,\thickness] (inter6) |- (IntraPred);
+	\draw[-latex,\thickness] (inter6) |- (InterPred);
+	% \draw[-latex,\thickness] (IntraPred) |- (EntrCod);
+	\draw[-latex,\thickness] (inter1) |- (MotionComp);
+	\draw[-latex, \thickness] (MotionComp) -- (InterPred);
+	\draw[-latex, \thickness] (Reconst) |- (MotionComp);
+	\draw[-latex, \thickness] (inter8) -| (inter7);
+	\draw[-latex, \thickness] (IntraPred) |- (EntrCod);
+	\draw (\x+8.1*\h,\y-9.5*\v) node [] {\textsf{Prediction data}};
+\end{tikzpicture}
+% \end{document}

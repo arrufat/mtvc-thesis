@@ -1,0 +1,737 @@
+\documentclass[11pt,a4paper,openright,twoside]{book}
+\def\myauthor{Adrià Arrufat}
+\def\mytitle{Adaptive transforms for intra video coding}
+\usepackage[british]{babel}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\usepackage[nottoc]{tocbibind} % see http://www.howtotex.com/packages/how-to-add-bibliography-and-more-to-table-of-contents/
+\usepackage{titlesec,titletoc} % to modify titles and add partial tocs
+\usepackage[printonlyused,withpage]{acronym} % options: printonlyused, withpage
+\usepackage{imakeidx} % allows customizing the index in the makeindex command
+\usepackage{emptypage} % removes headers and footers from empty pages
+\usepackage[thickqspace,amssymb,noams]{SIunits} % consistent units support
+\usepackage{subfig}
+
+% font configuration
+\usepackage{amsmath, amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage[scaled=0.92]{helvet}
+% \usepackage{courier}
+
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{tikz}
+\usepackage{bookmark} % needed for \bookmarksetup{startatroot}
+\usepackage{hyperref}
+\hypersetup{
+	unicode=true,
+	pdfencoding=auto,
+	colorlinks=true,
+	citecolor=blue,
+	filecolor=red,
+	linkcolor=Blue,
+	urlcolor=blue,
+	pdfauthor={\myauthor},
+	pdftitle={\mytitle},
+	pdfsubject={video coding},
+	pdfkeywords={video, image, transform},
+	pdfinfo={
+		CreationDate={D:20150121111947},
+		%ModDate={...}
+	},
+}
+% \urlstyle{same} % do not use monospaced fonts in urls
+
+% Define a partial ToC to use at the beginning of every chapter
+\providecommand{\chaptertoc}{
+	\startcontents[chapters]
+	\hrule
+	\vspace{1em}
+	\printcontents[chapters]{}{1}{{\bf\large Contents}}
+	\hrule
+}
+
+\definecolor{almostwhite}{rgb}{0.9,0.9,0.95}
+\providecommand{\todo}[1]{
+	\begin{center}
+		\colorbox{almostwhite}{
+			\begin{minipage}{0.85\linewidth}
+				\textbf{TODO:} #1
+			\end{minipage}
+		}
+	\end{center}
+}
+
+\numberwithin{equation}{section} % equations referred to sections
+
+\makeindex[options=-s index-alph-group.ist]
+
+\title{\Huge\bf\mytitle}
+\author{\myauthor}
+
+\begin{document}
+\frontmatter
+\maketitle
+
+\chapter*{Acknowledgements}
+\label{cha:acknowledgements}
+\addcontentsline{toc}{chapter}{Acknowledgements}
+
+\setcounter{tocdepth}{5}
+\tableofcontents
+\addcontentsline{toc}{chapter}{Contents}
+\cleardoublepage
+\listoffigures
+\cleardoublepage
+\listoftables
+\cleardoublepage
+
+\mainmatter
+\part{General introduction}
+\label{prt:general_introduction}
+
+\addcontentsline{toc}{section}{\protect\numberline{}Context}
+\chapter*{Context}
+\label{cha:context}
+
+\part{State of the art}
+\label{prt:state_of_the_art}
+
+\chapter{Video coding fundamentals}
+\label{sec:video_coding_fundamentals}
+\chaptertoc
+
+\section{Introduction to video coding}
+\label{sec:introduction_to_video_coding}
+
+\subsection{The need of video coding}
+\label{sub:the_need_of_video_coding}
+
+The purpose of video coding is to compress video files, which consist of
+a sequence of images that, at some point, will be either transmitted or
+stored.
+
+For instance, a two-hour long film in \ac{HD} format ($1920 \times 1080$)
+at a frame rate of 25 images per second and 8 bits to represent each one
+of the \ac{RGB} channels, requires:
+\[
+	\frac{\unit{1920\times1080}{pix}}{\unit{1}{image}}
+	\times \frac{\unit{25}{images}}{\unit{1}{s}}
+	\times \unit{2}{\hour} \times \frac{\unit{3600}{s}}{\unit{1}{\hour}}
+	\times \unit{3}{channels} \times \frac{\unit{8}{bits}}{\unit{1}{channel}}=
+\]
+\[
+	= 8.957952 \times 10 ^ {12} \; \text{bits}
+	= 8957.952\;\text{Gb} \approx 1043\;\text{GiB}
+\]
+
+Through this simple example, it is evident that video coding is
+indispensable to store or stream video files.
+Depending on the target quality, it is common to have compression rates
+ranging from 100 to 1000.
+
+For content providers, being able to reduce the size of the content they
+broadcast implies increasing the number of contents they can store, as
+well as the number of subscribers they can reach using the same
+resources for storage and network capacity.
+
+In 2013, two thirds of the \ac{IP} traffic was due to video
+streaming, and this trend is only going to increase, reaching up to 84\%
+of the \acs{IP} traffic by 2018~\cite{cisco-13-vni-forecast}.
+Such statistics highlight the need of continuing the research on
+new video coding techniques.
+
+\section{The video coding system}
+\label{sec:the_video_coding_system}
+
+The video coding system describes a work flow to work with video
+sequences.
+It is composed of several stages, starting with the video acquisition at
+the source and ending at the video display.
+A good understanding of each part is crucial to be able to take the
+proper decisions when delivering a video coding solution.
+
+This section presents a scheme containing the most important concepts
+used in state-of-the-art video coders.
+
+Figure~\ref{fig:video_coding_system} describes how a complete video
+coding system can be organised as a block diagram.
+
+\begin{figure}[h]
+	\centering
+	\input{./figures/VideoCodingSystem.tex}
+	\caption{Video coding system}
+	\label{fig:video_coding_system}
+\end{figure}
+
+The composing blocks of the video system are explained more in detail in
+the following subsections.
+
+\subsection{Pre-processing}
+\label{sub:pre_processing}
+
+After the digital video has been acquired at the source, which may be of
+many different sorts, such as natural scenes or synthetic
+computer-generated content, it has to be processed in order to be
+encoded.
+Usually, the pre-processing stage can include some filtering, scaling
+and colour space conversions on the raw video sequence.
+
+\subsubsection{Colour space conversions}
+\label{ssub:colour_space_conversions}
+\index{HVS}
+\index{YUV}
+\index{gamma}
+\index{luma}
+\index{chroma}
+
+Colour space conversions are used to change the colour
+representation of the content to better fit the \ac{HVS}.
+The raw video data is normally in \ac{RGB} format, corrected by the
+transfer function of the camera ($\gamma$), hence denoted R'G'B'.
+
+For historical reasons, in order to be backwards compatible with black
+and white displays, the raw video file is converted to another colour
+space that separates the light information (luma) from the colour
+information (chroma), typically referred to as the YUV colour space
+family~\cite{poynton-95-color-space}.
+Moreover, due to the way the \ac{HVS} works, being more sensible to
+light variations than to colour, this family of colour spaces supports
+sub-sampling the chroma channels without any major perceptual
+degradation.
+
+\subsection{Encoding}
+\label{sub:encoding}
+
+This stage is in charge of converting the pre-processed raw video sequence
+into a coded video stream to ease the storage and transmission.
+A deep look at the inners of a widely used coding scheme is provided
+in~\ref{sec:the_hybrid_video_coding_scheme}.
+
+\subsection{Transmission}
+\label{sub:transmission}
+
+The transmission stage stands for the way the encoded bitstream is
+transferred to the decoder.
+Most typical examples are streaming and storage, which may determine
+some of the encoder and decoder behaviours, like real time or memory
+constraints.
+
+\subsection{Decoding}
+\label{sub:decoding}
+
+As the stream is received by the decoder, it is buffered and used to
+reconstruct the encoded data into the appropriate format, as signalled
+by the encoder.
+Video coding norms tend to define a standard video decoder, which
+follows the implemented video coding specificication, such as \ac{AVC}
+or \ac{HEVC}~\cite{itu-14-h265-hevc-rec,sullivan-12-overview-hevc}.
+The encoder must comply to this specification by generating a decodable
+stream.
+
+\subsection{Post-processing}
+\label{sub:post_processing}
+
+The post-processing stage performs operations for image enhancement and
+display adaptation, such as converting back to the original colour
+space and to the display format.
+
+\section{The hybrid video coding scheme}
+\label{sec:the_hybrid_video_coding_scheme}
+
+State-of-the-art video coding standards such as H.264/\acs{MPEG}-4 \acs{AVC}
+and H.265/\acs{HEVC} use a hybrid video coding scheme that appeared in
+H.261, in the late eighties.
+Since then, all video coding standards and recommendations issued by the
+\ac{ITU-T} and the \ac{MPEG} use it as their basic coding structure.
+
+The hybrid video coding scheme is named after its use of both temporal
+prediction and transform coding techniques for the prediction error.
+
+A basic structure of the hybrid video coding scheme is presented in
+figure~\ref{fig:hybrid_video_coding_scheme}
+
+\begin{figure}[h]
+	\centering
+	\input{./figures/HybridVideoCodingScheme.tex}
+	\caption{Hybrid video coding scheme}
+	\label{fig:hybrid_video_coding_scheme}
+\end{figure}
+
+The hybrid video coding scheme provides an efficient way of compressing
+a video signal into a bitstream of the smallest possible size.
+The key features to achieve such a small bitstream are the signal
+prediction and the transformation of the prediction error.
+
+The encoder includes a decoder, represented inside a blue box, to be
+able to perform its coding decisions based on what the decoder would do
+while decoding a bitstream.
+
+The building blocks of the hybrid video coding scheme are explained in
+the following subsections.
+
+\subsection{Partitioning}
+\label{sub:partitioning}
+
+In order to process the video frames, they are exhaustively partitioned
+into non-overlapping blocks.
+These blocks ease the succeeding stages of prediction and transform.
+The partitioning does not have to be uniform, allowing blocks of different
+sizes to be used.
+The optimal choice for the block size is left to the encoder.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\linewidth]{./figures/partitioning-orig-all-001.png}
+	\caption{Partitioning example using \acs{HEVC} at \acs{QP} 27}
+	\label{fig:partitioning}
+\end{figure}
+
+\subsection{Prediction}
+\label{sub:prediction}
+
+Residual coding is video coding technique, that, instead of coding the
+blocks coming from the original source image directly, computes an
+estimation of the block which is then subtracted from the original
+block, generating a residual block.
+Those block estimations are carried out by the prediction module, using
+some information from previously treated blocks.
+This way, predictable information present in the original blocks will be
+removed and their energy will be lowered.
+
+Predictions must be performed the same way at both encoder and decoder
+side, and this computed inside the blue box in
+figure~\ref{fig:hybrid_video_coding_scheme}, referring to the decoder.
+For this reason, the encoder uses reconstructed blocks (blocks that have
+been already encoded and will make it to the bitstream) as the input
+data to compute the predictions, as these blocks are equivalent to
+those the decoder will handle.
+
+Commonly, predictions might be of two types, depending on the origin of
+the prediction source:
+intra or spatial prediction for those blocks that
+have been predicted using information within the same frame, and inter
+or temporal prediction for those blocks predicted from other frames.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\linewidth]{./figures/partitioning-pred-all-001.png}
+	\caption{Predicted image}
+	\label{fig:predicted_image}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\linewidth]{./figures/partitioning-resi-all-001.png}
+	\caption{Residual image (difference between original and predicted)}
+	\label{fig:residual_image}
+\end{figure}
+
+\subsubsection{Intra prediction}
+\label{ssub:intra_prediction}
+\index{Intra prediction}
+
+Intra prediction, sometimes referred to as spatial prediction, is used
+to remove correlation within local regions of a picture.
+The basic principle of intra prediction is that the texture of a picture
+region is similar to the texture of its neighbourhood and can be
+predicted from there.
+
+The intra prediction is analysed in
+Chapter~\ref{cha:the_mode_dependent_directional_transforms}, when
+introducing a kind of prediction-adapted transforms.
+
+\subsubsection{Inter prediction}
+\label{ssub:inter_prediction}
+\index{Inter prediction}
+
+Inter prediction, or temporal prediction, takes advantage of the fact
+that images close in time share many similarities, and that many of
+their component regions will move as a whole.
+Since the encoding order is not necessarily the same as the viewing
+order, inter predictions can have their origins in either past or future
+frames.
+Regions that are covered and uncovered by other objects can be predicted
+using this technique.
+
+At the encoder side, an extra operation, called motion estimation, is
+carried out.
+This stage searches for the best matching area in the reference picture
+for the current prediction block.
+
+\subsection{Transform}
+\label{sub:transform}
+
+The transform stage removes remaining correlations from the residual
+block, computed as the difference between the original and the predicted
+blocks.
+The goal of the transform is to concentrate the residual energy into as
+many few coefficients as possible in the transform domain.
+
+Considering that the subject of this thesis is centred around the
+transforms for video coding, the transform stage will be explained
+thoroughly in Chapter~\ref{cha:transform_coding}.
+
+\subsection{Quantisation}
+\label{sub:quantisation}
+\index{QP}\index{lossy}\index{lossless}
+
+The quantisation, applied in the transform domain, it is used to discard
+any coefficient whose energy level is below a certain threshold.
+High energy coefficients are also be affected by the quantisation.
+In standards like \acs{HEVC}, the quantisation step is controlled by a
+\ac{QP}.
+It is worth noticing that it is the only non-reversible step in the whole
+hybrid video coding scheme, and therefore what makes video coding lossy.
+Lossless video coding can be attained by not using quantification in the
+process.
+
+% \begin{figure}[h]
+% 	\centering
+% 	\subfloat[Partitioning]
+% 	{\includegraphics[width=0.8\linewidth]{./figures/partitioning-orig-all-001.png}}
+% 	\\
+% 	\subfloat[Predicted Image]
+% 	{\includegraphics[width=0.8\linewidth]{./figures/pred_image-all-001.png}}
+% 	\\
+% 	\subfloat[Residual Image]
+% 	{\includegraphics[width=0.8\linewidth]{./figures/res_image-all-001.png}}
+% 	\caption{Example of an image at different encoding points for a
+% 	certain level of quantisation}
+% 	\label{fig:part_orig_pred_res_image}
+% \end{figure}
+
+\subsection{Entropy coding}
+\label{sub:entropy_coding}
+\index{CABAC}
+
+Once the transform coefficients have been quantised, they have to be
+treated to conform the bitstream.
+That is, the transform coefficients are scanned to make sure they are
+sorted in a way that will make the entropy coder work more efficiently.
+Signalling is also conveyed into the bitstream at this point, and the
+entropy coder ensures a correct binarisation while using the adequate
+number of bits thanks to the \ac{CABAC}.
+
+\section{Encoder control}
+\label{sec:encoder_control}
+
+The encoder control is used by essentially all blocks in the diagram
+from figure~\ref{fig:hybrid_video_coding_scheme}.
+This technique allows the encoder to take decisions related to coding
+based on the application requirements.
+These decisions include the block sizes and the prediction to use.
+
+\subsection{Distortion measures}
+\label{sub:distortion_measures}
+
+\subsubsection{Mean squared error}
+\label{ssub:mean_squared_error}
+\index{MSE}
+
+The \ac{MSE} is the average of the square difference between two
+signals.
+For two-dimensional signals, such as images, the \ac{MSE} can be computed as:
+
+\begin{equation}
+	MSE_{I,K} = \frac{1}{m\,n} \sum\limits_{i=0}^{m-1} \sum\limits_{j=0}^{n-1}
+	{\left[ I(i,j) - K(i,j) \right]} ^2
+	\label{eqn:mse}
+\end{equation}
+
+Where $I$ and $K$ are two images of $m \times n$ pixels.
+
+\subsubsection{Peak signal-to-noise ratio}
+\label{ssub:peak_signal_to_noise_ratio}
+\index{\ac{PSNR}}
+
+The \ac{PSNR} is an objective quality measure that computes the ratio
+between the maximum possible value of a signal and the power of the
+noise that affects the fidelity of its approximation.
+It is usually defined in terms of the logarithmic decibel scale to cope
+with the wide range that signals might have.
+Defining the \ac{PSNR} in terms of the \ac{MSE} from
+equation~\ref{eqn:mse}, it can be expressed as:
+
+\begin{equation}
+	PSNR = 10 \log_{10} \left(\frac{MAX_I^2}{MSE_{I,K}}\right)
+	= 20 \log_{10} (MAX_I) - 10 \log_{10} (MSE_{I,K})
+	\label{eqn:psnr}
+\end{equation}
+
+For 8-bit depth images, $MAX = 2^{8} - 1 = 255$.
+
+\subsection{Rate-distortion optimisation}
+\label{sub:rate_distortion_optimisation}
+\index{\ac{RDO}}
+
+In order to carry out the most sensible decision at each time, the
+encoder uses a \ac{RDO} criterion
+\cite{sullivan-98-rdo-video-compression}.
+
+Each time the encoder has to make a decision about choosing a
+particular block size for the partitioning or a prediction mode, it
+checks the distortion that decision might cause as well as an estimation
+of the bit rate needed.
+The encoder performs this computation iteratively the same block,
+exploring many different coding possibilities and finally selects the
+one that provides the best score in terms of rate and distortion.
+This is called the \ac{RDO} loop.
+
+As seen in the previous subsections, computing the distortion is
+reasonably straightforward.
+However, estimating the bit rate is a bit more delicate, since the whole
+entropy coder cannot be run each time the encoder explores the different
+possibilities for a block.
+As a consequence, an approximation of the bit rate is used in the
+\ac{RDO} loop.
+
+\subsection{Bj{\o}ntegaard Delta measurements}
+\label{sub:bjontegaard_delta_measurements}
+\index{\ac{BD}-rate}
+\index{\ac{BD}-\ac{PSNR}}
+
+Metrics introduced by Gisle Bj{\o}ntegaard, know as \ac{BD} measurements
+have become the current \emph{de facto} standard to objectively compare
+the result of two encodings~\cite{VCEG-M33,VCEG-AI11}.  Two different
+metrics are defined:
+\begin{itemize}
+	\item \ac{BD}-rate: computes the relative savings in bit rate for an
+		equivalent distortion in percent.
+	\item \ac{BD}-\ac{PSNR}: computes the relative quality improvement
+		in \deci\bel.
+\end{itemize}
+
+% TODO
+\todo{
+\begin{itemize}
+	\item Maybe place this section elsewhere.
+	\item Graphical examples as in Wien's book~\cite{wien-15-hevc}.
+\end{itemize}
+}
+
+\section{Conclusions}
+\label{sec:conclusions_video_coding}
+
+This chapter has presented the motivation for video coding as well as an
+overview of the video coding system.
+
+Current video coders exploit both redundancies existing within images of
+the video sequence via predictions.
+These predictions can be either spatial or temporal, depending on
+whether the prediction source is the same image or another image,
+respectively.
+Unpredictable parts of the image, called residuals, are then transformed
+in order to concentrate their energy in as few coefficients as possible.
+
+Next chapter will explore the details of the transforms used in video
+coding, namely their design principles and a comparison between two
+design approaches.
+
+\chapter{Transform coding}
+\label{cha:transform_coding}
+\chaptertoc
+
+\section{Introduction to transforms}
+\label{sec:introduction_to_transforms}
+
+In the previous chapter, transforms were mentioned as an important part
+in current video coders.
+This chapter will study their design and properties that lead transforms
+to be useful in video coding.
+
+A transform is a mathematical operation that takes an input signal and
+represents the same input signal in a different domain.
+
+High energy compaction provided by transform coding has led this
+technique to be present in the international video coding standards.
+
+Transform coding allows removing existing signal correlations in the
+spatial domain, leading to a decorrelated signal in the transform
+domain.
+This is of great importance for the upcoming stages of scanning and
+entropy coding.
+
+Transforms can be very abstract since they tend to work in N-dimensional
+spaces.
+However, restraining ourselves to two dimensions, one of the most visual
+and representative example of transforms are rotations.
+The example in figure~\ref{fig:transform_rotation} helps visualising the
+transform role in signal compression.
+
+\begin{figure}[h]
+	\centering
+	\input{figures/TransformRotation.tex}
+	\caption{Simple transform performing a rotation}
+	\label{fig:transform_rotation}
+\end{figure}
+
+Whereas on the left signal (in blue), both the horizontal and vertical
+dimensions are needed to describe the signal completely, on the right
+signal (in red), the vertical dimension is enough to provide an equally
+accurate signal representation, since the horizontal dimension remains
+constant.
+
+\section{Block-based transforms}
+\label{sec:block_based_transforms}
+
+Amongst all the different kinds of transforms available, the ones used
+in image and video coding applications are the block-based transforms
+due to the good trade-off they provide in terms of complexity and
+performance.
+
+\section{Separability}
+\label{sec:separability}
+
+Image and video coding deal with image blocks, which are two-dimensional
+signals and, consequently, use transforms able two deal with those
+signals.
+
+The naive approach to work with those signals is to use non-separable
+transforms.
+These transforms take the signal as a whole and reshape it to a
+single-dimensional signal.
+Afterwards the transform is applied normally.
+The main disadvantage of this approach is the number of calculations
+required to obtain the transformed signal.
+
+\section{Transform design}
+\label{sec:transform_design}
+\def\x{\mathbf{x}}
+\def\c{\mathbf{c}}
+\def\A{\mathbf{A}}
+
+\begin{equation}
+	J(\lambda) = \text{Distortion} + \lambda \text{Rate}
+\end{equation}
+
+\begin{equation}
+	J(\lambda) = \sum\limits_{\forall i}{\Vert \x_i - \A^T \c_i \Vert}_2^2
+	+ \lambda r_i
+\end{equation}
+
+\subsection{The Karhunen-Loève transform}
+\label{sub:the_karhunen_loeve_transform}
+\index{KLT}
+The \ac{KLT}
+
+\subsection{The rate-distortion optimised transforms}
+\label{sub:the_rate_distortion_optimised_transforms}
+\index{RDOT}
+
+In order to better fit the video coding demands, Sezer proposes a kind
+of transforms that take into account the sparsity of the output in their
+design~\cite{sezer-11-phd}
+
+\begin{equation}
+	\A_{opt} = \text{arg}\min\limits_{\A}
+	\sum_{\forall i} \min\limits_{\c_i}
+	\left(
+	{\Vert \x_i - \A^T\c_i \Vert}_2^2 + \lambda{\Vert \c_i \Vert}_0
+	\right)
+	\label{eqn:rdot-nsep}
+\end{equation}
+
+Where $\x_i$ is a block of the training set, $\c_i$ are its quantised
+transformed coefficients using the transform $\A$.
+$\A^T$ is its transposed matrix, as $\A$ is chosen orthonormal.
+The constraint in the cost function is the $\ell_0$ norm of the coefficients,
+i.e.\ the number of non-zero coefficients.
+The Lagrange multiplier $\lambda$ of the constraint only depends on the
+quantisation accuracy applied to the coefficients, as demonstrated
+in~\cite{sezer-11-phd}.
+
+\section{Conclusions}
+\label{sec:conclusions_transforms}
+
+\chapter{The mode-dependent directional transforms}
+\label{cha:the_mode_dependent_directional_transforms}
+\chaptertoc
+
+\vspace{0.5cm}
+Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
+
+\part{Contributions}
+\label{prt:contributions}
+
+\chapter{The mode-dependent transform competition}
+\label{cha:the_mode_dependent_transform_competition}
+\chaptertoc
+
+\vspace{0.5cm}
+Maybe explain the VCIP
+publication~\cite{arrufat-14-transform-competition-rdot}
+
+\chapter{Realistic system}
+\label{cha:realistic_system}
+\chaptertoc
+
+\section{Motivation}
+\label{sec:motivation}
+
+This chapter will take a look at different approaches to simplify the
+system presented in
+Chapter~\ref{cha:the_mode_dependent_transform_competition} while trying
+to degrade its performances as least as possible.
+
+\subsection{Main drawbacks}
+\label{sub:main_drawbacks}
+
+\begin{itemize}
+	\item Testing and learning on almost the same sequences
+	\item Encoding time
+	\item Decoding time
+	\item Storage requirements
+\end{itemize}
+
+\subsection{Proposals}
+\label{sub:proposals}
+
+\begin{itemize}
+	\item Usage of separable transforms
+	\item Making use of symmetries in prediction modes
+	\item Non-homogeneous transform repartition amongst prediction modes
+\end{itemize}
+
+\bookmarksetup{startatroot}% to remove Bibliography from the last part
+\addtocontents{toc}{\bigskip}% add a separation to the ToC
+\backmatter
+
+\bibliographystyle{abbrv} % numbers
+%\bibliographystyle{apalike} % Surname et al. 2014
+%\bibliographystyle{alpha} % ABC14
+\bibliography{refs}
+
+\chapter*{List of Acronyms}
+\label{cha:glossary}
+\addcontentsline{toc}{chapter}{List of Acronyms}
+\begin{acronym}[CABAC] % the option corresponds to the longest acronym
+	\acro{AVC}{Advanced Video Coding}
+	\acro{BD}{Bj{\o}ntegaard Delta}
+	\acro{CABAC}{Context Adaptive Binary Arithmetic Coding}
+	\acro{HVS}{Human Visual System}
+	\acro{HD}{High Definition}
+	\acro{IP}{Internet Protocol}
+	\acro{ITU}{International Telecommunication Union}
+	\acro{ITU-T}{\ac{ITU} Telecommunication Standardization Sector}
+	\acro{HEVC}{High Efficiency Video Coding}
+	\acro{KLT}{Karhunen-Loève transform}
+	\acro{MPEG}{Moving Picture Experts Group}
+	\acro{MSE}{mean squared error}
+	\acro{PSNR}{peak signal-to-noise ratio}
+	\acro{QP}{quantisation parameter}
+	\acro{RDO}{rate-distortion optimisation}
+	\acro{RDOT}{rate-distortion optimised transform}
+	\acro{RGB}{red, green and blue}
+	\acro{SOT}{sparse orthogonal transform}
+	\acro{VCEG}{Video Coding Experts Group}
+	\acro{VCIP}{Visual Communications and Image Processing}
+\end{acronym}
+\thispagestyle{empty}
+
+\label{cha:index}
+\printindex
+\addcontentsline{toc}{chapter}{Index}
+\thispagestyle{empty}
+
+\end{document}

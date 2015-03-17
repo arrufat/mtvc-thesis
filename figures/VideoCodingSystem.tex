@@ -1,0 +1,49 @@
+% \documentclass{book}
+% \usepackage{tikz, libertine}
+% \begin{document}
+%
+\pgfmathsetmacro{\nodebasesize}{1} % A node with a value of one will have this diameter
+\pgfmathsetmacro{\nodeinnersep}{0.1}
+
+\newcommand{\propnode}[5]{% position, name, options, value, label
+	\pgfmathsetmacro{\minimalwidth}{sqrt (#4*\nodebasesize)}
+	\node[#3,minimum width=\minimalwidth*1cm,inner sep=\nodeinnersep*0cm,circle,draw] 
+	(#2) at (#1) {#5};
+}
+
+\tikzstyle{bloq} = [rectangle, draw, text badly centered, minimum height=2.5em, inner sep=1mm]
+\newcommand{\bloq}[4]{% position, name options, label
+	\node[bloq,#3] (#2) at (#1) {\textsf{#4}}; 
+}
+\newcommand{\add}[2]{%position, name
+	\draw (4,4) circle [radius=0.3] node (add) {\textsf$+$};
+}
+
+\begin{tikzpicture}[scale=1.5, x=1em, y=1em]
+\tikzstyle{every node}=[font=\small]
+
+	\def\startx{0}
+	\def\starty{0}
+	\def\thickness{thick}
+	\def\hdist{5}
+	\def\vdist{2}
+
+
+	\bloq{\startx+0*\hdist,\starty-0*\vdist}{source}{text width=4.5em,fill=yellow!50}{\textsf{source}}
+	\bloq{\startx+1*\hdist,\starty-0*\vdist}{pre}{text width=4.5em,fill=yellow!50}{\textsf{pre-processing}}
+	\bloq{\startx+2*\hdist,\starty-0*\vdist}{encoding}{text width=4.5em,fill=yellow!50}{\textsf{encoding}}
+	\bloq{\startx+3*\hdist,\starty-1*\vdist}{transmission}{text
+	width=5.5em,fill=yellow!50}{\textsf{transmission}}
+	\bloq{\startx+2*\hdist,\starty-2*\vdist}{decoding}{text width=4.5em,fill=yellow!50}{\textsf{decoding}}
+	\bloq{\startx+1*\hdist,\starty-2*\vdist}{post}{text width=4.5em,fill=yellow!50}{\textsf{post-processing}}
+	\bloq{\startx+0*\hdist,\starty-2*\vdist}{display}{text width=4.5em,fill=yellow!50}{\textsf{display}}
+
+	\draw[-latex, \thickness] (source) -- (pre);
+	\draw[-latex, \thickness] (pre) -- (encoding);
+	\draw[-latex, \thickness] (encoding) -| (transmission);
+	\draw[-latex, \thickness] (transmission) |- (decoding);
+	\draw[-latex, \thickness] (decoding) -- (post);
+	\draw[-latex, \thickness] (post) -- (display);
+
+\end{tikzpicture}
+% \end{document}
