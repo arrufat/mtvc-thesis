@@ -272,6 +272,7 @@ the following subsections.
 
 \subsection{Partitioning}
 \label{sub:partitioning}
+\index{partitioning}
 
 In order to process the video frames, they are exhaustively partitioned
 into non-overlapping blocks.
@@ -290,10 +291,10 @@ The optimal choice for the block size is left to the encoder.
 \subsection{Prediction}
 \label{sub:prediction}
 
-Residual coding is video coding technique, that, instead of coding the
+Residual coding is video coding technique that, instead of coding the
 blocks coming from the original source image directly, computes an
-estimation of the block which is then subtracted from the original
-block, generating a residual block.
+estimation of the block, which is then subtracted from the original
+block, generating the residual block.
 Those block estimations are carried out by the prediction module, using
 some information from previously treated blocks.
 This way, predictable information present in the original blocks will be
@@ -303,15 +304,15 @@ Predictions must be performed the same way at both encoder and decoder
 side, and this computed inside the blue box in
 figure~\ref{fig:hybrid_video_coding_scheme}, referring to the decoder.
 For this reason, the encoder uses reconstructed blocks (blocks that have
-been already encoded and will make it to the bitstream) as the input
-data to compute the predictions, as these blocks are equivalent to
+already been encoded and will make it to the bitstream) as the input
+data to compute the predictions, because these blocks are equivalent to
 those the decoder will handle.
 
 Commonly, predictions might be of two types, depending on the origin of
 the prediction source:
 intra or spatial prediction for those blocks that
 have been predicted using information within the same frame, and inter
-or temporal prediction for those blocks predicted from other frames.
+or temporal prediction for those blocks predicted using other frames.
 
 \begin{figure}[h]
 	\centering
@@ -358,6 +359,8 @@ At the encoder side, an extra operation, called motion estimation, is
 carried out.
 This stage searches for the best matching area in the reference picture
 for the current prediction block.
+It is one of the most demanding parts of video coders, with regards to
+the number of operations.
 
 \subsection{Transform}
 \label{sub:transform}
@@ -486,15 +489,18 @@ possibilities for a block.
 As a consequence, an approximation of the bit rate is used in the
 \ac{RDO} loop.
 
-\subsection{Bj{\o}ntegaard Delta measurements}
+\section{Bj{\o}ntegaard Delta measurements}
 \label{sub:bjontegaard_delta_measurements}
 \index{\ac{BD}-rate}
 \index{\ac{BD}-\ac{PSNR}}
 
+Comparing two video coding techniques objectively might be complicated,
+as both distortion and bit rate savings have to be taken into account.
+
 Metrics introduced by Gisle Bj{\o}ntegaard, know as \ac{BD} measurements
 have become the current \emph{de facto} standard to objectively compare
-the result of two encodings~\cite{VCEG-M33,VCEG-AI11}.  Two different
-metrics are defined:
+the result of two encodings~\cite{VCEG-M33,VCEG-AI11}.
+Two different metrics are defined:
 \begin{itemize}
 	\item \ac{BD}-rate: computes the relative savings in bit rate for an
 		equivalent distortion in percent.
@@ -513,7 +519,8 @@ metrics are defined:
 \section{Conclusions}
 \label{sec:conclusions_video_coding}
 
-This chapter has presented the motivation for video coding as well as an
+This chapter has presented the motivation for video coding as well as
+some general concepts concerning an
 overview of the video coding system.
 
 Current video coders exploit both redundancies existing within images of
