@@ -425,6 +425,13 @@ This technique allows the encoder to take decisions related to coding
 based on the application requirements.
 These decisions include the block sizes and the prediction to use.
 
+\begin{figure}[h]
+	\centering
+	\input{./figures/RateDistortionScheme.tex}
+	\caption{Rate-distortion scheme of a transform-based codec}
+	\label{fig:rate_distortion_scheme}
+\end{figure}
+
 \subsection{Distortion measures}
 \label{sub:distortion_measures}
 
@@ -605,6 +612,7 @@ required to obtain the transformed signal.
 \section{Transform design}
 \label{sec:transform_design}
 \def\x{\mathbf{x}}
+\def\X{\mathbf{X}}
 \def\c{\mathbf{c}}
 \def\A{\mathbf{A}}
 
@@ -620,7 +628,7 @@ required to obtain the transformed signal.
 \subsection{The Karhunen-Loève transform}
 \label{sub:the_karhunen_loeve_transform}
 \index{KLT}
-The \ac{KLT}
+The \ac{KLT}~\cite{rao-01-transform-data-compression-book}
 
 \subsection{The rate-distortion optimised transforms}
 \label{sub:the_rate_distortion_optimised_transforms}
@@ -647,6 +655,14 @@ i.e.\ the number of non-zero coefficients.
 The Lagrange multiplier $\lambda$ of the constraint only depends on the
 quantisation accuracy applied to the coefficients, as demonstrated
 in~\cite{sezer-11-phd}.
+
+\subsubsection{The zero norm}
+\label{ssub:the_zero_norm}
+
+\begin{equation}
+	D = \int_{\infty}^{\infty} {(x - \hat x)}^2 \text{P}_X (\X)\text{d}x
+\end{equation}
+
 
 \section{Conclusions}
 \label{sec:conclusions_transforms}

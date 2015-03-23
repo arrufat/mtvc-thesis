@@ -1,0 +1,67 @@
+% \documentclass{book}
+% \usepackage{tikz}
+% \usepackage{mathptmx}
+% \usepackage[scaled=0.92]{helvet}
+% \begin{document}
+
+\pgfmathsetmacro{\nodebasesize}{1} % A node with a value of one will have this diameter
+\pgfmathsetmacro{\nodeinnersep}{0.1}
+
+\newcommand{\propnode}[5]{% position, name, options, value, label
+	\pgfmathsetmacro{\minimalwidth}{sqrt (#4*\nodebasesize)}
+	\node[#3,minimum width=\minimalwidth*1cm,inner sep=\nodeinnersep*0cm,circle,draw] 
+	(#2) at (#1) {#5};
+}
+
+\tikzstyle{bloq} = [rectangle, draw, text badly centered, minimum height=2.5em, inner sep=1mm]
+\newcommand{\bloq}[4]{% position, name options, label
+	\node[bloq,#3] (#2) at (#1) {\textsf{#4}}; 
+}
+\newcommand{\add}[2]{%position, name
+	\draw (4,4) circle [radius=0.3] node (add) {\textsf$+$};
+}
+
+\begin{tikzpicture}[scale=1.5, x=1em, y=1em]
+\tikzstyle{every node}=[font=\small]
+
+	\def\startx{0}
+	\def\starty{0}
+	\def\thickness{thick}
+	\def\hdist{5}
+	\def\vdist{3}
+
+	\filldraw[fill=blue!20, draw=blue!50,dashed,thick]
+	(\startx-2.5,\starty+2) --++ (15,0) --++ (0,-4) --++ (-15,0) -- cycle;
+	\filldraw[fill=blue!20, draw=blue!50,dashed,thick]
+	(\startx-2.5,\starty-\vdist-1) --++ (15,0) --++ (0,-4) --++ (-15,0) -- cycle;
+
+	\bloq{\startx+0*\hdist,\starty-0*\vdist}{transf}{text width=5.0em,fill=yellow!50}{\textsf{transform}}
+	\bloq{\startx+1*\hdist,\starty-0*\vdist}{quant}{text width=5.0em,fill=yellow!50}{\textsf{quantisation}}
+	\bloq{\startx+2*\hdist,\starty-0*\vdist}{entrocod}{text width=5.0em,fill=yellow!50}{\textsf{entropy coding}}
+
+	\bloq{\startx+2*\hdist,\starty-2*\vdist}{entrodec}{text width=5.0em,fill=yellow!50}{\textsf{entropy decoding}}
+	\bloq{\startx+1*\hdist,\starty-2*\vdist}{iquant}{text width=5.0em,fill=yellow!50}{\textsf{inverse quantisation}}
+	\bloq{\startx+0*\hdist,\starty-2*\vdist}{itransf}{text width=5.0em,fill=yellow!50}{\textsf{inverse transform}}
+
+	\node (rate) at (\startx+3*\hdist,\starty-1*\vdist) {\textsf{rate}};
+	\node [label={[xshift=0cm, yshift=0.5cm]\textsf{encoder}}] at (quant) {};
+	\node [label={[xshift=0cm, yshift=-1.2cm]\textsf{decoder}}] at (iquant) {};
+
+	\draw[latex-, \thickness] (transf) -- (-4,0) node [left] (in) {\large$x$};
+	\draw[-latex, \thickness] (itransf) -- (-4,-2*\vdist) node [left] (out) {\large$\hat x$};
+
+	\node (dist) at (-4.425,-\vdist) {\textsf{distortion}};
+
+	\draw [-latex, \thickness] (dist) -- (in);
+	\draw [-latex, \thickness] (dist) -- (out);
+
+	\draw[-latex, \thickness] (transf) -- (quant);
+	\draw[-latex, \thickness] (quant) -- (entrocod);
+	\draw[\thickness] (entrocod) -| (rate);
+	\draw[-latex, \thickness] (rate) |- (entrodec);
+	\draw[-latex, \thickness] (entrodec) -- (iquant);
+	\draw[-latex, \thickness] (iquant) -- (itransf);
+
+
+\end{tikzpicture}
+% \end{document}
