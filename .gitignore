@@ -12,5 +12,6 @@ figures/build
 *.lot
 *.pdf
 *.ptc
+*.swp
 *.synctex.gz
 *.toc
