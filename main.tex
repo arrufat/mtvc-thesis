@@ -424,6 +424,9 @@ from figure~\ref{fig:hybrid_video_coding_scheme}.
 This technique allows the encoder to take decisions related to coding
 based on the application requirements.
 These decisions include the block sizes and the prediction to use.
+For each block size and kind of prediction, the encoder computes the
+distortion, using its own decoder, and estimates the rate as illustrated
+in figure~\ref{fig:rate_distortion_scheme}.
 
 \begin{figure}[h]
 	\centering
