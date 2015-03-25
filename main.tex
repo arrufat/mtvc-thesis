@@ -11,6 +11,7 @@
 \usepackage{emptypage} % removes headers and footers from empty pages
 \usepackage[thickqspace,amssymb,noams]{SIunits} % consistent units support
 \usepackage{subfig}
+\usepackage{nicefrac}
 
 % font configuration
 \usepackage{amsmath, amssymb}
@@ -247,9 +248,8 @@ Since then, all video coding standards and recommendations issued by the
 
 The hybrid video coding scheme is named after its use of both temporal
 prediction and transform coding techniques for the prediction error.
-
 A basic structure of the hybrid video coding scheme is presented in
-figure~\ref{fig:hybrid_video_coding_scheme}
+figure~\ref{fig:hybrid_video_coding_scheme}.
 
 \begin{figure}[h]
 	\centering
@@ -456,7 +456,7 @@ Where $I$ and $K$ are two images of $m \times n$ pixels.
 
 \subsubsection{Peak signal-to-noise ratio}
 \label{ssub:peak_signal_to_noise_ratio}
-\index{\ac{PSNR}}
+\index{PSNR}
 
 The \ac{PSNR} is an objective quality measure that computes the ratio
 between the maximum possible value of a signal and the power of the
@@ -476,7 +476,7 @@ For 8-bit depth images, $MAX = 2^{8} - 1 = 255$.
 
 \subsection{Rate-distortion optimisation}
 \label{sub:rate_distortion_optimisation}
-\index{\ac{RDO}}
+\index{RDO}
 
 In order to carry out the most sensible decision at each time, the
 encoder uses a \ac{RDO} criterion
@@ -496,13 +496,13 @@ reasonably straightforward.
 However, estimating the bit rate is a bit more delicate, since the whole
 entropy coder cannot be run each time the encoder explores the different
 possibilities for a block.
-As a consequence, an approximation of the bit rate is used in the
-\ac{RDO} loop.
+As a consequence, an estimation of the bit rate is used in the \ac{RDO}
+loop.
 
 \section{Bj{\o}ntegaard Delta measurements}
 \label{sub:bjontegaard_delta_measurements}
-\index{\ac{BD}-rate}
-\index{\ac{BD}-\ac{PSNR}}
+\index{BD-rate}
+\index{BD-PSNR}
 
 Comparing two video coding techniques objectively might be complicated,
 as both distortion and bit rate savings have to be taken into account.
@@ -589,16 +589,16 @@ signal (in red), the vertical dimension is enough to provide an equally
 accurate signal representation, since the horizontal dimension remains
 constant.
 
-\section{Block-based transforms}
-\label{sec:block_based_transforms}
+\subsection{Block-based transforms}
+\label{sub:block_based_transforms}
 
 Amongst all the different kinds of transforms available, the ones used
 in image and video coding applications are the block-based transforms
 due to the good trade-off they provide in terms of complexity and
 performance.
 
-\section{Separability}
-\label{sec:separability}
+\subsection{Separability}
+\label{sub:separability}
 
 Image and video coding deal with image blocks, which are two-dimensional
 signals and, consequently, use transforms able two deal with those
@@ -612,12 +612,15 @@ Afterwards the transform is applied normally.
 The main disadvantage of this approach is the number of calculations
 required to obtain the transformed signal.
 
-\section{Transform design}
-\label{sec:transform_design}
+\subsection{Transform design}
+\label{sub:transform_design}
 \def\x{\mathbf{x}}
 \def\X{\mathbf{X}}
 \def\c{\mathbf{c}}
 \def\A{\mathbf{A}}
+\def\P{\text{P}}
+\def\e{\text{e}}
+\def\d{\text{d}}
 
 \begin{equation}
 	J(\lambda) = \text{Distortion} + \lambda \text{Rate}
@@ -628,18 +631,20 @@ required to obtain the transformed signal.
 	+ \lambda r_i
 \end{equation}
 
-\subsection{The Karhunen-Loève transform}
-\label{sub:the_karhunen_loeve_transform}
+
+\section{The Karhunen-Loève transform}
+\label{sec:the_karhunen_loeve_transform}
 \index{KLT}
 The \ac{KLT}~\cite{rao-01-transform-data-compression-book}
 
-\subsection{The rate-distortion optimised transforms}
-\label{sub:the_rate_distortion_optimised_transforms}
+\section{The rate-distortion optimised transforms}
+\label{sec:the_rate_distortion_optimised_transforms}
 \index{RDOT}
 
 In order to better fit the video coding demands, Sezer proposes a kind
 of transforms that take into account the sparsity of the output in their
-design~\cite{sezer-11-phd}
+design~\cite{sezer-11-phd}.
+The proposed \ac{RDOT} can be expressed as:
 
 \begin{equation}
 	\A_{opt} = \text{arg}\min\limits_{\A}
@@ -650,22 +655,155 @@ design~\cite{sezer-11-phd}
 	\label{eqn:rdot-nsep}
 \end{equation}
 
-Where $\x_i$ is a block of the training set, $\c_i$ are its quantised
-transformed coefficients using the transform $\A$.
+Where $\x_i$ are the input signals, i.e.\ a block of the training set,
+$\c_i$ are its quantised transformed coefficients using the transform
+$\A$.
 $\A^T$ is its transposed matrix, as $\A$ is chosen orthonormal.
 The constraint in the cost function is the $\ell_0$ norm of the coefficients,
 i.e.\ the number of non-zero coefficients.
-The Lagrange multiplier $\lambda$ of the constraint only depends on the
-quantisation accuracy applied to the coefficients, as demonstrated
-in~\cite{sezer-11-phd}.
+The Lagrange multiplier $\lambda$ of the constraint.
 
-\subsubsection{The zero norm}
-\label{ssub:the_zero_norm}
+A thorough study of equation~\ref{eqn:rdot-nsep} analysing its
+properties and consequences is detailed below.
+
+\subsection{The \acs{RDOT} metric}
+\label{sub:the_rdot_metric}
+
+The value that \acp{RDOT} minimise is expressed in
+equation~\ref{eqn:rdot_metric} for a single signal.
+As it is explicitly written, this metric depends exclusively on the
+quantisation step $\Delta$ and the initial transform used $\A$.
 
 \begin{equation}
-	D = \int_{\infty}^{\infty} {(x - \hat x)}^2 \text{P}_X (\X)\text{d}x
+	\delta_{\Delta,\A} (\lambda) =
+	{\Vert \x - \A^T \c \Vert}_2^2 + \lambda {\Vert \c \Vert}_0
+	\label{eqn:rdot_metric}
 \end{equation}
 
+The first part of the equation represents the distortion introduced by
+the quantisation.
+The second term serves as rate-like constraint, by ensuring that the
+number of significant values in the transform domain is minimised,
+together with the distortion.
+
+% The quantised transformed coefficient are obtained as follows:
+% \begin{equation}
+% 	\c = \lfloor \X \rfloor = \lfloor \A \x \rfloor
+% \end{equation}
+
+The minimisation of the metric happens in two steps, iteratively until
+convergence:
+\begin{enumerate}
+	\item Finding the optimal coefficients for a given transform.
+	\item Updating the transform for the optimal coefficients.
+\end{enumerate}
+
+\subsubsection{Optimal coefficients for a given transform}
+\label{ssub:optimal_coefficients_for_a_given_transform}
+
+The optimal coefficients are obtained by transforming the signal and
+hard-thresholing them.
+The threshold value depends only on the Lagrange multiplier $\lambda$,
+as demonstrated in Section~\ref{sub:the_zero_norm}:
+
+\begin{equation}
+	\c[n] =
+	\begin{cases}
+		\X[n] & \vert \X[n] \vert \ge \displaystyle \frac{\Delta}{2} \\
+		0     & \text{otherwise}\\
+	\end{cases}
+	\label{eqn:hard_threshold}
+\end{equation}
+
+\subsubsection{Optimal transform for given coefficients}
+\label{ssub:optimal_transform_for_given_coefficients}
+
+
+
+\subsection{The zero norm}
+\label{sub:the_zero_norm}
+The distortion introduced by the hard-thresholding from
+equation~\ref{eqn:hard_threshold} can be expressed as:
+\begin{equation}
+	D
+	= \int_{\infty}^{\infty} {(x - \hat x)}^2 \P_X (X)\text{d}x
+	= \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
+	x^2\text{P}_X (X) \d x
+\end{equation}
+
+For the sake of simplicity, \ac{PDF} of $x$ will be assumed to be
+Laplacian.
+
+\begin{align}
+	D
+	&= a \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
+		x^2 \e ^{-b\vert x \vert} \d x \nonumber \\
+	&= 2a \int_0^{\nicefrac{\Delta}{2}}
+		x^2 \e ^{-b x} \d x \\
+		&= -\frac{2a}{b^3}{\left[\e^{-bx}(b^2x^2+2bx+2)\right]}
+		_0^{\nicefrac{\Delta}{2}} \nonumber
+\end{align}
+
+Resulting in:
+\begin{equation}
+	D = -\frac{2a}{b^3}\left[ 2-\e^{\nicefrac{-b\Delta}{2}}
+	\left(b^2 \frac{\Delta^2}{4}+b\Delta+2\right)\right]
+\end{equation}
+
+By definition, the $\ell_0$ norm is the total number of non-zero
+elements in a vector.
+Consequently:
+\begin{align}
+	R 
+	&= {\Vert \c \Vert}_0 \nonumber \\
+	&= N \P_X\left(\vert X \vert \ge \frac{\Delta}{2}\right) \nonumber \\
+	&= 2N\int_{\nicefrac{\Delta}{2}}^{\infty}\P_X(x)\d x \\
+	&= 2N\left(\frac{1}{2} - \int_0^{\nicefrac{\Delta}{2}}\P_X(x)\d x \right) \nonumber \\
+	&= 2N\left(\frac{1}{2} - \int_0^{\nicefrac{\Delta}{2}}a\e^{-bx}\d x \right) \nonumber
+\end{align}
+
+Note that $\displaystyle\frac{a}{b} = \frac{1}{2}$ since the distribution is
+Laplacian.
+Hence:
+
+\begin{align}
+	R
+	&= 2N \left(\frac{1}{2}-{\left[-\frac{1}{2}\e^{\nicefrac{-b\Delta}{2}}\right]}
+		_0^{\nicefrac{\Delta}{2}}\right) \nonumber \\
+	&= 2N \left(\frac{1}{2}-\left[-\frac{1}{2}
+		\e^{\nicefrac{-b\Delta}{2}}+\frac{1}{2}\right]\right) \\
+	&= N\e^{\nicefrac{-b\Delta}{2}} \nonumber
+\end{align}
+
+\begin{equation}
+	R = N \e ^{\nicefrac{-b\Delta}{2}}
+	\label{eqn:zero_norm_int}
+\end{equation}
+
+Deriving equation~\ref{eqn:zero_norm_int}:
+
+\begin{align}
+	\frac{\partial R}{\partial \Delta} &=
+		- \frac{b}{2}\e^{\nicefrac{-b\Delta}{2}} \nonumber \\
+	&= \frac{1}{4}a\Delta^2\e^{\nicefrac{-b\Delta}{2}}
+\end{align}
+
+Therefore:
+\begin{equation}
+	\frac{\partial J(\lambda)}{\partial \Delta}
+	= \frac{\partial D}{\partial \Delta} +
+	\lambda \frac{\partial R}{\partial \Delta} = 0 \\
+\end{equation}
+
+Is equivalent to:
+\begin{equation}
+	\frac{1}{4}a\Delta^2-\frac{b}{2}=0
+\end{equation}
+
+Reminding that $\displaystyle \frac{a}{b}=\frac{1}{2}$:
+\begin{equation}
+	\lambda = \frac{\Delta^2}{2}
+\end{equation}
 
 \section{Conclusions}
 \label{sec:conclusions_transforms}
@@ -744,6 +882,7 @@ to degrade its performances as least as possible.
 	\acro{KLT}{Karhunen-Loève transform}
 	\acro{MPEG}{Moving Picture Experts Group}
 	\acro{MSE}{mean squared error}
+	\acro{PDF}{probability density function}
 	\acro{PSNR}{peak signal-to-noise ratio}
 	\acro{QP}{quantisation parameter}
 	\acro{RDO}{rate-distortion optimisation}
