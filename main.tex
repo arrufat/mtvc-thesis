@@ -13,11 +13,21 @@
 \usepackage{subfig}
 \usepackage{nicefrac}
 
+% lines and paragraphs
+% \usepackage{setspace}
+% \setstretch{1}
+% \parskip=\smallskipamount
+% \setlength{\parindent}{0pt}
+
 % font configuration
 \usepackage{amsmath, amssymb}
+% \usepackage{lmodern}
+% \usepackage[default,scaled=0.85]{FiraSans}
+% \usepackage[helvet]{sfmath}
+% \usepackage[scaled=0.80]{sourcecodepro} % option: default
 \usepackage[T1]{fontenc}
 \usepackage{mathptmx}
-\usepackage[scaled=0.92]{helvet}
+\usepackage[scaled]{helvet}
 % \usepackage{courier}
 
 \usepackage[usenames,dvipsnames]{xcolor}
@@ -465,13 +475,11 @@ It is usually defined in terms of the logarithmic decibel scale to cope
 with the wide range that signals might have.
 Defining the \ac{PSNR} in terms of the \ac{MSE} from
 equation~\ref{eqn:mse}, it can be expressed as:
-
 \begin{equation}
 	PSNR = 10 \log_{10} \left(\frac{MAX_I^2}{MSE_{I,K}}\right)
 	= 20 \log_{10} (MAX_I) - 10 \log_{10} (MSE_{I,K})
 	\label{eqn:psnr}
 \end{equation}
-
 For 8-bit depth images, $MAX = 2^{8} - 1 = 255$.
 
 \subsection{Rate-distortion optimisation}
@@ -530,8 +538,7 @@ Two different metrics are defined:
 \label{sec:conclusions_video_coding}
 
 This chapter has presented the motivation for video coding as well as
-some general concepts concerning an
-overview of the video coding system.
+some general concepts concerning an overview of the video coding system.
 
 Current video coders exploit both redundancies existing within images of
 the video sequence via predictions.
@@ -614,13 +621,19 @@ required to obtain the transformed signal.
 
 \subsection{Transform design}
 \label{sub:transform_design}
-\def\x{\mathbf{x}}
-\def\X{\mathbf{X}}
-\def\c{\mathbf{c}}
 \def\A{\mathbf{A}}
+\def\I{\mathbf{I}}
 \def\P{\text{P}}
-\def\e{\text{e}}
+\def\U{\mathbf{U}}
+\def\V{\mathbf{V}}
+\def\X{\mathbf{X}}
+\def\Y{\mathbf{Y}}
+\def\arg{\text{arg}}
+\def\c{\mathbf{c}}
 \def\d{\text{d}}
+\def\e{\text{e}}
+\def\tr{\text{tr}}
+\def\x{\mathbf{x}}
 
 \begin{equation}
 	J(\lambda) = \text{Distortion} + \lambda \text{Rate}
@@ -631,6 +644,8 @@ required to obtain the transformed signal.
 	+ \lambda r_i
 \end{equation}
 
+Next sections will study different transform design approaches, based on
+different modellings of the rate constraint.
 
 \section{The Karhunen-Loève transform}
 \label{sec:the_karhunen_loeve_transform}
@@ -645,23 +660,22 @@ In order to better fit the video coding demands, Sezer proposes a kind
 of transforms that take into account the sparsity of the output in their
 design~\cite{sezer-11-phd}.
 The proposed \ac{RDOT} can be expressed as:
-
 \begin{equation}
-	\A_{opt} = \text{arg}\min\limits_{\A}
+	\A_{opt} = \arg\min\limits_{\A}
 	\sum_{\forall i} \min\limits_{\c_i}
 	\left(
-	{\Vert \x_i - \A^T\c_i \Vert}_2^2 + \lambda{\Vert \c_i \Vert}_0
+	{\Vert \x_i - \A^T\c_i \Vert}_2^2 + \lambda\overline{\Vert \c_i \Vert}_0
 	\right)
 	\label{eqn:rdot-nsep}
 \end{equation}
-
 Where $\x_i$ are the input signals, i.e.\ a block of the training set,
 $\c_i$ are its quantised transformed coefficients using the transform
 $\A$.
 $\A^T$ is its transposed matrix, as $\A$ is chosen orthonormal.
-The constraint in the cost function is the $\ell_0$ norm of the coefficients,
-i.e.\ the number of non-zero coefficients.
-The Lagrange multiplier $\lambda$ of the constraint.
+The constraint in the cost function is the average $\ell_0$ norm of the
+coefficients, i.e.\ the number of non-zero coefficients.
+The $N$ factor is used to average the number of non-zero coefficients.
+Finally, $\lambda$ is the Lagrange multiplier of the constraint.
 
 A thorough study of equation~\ref{eqn:rdot-nsep} analysing its
 properties and consequences is detailed below.
@@ -673,23 +687,16 @@ The value that \acp{RDOT} minimise is expressed in
 equation~\ref{eqn:rdot_metric} for a single signal.
 As it is explicitly written, this metric depends exclusively on the
 quantisation step $\Delta$ and the initial transform used $\A$.
-
 \begin{equation}
 	\delta_{\Delta,\A} (\lambda) =
-	{\Vert \x - \A^T \c \Vert}_2^2 + \lambda {\Vert \c \Vert}_0
+	{\Vert \x - \A^T \c \Vert}_2^2 + \lambda\overline{\Vert \c \Vert}_0
 	\label{eqn:rdot_metric}
 \end{equation}
-
 The first part of the equation represents the distortion introduced by
 the quantisation.
 The second term serves as rate-like constraint, by ensuring that the
 number of significant values in the transform domain is minimised,
 together with the distortion.
-
-% The quantised transformed coefficient are obtained as follows:
-% \begin{equation}
-% 	\c = \lfloor \X \rfloor = \lfloor \A \x \rfloor
-% \end{equation}
 
 The minimisation of the metric happens in two steps, iteratively until
 convergence:
@@ -702,15 +709,17 @@ convergence:
 \label{ssub:optimal_coefficients_for_a_given_transform}
 
 The optimal coefficients are obtained by transforming the signal and
-hard-thresholing them.
+hard-thresholing them:
+\begin{equation}
+	\c = \lfloor \X \rfloor = \lfloor \A \x \rfloor
+\end{equation}
 The threshold value depends only on the Lagrange multiplier $\lambda$,
 as demonstrated in Section~\ref{sub:the_zero_norm}:
-
 \begin{equation}
 	\c[n] =
 	\begin{cases}
 		\X[n] & \vert \X[n] \vert \ge \displaystyle \frac{\Delta}{2} \\
-		0     & \text{otherwise}\\
+		0     & \text{otherwise} \\
 	\end{cases}
 	\label{eqn:hard_threshold}
 \end{equation}
@@ -718,65 +727,167 @@ as demonstrated in Section~\ref{sub:the_zero_norm}:
 \subsubsection{Optimal transform for given coefficients}
 \label{ssub:optimal_transform_for_given_coefficients}
 
-
+Once the optimal coefficients have been found, the transform $\A$ must
+be updated to provide the link between $\x$ and $\c$ while minimising
+the reconstruction error.
+\begin{equation}
+	\A_{opt} = \arg\min\limits_{\A}
+	\left(
+	\sum_{\forall i}{\Vert \x_i - \A^T\c_i\Vert}^2
+	\right)
+	\qquad \text{s.t. } \A\A^T = \I
+\end{equation}
+Since the expression represents a scalar value, it can be rewritten as:
+\begin{equation}
+	\A_{opt} = \arg\min\limits_{\A}
+	\left(\sum_{\forall i}\tr\left( 
+	{\left(\x_i - \A^T\c_i\right)}^T\left( \x_i - \A^T\c_i\right)
+	\right)\right)
+\end{equation}
+Operating:
+\begin{equation}
+	\A_{opt} = \arg\min\limits_{\A}
+	\left(\sum_{\forall i}\tr\left( 
+	\x_i^T\x_i -\x_i^T\A^T\c_i -\c_i^T\A\x_i^T + \c_i^T\A\A^T\c_i
+	\right)\right)
+\end{equation}
+Since the trace is a linear operator and $\A\A^T=\I$:
+\begin{equation}
+	\A_{opt} = \arg\min\limits_{\A}
+	\left(\sum_{\forall i}
+	\tr\left(\x_i^T\x_i\right)
+	-\tr\left(\x_i^T\A^T\c_i\right)
+	-\tr\left(\c_i^T\A\x_i^T\right)
+	+\tr\left(\c_i^T\c_i \right)
+	\right)
+\end{equation}
+Making use of the cyclic property of the trace and removing
+$\A$-independent terms:
+\begin{equation}
+	\A_{opt} = \arg\min\limits_{\A}
+	\left(\sum_{\forall i}
+	-2\tr\left(\c_i\x_i^T\A^T\right)
+	\right)
+\end{equation}
+We now define $\Y=\displaystyle\sum_{\forall i}\c_i\x_i^T$ and its SVD
+decomposition $\Y=\U\Lambda^{\nicefrac{1}{2}}\V^T$, where $\U$ and $\V$
+are orthonormal and $\Lambda$ is diagonal.
+The equation rewrites as follows:
+\begin{equation}
+	\A_{opt} = \arg\min\limits_{\A}
+	\left(
+	-2\tr\left(\U\Lambda^{\nicefrac{1}{2}}\V^T\A^T\right)
+	\right)
+\end{equation}
+Minimising a negative expression is equivalent to maximise its positive
+version.
+Re-arranging the terms using the trace cyclic property:
+\begin{equation}
+	\A_{opt} = \arg\min\limits_{\A}
+	\left(
+	-2\tr\left(\Lambda^{\nicefrac{1}{2}}\V^T\A^T\U\right)
+	\right)
+\end{equation}
+Let $\P=\V^T\A^T\U$. Since $\V$, $\A$ and $\U$ are orthonormal, so is
+$\P$. The equation is now:
+\begin{equation}
+	\A_{opt} = \arg\max\limits_{\A}
+	\left(
+	\tr\left(\Lambda^{\nicefrac{1}{2}}\P\right)
+	\right)
+\end{equation}
+Since $\Lambda$ is a diagonal matrix whose entries are non-negative by
+definition and $\P$ is orthonormal, the maximisation is achieved when
+$\P=\I$
+\begin{equation}
+	\V^T\A_{opt}^T\U=\I\quad \Rightarrow \quad \A_{opt} = \U\V^T
+\end{equation}
 
 \subsection{The zero norm}
 \label{sub:the_zero_norm}
+
+Despite its simplicity, the $\ell_0$ norm provides an efficient and
+robust approximation of the rate, which makes it very suitable for the
+transform learnings.
+This section justifies its use over other rate models, even those closer
+to the real rate, such as the entropy.
+
+In order to find the optimal $\lambda$, equation~\ref{eqn:rdot_metric}
+has to be derived.
+The problem will be tackled in two separated steps
+\begin{enumerate}
+	\item Compute the distortion analytically and derive it.
+	\item Compute the rate constraint and derive it.
+\end{enumerate}
+
+\subsubsection{Derivation of the distortion function}
+\label{ssub:derivation_of_the_distortion_function}
+
 The distortion introduced by the hard-thresholding from
 equation~\ref{eqn:hard_threshold} can be expressed as:
 \begin{equation}
 	D
-	= \int_{\infty}^{\infty} {(x - \hat x)}^2 \P_X (X)\text{d}x
+	= \int_{-\infty}^{\infty} {(x - \hat x)}^2 \P_X (X)\dx
 	= \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
-	x^2\text{P}_X (X) \d x
+	x^2\P_X (X) \d x
 \end{equation}
+Note that the integration intervals can be reduced to where the
+quantised values differ from the original ones, that is, the values that
+have been affected by the hard-thresholding from
+equation~\ref{eqn:hard_threshold}.
 
-For the sake of simplicity, \ac{PDF} of $x$ will be assumed to be
-Laplacian.
-
+This first approach will consider a Laplacian \ac{PDF} for the sake of
+simplicity, instead of a generalised Gaussian \ac{PDF}:
 \begin{align}
 	D
-	&= a \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
-		x^2 \e ^{-b\vert x \vert} \d x \nonumber \\
+	&= \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
+		a x^2 \e ^{-b\vert x \vert} \d x \nonumber \\
 	&= 2a \int_0^{\nicefrac{\Delta}{2}}
 		x^2 \e ^{-b x} \d x \\
 		&= -\frac{2a}{b^3}{\left[\e^{-bx}(b^2x^2+2bx+2)\right]}
 		_0^{\nicefrac{\Delta}{2}} \nonumber
 \end{align}
-
 Resulting in:
 \begin{equation}
 	D = -\frac{2a}{b^3}\left[ 2-\e^{\nicefrac{-b\Delta}{2}}
 	\left(b^2 \frac{\Delta^2}{4}+b\Delta+2\right)\right]
+	\label{eqn:distortion}
 \end{equation}
+Deriving equation~\ref{eqn:distortion}:
+\begin{equation}
+	\frac{\partial D}{\partial\Delta} =
+	-a\frac{\Delta^2}{4}\e^{\nicefrac{-b\Delta}{2}}
+\end{equation}
+
+\subsubsection{Derivation of the zero norm function}
+\label{ssub:derivation_of_the_zero_norm_function}
 
 By definition, the $\ell_0$ norm is the total number of non-zero
 elements in a vector.
-Consequently:
+Consequently, the constraint can be expressed as:
 \begin{align}
 	R 
-	&= {\Vert \c \Vert}_0 \nonumber \\
-	&= N \P_X\left(\vert X \vert \ge \frac{\Delta}{2}\right) \nonumber \\
-	&= 2N\int_{\nicefrac{\Delta}{2}}^{\infty}\P_X(x)\d x \\
-	&= 2N\left(\frac{1}{2} - \int_0^{\nicefrac{\Delta}{2}}\P_X(x)\d x \right) \nonumber \\
-	&= 2N\left(\frac{1}{2} - \int_0^{\nicefrac{\Delta}{2}}a\e^{-bx}\d x \right) \nonumber
+	&= \overline{\Vert \c \Vert}_0 = \frac{1}{N}{\Vert \c \Vert}_0 \nonumber \\
+	&= \frac{1}{N} N \P_X\left(\vert X \vert \ge \frac{\Delta}{2}\right) \nonumber \\
+	&= 2\int_{\nicefrac{\Delta}{2}}^{\infty}\P_X(x)\d x \\
+	&= 2\left(\frac{1}{2} - \int_0^{\nicefrac{\Delta}{2}}\P_X(x)\d x \right) \nonumber \\
+	&= 2\left(\frac{1}{2} - \int_0^{\nicefrac{\Delta}{2}}a\e^{-bx}\d x \right) \nonumber
 \end{align}
 
 Note that $\displaystyle\frac{a}{b} = \frac{1}{2}$ since the distribution is
 Laplacian.
 Hence:
-
 \begin{align}
 	R
-	&= 2N \left(\frac{1}{2}-{\left[-\frac{1}{2}\e^{\nicefrac{-b\Delta}{2}}\right]}
+	&= 2 \left(\frac{1}{2}-{\left[-\frac{1}{2}\e^{\nicefrac{-b\Delta}{2}}\right]}
 		_0^{\nicefrac{\Delta}{2}}\right) \nonumber \\
-	&= 2N \left(\frac{1}{2}-\left[-\frac{1}{2}
+	&= 2 \left(\frac{1}{2}-\left[-\frac{1}{2}
 		\e^{\nicefrac{-b\Delta}{2}}+\frac{1}{2}\right]\right) \\
-	&= N\e^{\nicefrac{-b\Delta}{2}} \nonumber
+	&= \e^{\nicefrac{-b\Delta}{2}} \nonumber
 \end{align}
 
 \begin{equation}
-	R = N \e ^{\nicefrac{-b\Delta}{2}}
+	R = \e ^{\nicefrac{-b\Delta}{2}}
 	\label{eqn:zero_norm_int}
 \end{equation}
 
@@ -797,7 +908,7 @@ Therefore:
 
 Is equivalent to:
 \begin{equation}
-	\frac{1}{4}a\Delta^2-\frac{b}{2}=0
+	-a\frac{\Delta^2}{4}+\lambda\frac{b}{2}=0
 \end{equation}
 
 Reminding that $\displaystyle \frac{a}{b}=\frac{1}{2}$:
