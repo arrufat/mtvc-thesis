@@ -844,19 +844,19 @@ simplicity, instead of a generalised Gaussian \ac{PDF}:
 		a x^2 \e ^{-b\vert x \vert} \d x \nonumber \\
 	&= 2a \int_0^{\nicefrac{\Delta}{2}}
 		x^2 \e ^{-b x} \d x \\
-		&= -\frac{2a}{b^3}{\left[\e^{-bx}(b^2x^2+2bx+2)\right]}
+		&= frac{2a}{b^3}{\left[\e^{-bx}(b^2x^2+2bx+2)\right]}
 		_0^{\nicefrac{\Delta}{2}} \nonumber
 \end{align}
 Resulting in:
 \begin{equation}
-	D = -\frac{2a}{b^3}\left[ 2-\e^{\nicefrac{-b\Delta}{2}}
+	D = \frac{2a}{b^3}\left[ 2-\e^{\nicefrac{-b\Delta}{2}}
 	\left(b^2 \frac{\Delta^2}{4}+b\Delta+2\right)\right]
 	\label{eqn:distortion}
 \end{equation}
 Deriving equation~\ref{eqn:distortion}:
 \begin{equation}
 	\frac{\partial D}{\partial\Delta} =
-	-a\frac{\Delta^2}{4}\e^{\nicefrac{-b\Delta}{2}}
+	a\frac{\Delta^2}{4}\e^{\nicefrac{-b\Delta}{2}}
 \end{equation}
 
 \subsubsection{Derivation of the zero norm function}
@@ -885,19 +885,15 @@ Hence:
 		\e^{\nicefrac{-b\Delta}{2}}+\frac{1}{2}\right]\right) \\
 	&= \e^{\nicefrac{-b\Delta}{2}} \nonumber
 \end{align}
-
 \begin{equation}
 	R = \e ^{\nicefrac{-b\Delta}{2}}
 	\label{eqn:zero_norm_int}
 \end{equation}
-
 Deriving equation~\ref{eqn:zero_norm_int}:
-
-\begin{align}
-	\frac{\partial R}{\partial \Delta} &=
-		- \frac{b}{2}\e^{\nicefrac{-b\Delta}{2}} \nonumber \\
-	&= \frac{1}{4}a\Delta^2\e^{\nicefrac{-b\Delta}{2}}
-\end{align}
+\begin{equation}
+	\frac{\partial R}{\partial \Delta} =
+	- \frac{b}{2}\e^{\nicefrac{-b\Delta}{2}} \nonumber \\
+\end{equation}
 
 Therefore:
 \begin{equation}
@@ -908,7 +904,7 @@ Therefore:
 
 Is equivalent to:
 \begin{equation}
-	-a\frac{\Delta^2}{4}+\lambda\frac{b}{2}=0
+	a\frac{\Delta^2}{4}-\lambda\frac{b}{2}=0
 \end{equation}
 
 Reminding that $\displaystyle \frac{a}{b}=\frac{1}{2}$:
