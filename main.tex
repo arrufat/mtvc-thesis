@@ -675,7 +675,6 @@ $\A$.
 $\A^T$ is its transposed matrix, as $\A$ is chosen orthonormal.
 The constraint in the cost function is the average $\ell_0$ norm of the
 coefficients, i.e.\ the number of non-zero coefficients.
-The $N$ factor is used to average the number of non-zero coefficients.
 Finally, $\lambda$ is the Lagrange multiplier of the constraint.
 
 A thorough study of equation~\ref{eqn:rdot-nsep} analysing its
@@ -874,7 +873,6 @@ Consequently, the constraint can be expressed as:
 	&= 2\left(\frac{1}{2} - \int_0^{\nicefrac{\Delta}{2}}\P_X(x)\d x \right) \nonumber \\
 	&= 2\left(\frac{1}{2} - \int_0^{\nicefrac{\Delta}{2}}a\e^{-bx}\d x \right) \nonumber
 \end{align}
-
 Note that $\displaystyle\frac{a}{b} = \frac{1}{2}$ since the distribution is
 Laplacian.
 Hence:
@@ -895,20 +893,21 @@ Deriving equation~\ref{eqn:zero_norm_int}:
 	\frac{\partial R}{\partial \Delta} =
 	- \frac{b}{2}\e^{\nicefrac{-b\Delta}{2}} \nonumber \\
 \end{equation}
+\subsubsection{Optimal Lagrangian value}
+\label{ssub:optimal_lagrangian_value}
 
-Therefore:
+With both the distortion and the constraint derived, the optimal
+Lagrangian can be found as:
 \begin{equation}
 	\frac{\partial J(\lambda)}{\partial \Delta}
 	= \frac{\partial D}{\partial \Delta} +
 	\lambda \frac{\partial R}{\partial \Delta} = 0 \\
 \end{equation}
-
-Is equivalent to:
+Substituting the both derivatives:
 \begin{equation}
 	a\frac{\Delta^2}{4}-\lambda\frac{b}{2}=0
 \end{equation}
-
-Reminding that $\displaystyle \frac{a}{b}=\frac{1}{2}$:
+Finally, reminding that $\displaystyle \frac{a}{b}=\frac{1}{2}$:
 \begin{equation}
 	\lambda = \frac{\Delta^2}{2}
 \end{equation}
