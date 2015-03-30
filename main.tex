@@ -714,7 +714,7 @@ hard-thresholing them:
 	\c = \lfloor \X \rfloor = \lfloor \A \x \rfloor
 \end{equation}
 The threshold value depends only on the Lagrange multiplier $\lambda$,
-as demonstrated in Section~\ref{sub:the_zero_norm}:
+as demonstrated in Section~\ref{sub:the_lagrange_multiplier}:
 \begin{equation}
 	\c[n] =
 	\begin{cases}
@@ -737,7 +737,8 @@ the reconstruction error.
 	\right)
 	\qquad \text{s.t. } \A\A^T = \I
 \end{equation}
-Since the expression represents a scalar value, it can be rewritten as:
+Since the expression represents a scalar value, it can be rewritten
+using the trace:
 \begin{equation}
 	\A_{opt} = \arg\min\limits_{\A}
 	\left(\sum_{\forall i}\tr\left( 
@@ -803,14 +804,8 @@ $\P=\I$
 	\V^T\A_{opt}^T\U=\I\quad \Rightarrow \quad \A_{opt} = \U\V^T
 \end{equation}
 
-\subsection{The zero norm}
-\label{sub:the_zero_norm}
-
-Despite its simplicity, the $\ell_0$ norm provides an efficient and
-robust approximation of the rate, which makes it very suitable for the
-transform learnings.
-This section justifies its use over other rate models, even those closer
-to the real rate, such as the entropy.
+\subsection{The Lagrange multiplier}
+\label{sub:the_lagrange_multiplier}
 
 In order to find the optimal $\lambda$, equation~\ref{eqn:rdot_metric}
 has to be derived.
@@ -820,6 +815,24 @@ The problem will be tackled in two separated steps
 	\item Compute the rate constraint and derive it.
 \end{enumerate}
 
+The generalised normal distribution \ac{PDF} can be expressed compactly
+as:
+\begin{equation}
+	\frac{\beta}{2\alpha\Gamma \left(\nicefrac{1}{\beta}\right)}
+	{\e^{-\left(\nicefrac{\vert x - \mu \vert}{\alpha}\right)}}^\beta
+\end{equation}
+It is a well-known fact that transformed coefficients have a centred
+Laplace-like \ac{PDF}, which can be obtained with $\beta=1$:
+\begin{equation}
+	\frac{1}{2\alpha}\e^{\nicefrac{-\vert x \vert}{\alpha}}
+\end{equation}
+In order to simplify the upcoming calculations, the above equation is
+rewritten as:
+\begin{equation}
+	a\e^{-b\vert x \vert}
+\end{equation}
+with $\nicefrac{a}{b}=\nicefrac{1}{2}$
+
 \subsubsection{Derivation of the distortion function}
 \label{ssub:derivation_of_the_distortion_function}
 
@@ -827,7 +840,7 @@ The distortion introduced by the hard-thresholding from
 equation~\ref{eqn:hard_threshold} can be expressed as:
 \begin{equation}
 	D
-	= \int_{-\infty}^{\infty} {(x - \hat x)}^2 \P_X (X)\dx
+	= \int_{-\infty}^{\infty} {(x - \hat x)}^2 \P_X (X)\d x
 	= \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
 	x^2\P_X (X) \d x
 \end{equation}
@@ -837,14 +850,14 @@ have been affected by the hard-thresholding from
 equation~\ref{eqn:hard_threshold}.
 
 This first approach will consider a Laplacian \ac{PDF} for the sake of
-simplicity, instead of a generalised Gaussian \ac{PDF}:
+simplicity, instead of a generalised normal \ac{PDF}:
 \begin{align}
 	D
 	&= \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
 		a x^2 \e ^{-b\vert x \vert} \d x \nonumber \\
 	&= 2a \int_0^{\nicefrac{\Delta}{2}}
 		x^2 \e ^{-b x} \d x \\
-		&= frac{2a}{b^3}{\left[\e^{-bx}(b^2x^2+2bx+2)\right]}
+		&= \frac{2a}{b^3}{\left[\e^{-bx}(b^2x^2+2bx+2)\right]}
 		_0^{\nicefrac{\Delta}{2}} \nonumber
 \end{align}
 Resulting in:
@@ -891,19 +904,19 @@ Hence:
 Deriving equation~\ref{eqn:zero_norm_int}:
 \begin{equation}
 	\frac{\partial R}{\partial \Delta} =
-	- \frac{b}{2}\e^{\nicefrac{-b\Delta}{2}} \nonumber \\
+	- \frac{b}{2}\e^{\nicefrac{-b\Delta}{2}} \\
 \end{equation}
-\subsubsection{Optimal Lagrangian value}
-\label{ssub:optimal_lagrangian_value}
+\subsubsection{Optimal Lagrange multiplier}
+\label{ssub:optimal_lagrange_multiplier}
 
 With both the distortion and the constraint derived, the optimal
-Lagrangian can be found as:
+Lagrange multiplier can be found as:
 \begin{equation}
 	\frac{\partial J(\lambda)}{\partial \Delta}
 	= \frac{\partial D}{\partial \Delta} +
 	\lambda \frac{\partial R}{\partial \Delta} = 0 \\
 \end{equation}
-Substituting the both derivatives:
+Substituting both derivatives:
 \begin{equation}
 	a\frac{\Delta^2}{4}-\lambda\frac{b}{2}=0
 \end{equation}
@@ -911,6 +924,19 @@ Finally, reminding that $\displaystyle \frac{a}{b}=\frac{1}{2}$:
 \begin{equation}
 	\lambda = \frac{\Delta^2}{2}
 \end{equation}
+This proves how the Lagrange multiplier is directly related to the
+quantisation step.
+In other words, once the quantisation step is fixed, so is the optimal
+balance between the distortion and the rate constraint.
+
+\subsection{The zero norm}
+\label{sub:the_zero_norm}
+
+Despite its simplicity, the $\ell_0$ norm provides an efficient and
+robust approximation of the rate, which makes it very suitable for the
+transform learnings.
+This section justifies its use over other rate models, even those closer
+to the real rate, such as the entropy.
 
 \section{Conclusions}
 \label{sec:conclusions_transforms}
