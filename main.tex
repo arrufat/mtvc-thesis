@@ -169,7 +169,7 @@ used in state-of-the-art video coders.
 Figure~\ref{fig:video_coding_system} describes how a complete video
 coding system can be organised as a block diagram.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\input{./figures/VideoCodingSystem.tex}
 	\caption{Video coding system}
@@ -262,7 +262,7 @@ prediction and transform coding techniques for the prediction error.
 A basic structure of the hybrid video coding scheme is presented in
 figure~\ref{fig:hybrid_video_coding_scheme}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\input{./figures/HybridVideoCodingScheme.tex}
 	\caption{Hybrid video coding scheme}
@@ -292,7 +292,7 @@ The partitioning does not have to be uniform, allowing blocks of different
 sizes to be used.
 The optimal choice for the block size is left to the encoder.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.6\linewidth]{./figures/partitioning-orig-all-001.png}
 	\caption{Partitioning example using \acs{HEVC} at \acs{QP} 27}
@@ -325,14 +325,14 @@ intra or spatial prediction for those blocks that
 have been predicted using information within the same frame, and inter
 or temporal prediction for those blocks predicted using other frames.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.6\linewidth]{./figures/partitioning-pred-all-001.png}
 	\caption{Predicted image}
 	\label{fig:predicted_image}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.6\linewidth]{./figures/partitioning-resi-all-001.png}
 	\caption{Residual image (difference between original and predicted)}
@@ -400,7 +400,7 @@ hybrid video coding scheme, and therefore what makes video coding lossy.
 Lossless video coding can be attained by not using quantification in the
 process.
 
-% \begin{figure}[h]
+% \begin{figure}[ht]
 % 	\centering
 % 	\subfloat[Partitioning]
 % 	{\includegraphics[width=0.8\linewidth]{./figures/partitioning-orig-all-001.png}}
@@ -439,7 +439,7 @@ For each block size and kind of prediction, the encoder computes the
 distortion, using its own decoder, and estimates the rate as illustrated
 in figure~\ref{fig:rate_distortion_scheme}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\input{./figures/RateDistortionScheme.tex}
 	\caption{Rate-distortion scheme of a transform-based codec}
@@ -584,7 +584,7 @@ and representative example of transforms are rotations.
 The example in figure~\ref{fig:transform_rotation} helps visualising the
 transform role in signal compression.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\input{figures/TransformRotation.tex}
 	\caption{Simple transform performing a rotation}
@@ -622,6 +622,7 @@ required to obtain the transformed signal.
 
 \subsection{Transform design}
 \label{sub:transform_design}
+
 \def\A{\mathbf{A}}
 \def\I{\mathbf{I}}
 \def\P{\text{P}}
@@ -633,6 +634,7 @@ required to obtain the transformed signal.
 \def\c{\mathbf{c}}
 \def\d{\text{d}}
 \def\e{\text{e}}
+\def\GGD{\text{GGD}}
 \def\tr{\text{tr}}
 \def\x{\mathbf{x}}
 
@@ -807,31 +809,32 @@ $\P=\I$
 \subsection{The Lagrange multiplier}
 \label{sub:the_lagrange_multiplier}
 
+It is a well-known fact that the residuals distribution can be modelled
+quite accurately using a generalised normal distribution or \ac{GGD}.
+For this reason, in order to obtain the optimal Lagrange multiplier in a
+reasonably general case, a \ac{GGD} will be used to represent the
+residuals \ac{PDF}.
+Since residuals are the difference between the predicted block and the
+original block, errors in prediction are made by excess or defect
+evenly, so their mean is zero.
+
+The cented \ac{GGD} \ac{PDF} can be expressed compactly as:
+\begin{equation}
+	\GGD(\alpha,\beta,x)=
+	\frac{\beta}{2\alpha\Gamma\left(\nicefrac{1}{\beta}\right)}
+	{\e^{-\left(\nicefrac{\vert x \vert}{\alpha}\right)}}^\beta
+\end{equation}
+The Laplace and normal or Gaussian \acp{PDF} are achieved with
+$\beta=1$ and $\beta=2$, respectively.
+Even the uniform distribution can be reached by making $\beta\to\infty$.
+
 In order to find the optimal $\lambda$, equation~\ref{eqn:rdot_metric}
 has to be derived.
-The problem will be tackled in two separated steps
+The problem will be tackled in two separated steps:
 \begin{enumerate}
 	\item Compute the distortion analytically and derive it.
 	\item Compute the rate constraint and derive it.
 \end{enumerate}
-
-The generalised normal distribution \ac{PDF} can be expressed compactly
-as:
-\begin{equation}
-	\frac{\beta}{2\alpha\Gamma \left(\nicefrac{1}{\beta}\right)}
-	{\e^{-\left(\nicefrac{\vert x - \mu \vert}{\alpha}\right)}}^\beta
-\end{equation}
-It is a well-known fact that transformed coefficients have a centred
-Laplace-like \ac{PDF}, which can be obtained with $\beta=1$:
-\begin{equation}
-	\frac{1}{2\alpha}\e^{\nicefrac{-\vert x \vert}{\alpha}}
-\end{equation}
-In order to simplify the upcoming calculations, the above equation is
-rewritten as:
-\begin{equation}
-	a\e^{-b\vert x \vert}
-\end{equation}
-with $\nicefrac{a}{b}=\nicefrac{1}{2}$
 
 \subsubsection{Derivation of the distortion function}
 \label{ssub:derivation_of_the_distortion_function}
@@ -844,32 +847,35 @@ equation~\ref{eqn:hard_threshold} can be expressed as:
 	= \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
 	x^2\P_X (X) \d x
 \end{equation}
-Note that the integration intervals can be reduced to where the
+Note that the integration intervals have been reduced to where the
 quantised values differ from the original ones, that is, the values that
 have been affected by the hard-thresholding from
 equation~\ref{eqn:hard_threshold}.
 
-This first approach will consider a Laplacian \ac{PDF} for the sake of
-simplicity, instead of a generalised normal \ac{PDF}:
+Substituting $P_X(x)$ by the residuals \ac{PDF}:
 \begin{align}
 	D
-	&= \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
-		a x^2 \e ^{-b\vert x \vert} \d x \nonumber \\
-	&= 2a \int_0^{\nicefrac{\Delta}{2}}
-		x^2 \e ^{-b x} \d x \\
-		&= \frac{2a}{b^3}{\left[\e^{-bx}(b^2x^2+2bx+2)\right]}
-		_0^{\nicefrac{\Delta}{2}} \nonumber
-\end{align}
-Resulting in:
-\begin{equation}
-	D = \frac{2a}{b^3}\left[ 2-\e^{\nicefrac{-b\Delta}{2}}
-	\left(b^2 \frac{\Delta^2}{4}+b\Delta+2\right)\right]
+	&=\int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
+	x^2 \frac{\beta}{2\alpha\Gamma\left(\nicefrac{1}{\beta}\right)}
+	{\e^{-\left(\nicefrac{\vert x \vert}{\alpha}\right)}}^\beta \\
+	&=2 \int_0^{\nicefrac{\Delta}{2}}
+	x^2 \frac{\beta}{2\alpha\Gamma\left(\nicefrac{1}{\beta}\right)}
+	{\e^{-\left(\nicefrac{\vert x \vert}{\alpha}\right)}}^\beta \\
+	&=\frac{\alpha^2\Gamma\left(
+		\frac{3}{\beta},\frac{\Delta^\beta}{\alpha^\beta2^\beta}\right)-
+		\alpha^2\Gamma\left(\nicefrac{3}{\beta}\right)}
+		{\Gamma \left(\nicefrac{1}{\beta}\right)}
 	\label{eqn:distortion}
+\end{align}
+Where $\Gamma(a,z)$ is the incomplete upper gamma function, defined as:
+\begin{equation}
+	\Gamma(a,z)=\int_z^\infty t^{a-1}\e^{-t}\d t
 \end{equation}
-Deriving equation~\ref{eqn:distortion}:
+Deriving equation~\ref{eqn:distortion} in $\Delta$:
 \begin{equation}
 	\frac{\partial D}{\partial\Delta} =
-	a\frac{\Delta^2}{4}\e^{\nicefrac{-b\Delta}{2}}
+	\frac{\beta\Delta^2\e^{\nicefrac{-\Delta^\beta}{\alpha^\beta2^\beta}}}
+	{8\alpha\Gamma \left(\nicefrac{1}{\beta}\right)}
 \end{equation}
 
 \subsubsection{Derivation of the zero norm function}
@@ -878,33 +884,32 @@ Deriving equation~\ref{eqn:distortion}:
 By definition, the $\ell_0$ norm is the total number of non-zero
 elements in a vector.
 Consequently, the constraint can be expressed as:
-\begin{align}
+\begin{equation}
 	R 
-	&= \overline{\Vert \c \Vert}_0 = \frac{1}{N}{\Vert \c \Vert}_0 \nonumber \\
-	&= \frac{1}{N} N \P_X\left(\vert X \vert \ge \frac{\Delta}{2}\right) \nonumber \\
-	&= 2\int_{\nicefrac{\Delta}{2}}^{\infty}\P_X(x)\d x \\
-	&= 2\left(\frac{1}{2} - \int_0^{\nicefrac{\Delta}{2}}\P_X(x)\d x \right) \nonumber \\
-	&= 2\left(\frac{1}{2} - \int_0^{\nicefrac{\Delta}{2}}a\e^{-bx}\d x \right) \nonumber
-\end{align}
-Note that $\displaystyle\frac{a}{b} = \frac{1}{2}$ since the distribution is
-Laplacian.
-Hence:
+	= \overline{\Vert \c \Vert}_0 = \frac{1}{N}{\Vert \c \Vert}_0
+	= \frac{1}{N} N \P_X\left(\vert X \vert \ge \frac{\Delta}{2}\right)
+	= 1-P_X\left(\vert X \vert < \frac{\Delta}{2}\right)
+	= 1-\int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}\P_X(x)\d x
+\end{equation}
+Substituting $P_X(x)$ by the residuals \ac{PDF}:
 \begin{align}
 	R
-	&= 2 \left(\frac{1}{2}-{\left[-\frac{1}{2}\e^{\nicefrac{-b\Delta}{2}}\right]}
-		_0^{\nicefrac{\Delta}{2}}\right) \nonumber \\
-	&= 2 \left(\frac{1}{2}-\left[-\frac{1}{2}
-		\e^{\nicefrac{-b\Delta}{2}}+\frac{1}{2}\right]\right) \\
-	&= \e^{\nicefrac{-b\Delta}{2}} \nonumber
+	&=1-\int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
+	\frac{\beta}{2\alpha\Gamma\left(\nicefrac{1}{\beta}\right)}
+	{\e^{-\left(\nicefrac{\vert x \vert}{\alpha}\right)}}^\beta \\
+	&=1-2\int_0^{\nicefrac{\Delta}{2}}
+	\frac{\beta}{2\alpha\Gamma\left(\nicefrac{1}{\beta}\right)}
+	{\e^{-\left(\nicefrac{\vert x \vert}{\alpha}\right)}}^\beta \\
+	&=\frac{\Gamma\left(
+	\frac{1}{\beta},\frac{{\Delta}^{\beta}}{{\alpha}^{\beta}\,{2}^{\beta}}\right)
+	}{\Gamma\left( \nicefrac{1}{\beta}\right) }
+	\label{eqn:rate}
 \end{align}
+Deriving equation~\ref{eqn:rate} in $\Delta$:
 \begin{equation}
-	R = \e ^{\nicefrac{-b\Delta}{2}}
-	\label{eqn:zero_norm_int}
-\end{equation}
-Deriving equation~\ref{eqn:zero_norm_int}:
-\begin{equation}
-	\frac{\partial R}{\partial \Delta} =
-	- \frac{b}{2}\e^{\nicefrac{-b\Delta}{2}} \\
+	\frac{\partial R}{\partial\Delta} =
+	-\frac{\beta\e^{\nicefrac{-\Delta^\beta}{\alpha^\beta2^\beta}}}
+	{2\alpha\Gamma \left(\nicefrac{1}{\beta}\right)}
 \end{equation}
 \subsubsection{Optimal Lagrange multiplier}
 \label{ssub:optimal_lagrange_multiplier}
@@ -918,11 +923,11 @@ Lagrange multiplier can be found as:
 \end{equation}
 Substituting both derivatives:
 \begin{equation}
-	a\frac{\Delta^2}{4}-\lambda\frac{b}{2}=0
-\end{equation}
-Finally, reminding that $\displaystyle \frac{a}{b}=\frac{1}{2}$:
-\begin{equation}
-	\lambda = \frac{\Delta^2}{2}
+	\frac{\beta\Delta^2\e^{\nicefrac{-\Delta^\beta}{\alpha^\beta2^\beta}}}
+	{8\alpha\Gamma \left(\nicefrac{1}{\beta}\right)}
+	-\lambda\frac{\beta\e^{\nicefrac{-\Delta^\beta}{\alpha^\beta2^\beta}}}
+	{2\alpha\Gamma \left(\nicefrac{1}{\beta}\right)} = 0
+	\quad \Rightarrow \quad \lambda = \frac{\Delta^2}{4}
 \end{equation}
 This proves how the Lagrange multiplier is directly related to the
 quantisation step.
@@ -935,8 +940,8 @@ balance between the distortion and the rate constraint.
 Despite its simplicity, the $\ell_0$ norm provides an efficient and
 robust approximation of the rate, which makes it very suitable for the
 transform learnings.
-This section justifies its use over other rate models, even those closer
-to the real rate, such as the entropy.
+This section justifies its use over other rate models that might be
+closer to the real rate, such as the entropy.
 
 \section{Conclusions}
 \label{sec:conclusions_transforms}
@@ -1011,6 +1016,7 @@ to degrade its performances as least as possible.
 	\acro{IP}{Internet Protocol}
 	\acro{ITU}{International Telecommunication Union}
 	\acro{ITU-T}{\ac{ITU} Telecommunication Standardization Sector}
+	\acro{GGD}{generalised Gaussian distribution}
 	\acro{HEVC}{High Efficiency Video Coding}
 	\acro{KLT}{Karhunen-Loève transform}
 	\acro{MPEG}{Moving Picture Experts Group}

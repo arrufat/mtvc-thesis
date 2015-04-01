@@ -1,0 +1,93 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 14.12.0 ] */
+
+/* [wxMaxima: title   start ]
+Zero Norm Demonstration for Laplacian distributions
+   [wxMaxima: title   end   ] */
+
+/* [wxMaxima: comment start ]
+We define %Delta as the quantisation step, which is positive
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+assume(%Delta>0);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: section start ]
+Distortion function
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: comment start ]
+The distortion function is computed as the MSE between original and reconstructed signals
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+integrate(2*a*x^2*%e^(-b*x), x, 0, %Delta/2);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Derivation of the distortion function
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+diff(%,%Delta,1);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Finally, simplifying:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(%);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: section start ]
+Zero norm function
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: input   start ] */
+2*(1/2-integrate(a*exp(-b*x), x, 0, %Delta/2));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Since we assumed a Laplacian distribution, a/b = 1/2
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+(subst(b/2, a, %));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(%);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Derivation of the zero norm function
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+diff(%,%Delta,1);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: section start ]
+Optimal Lagrangian
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: comment start ]
+We now combine both derivatives with the Lagrange multiplier and solve the equation
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+solve(%o4 + %lambda * %o8, %lambda);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Substituting by the Laplacian relationship between a and b:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+subst(b/2, a, %);
+/* [wxMaxima: input   end   ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$

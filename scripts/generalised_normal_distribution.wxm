@@ -1,0 +1,126 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 14.12.0 ] */
+
+/* [wxMaxima: title   start ]
+Generalised normal distribution
+   [wxMaxima: title   end   ] */
+
+/* [wxMaxima: section start ]
+Well-known distributions
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: comment start ]
+We are going to define some well-known distributions using the generalised normal distribution:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+gnd(%alpha,%beta,x):=%beta/(2*%alpha*gamma(1/%beta))*%e^(-(abs(x)/%alpha)^%beta);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Let's make some assumptions about %alpha, %beta and the quantisation step %Delta:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+declare(%alpha,noninteger,%beta,noninteger);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+assume(%Delta>0,%alpha>0,%beta>0);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Laplace distribution
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: comment start ]
+We can define the Laplace distribution with %beta = 1:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+wxplot2d([gnd(1,1,x)], [x,-3,3])$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Normal distribution
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: comment start ]
+The normal distribution is obtained with %beta = 2
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+wxplot2d([gnd(1,2,x)], [x,-3,3])$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: section start ]
+Zero norm for generalised normal distributions 
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: comment start ]
+In this section we are going to compute the lagrangian for the zero-norm-based Rate-Distortion equation
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: subsect start ]
+Distortion function
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: comment start ]
+Distortion is equal to the MSE of those values affected by the threshold.
+We integrate 
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+D(%alpha,%beta,%Delta):=2*integrate(x^2*gnd(%alpha,%beta,x),x,0,%Delta/2);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(ev(D(%alpha,%beta,%Delta)));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Deriving the equation above in %Delta:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(diff(%,%Delta,1));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Zero norm function
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: comment start ]
+We compute the probability of values being bigger than the threshold
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+R(%alpha,%beta,%Delta):=1-2*(integrate(gnd(%alpha,%beta,x), x, 0, %Delta/2));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(ev(R(%alpha,%beta,%Delta)));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Deriving the equation above in %Delta:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(diff(%,%Delta,1));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Optimal Lagrangian
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: comment start ]
+Combining both derivatives and solving in %lambda:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+solve(%o8+%lambda*%o11,%lambda);
+/* [wxMaxima: input   end   ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$
