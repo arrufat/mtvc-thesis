@@ -813,7 +813,7 @@ It is a well-known fact that the residuals distribution can be modelled
 quite accurately using a generalised normal distribution or \ac{GGD}.
 
 Figure~\ref{fig:probability_density_functions} illustrates the \acp{PDF}
-of some residuals transformed with the \ac{DST} and the same residuals
+of a set of residuals transformed with the \ac{DST} and the same residuals
 transformed with an adapted \ac{RDOT}.
 Since residuals are the difference between the predicted block and the
 original block, errors in prediction are made by excess or defect
@@ -821,13 +821,13 @@ evenly, so their mean is zero.
 As expected, the use of an adapted transformed has increased the number
 of zeroes in the transform domain and, consequently, lowered the amount
 of values elsewhere.
-When changing the transform, the \ac{PDF} is changed, but since the
-transforms are orthonormal, only the variance is changes.
+When changing the transform, the resulting \ac{PDF} is changed, but
+since the transforms are orthonormal, the variance remains the same.
 \begin{figure}[ht]
 	\centering
 	\input{./figures/pdfs.pgf}
-	\caption{\acsp{PDF} of the transformed coefficients compared to
-	Laplace and normal distributions}
+	\caption{\acsp{PDF} of the residuals with different transforms
+	compared to Laplace and normal distributions}
 	\label{fig:probability_density_functions}
 \end{figure}
 Figure~\ref{fig:probability_density_functions} also includes the
@@ -846,6 +846,8 @@ The centred \ac{GGD} \ac{PDF} can be expressed compactly as:
 The Laplace and normal or Gaussian \acp{PDF} are achieved with
 $\beta=1$ and $\beta=2$, respectively.
 Even the uniform distribution can be reached by making $\beta\to\infty$.
+However, from figure~\ref{fig:probability_density_functions} one can see
+that $1\le\beta\le2$ for video residuals.
 
 In order to find the optimal $\lambda$, equation~\ref{eqn:rdot_metric}
 has to be derived.
@@ -862,9 +864,10 @@ The distortion introduced by the hard-thresholding from
 equation~\ref{eqn:hard_threshold} can be expressed as:
 \begin{equation}
 	D
-	= \int_{-\infty}^{\infty} {(x - \hat x)}^2 \P_X (X)\d x
+	= \int_{-\infty}^{\infty} {(x - \hat x)}^2 \P_X (x)\d x
+	= \int_{-\infty}^{\infty} \left(x^2 -2x\hat x + {\hat x}^2\right) \P_X (x)\d x
 	= \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
-	x^2\P_X (X) \d x
+	x^2\P_X (x) \d x
 \end{equation}
 Note that the integration intervals have been reduced to where the
 quantised values differ from the original ones, that is, the values that
@@ -950,16 +953,22 @@ Substituting both derivatives:
 	{8\alpha\Gamma \left(\nicefrac{1}{\beta}\right)}
 	-\lambda\frac{\beta\e^{\nicefrac{-\Delta^\beta}{\alpha^\beta2^\beta}}}
 	{2\alpha\Gamma \left(\nicefrac{1}{\beta}\right)} = 0
-	\quad \Rightarrow \quad \lambda = \frac{\Delta^2}{4}
+	\quad \Rightarrow \quad \boxed{\lambda = \frac{\Delta^2}{4}}
 \end{equation}
 
-This proves how the Lagrange multiplier is directly related to the
+This proves how the Lagrange multiplier is only related to the
 quantisation step.
 In other words, once the quantisation step is fixed, so is the optimal
 balance between the distortion and the rate constraint.
 
 An important consequence of using the $\ell_0$ norm is that the optimal
-Lagrange multiplier is independent from the data's \ac{PDF}.
+Lagrange multiplier is independent from the data's \ac{PDF} (it doest
+not depend on $\alpha$ neither on $\beta$), meaning that the optimal
+Lagrange multiplier remains the same, no matter which transform has been
+used.
+This fact makes the $\ell_0$ norm very suitable for this iterative
+learning method, where the transform changes at each iteration and so
+does the \ac{PDF} of the training data.
 
 \subsection{The zero norm }
 \label{sub:the_zero_norm}
