@@ -867,7 +867,11 @@ Substituting $P_X(x)$ by the residuals \ac{PDF}:
 		{\Gamma \left(\nicefrac{1}{\beta}\right)}
 	\label{eqn:distortion}
 \end{align}
-Where $\Gamma(a,z)$ is the incomplete upper gamma function, defined as:
+Where $\Gamma(z)$ is the gamma function, defined as:
+\begin{equation}
+	\Gamma(z) = \int_0^\infty t^{z-1}\e^{-t}\d t
+\end{equation}
+and $\Gamma(a,z)$ is the incomplete upper gamma function, defined as:
 \begin{equation}
 	\Gamma(a,z)=\int_z^\infty t^{a-1}\e^{-t}\d t
 \end{equation}
