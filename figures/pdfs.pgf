@@ -1,0 +1,70 @@
+\definecolor{mygreen}{RGB}{0,143,0}
+\begin{tikzpicture}[
+	declare function={gamma(\z)=
+    (2.506628274631*sqrt(1/\z) + 0.20888568*(1/\z)^(1.5) + 0.00870357*(1/\z)^(2.5) - (174.2106599*(1/\z)^(3.5))/25920 - (715.6423511*(1/\z)^(4.5))/1244160)*exp((-ln(1/\z)-1)*\z);},
+	declare function={ggd(\a,\b,\x)=
+	\b / (2*\a*gamma(1/\b)*exp((abs(x)/\a)^\b);}
+]
+	\pgfplotsset{/tikz/font={\small}}
+	\begin{axis}[
+			xlabel={Values},
+			ylabel={Density},
+			grid=both,
+			scale only axis,
+			width=0.80\textwidth,
+			height=0.25\textheight,
+			scaled y ticks = false,
+			% xtick={0,2,...,22},
+			% x tick label style={
+			% 	/pgf/number format/.cd,
+			% 	set thousands separator={\thinspace},
+			% 	/tikz/.cd
+			% },
+			ytick={0,0.01,...,0.09},
+			y tick label style={
+				/pgf/number format/.cd,
+				set decimal separator={.},
+				fixed,
+				fixed zerofill,
+				precision=2,
+				/tikz/.cd
+			},
+			xmin=-20, xmax=20,
+			ymin=0, ymax=0.09,
+			legend style={nodes=right},
+			legend pos= north east,
+			unbounded coords=jump,
+		]
+
+		\pgfplotstableread{figures/pdf_dst.dat}\table
+		\addplot[blue, thick, smooth, tension=0.3]
+		table[x=x,y=b1,col sep=tab] from \table;
+		\addlegendentry{DST}
+
+		\pgfplotstableread{figures/pdf_rdot.dat}\table
+		\addplot[red, thick, smooth, tension=0.3]
+		table[x=x,y=n1,col sep=tab] from \table;
+		\addlegendentry{RDOT}
+
+		\addplot[purple, thick, samples=101, smooth, domain=-20:20] {ggd(7,1,x)};
+		\addlegendentry{GGD($\alpha$,1,$x$)}
+
+		\addplot[ mygreen, thick, samples=101, smooth, domain=-20:20] {ggd(7,2,x)};
+		\addlegendentry{GGD($\alpha$,2,$x$)}
+
+		% \addplot[domain=-5:5, samples=50]{x^2};
+		% \pgfplotstableread{figures/bdrill-mdst-rdot-sep.dat}\table
+		% \addplot[mark=*,mark size=1pt, mygreen, thick, smooth, tension=0.3]
+		% table[x=bitrate,y=psnr,col sep=tab] from \table;
+        %
+		% \pgfplotstableread{figures/bdrill-mddt-klt.dat}\table
+		% \addplot[mark=*,mark size=1pt, blue, thick, smooth, tension=0.3]
+		% table[x=bitrate,y=psnr,col sep=tab] from \table;
+        %
+		% \pgfplotstableread{figures/bdrill-mdst-rdot-nsep.dat}\table
+		% \addplot[mark=*,mark size=1pt, red, thick, smooth, tension=0.3]
+		% table[x=bitrate,y=psnr,col sep=tab] from \table;
+	\end{axis}
+\end{tikzpicture}
+
+% vim:set filetype=tex:

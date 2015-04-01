@@ -31,7 +31,7 @@
 % \usepackage{courier}
 
 \usepackage[usenames,dvipsnames]{xcolor}
-\usepackage{tikz}
+\usepackage{pgfplots,tikz}
 \usepackage{bookmark} % needed for \bookmarksetup{startatroot}
 \usepackage{hyperref}
 \hypersetup{
@@ -811,14 +811,33 @@ $\P=\I$
 
 It is a well-known fact that the residuals distribution can be modelled
 quite accurately using a generalised normal distribution or \ac{GGD}.
-For this reason, in order to obtain the optimal Lagrange multiplier in a
-reasonably general case, a \ac{GGD} will be used to represent the
-residuals \ac{PDF}.
+
+Figure~\ref{fig:probability_density_functions} illustrates the \acp{PDF}
+of some residuals transformed with the \ac{DST} and the same residuals
+transformed with an adapted \ac{RDOT}.
 Since residuals are the difference between the predicted block and the
 original block, errors in prediction are made by excess or defect
 evenly, so their mean is zero.
+As expected, the use of an adapted transformed has increased the number
+of zeroes in the transform domain and, consequently, lowered the amount
+of values elsewhere.
+When changing the transform, the \ac{PDF} is changed, but since the
+transforms are orthonormal, only the variance is changes.
+\begin{figure}[ht]
+	\centering
+	\input{./figures/pdfs.pgf}
+	\caption{\acsp{PDF} of the transformed coefficients compared to
+	Laplace and normal distributions}
+	\label{fig:probability_density_functions}
+\end{figure}
+Figure~\ref{fig:probability_density_functions} also includes the
+\ac{PDF} of a Laplace distribution and a normal distribution.
+Those two distribution are particular cases of a \ac{GGD}.
 
-The cented \ac{GGD} \ac{PDF} can be expressed compactly as:
+For this reason, in order to obtain the optimal Lagrange multiplier in a
+reasonably general case, a \ac{GGD} will be used to represent the
+residuals \ac{PDF}.
+The centred \ac{GGD} \ac{PDF} can be expressed compactly as:
 \begin{equation}
 	\GGD(\alpha,\beta,x)=
 	\frac{\beta}{2\alpha\Gamma\left(\nicefrac{1}{\beta}\right)}
@@ -933,12 +952,16 @@ Substituting both derivatives:
 	{2\alpha\Gamma \left(\nicefrac{1}{\beta}\right)} = 0
 	\quad \Rightarrow \quad \lambda = \frac{\Delta^2}{4}
 \end{equation}
+
 This proves how the Lagrange multiplier is directly related to the
 quantisation step.
 In other words, once the quantisation step is fixed, so is the optimal
 balance between the distortion and the rate constraint.
 
-\subsection{The zero norm}
+An important consequence of using the $\ell_0$ norm is that the optimal
+Lagrange multiplier is independent from the data's \ac{PDF}.
+
+\subsection{The zero norm }
 \label{sub:the_zero_norm}
 
 Despite its simplicity, the $\ell_0$ norm provides an efficient and
@@ -1015,6 +1038,7 @@ to degrade its performances as least as possible.
 	\acro{AVC}{Advanced Video Coding}
 	\acro{BD}{Bj{\o}ntegaard Delta}
 	\acro{CABAC}{Context Adaptive Binary Arithmetic Coding}
+	\acro{DST}{discrete sine transform}
 	\acro{HVS}{Human Visual System}
 	\acro{HD}{High Definition}
 	\acro{IP}{Internet Protocol}
