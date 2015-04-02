@@ -12,6 +12,8 @@
 \usepackage[thickqspace,amssymb,noams]{SIunits} % consistent units support
 \usepackage{subfig}
 \usepackage{nicefrac}
+\usepackage{contour} % for inexisting bold symbols
+\contourlength{0.01em}
 
 % lines and paragraphs
 % \usepackage{setspace}
@@ -637,6 +639,7 @@ required to obtain the transformed signal.
 \def\GGD{\text{GGD}}
 \def\tr{\text{tr}}
 \def\x{\mathbf{x}}
+\def\Lambdab{\contour[3]{black}{$\Lambda$}}
 
 \begin{equation}
 	J(\lambda) = \text{Distortion} + \lambda \text{Rate}
@@ -715,7 +718,7 @@ hard-thresholing them:
 \begin{equation}
 	\c = \lfloor \X \rfloor = \lfloor \A \x \rfloor
 \end{equation}
-The threshold value depends only on the Lagrange multiplier $\lambda$,
+The threshold value is tightly related to the Lagrange multiplier $\lambda$,
 as demonstrated in Section~\ref{sub:the_lagrange_multiplier}:
 \begin{equation}
 	\c[n] =
@@ -730,7 +733,7 @@ as demonstrated in Section~\ref{sub:the_lagrange_multiplier}:
 \label{ssub:optimal_transform_for_given_coefficients}
 
 Once the optimal coefficients have been found, the transform $\A$ must
-be updated to provide the link between $\x$ and $\c$ while minimising
+be updated to provide the mapping between $\x$ and $\c$ while minimising
 the reconstruction error.
 \begin{equation}
 	\A_{opt} = \arg\min\limits_{\A}
@@ -773,13 +776,13 @@ $\A$-independent terms:
 	\right)
 \end{equation}
 We now define $\Y=\displaystyle\sum_{\forall i}\c_i\x_i^T$ and its SVD
-decomposition $\Y=\U\Lambda^{\nicefrac{1}{2}}\V^T$, where $\U$ and $\V$
-are orthonormal and $\Lambda$ is diagonal.
+decomposition $\Y=\U\Lambdab^{\nicefrac{1}{2}}\V^T$, where $\U$ and $\V$
+are orthonormal and $\Lambdab$ is diagonal.
 The equation rewrites as follows:
 \begin{equation}
 	\A_{opt} = \arg\min\limits_{\A}
 	\left(
-	-2\tr\left(\U\Lambda^{\nicefrac{1}{2}}\V^T\A^T\right)
+	-2\tr\left(\U\Lambdab^{\nicefrac{1}{2}}\V^T\A^T\right)
 	\right)
 \end{equation}
 Minimising a negative expression is equivalent to maximise its positive
@@ -788,7 +791,7 @@ Re-arranging the terms using the trace cyclic property:
 \begin{equation}
 	\A_{opt} = \arg\min\limits_{\A}
 	\left(
-	-2\tr\left(\Lambda^{\nicefrac{1}{2}}\V^T\A^T\U\right)
+	-2\tr\left(\Lambdab^{\nicefrac{1}{2}}\V^T\A^T\U\right)
 	\right)
 \end{equation}
 Let $\P=\V^T\A^T\U$. Since $\V$, $\A$ and $\U$ are orthonormal, so is
@@ -796,10 +799,10 @@ $\P$. The equation is now:
 \begin{equation}
 	\A_{opt} = \arg\max\limits_{\A}
 	\left(
-	\tr\left(\Lambda^{\nicefrac{1}{2}}\P\right)
+	\tr\left(\Lambdab^{\nicefrac{1}{2}}\P\right)
 	\right)
 \end{equation}
-Since $\Lambda$ is a diagonal matrix whose entries are non-negative by
+Since $\Lambdab$ is a diagonal matrix whose entries are non-negative by
 definition and $\P$ is orthonormal, the maximisation is achieved when
 $\P=\I$
 \begin{equation}
