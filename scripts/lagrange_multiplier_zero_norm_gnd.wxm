@@ -1,0 +1,128 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 14.12.0 ] */
+
+/* [wxMaxima: title   start ]
+Optimal Lagrange Multiplier
+   [wxMaxima: title   end   ] */
+
+/* [wxMaxima: section start ]
+Generalised Gaussian distribution
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: comment start ]
+A GND can be expressed compactly in function of a and b as:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+b(%sigma,g):=1/%sigma * sqrt(gamma(3/g)/gamma(1/g));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+a(%sigma,g):=b(%sigma,g)*g/(2*gamma(1/g));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+gnd(%sigma,g,x):=a(%sigma,g) * %e^(-(b(%sigma,g)*abs(x))^g);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+The Laplacian and Normal distributions can be obtained with g=1 and g=2 respectively
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+wxplot2d([gnd(1,1,x),gnd(1,2,x)], [x,-3,3])$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: section start ]
+Zero norm for generalised normal distributions
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: comment start ]
+In this section we are going to compute the lagrangian for the zero-norm-based Rate-Distortion equation
+
+Some assumptions about the variance, the exponent and the quantification step
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+declare(%sigma,noninteger,g,noninteger);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+assume(%Delta>0,%sigma>0,g>0);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+We will use the expressions with a and b to make the computations more compact
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+gnd_compact(a,b,x):=a* %e^(-(b*abs(x))^g);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Distortion function
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: comment start ]
+Distortion is equal to the MSE of those values affected by the threshold.
+We integrate:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+D(a,b,%Delta):=2*integrate(x^2*gnd_compact(a,b,x),x,0,%Delta/2);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(D(a,b,%Delta));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Deriving the equation above in %Delta:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(diff(%,%Delta,1));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Zero norm function
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: comment start ]
+We compute the probability of values being bigger than the threshold
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+R(%sigma,g,%Delta):=1-2*(integrate(gnd_compact(a,b,x), x, 0, %Delta/2));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(R(%sigma,g,%Delta));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Deriving the equation above in %Delta:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(diff(%,%Delta,1));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Optimal Lagrangian
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: comment start ]
+Combining both derivatives and solving in %lambda:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+solve(%o10+%lambda*%o13,%lambda);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+wxplot2d([gnd(sqrt(10.7),1,x),gnd(sqrt(10.7),2,x)], [x,-10,10])$
+/* [wxMaxima: input   end   ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$
