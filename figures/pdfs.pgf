@@ -18,7 +18,7 @@
 			grid=both,
 			scale only axis,
 			width=0.80\textwidth,
-			height=0.25\textheight,
+			height=0.30\textheight,
 			scaled y ticks = false,
 			% xtick={0,2,...,22},
 			% x tick label style={
@@ -47,17 +47,17 @@
 		table[x=x,y=dct,col sep=tab] from \table;
 		\addlegendentry{DCT}
 
-		\pgfplotstableread{figures/pdf_klt.dat}\table
-		\addplot[blue, thick, smooth, tension=0.3]
-		table[x=x,y=klt,col sep=tab] from \table;
-		\addlegendentry{KLT}
+		% \pgfplotstableread{figures/pdf_klt.dat}\table
+		% \addplot[blue, thick, smooth, tension=0.3]
+		% table[x=x,y=klt,col sep=tab] from \table;
+		% \addlegendentry{KLT}
 
 		\pgfplotstableread{figures/pdf_rdot.dat}\table
 		\addplot[red, thick, smooth, tension=0.3]
 		table[x=x,y=rdot,col sep=tab] from \table;
 		\addlegendentry{RDOT}
 
-		\addplot[purple, thick, samples=101, smooth, domain=-20:20]
+		\addplot[blue, thick, samples=101, smooth, domain=-20:20]
 		{ggd(5,1,x)};
 		\addlegendentry{GGD($\sigma$,1,$x$)}
 
