@@ -811,24 +811,30 @@ $\P=\I$
 
 \subsection{The Lagrange multiplier}
 \label{sub:the_lagrange_multiplier}
-
-It is a well-known fact that the residuals distribution can be modelled
-quite accurately using a generalised normal distribution or \ac{GGD}.
-
 \index{generalised normal distribution}
 \index{generalised gaussian distribution}
 \index{exponential power distribution}
+
+It is a well-known fact that the residuals distribution can be modelled
+using a \ac{GGD}, also known as generalised normal distribution or
+exponential power distribution.
+For this reason, in order to obtain the optimal Lagrange multiplier in a
+reasonably general case, a \ac{GGD} will be used to represent the
+residuals \ac{PDF}.
+
 Figure~\ref{fig:probability_density_functions} illustrates the \acp{PDF}
 of a set of residuals transformed with the \ac{DCT} and the same residuals
 transformed with an adapted \ac{RDOT}.
-Since residuals are the difference between the predicted block and the
-original block, errors in prediction are made by excess or defect
-evenly, so their mean is zero.
-As expected, the use of an adapted transformed has increased the number
+As expected, the use of an adapted transform has increased the number
 of zeroes in the transform domain and, consequently, lowered the amount
 of values elsewhere.
-When changing the transform, the resulting \ac{PDF} is changed, but
-since the transforms are orthonormal, the variance remains the same.
+Changing the transform, modifies the resulting \ac{PDF}, but
+since the used transforms are orthonormal, the variance remains
+unaltered.
+Residuals are computed as the difference between predicted and original
+blocks, meaning they are prediction errors.
+These errors are made by excess or defect evenly, evidenced by their
+zero-mean \ac{PDF}.
 \begin{figure}[ht]
 	\centering
 	% \vspace{0.30\textheight} % using this to speedup compilation
@@ -841,9 +847,6 @@ Figure~\ref{fig:probability_density_functions} also includes the
 \ac{PDF} of a Laplace distribution and a normal distribution.
 Those two distribution are particular cases of a \ac{GGD}.
 
-For this reason, in order to obtain the optimal Lagrange multiplier in a
-reasonably general case, a \ac{GGD} will be used to represent the
-residuals \ac{PDF}.
 The centred \ac{GGD} \ac{PDF} can be expressed compactly as:
 \index{gamma function}
 \begin{equation}
