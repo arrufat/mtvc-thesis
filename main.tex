@@ -921,7 +921,7 @@ Where $\Gamma(a,z)$ is the incomplete upper gamma function, defined as:
 \end{equation}
 Deriving equation~\ref{eqn:distortion} in $\Delta$:
 \begin{equation}
-	\frac{\partial D}{\partial\Delta} =
+	\frac{\d D}{\d\Delta} =
 	\frac{\Delta^2 a \e^{{(-b\nicefrac{\Delta}{2})}^\gamma}}{4}
 	\label{eqn:diff_distortion}
 \end{equation}
@@ -954,7 +954,7 @@ Substituting $P_X(x)$ by the residuals \ac{PDF}:
 \end{align}
 Deriving equation~\ref{eqn:rate} in $\Delta$:
 \begin{equation}
-	\frac{\partial R}{\partial\Delta} =
+	\frac{\d R}{\d\Delta} =
 	-a\e^{{\left(\nicefrac{-b\Delta}{2}\right)}^\gamma}
 	\label{eqn:diff_rate}
 \end{equation}
@@ -965,9 +965,9 @@ With both the distortion (equation~\ref{eqn:diff_distortion}) and the
 constraint (equation~\ref{eqn:diff_rate}) derived, the optimal Lagrange
 multiplier can be found as:
 \begin{equation}
-	\frac{\partial J(\lambda)}{\partial \Delta}
-	= \frac{\partial D}{\partial \Delta} +
-	\lambda \frac{\partial R}{\partial \Delta} = 0 \\
+	\frac{\d J(\lambda)}{\d \Delta}
+	= \frac{\d D}{\d \Delta} +
+	\lambda \frac{\d R}{\d \Delta} = 0 \\
 \end{equation}
 Substituting both derivatives:
 \begin{equation}
