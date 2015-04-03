@@ -343,7 +343,7 @@ or temporal prediction for those blocks predicted using other frames.
 
 \subsubsection{Intra prediction}
 \label{ssub:intra_prediction}
-\index{Intra prediction}
+\index{intra prediction}
 
 Intra prediction, sometimes referred to as spatial prediction, is used
 to remove correlation within local regions of a picture.
@@ -357,7 +357,7 @@ introducing a kind of prediction-adapted transforms.
 
 \subsubsection{Inter prediction}
 \label{ssub:inter_prediction}
-\index{Inter prediction}
+\index{inter prediction}
 
 Inter prediction, or temporal prediction, takes advantage of the fact
 that images close in time share many similarities, and that many of
@@ -815,6 +815,9 @@ $\P=\I$
 It is a well-known fact that the residuals distribution can be modelled
 quite accurately using a generalised normal distribution or \ac{GGD}.
 
+\index{generalised normal distribution}
+\index{generalised gaussian distribution}
+\index{exponential power distribution}
 Figure~\ref{fig:probability_density_functions} illustrates the \acp{PDF}
 of a set of residuals transformed with the \ac{DST} and the same residuals
 transformed with an adapted \ac{RDOT}.
@@ -828,7 +831,7 @@ When changing the transform, the resulting \ac{PDF} is changed, but
 since the transforms are orthonormal, the variance remains the same.
 \begin{figure}[ht]
 	\centering
-	\vspace{0.25\textheight} % using this to speedup compilation
+	\vspace{0.30\textheight} % using this to speedup compilation
 	% \input{./figures/pdfs.pgf}
 	\caption{\acsp{PDF} of the residuals with different transforms
 	compared to Laplace and normal distributions}
@@ -842,6 +845,7 @@ For this reason, in order to obtain the optimal Lagrange multiplier in a
 reasonably general case, a \ac{GGD} will be used to represent the
 residuals \ac{PDF}.
 The centred \ac{GGD} \ac{PDF} can be expressed compactly as:
+\index{gamma function}
 \begin{equation}
 	\GGD(\sigma,\gamma,x)=
 	a\e^{-{\left(b\vert x \vert\right)}^\gamma}
@@ -854,6 +858,14 @@ Where:
 	{\Gamma \left(\nicefrac{1}{\gamma}\right)}} \\
 	a &= \frac{b\gamma}{2\Gamma \left(\nicefrac{1}{\gamma}\right)}
 \end{align}
+and $\Gamma(z)$ is the gamma function, defined as:
+\begin{equation}
+	\Gamma(z) = \int_0^\infty t^{z-1}\e^{-t}\d t
+\end{equation}
+\index{Laplace distribution}
+\index{gaussian distribution}
+\index{normal distribution}
+\index{uniform distribution}
 The Laplace and normal or Gaussian \acp{PDF} are achieved with
 $\gamma=1$ and $\gamma=2$, respectively.
 Even the uniform distribution can be reached by making $\beta\to\infty$.
@@ -899,11 +911,8 @@ Substituting $P_X(x)$ by the residuals \ac{PDF}:
 		\right)}{b^3\gamma}
 	\label{eqn:distortion}
 \end{align}
-Where $\Gamma(z)$ is the gamma function, defined as:
-\begin{equation}
-	\Gamma(z) = \int_0^\infty t^{z-1}\e^{-t}\d t
-\end{equation}
-and $\Gamma(a,z)$ is the incomplete upper gamma function, defined as:
+Where $\Gamma(a,z)$ is the incomplete upper gamma function, defined as:
+\index{incomplete upper gamma function}
 \begin{equation}
 	\Gamma(a,z)=\int_z^\infty t^{a-1}\e^{-t}\d t
 \end{equation}
