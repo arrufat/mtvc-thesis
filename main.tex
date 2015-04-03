@@ -911,6 +911,7 @@ Deriving equation~\ref{eqn:distortion} in $\Delta$:
 \begin{equation}
 	\frac{\partial D}{\partial\Delta} =
 	\frac{\Delta^2 a \e^{{(-b\nicefrac{\Delta}{2})}^\gamma}}{4}
+	\label{eqn:diff_distortion}
 \end{equation}
 
 \subsubsection{Derivation of the zero norm function}
@@ -935,7 +936,7 @@ Substituting $P_X(x)$ by the residuals \ac{PDF}:
 	a \e^{-{\left(b x \right)}^\gamma} \\
 	&=1+2a\frac{\Gamma\left(
 		\frac{1}{\gamma},{\left(\frac{b\Delta}{2}\right)}^\gamma\right)-
-		\Gamma\left(\nicefrac{1}{\gamma}\right)}
+		\Gamma\left(\frac{1}{\gamma}\right)}
 		{b\gamma}
 	\label{eqn:rate}
 \end{align}
@@ -943,12 +944,13 @@ Deriving equation~\ref{eqn:rate} in $\Delta$:
 \begin{equation}
 	\frac{\partial R}{\partial\Delta} =
 	-a\e^{{\left(\nicefrac{-b\Delta}{2}\right)}^\gamma}
+	\label{eqn:diff_rate}
 \end{equation}
 \subsubsection{Optimal Lagrange multiplier}
 \label{ssub:optimal_lagrange_multiplier}
 
-With both the distortion (equation~\ref{eqn:distortion}) and the
-constraint (equation~\ref{eqn:rate}) derived, the optimal Lagrange
+With both the distortion (equation~\ref{eqn:diff_distortion}) and the
+constraint (equation~\ref{eqn:diff_rate}) derived, the optimal Lagrange
 multiplier can be found as:
 \begin{equation}
 	\frac{\partial J(\lambda)}{\partial \Delta}
