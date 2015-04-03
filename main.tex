@@ -828,7 +828,8 @@ When changing the transform, the resulting \ac{PDF} is changed, but
 since the transforms are orthonormal, the variance remains the same.
 \begin{figure}[ht]
 	\centering
-	\input{./figures/pdfs.pgf}
+	\vspace{0.25\textheight} % using this to speedup compilation
+	% \input{./figures/pdfs.pgf}
 	\caption{\acsp{PDF} of the residuals with different transforms
 	compared to Laplace and normal distributions}
 	\label{fig:probability_density_functions}
@@ -842,15 +843,22 @@ reasonably general case, a \ac{GGD} will be used to represent the
 residuals \ac{PDF}.
 The centred \ac{GGD} \ac{PDF} can be expressed compactly as:
 \begin{equation}
-	\GGD(\alpha,\beta,x)=
-	\frac{\beta}{2\alpha\Gamma\left(\nicefrac{1}{\beta}\right)}
-	{\e^{-\left(\nicefrac{\vert x \vert}{\alpha}\right)}}^\beta
+	\GGD(\sigma,\gamma,x)=
+	a\e^{-{\left(b\vert x \vert\right)}^\gamma}
+	\label{eqn:ggd}
 \end{equation}
+Where:
+\begin{align}
+	b &= \frac{1}{\sigma}\sqrt{
+	\frac{\Gamma\left(\nicefrac{3}{\gamma}\right)}
+	{\Gamma \left(\nicefrac{1}{\gamma}\right)}} \\
+	a &= \frac{b\gamma}{2\Gamma \left(\nicefrac{1}{\gamma}\right)}
+\end{align}
 The Laplace and normal or Gaussian \acp{PDF} are achieved with
-$\beta=1$ and $\beta=2$, respectively.
+$\gamma=1$ and $\gamma=2$, respectively.
 Even the uniform distribution can be reached by making $\beta\to\infty$.
 However, from figure~\ref{fig:probability_density_functions} one can see
-that $1\le\beta\le2$ for video residuals.
+that $1\le\gamma\le2$ for video residuals.
 
 In order to find the optimal $\lambda$, equation~\ref{eqn:rdot_metric}
 has to be derived.
@@ -881,15 +889,14 @@ Substituting $P_X(x)$ by the residuals \ac{PDF}:
 \begin{align}
 	D
 	&=\int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
-	x^2 \frac{\beta}{2\alpha\Gamma\left(\nicefrac{1}{\beta}\right)}
-	{\e^{-\left(\nicefrac{\vert x \vert}{\alpha}\right)}}^\beta \\
+	x^2 a \e^{-{\left(b\vert x \vert\right)}^\gamma} \\
 	&=2 \int_0^{\nicefrac{\Delta}{2}}
-	x^2 \frac{\beta}{2\alpha\Gamma\left(\nicefrac{1}{\beta}\right)}
-	{\e^{-\left(\nicefrac{\vert x \vert}{\alpha}\right)}}^\beta \\
-	&=\frac{\alpha^2\Gamma\left(
-		\frac{3}{\beta},\frac{\Delta^\beta}{\alpha^\beta2^\beta}\right)-
-		\alpha^2\Gamma\left(\nicefrac{3}{\beta}\right)}
-		{\Gamma \left(\nicefrac{1}{\beta}\right)}
+	x^2 a \e^{-{\left(b x \right)}^\gamma} \\
+	&=
+		2a \frac{\Gamma\left(\frac{3}{\gamma}\right)-
+		\Gamma\left(
+		\frac{3}{\gamma},{\left(\frac{b\Delta}{2}\right)}^\gamma
+		\right)}{b^3\gamma}
 	\label{eqn:distortion}
 \end{align}
 Where $\Gamma(z)$ is the gamma function, defined as:
@@ -903,8 +910,7 @@ and $\Gamma(a,z)$ is the incomplete upper gamma function, defined as:
 Deriving equation~\ref{eqn:distortion} in $\Delta$:
 \begin{equation}
 	\frac{\partial D}{\partial\Delta} =
-	\frac{\beta\Delta^2\e^{\nicefrac{-\Delta^\beta}{\alpha^\beta2^\beta}}}
-	{8\alpha\Gamma \left(\nicefrac{1}{\beta}\right)}
+	\frac{\Delta^2 a \e^{{(-b\nicefrac{\Delta}{2})}^\gamma}}{4}
 \end{equation}
 
 \subsubsection{Derivation of the zero norm function}
@@ -924,27 +930,26 @@ Substituting $P_X(x)$ by the residuals \ac{PDF}:
 \begin{align}
 	R
 	&=1-\int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
-	\frac{\beta}{2\alpha\Gamma\left(\nicefrac{1}{\beta}\right)}
-	{\e^{-\left(\nicefrac{\vert x \vert}{\alpha}\right)}}^\beta \\
+	a \e^{-{\left(b\vert x \vert\right)}^\gamma} \\
 	&=1-2\int_0^{\nicefrac{\Delta}{2}}
-	\frac{\beta}{2\alpha\Gamma\left(\nicefrac{1}{\beta}\right)}
-	{\e^{-\left(\nicefrac{\vert x \vert}{\alpha}\right)}}^\beta \\
-	&=\frac{\Gamma\left(
-	\frac{1}{\beta},\frac{{\Delta}^{\beta}}{{\alpha}^{\beta}\,{2}^{\beta}}\right)
-	}{\Gamma\left( \nicefrac{1}{\beta}\right) }
+	a \e^{-{\left(b x \right)}^\gamma} \\
+	&=1+2a\frac{\Gamma\left(
+		\frac{1}{\gamma},{\left(\frac{b\Delta}{2}\right)}^\gamma\right)-
+		\Gamma\left(\nicefrac{1}{\gamma}\right)}
+		{b\gamma}
 	\label{eqn:rate}
 \end{align}
 Deriving equation~\ref{eqn:rate} in $\Delta$:
 \begin{equation}
 	\frac{\partial R}{\partial\Delta} =
-	-\frac{\beta\e^{\nicefrac{-\Delta^\beta}{\alpha^\beta2^\beta}}}
-	{2\alpha\Gamma \left(\nicefrac{1}{\beta}\right)}
+	-a\e^{{\left(\nicefrac{-b\Delta}{2}\right)}^\gamma}
 \end{equation}
 \subsubsection{Optimal Lagrange multiplier}
 \label{ssub:optimal_lagrange_multiplier}
 
-With both the distortion and the constraint derived, the optimal
-Lagrange multiplier can be found as:
+With both the distortion (equation~\ref{eqn:distortion}) and the
+constraint (equation~\ref{eqn:rate}) derived, the optimal Lagrange
+multiplier can be found as:
 \begin{equation}
 	\frac{\partial J(\lambda)}{\partial \Delta}
 	= \frac{\partial D}{\partial \Delta} +
@@ -952,10 +957,9 @@ Lagrange multiplier can be found as:
 \end{equation}
 Substituting both derivatives:
 \begin{equation}
-	\frac{\beta\Delta^2\e^{\nicefrac{-\Delta^\beta}{\alpha^\beta2^\beta}}}
-	{8\alpha\Gamma \left(\nicefrac{1}{\beta}\right)}
-	-\lambda\frac{\beta\e^{\nicefrac{-\Delta^\beta}{\alpha^\beta2^\beta}}}
-	{2\alpha\Gamma \left(\nicefrac{1}{\beta}\right)} = 0
+	\frac{\Delta^2 a \e^{{(-b\nicefrac{\Delta}{2})}^\gamma}}{4}
+	- \lambda
+	a\e^{{\left(\nicefrac{-b\Delta}{2}\right)}^\gamma} = 0
 	\quad \Rightarrow \quad \boxed{\lambda = \frac{\Delta^2}{4}}
 \end{equation}
 
@@ -966,7 +970,7 @@ balance between the distortion and the rate constraint.
 
 An important consequence of using the $\ell_0$ norm is that the optimal
 Lagrange multiplier is independent from the data's \ac{PDF} (it doest
-not depend on $\alpha$ neither on $\beta$), meaning that the optimal
+not depend on $\sigma$ neither on $\gamma$), meaning that the optimal
 Lagrange multiplier remains the same, no matter which transform has been
 used.
 This fact makes the $\ell_0$ norm very suitable for this iterative
