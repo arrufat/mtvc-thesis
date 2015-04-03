@@ -6,8 +6,6 @@
 	1/\s*sqrt(gamma(3/\g)/gamma(1/\g));},
 	declare function={a(\s,\g)=
 	b(\s,\g)*\g/(2*gamma(1/\g));},
-	% declare function={ggd(\a,\b,\x)=
-	% \b / (2*\a*gamma(1/\b))*exp(-(abs(\x)/\a)^\b);},
 	declare function={ggd(\s,\g,\x)=
 	a(\s,\g)*exp(-(abs(\x)*b(\s,\g))^\g);}
 ]
@@ -36,7 +34,7 @@
 				/tikz/.cd
 			},
 			xmin=-20, xmax=20,
-			% ymin=0, ymax=0.09,
+			ymin=0, ymax=0.14,
 			legend style={nodes=right},
 			legend pos= north east,
 			unbounded coords=jump,
@@ -47,36 +45,18 @@
 		table[x=x,y=dct,col sep=tab] from \table;
 		\addlegendentry{DCT}
 
-		% \pgfplotstableread{figures/pdf_klt.dat}\table
-		% \addplot[blue, thick, smooth, tension=0.3]
-		% table[x=x,y=klt,col sep=tab] from \table;
-		% \addlegendentry{KLT}
-
 		\pgfplotstableread{figures/pdf_rdot.dat}\table
 		\addplot[red, thick, smooth, tension=0.3]
 		table[x=x,y=rdot,col sep=tab] from \table;
 		\addlegendentry{RDOT}
 
-		\addplot[blue, thick, samples=101, smooth, domain=-20:20]
-		{ggd(5,1,x)};
+		\addplot[blue, thick, samples=51, smooth, domain=-20:20]
+		{ggd(5.6,1,x)};
 		\addlegendentry{GGD($\sigma$,1,$x$)}
 
-		\addplot[mygreen, thick, samples=101, smooth, domain=-20:20]
-		{ggd(5,2,x)};
+		\addplot[mygreen, thick, samples=51, smooth, domain=-20:20]
+		{ggd(5.6,2,x)};
 		\addlegendentry{GGD($\sigma$,2,$x$)}
-
-		% \addplot[domain=-5:5, samples=50]{x^2};
-		% \pgfplotstableread{figures/bdrill-mdst-rdot-sep.dat}\table
-		% \addplot[mark=*,mark size=1pt, mygreen, thick, smooth, tension=0.3]
-		% table[x=bitrate,y=psnr,col sep=tab] from \table;
-        %
-		% \pgfplotstableread{figures/bdrill-mddt-klt.dat}\table
-		% \addplot[mark=*,mark size=1pt, blue, thick, smooth, tension=0.3]
-		% table[x=bitrate,y=psnr,col sep=tab] from \table;
-        %
-		% \pgfplotstableread{figures/bdrill-mdst-rdot-nsep.dat}\table
-		% \addplot[mark=*,mark size=1pt, red, thick, smooth, tension=0.3]
-		% table[x=bitrate,y=psnr,col sep=tab] from \table;
 	\end{axis}
 \end{tikzpicture}
 
