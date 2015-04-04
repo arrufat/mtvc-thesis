@@ -809,7 +809,7 @@ $\P=\I$
 	\V^T\A_{opt}^T\U=\I\quad \Rightarrow \quad \A_{opt} = \U\V^T
 \end{equation}
 
-\subsection{The Lagrange multiplier}
+\subsection{The Lagrange multiplier and the zero norm}
 \label{sub:the_lagrange_multiplier}
 \index{generalised normal distribution}
 \index{generalised gaussian distribution}
@@ -893,7 +893,6 @@ equation~\ref{eqn:hard_threshold} can be expressed as:
 \begin{equation}
 	D
 	= \int_{-\infty}^{\infty} {(x - \hat x)}^2 \P_X (x)\d x
-	= \int_{-\infty}^{\infty} \left(x^2 -2x\hat x + {\hat x}^2\right) \P_X (x)\d x
 	= \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
 	x^2\P_X (x) \d x
 \end{equation}
@@ -906,9 +905,9 @@ Substituting $P_X(x)$ by the residuals \ac{PDF}:
 \begin{align}
 	D
 	&=\int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
-	x^2 a \e^{-{\left(b\vert x \vert\right)}^\gamma} \\
+	x^2 a \e^{-{\left(b\vert x \vert\right)}^\gamma} \d x \\
 	&=2 \int_0^{\nicefrac{\Delta}{2}}
-	x^2 a \e^{-{\left(b x \right)}^\gamma} \\
+	x^2 a \e^{-{\left(b x \right)}^\gamma} \d x\\
 	&=
 		2a \frac{\Gamma\left(\frac{3}{\gamma}\right)-
 		\Gamma\left(
@@ -945,9 +944,9 @@ Substituting $P_X(x)$ by the residuals \ac{PDF}:
 \begin{align}
 	R
 	&=1-\int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
-	a \e^{-{\left(b\vert x \vert\right)}^\gamma} \\
+	a \e^{-{\left(b\vert x \vert\right)}^\gamma} \d x \\
 	&=1-2\int_0^{\nicefrac{\Delta}{2}}
-	a \e^{-{\left(b x \right)}^\gamma} \\
+	a \e^{-{\left(b x \right)}^\gamma} \d x \\
 	&=1+2a\frac{\Gamma\left(
 		\frac{1}{\gamma},{\left(\frac{b\Delta}{2}\right)}^\gamma\right)-
 		\Gamma\left(\frac{1}{\gamma}\right)}
@@ -989,18 +988,10 @@ Lagrange multiplier is independent from the data's \ac{PDF} (it doest
 not depend on $\sigma$ neither on $\gamma$), meaning that the optimal
 Lagrange multiplier remains the same, no matter which transform has been
 used.
-This fact makes the $\ell_0$ norm very suitable for this iterative
-learning method, where the transform changes at each iteration and so
-does the \ac{PDF} of the training data.
-
-\subsection{The zero norm }
-\label{sub:the_zero_norm}
-
-Despite its simplicity, the $\ell_0$ norm provides an efficient and
-robust approximation of the rate, which makes it very suitable for the
-transform learnings.
-This section justifies its use over other rate models that might be
-closer to the real rate, such as the entropy.
+In fact, these results can be generalised to any \ac{PDF}, making the
+$\ell_0$ norm a robust approximation of the rate, suitable for this
+iterative learning method, where the transform changes at each iteration
+and so does the \ac{PDF} of the training data.
 
 \section{Conclusions}
 \label{sec:conclusions_transforms}
