@@ -50,11 +50,11 @@
 		table[x=x,y=rdot,col sep=tab] from \table;
 		\addlegendentry{RDOT}
 
-		\addplot[blue, thick, samples=51, smooth, domain=-20:20]
+		\addplot[blue, dotted, thick, samples=51, smooth, domain=-20:20]
 		{ggd(5.1,1,x)};
 		\addlegendentry{GGD($\sigma$,1,$x$)}
 
-		\addplot[mygreen, thick, samples=51, smooth, domain=-20:20]
+		\addplot[mygreen, dashed, thick, samples=51, smooth, domain=-20:20]
 		{ggd(5.1,2,x)};
 		\addlegendentry{GGD($\sigma$,2,$x$)}
 	\end{axis}
