@@ -19,12 +19,6 @@
 		}
 	}
 
-	% \node[draw, thick, rectangle, fill=blue!50, opacity=1, minimum
-	% height=5cm, minimum width=1cm, rotate=30] (input) at (3,3) {};
-
-	% \node[draw, thick, rectangle, fill=red!50, opacity=1, minimum
-	% height=5cm, minimum width=1cm, rotate=0] (output) at (13,3) {};
-
 	\def\seed{88}
 	\pgfmathsetmacro{\xvar}{2.4}
 	\pgfmathsetmacro{\yvar}{0.0}
@@ -33,6 +27,10 @@
 	\pgfmathsetseed{\seed}
 	\pgfmathsetmacro{\xoff}{3}
 	\pgfmathsetmacro{\yoff}{3}
+	\draw[style=help lines, dashed, very thin, rotate=0]
+		(\xoff-2.5,\yoff-2.5) grid (\xoff+2.5,\yoff+2.5);
+	\draw[->,very thick] (\xoff-2.5,\yoff)--(\xoff+2.5,\yoff) node[right]{$x$};
+	\draw[->,very thick] (\xoff,\yoff-2.5)--(\xoff,\yoff+2.5) node[above]{$y$};
 	\pgfmathsetmacro{\radius}{0.075}
 	\foreach \i in {1,2,...,50} {
 		\pgfmathsetmacro{\x}{(rand) * \xvar}
@@ -46,6 +44,10 @@
 	\pgfmathsetseed{\seed}
 	\pgfmathsetmacro{\xoff}{13}
 	\pgfmathsetmacro{\yoff}{3}
+	\draw[style=help lines, dashed, very thin, rotate=0]
+		(\xoff-2.5,\yoff-2.5) grid (\xoff+2.5,\yoff+2.5);
+	\draw[->,very thick] (\xoff-2.5,\yoff)--(\xoff+2.5,\yoff) node[right]{$x'$};
+	\draw[->,very thick] (\xoff,\yoff-2.5)--(\xoff,\yoff+2.5) node[above]{$y'$};
 	\foreach \i in {1,2,...,50} {
 		\pgfmathsetmacro{\x}{(rand) * \xvar}
 		\pgfmathsetmacro{\y}{(rand) * \yvar}
