@@ -51,11 +51,11 @@
 		\addlegendentry{RDOT}
 
 		\addplot[blue, thick, samples=51, smooth, domain=-20:20]
-		{ggd(5.6,1,x)};
+		{ggd(5.1,1,x)};
 		\addlegendentry{GGD($\sigma$,1,$x$)}
 
 		\addplot[mygreen, thick, samples=51, smooth, domain=-20:20]
-		{ggd(5.6,2,x)};
+		{ggd(5.1,2,x)};
 		\addlegendentry{GGD($\sigma$,2,$x$)}
 	\end{axis}
 \end{tikzpicture}
