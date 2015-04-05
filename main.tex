@@ -662,6 +662,16 @@ The \ac{KLT}~\cite{rao-01-transform-data-compression-book}
 \label{sec:the_rate_distortion_optimised_transforms}
 \index{RDOT}
 
+State-of-the-art video coding standard, such as \ac{HEVC} take advantage
+of sparse signals.
+As discussed before, transforms try to concentrate the energy of the
+residuals into as few coefficients as possible, maximising the number of
+zeroes in the transform domain.
+There are even syntax elements in \ac{HEVC} to deal with this:
+for a given transformed residual, the position of the last non-zero
+value is indicated, meaning that from that point onwards, all the
+following values are zero.
+
 In order to better fit the video coding demands, Sezer proposes a kind
 of transforms that take into account the sparsity of the output in their
 design~\cite{sezer-11-phd}.
