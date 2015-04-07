@@ -641,17 +641,22 @@ required to obtain the transformed signal.
 \def\x{\mathbf{x}}
 \def\Lambdab{\contour[3]{black}{$\Lambda$}}
 
-\begin{equation}
-	J(\lambda) = \text{Distortion} + \lambda \text{Rate}
-\end{equation}
+Since the objective of the transforms is to be able to represent the
+signal with as few coefficients as possible while minimising the
+distortion introduced by the quantisation, transform design methods are
+often a trade-off between the distortion and the number of bits needed
+to represent those signals in the transform domain.
 
-\begin{equation}
-	J(\lambda) = \sum\limits_{\forall i}{\Vert \x_i - \A^T \c_i \Vert}_2^2
-	+ \lambda r_i
-\end{equation}
-
+Many transform design method agree on how the distortion should be
+computed, namely using the \ac{MSE} from equation~\ref{eqn:mse}.
+However, different transform designs exist, depending on the used rate
+model.
 Next sections will study different transform design approaches, based on
 different modellings of the rate constraint.
+\begin{equation}
+	J(\lambda) = \text{Distortion} + \lambda \text{Rate}
+	\label{eqn:transform_design}
+\end{equation}
 
 \section{The Karhunen-Loève transform}
 \label{sec:the_karhunen_loeve_transform}
@@ -887,8 +892,9 @@ Even the uniform distribution can be reached by making $\gamma\to\infty$.
 However, from figure~\ref{fig:probability_density_functions} one can see
 that $1\le\gamma\le2$ for video residuals.
 
-In order to find the optimal $\lambda$, equation~\ref{eqn:rdot_metric}
-has to be derived.
+In order to find the optimal $\lambda$, equation~\ref{eqn:rdot_metric},
+which describes the trade-off between the distortion and the rate, has
+to be derived.
 The problem will be tackled in two separated steps:
 \begin{enumerate}
 	\item Compute the distortion analytically and derive it.
@@ -904,6 +910,7 @@ equation~\ref{eqn:hard_threshold} can be expressed as:
 	D
 	= \int_{-\infty}^{\infty} {(x - \hat x)}^2 \P_X (x)\d x
 	= \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
+	\label{eqn:int_distortion}
 	x^2\P_X (x) \d x
 \end{equation}
 Note that the integration intervals have been reduced to where the
@@ -949,6 +956,7 @@ Consequently, the constraint can be expressed as:
 	= \frac{1}{N} N \P_X\left(\vert X \vert \ge \frac{\Delta}{2}\right)
 	= 1-P_X\left(\vert X \vert < \frac{\Delta}{2}\right)
 	= 1-\int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}\P_X(x)\d x
+	\label{eqn:int_rate}
 \end{equation}
 Substituting $P_X(x)$ by the residuals \ac{PDF}:
 \begin{align}
@@ -979,6 +987,7 @@ multiplier can be found as:
 	\frac{\d J(\lambda)}{\d \Delta}
 	= \frac{\d D}{\d \Delta} +
 	\lambda \frac{\d R}{\d \Delta} = 0 \\
+	\label{eqn:diff_lagrange_multiplier}
 \end{equation}
 Substituting both derivatives:
 \begin{equation}
@@ -1002,6 +1011,60 @@ In fact, these results can be generalised to any \ac{PDF}, making the
 $\ell_0$ norm a robust approximation of the rate, suitable for this
 iterative learning method, where the transform changes at each iteration
 and so does the \ac{PDF} of the training data.
+
+\subsection{Independence from the \ac{PDF}}
+\label{sub:independence_from_the_pdf}
+
+In the previous subsection, for a given quantisation step, the value of
+the optimal Lagrange multiplier $\lambda$ has been proved for the
+particular case of the residuals displaying \ac{PDF} that can be
+modelled after a \ac{GGD}.
+By using the fundamental theorem of calculus, which relates integrals
+and derivatives of a function, one can generalise that conclusion for
+any continuous \ac{PDF}.
+
+Let $f(x)$ be the residuals \ac{PDF}.
+The distortion is computed reusing equation~\ref{eqn:int_distortion}:
+\begin{equation}
+	D = \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}} x^2 f(x) \d x
+\end{equation}
+Deriving the distortion with respect to $\Delta$:
+\begin{equation}
+	\frac{\d D}{\d \Delta} =
+	\frac{\Delta^2}{8}\left[
+	f\left(\frac{\Delta}{2}\right)+f\left(-\frac{\Delta}{2}\right)\right]
+\end{equation}
+The rate constraint from equation~\ref{eqn:int_rate} is computed as
+follows with the generic \ac{PDF}
+$f(x)$:
+\begin{equation}
+	R = 1 - \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}} f(x) \d x\\
+\end{equation}
+Again, deriving with respect to $\Delta$:
+\begin{equation}
+	\frac{\d R}{\d \Delta} =
+	-\frac{1}{2}\left[
+	f\left(\frac{\Delta}{2}\right)+
+	f\left(\frac{-\Delta}{2}\right)\right]
+\end{equation}
+Combining previous equations using equation~\ref{eqn:diff_lagrange_multiplier},
+one can see that the optimal Lagrange multiplier $\lambda$ does not
+depend on the residuals \ac{PDF}:
+\begin{equation}
+	\frac{\Delta^2}{8}\left[
+	f\left(\frac{\Delta}{2}\right)+f\left(-\frac{\Delta}{2}\right)\right]
+	- \lambda
+	\frac{1}{2}\left[
+	f\left(\frac{\Delta}{2}\right)+
+	f\left(\frac{-\Delta}{2}\right)\right] = 0
+\end{equation}
+\begin{equation}
+	\boxed{\lambda = \frac{\Delta^2}{4}}
+\end{equation}
+
+This fact reassures the use of the $\ell_0$ norm, even in the case that
+the transform changes the \ac{PDF} in a way that can no longer be modelled
+after a \ac{GGD}.
 
 \section{Conclusions}
 \label{sec:conclusions_transforms}
