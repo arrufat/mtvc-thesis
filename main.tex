@@ -171,7 +171,7 @@ used in state-of-the-art video coders.
 Figure~\ref{fig:video_coding_system} describes how a complete video
 coding system can be organised as a block diagram.
 
-\begin{figure}[ht]
+\begin{figure}[tb]
 	\centering
 	\input{./figures/VideoCodingSystem.tex}
 	\caption{Video coding system}
@@ -264,7 +264,7 @@ prediction and transform coding techniques for the prediction error.
 A basic structure of the hybrid video coding scheme is presented in
 figure~\ref{fig:hybrid_video_coding_scheme}.
 
-\begin{figure}[ht]
+\begin{figure}[tb]
 	\centering
 	\input{./figures/HybridVideoCodingScheme.tex}
 	\caption{Hybrid video coding scheme}
@@ -294,7 +294,7 @@ The partitioning does not have to be uniform, allowing blocks of different
 sizes to be used.
 The optimal choice for the block size is left to the encoder.
 
-\begin{figure}[ht]
+\begin{figure}[tb]
 	\centering
 	\includegraphics[width=0.6\linewidth]{./figures/partitioning-orig-all-001.png}
 	\caption{Partitioning example using \acs{HEVC} at \acs{QP} 27}
@@ -327,14 +327,14 @@ intra or spatial prediction for those blocks that
 have been predicted using information within the same frame, and inter
 or temporal prediction for those blocks predicted using other frames.
 
-\begin{figure}[ht]
+\begin{figure}[tb]
 	\centering
 	\includegraphics[width=0.6\linewidth]{./figures/partitioning-pred-all-001.png}
 	\caption{Predicted image}
 	\label{fig:predicted_image}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[tb]
 	\centering
 	\includegraphics[width=0.6\linewidth]{./figures/partitioning-resi-all-001.png}
 	\caption{Residual image (difference between original and predicted)}
@@ -402,7 +402,7 @@ hybrid video coding scheme, and therefore what makes video coding lossy.
 Lossless video coding can be attained by not using quantification in the
 process.
 
-% \begin{figure}[ht]
+% \begin{figure}[tb]
 % 	\centering
 % 	\subfloat[Partitioning]
 % 	{\includegraphics[width=0.8\linewidth]{./figures/partitioning-orig-all-001.png}}
@@ -441,7 +441,7 @@ For each block size and kind of prediction, the encoder computes the
 distortion, using its own decoder, and estimates the rate as illustrated
 in figure~\ref{fig:rate_distortion_scheme}.
 
-\begin{figure}[ht]
+\begin{figure}[tb]
 	\centering
 	\input{./figures/RateDistortionScheme.tex}
 	\caption{Rate-distortion scheme of a transform-based codec}
@@ -586,7 +586,7 @@ and representative example of transforms are rotations.
 The example in figure~\ref{fig:transform_rotation} helps visualising the
 transform role in signal compression.
 
-\begin{figure}[ht]
+\begin{figure}[tb]
 	\centering
 	\input{figures/TransformRotation.tex}
 	\caption{Simple transform performing a rotation}
@@ -625,21 +625,25 @@ required to obtain the transformed signal.
 \subsection{Transform design}
 \label{sub:transform_design}
 
-\def\A{\mathbf{A}}
-\def\I{\mathbf{I}}
-\def\P{\text{P}}
-\def\U{\mathbf{U}}
-\def\V{\mathbf{V}}
-\def\X{\mathbf{X}}
-\def\Y{\mathbf{Y}}
-\def\arg{\text{arg}}
-\def\c{\mathbf{c}}
-\def\d{\text{d}}
-\def\e{\text{e}}
-\def\GGD{\text{GGD}}
-\def\tr{\text{tr}}
-\def\x{\mathbf{x}}
-\def\Lambdab{\contour[3]{black}{$\Lambda$}}
+\def\A{\mathbf{A}}   % transform \A
+\def\a{\mathbf{a}}   % rows of transform \A
+\def\C{\mathbf{C}}   % covariance matrix
+\def\E{\text{E}}     % expected value
+\def\I{\mathbf{I}}   % identity matrix
+\def\P{\text{P}}     % probability
+\def\R{\mathbf{R}}   % correlation matrix
+\def\U{\mathbf{U}}   % Right SVD decomposition
+\def\V{\mathbf{V}}   % Left SVD decomposition
+\def\X{\mathbf{X}}   % x in the transformed domain
+\def\Y{\mathbf{Y}}   % helper cross correlation matrix
+\def\arg{\text{arg}} % argument
+\def\c{\mathbf{c}}   % quantised coefficients
+\def\d{\text{d}}     % differential
+\def\e{\text{e}}     % Euler's constant
+\def\GGD{\text{GGD}} % general gaussian distribution
+\def\tr{\text{tr}}   % trace
+\def\x{\mathbf{x}}   % x vector
+\def\Lambdab{\contour[3]{black}{$\Lambda$}} % eigen values matrix
 
 Since the objective of the transforms is to be able to represent the
 signal with as few coefficients as possible while minimising the
@@ -661,10 +665,103 @@ different modellings of the rate constraint.
 \section{The Karhunen-Loève transform}
 \label{sec:the_karhunen_loeve_transform}
 \index{KLT}
-The \ac{KLT}~\cite{rao-01-transform-data-compression-book}
+In general, the components of source signals are correlated with one
+another.
+However, it is indeed, possible to select an orthogonal matrix $\A$, for
+a given \ac{PDF} describing the source that will make $\X=\A\x$ have
+pairwise uncorrelated components~\cite{gersho-92-vector-quantization}.
+The \ac{KLT} is a linear transform that removes the redundancy by
+decorrelating the data, so that the signal can be stored more
+efficiently~\cite{rao-01-transform-data-compression-book}.
 
-\section{The rate-distortion optimised transforms}
-\label{sec:the_rate_distortion_optimised_transforms}
+The \ac{KLT} is often presented as the optimal transform in a general
+case, sometimes even for all possible sources of signals.
+However, it has been proved to be suboptimal in the transform coding /
+bit allocation sense~\cite{effros-04-suboptimal-klt}.
+
+In this section, the \ac{KLT} is presented under its well-known optimal
+conditions: Gaussian sources with high resolution quantisation
+assumptions~\cite{goyal-00-high-resolution}.
+The high resolution assumption states that the number of quantisation
+levels $N$ is very high, the maximum quantisation step size
+$\Delta_{\max}$ is sufficiently small compared to the range of the
+granular region and the \ac{PDF} is relatively smooth.
+This means that, for a specific \ac{PDF}, increasing $N$ directly
+implies that $\Delta_{\max}$ decreases inversely with $N$.
+Under those conditions, the \ac{KLT} is the optimal transform in terms
+of bit allocation that minimises the overall
+distortion~\cite{gersho-92-vector-quantization}.
+
+Since the \ac{KLT} decorrelates the signal in the transform domain, it
+can be computed as follows.
+Let $\x$ be a zero-mean Gaussian process and $\A$ an orthonormal transform.
+In the transform domain:
+\begin{equation}
+	\X = \A \x \qquad \text{s.t. } \A \A^T = \I
+\end{equation}
+The covariance matrix in the transform domain is expressed as:
+\begin{equation}
+	\C_\X = \E\left\{\X \X^T\right\} = \A \E\left\{\x\x^T\right\}\A^T =
+	\A\C_\x\A^T
+\end{equation}
+Or equivalently:
+\begin{equation}
+	\A^T\C_\X = \C_\x\A^T
+\end{equation}
+And since $\C_\X$ is diagonal by construction:
+\begin{equation}
+	\C_\x \a_i = \lambda_i\a_i
+\end{equation}
+Where:
+\begin{itemize}
+	\item $\a_i$ are the eigenvectors of $\C_\x$.
+	\item $\lambda_i$ are the eigenvalues of $\C_\x$.
+\end{itemize}
+
+\subsection{Particular case: \acs{DCT}}
+\index{DCT}
+\index{Markov}
+\index{AR}
+\label{sub:particular_case_dct}
+
+In this section, the \ac{KLT} will be studied for a particular kind of
+signals: natural images.
+Natural images exhibit a first order \ac{AR} structure.
+A first order \ac{AR} model, also known as Markov-1 process, is a
+stochastic process that can be generated through the following
+regression formula:
+\begin{equation}
+	x(n) = \rho x(n-1) + w(n)
+	\label{eqn:first_order_ar_model}
+\end{equation}
+Where $\rho$ is the correlation coefficient between two adjacent samples
+and $w(n)$ is a white noise with zero mean, whose variance is related to
+the variance of $x(n)$ $\sigma_x^2$ as:
+\begin{equation}
+	\sigma_w^2 = \E\langle w(n) w(n)\rangle =
+	\left(1-\rho^2\right)\sigma_x^2
+\end{equation}
+The correlation matrix of this process takes the form of a Toeplitz
+matrix~\cite{akansu-12-toeplitz-approximation}:
+\begin{equation}
+    \R_x = \sigma_x^2
+    \begin{bmatrix}
+        1          & \rho       & \rho^2     & \cdots & \rho^{N-1} \\
+        \rho       & 1          & \rho       & \cdots & \rho^{N-2} \\
+        \rho^2     & \rho       & 1          & \cdots & \rho^{N-3} \\
+        \vdots     & \vdots     & \vdots     & \ddots & \vdots     \\
+        \rho^{N-1} & \rho^{N-2} & \rho^{N-3} & \cdots & 1
+    \end{bmatrix}
+    \label{eqn:toeplitz_matrix}
+\end{equation}
+The \ac{KLT} for this kind of processes tends to the DCT as
+$\rho\to1$~\cite{britanak-06-dct-and-dst}.
+
+\subsection{Particular case: \acp{DST}}
+\label{sub:particular_case_dst}
+
+\section{The rate-distortion optimised transform}
+\label{sec:the_rate_distortion_optimised_transform}
 \index{RDOT}
 
 State-of-the-art video coding standard, such as \ac{HEVC} take advantage
@@ -852,7 +949,7 @@ Residuals are computed as the difference between predicted and original
 blocks, meaning they are prediction errors.
 These errors are made by excess or defect evenly, evidenced by their
 zero-mean \ac{PDF}.
-\begin{figure}[ht]
+\begin{figure}[tb]
 	\centering
 	% \vspace{0.30\textheight} % using this to speedup compilation
 	\input{./figures/pdfs.pgf}
@@ -1045,7 +1142,7 @@ Again, deriving with respect to $\Delta$:
 	\frac{\d R}{\d \Delta} =
 	-\frac{1}{2}\left[
 	f\left(\frac{\Delta}{2}\right)+
-	f\left(\frac{-\Delta}{2}\right)\right]
+	f\left(-\frac{\Delta}{2}\right)\right]
 \end{equation}
 Combining previous equations using equation~\ref{eqn:diff_lagrange_multiplier},
 one can see that the optimal Lagrange multiplier $\lambda$ does not
@@ -1056,7 +1153,7 @@ depend on the residuals \ac{PDF}:
 	- \lambda
 	\frac{1}{2}\left[
 	f\left(\frac{\Delta}{2}\right)+
-	f\left(\frac{-\Delta}{2}\right)\right] = 0
+	f\left(-\frac{\Delta}{2}\right)\right] = 0
 \end{equation}
 \begin{equation}
 	\boxed{\lambda = \frac{\Delta^2}{4}}
@@ -1132,6 +1229,7 @@ to degrade its performances as least as possible.
 \addcontentsline{toc}{chapter}{List of Acronyms}
 \begin{acronym}[CABAC] % the option corresponds to the longest acronym
 	\acro{AVC}{Advanced Video Coding}
+	\acro{AR}{autoregressive}
 	\acro{BD}{Bj{\o}ntegaard Delta}
 	\acro{CABAC}{Context Adaptive Binary Arithmetic Coding}
 	\acro{DCT}{discrete cosine transform}
