@@ -744,15 +744,15 @@ the variance of $x(n)$ $\sigma_x^2$ as:
 The correlation matrix of this process takes the form of a Toeplitz
 matrix~\cite{akansu-12-toeplitz-approximation}:
 \begin{equation}
-    \R_x = \sigma_x^2
-    \begin{bmatrix}
-        1          & \rho       & \rho^2     & \cdots & \rho^{N-1} \\
-        \rho       & 1          & \rho       & \cdots & \rho^{N-2} \\
-        \rho^2     & \rho       & 1          & \cdots & \rho^{N-3} \\
-        \vdots     & \vdots     & \vdots     & \ddots & \vdots     \\
-        \rho^{N-1} & \rho^{N-2} & \rho^{N-3} & \cdots & 1
-    \end{bmatrix}
-    \label{eqn:toeplitz_matrix}
+	\R_x = \sigma_x^2
+	\begin{bmatrix}
+		1          & \rho       & \rho^2     & \cdots & \rho^{N-1} \\
+		\rho       & 1          & \rho       & \cdots & \rho^{N-2} \\
+		\rho^2     & \rho       & 1          & \cdots & \rho^{N-3} \\
+		\vdots     & \vdots     & \vdots     & \ddots & \vdots     \\
+		\rho^{N-1} & \rho^{N-2} & \rho^{N-3} & \cdots & 1
+	\end{bmatrix}
+	\label{eqn:toeplitz_matrix}
 \end{equation}
 The \ac{KLT} for this kind of processes tends to the DCT as
 $\rho\to1$~\cite{britanak-06-dct-and-dst}.
