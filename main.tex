@@ -34,6 +34,7 @@
 
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{pgfplots,tikz}
+\usetikzlibrary{decorations.markings}
 \usepackage{bookmark} % needed for \bookmarksetup{startatroot}
 \usepackage{hyperref}
 \hypersetup{
@@ -724,8 +725,10 @@ Where:
 \index{AR}
 \label{sub:particular_case_dct}
 
-In this section, the \ac{KLT} will be studied for a particular kind of
-signals: natural images.
+One of the most used transforms in image and video coding is the
+\ac{DCT}.
+In this section, the \ac{DCT} will be justified over a particular kind
+of signals: natural images.
 Natural images exhibit a first order \ac{AR} structure.
 A first order \ac{AR} model, also known as Markov-1 process, is a
 stochastic process that can be generated through the following
@@ -754,10 +757,9 @@ matrix~\cite{akansu-12-toeplitz-approximation}:
 	\end{bmatrix}
 	\label{eqn:toeplitz_matrix}
 \end{equation}
-The \ac{KLT} for this kind of processes tends to the DCT as
-$\rho\to1$~\cite{britanak-06-dct-and-dst}.
-
-
+The \ac{KLT} for this kind of processes, that is, the eigenvalues of
+$\R_\x$, tends to the \ac{DCT} as $\rho\to1$~\cite{britanak-06-dct-and-dst}.
+The \ac{DCT}-II can be expressed compactly as:
 \begin{equation}
 	{\left[C_{N}^{II} \right]}_{n,k} =
 	\sqrt{\frac{2}{N}}\epsilon_k\cos\left(\frac{\pi(2n+1)k}{2N}\right)
@@ -774,16 +776,47 @@ $\rho\to1$~\cite{britanak-06-dct-and-dst}.
 	\end{cases}
 \end{equation}
 
+\begin{figure}[tb]
+	\centering
+	\subfloat[\acs{DCT}-II $4\times4$]
+	{\includegraphics[width=0.3\linewidth]{./figures/dct4-bases.png}}
+	\hspace{0.2\linewidth}
+	\subfloat[\acs{DST}-VII $4\times4$]
+	{\includegraphics[width=0.3\linewidth]{./figures/dst4-bases.png}}
+	\caption{Transforms used in \ac{HEVC} for $4\times4$ blocks}
+	\label{fig:part_orig_pred_res_image}
+\end{figure}
+
 \subsection{Particular case: \acs{DST}}
 \label{sub:particular_case_dst}
+\index{DST}
 
-Although the \ac{DCT} has been proved to be nearly optimal for natural
+Although the \ac{DCT} has been proved to be nearly the \ac{KLT} for natural
 images, it is used in predictive transform coding based video standards.
 This kind of coding leads to signals whose nature differ from natural
 images: prediction residuals.
+In particular, prediction residuals resulting from intra prediction tend
+to have particular properties.
+Those residuals are computed using predictions from already
+reconstructed blocks, usually available on the left and upper borders of
+the current residual, as shown in figure~\ref{fig:pred_scheme}.
+This facts motivated a study on this particular blocks, resuling in a
+transform that performs better on them than the \ac{DCT}: the \ac{DST}.
+\begin{figure}[tb]
+	\centering
+	\subfloat[Prediction modes for the current block (white) from previously
+	reconstructed blocks (grey)]
+	{\input{./figures/pred-scheme.pgf}}
+	\hspace{0.2\linewidth}
+	\subfloat[Average intra prediction residual from mode 18]
+	{\includegraphics[width=0.3\linewidth]{./figures/av-residual-s4-p18.png}}
+	\caption{Prediction scheme showing all intra prediction modes and a
+	prediction residual example}
+	\label{fig:pred_scheme}
+\end{figure}
 
 \begin{equation}
-	{\left[ S_{N}^{VII} \right]}_{n,k} =
+	{\left[S_{N}^{VII} \right]}_{n,k} =
 	\frac{2}{\sqrt{2N+1}}\sin\left(\frac{\pi(2n-1)k}{2N+1}\right),
 	\quad
 	n,k = 1, \dots, N
