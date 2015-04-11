@@ -170,7 +170,7 @@ coding system can be organised as a block diagram.
 
 \begin{figure}[tb]
 	\centering
-	\input{./figures/VideoCodingSystem.tex}
+	\input{./figures/video_coding_system.tex}
 	\caption{Video coding system}
 	\label{fig:video_coding_system}
 \end{figure}
@@ -263,7 +263,7 @@ figure~\ref{fig:hybrid_video_coding_scheme}.
 
 \begin{figure}[tb]
 	\centering
-	\input{./figures/HybridVideoCodingScheme.tex}
+	\input{./figures/hybrid_video_coding_scheme.tex}
 	\caption{Hybrid video coding scheme}
 	\label{fig:hybrid_video_coding_scheme}
 \end{figure}
@@ -440,7 +440,7 @@ in figure~\ref{fig:rate_distortion_scheme}.
 
 \begin{figure}[tb]
 	\centering
-	\input{./figures/RateDistortionScheme.tex}
+	\input{./figures/rate_distortion_scheme.tex}
 	\caption{Rate-distortion scheme of a transform-based codec}
 	\label{fig:rate_distortion_scheme}
 \end{figure}
@@ -1222,7 +1222,21 @@ This fact reassures the use of the $\ell_0$ norm, even in the case that
 the transform changes the \ac{PDF} in a way that can no longer be modelled
 after a \ac{GGD}.
 
-\includegraphics{./figures/dist_zero_plot.pdf}
+\begin{figure}[tp]
+	\centering
+	\includegraphics{./figures/dist_zero_plot.pdf}
+	\caption{Distortion and $\ell_0$ norm with $\lambda_{opt}$ at \acs{QP} 27
+	for different \acsp{PDF}}
+	\label{fig:lambda_zero_norm_dist}
+\end{figure}
+
+\begin{figure}[tp]
+	\centering
+	\includegraphics{./figures/j_qp_plot.pdf}
+	\caption{$J(\lambda)$ for different \ac{GGD} modelling the rate with
+	the $\ell_0$ norm and the entropy (H)}
+	\label{fig:j_lambda_qp}
+\end{figure}
 
 \section{Conclusions}
 \label{sec:conclusions_transforms}
