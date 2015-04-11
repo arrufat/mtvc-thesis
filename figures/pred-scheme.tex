@@ -1,0 +1,38 @@
+\begin{tikzpicture}[scale=1.60]
+
+	\tikzset{middlearrow/.style={
+		decoration={markings,
+			mark= at position 0.95 with {\arrow{#1}} ,
+		},
+		postaction={decorate}
+	}
+}
+
+	\def\startangle{45}
+	\def\radius{0.707}
+
+	\filldraw[fill=black!15, draw=black!75] (-6,-2) rectangle (-5,-1);
+	\filldraw[fill=black!15, draw=black!75] (-6,-1) rectangle (-5,0);
+	\filldraw[fill=black!15, draw=black!75] (-5,-1) rectangle (-4,0);
+	\filldraw[fill=black!15, draw=black!75] (-6,-2) rectangle (-5,-3);
+	\filldraw[fill=black!15, draw=black!75] (-4,0) rectangle (-3,-1);
+
+	\draw[step=0.25,help lines] (-6,-2) grid (-4,0);
+	\draw[step=0.25,help lines] (-6,-2) grid (-5,-3);
+	\draw[step=0.25,help lines] (-4,0) grid (-3,-1);
+	\draw[step=1,black!75,thick] (-6,-2) grid (-4,0);
+	\draw[step=1,black!75,thick] (-6,-2) grid (-5,-3);
+	\draw[step=1,black!75,thick] (-4,0) grid (-3,-1);
+
+	\foreach \direction in {2,3,...,34}
+	{%
+		% set the angle of current prediction direction 
+		\pgfmathsetmacro{\angle}{\startangle - (\direction - 2) * 180 / 32 + 180}
+		\ifthenelse{\direction < 18}{\def\oper{cos}}{\def\oper{sin}}
+		\pgfmathsetmacro{\radnew}{abs(\radius / \oper(\angle))}
+		\ifthenelse{\direction = 2 \OR \direction = 10 \OR \direction = 18 \OR \direction = 26 \OR \direction = 34}
+		{\draw[opacity=0] (-4.5,-1.5) --++ (\angle:\radnew + 0.15) node [opacity=1] {\small \textsf{\direction}};}{}
+
+		\draw[middlearrow={latex reversed}] (-4.5,-1.5) --++ (\angle:\radnew);
+	}
+\end{tikzpicture}

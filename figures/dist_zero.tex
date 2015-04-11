@@ -1,0 +1,68 @@
+\definecolor{mygreen}{RGB}{0,143,0}
+\begin{tikzpicture}
+	\pgfplotsset{/tikz/font={\small}}
+	\begin{axis}[
+			xlabel={$\ell_0$ norm},
+			ylabel={Distortion},
+			grid=both,
+			scale only axis,
+			width=0.80\textwidth,
+			height=0.30\textheight,
+			scaled y ticks = false,
+			x tick label style={
+				/pgf/number format/.cd,
+				set thousands separator={\thinspace},
+				set decimal separator={.},
+				fixed,
+				fixed zerofill,
+				precision=2,
+				/tikz/.cd
+			},
+			y tick label style={
+				/pgf/number format/.cd,
+				set decimal separator={.},
+				fixed,
+				fixed zerofill,
+				precision=1,
+				/tikz/.cd
+			},
+			% xtick={0.20,0.22,...,0.50},
+			% ytick={0,2.5,...,100},
+			xmin=0.00, xmax=0.50,
+			ymin=0.00, ymax=40,
+			legend style={nodes=right},
+			legend pos= north east,
+			unbounded coords=jump,
+		]
+
+		\pgfplotstableread{dist_zero_1.50.dat}\table
+		\addplot[mark=*,mark size=1pt, mygreen, thick, smooth, tension=0.3]
+		table[x=nz,y=dist,col sep=tab] from \table;
+		\addlegendentry{$\gamma=1.50$}
+
+		\pgfplotstableread{dist_zero_1.25.dat}\table
+		\addplot[mark=*,mark size=1pt, blue, thick, smooth, tension=0.3]
+		table[x=nz,y=dist,col sep=tab] from \table;
+		\addlegendentry{$\gamma=1.25$}
+
+		\pgfplotstableread{dist_zero_1.00.dat}\table
+		\addplot[mark=*,mark size=1pt, red, thick, smooth, tension=0.3]
+		table[x=nz,y=dist,col sep=tab] from \table;
+		\addlegendentry{$\gamma=1.00$}
+
+		\pgfplotstableread{dist_zero_0.75.dat}\table
+		\addplot[mark=*,mark size=1pt, black, thick, smooth, tension=0.3]
+		table[x=nz,y=dist,col sep=tab] from \table;
+		\addlegendentry{$\gamma=0.75$}
+
+		\addplot [only marks, mark=o, mark size=3pt, thick] table {
+		0.434317	8.396036
+		0.404402	8.36362 
+		0.364981	8.176391
+		0.310958	7.666366
+		};
+		\addlegendentry{$\lambda_{opt}$}
+
+	\end{axis}
+
+\end{tikzpicture}

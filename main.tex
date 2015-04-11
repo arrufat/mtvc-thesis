@@ -23,10 +23,6 @@
 
 % font configuration
 \usepackage{amsmath, amssymb}
-% \usepackage{lmodern}
-% \usepackage[default,scaled=0.85]{FiraSans}
-% \usepackage[helvet]{sfmath}
-% \usepackage[scaled=0.80]{sourcecodepro} % option: default
 \usepackage[T1]{fontenc}
 \usepackage{mathptmx}
 \usepackage[scaled]{helvet}
@@ -800,13 +796,14 @@ to have particular properties.
 Those residuals are computed using predictions from already
 reconstructed blocks, usually available on the left and upper borders of
 the current residual, as shown in figure~\ref{fig:pred_scheme}.
-This facts motivated a study on this particular blocks, resuling in a
-transform that performs better on them than the \ac{DCT}: the \ac{DST}.
+This facts motivated a study on this particular blocks, resulting in a
+transform that performs better on them than the \ac{DCT}: the
+\ac{DST}~\cite{han-10-spatial-adaptive-transform}.
 \begin{figure}[tb]
 	\centering
 	\subfloat[Prediction modes for the current block (white) from previously
 	reconstructed blocks (grey)]
-	{\input{./figures/pred-scheme.pgf}}
+	{\input{./figures/pred-scheme.tex}}
 	\hspace{0.2\linewidth}
 	\subfloat[Average intra prediction residual from mode 18]
 	{\includegraphics[width=0.3\linewidth]{./figures/av-residual-s4-p18.png}}
@@ -1015,7 +1012,8 @@ zero-mean \ac{PDF}.
 \begin{figure}[tb]
 	\centering
 	% \vspace{0.30\textheight} % using this to speedup compilation
-	\input{./figures/pdfs.pgf}
+	% \input{./figures/pdfs.tex}
+	\includegraphics{./figures/pdfs.pdf}
 	\caption{\acsp{PDF} of the residuals with different transforms
 	compared to Laplace and normal distributions}
 	\label{fig:probability_density_functions}
@@ -1043,7 +1041,7 @@ and $\Gamma(z)$ is the gamma function, defined as:
 	\Gamma(z) = \int_0^\infty t^{z-1}\e^{-t}\d t
 \end{equation}
 \index{Laplace distribution}
-\index{gaussian distribution}
+\index{Gaussian distribution}
 \index{normal distribution}
 \index{uniform distribution}
 The Laplace and normal or Gaussian \acp{PDF} are achieved with
@@ -1225,6 +1223,9 @@ depend on the residuals \ac{PDF}:
 This fact reassures the use of the $\ell_0$ norm, even in the case that
 the transform changes the \ac{PDF} in a way that can no longer be modelled
 after a \ac{GGD}.
+
+% \input{./figures/dist_zero.tex}
+\includegraphics{./figures/dist_zero.pdf}
 
 \section{Conclusions}
 \label{sec:conclusions_transforms}
