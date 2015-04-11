@@ -40,12 +40,12 @@
 			unbounded coords=jump,
 		]
 
-		\pgfplotstableread{pdf_dct.dat}\table
+		\pgfplotstableread{figures/pdf_dct.dat}\table
 		\addplot[black, thick, smooth, tension=0.3]
 		table[x=x,y=dct,col sep=tab] from \table;
 		\addlegendentry{DCT}
 
-		\pgfplotstableread{pdf_rdot.dat}\table
+		\pgfplotstableread{figures/pdf_rdot.dat}\table
 		\addplot[red, thick, smooth, tension=0.3]
 		table[x=x,y=rdot,col sep=tab] from \table;
 		\addlegendentry{RDOT}

@@ -35,22 +35,22 @@
 			unbounded coords=jump,
 		]
 
-		\pgfplotstableread{dist_zero_1.50.dat}\table
+		\pgfplotstableread{figures/dist_zero_1.50.dat}\table
 		\addplot[mark=*,mark size=1pt, mygreen, thick, smooth, tension=0.3]
 		table[x=nz,y=dist,col sep=tab] from \table;
 		\addlegendentry{$\gamma=1.50$}
 
-		\pgfplotstableread{dist_zero_1.25.dat}\table
+		\pgfplotstableread{figures/dist_zero_1.25.dat}\table
 		\addplot[mark=*,mark size=1pt, blue, thick, smooth, tension=0.3]
 		table[x=nz,y=dist,col sep=tab] from \table;
 		\addlegendentry{$\gamma=1.25$}
 
-		\pgfplotstableread{dist_zero_1.00.dat}\table
+		\pgfplotstableread{figures/dist_zero_1.00.dat}\table
 		\addplot[mark=*,mark size=1pt, red, thick, smooth, tension=0.3]
 		table[x=nz,y=dist,col sep=tab] from \table;
 		\addlegendentry{$\gamma=1.00$}
 
-		\pgfplotstableread{dist_zero_0.75.dat}\table
+		\pgfplotstableread{figures/dist_zero_0.75.dat}\table
 		\addplot[mark=*,mark size=1pt, black, thick, smooth, tension=0.3]
 		table[x=nz,y=dist,col sep=tab] from \table;
 		\addlegendentry{$\gamma=0.75$}

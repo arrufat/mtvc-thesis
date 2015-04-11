@@ -585,7 +585,7 @@ transform role in signal compression.
 
 \begin{figure}[tb]
 	\centering
-	\input{figures/TransformRotation.tex}
+	\includegraphics{./figures/transform_rotation_plot.pdf}
 	\caption{Simple transform performing a rotation}
 	\label{fig:transform_rotation}
 \end{figure}
@@ -1011,9 +1011,7 @@ These errors are made by excess or defect evenly, evidenced by their
 zero-mean \ac{PDF}.
 \begin{figure}[tb]
 	\centering
-	% \vspace{0.30\textheight} % using this to speedup compilation
-	% \input{./figures/pdfs.tex}
-	\includegraphics{./figures/pdfs.pdf}
+	\includegraphics{./figures/pdfs_plot.pdf}
 	\caption{\acsp{PDF} of the residuals with different transforms
 	compared to Laplace and normal distributions}
 	\label{fig:probability_density_functions}
@@ -1224,8 +1222,7 @@ This fact reassures the use of the $\ell_0$ norm, even in the case that
 the transform changes the \ac{PDF} in a way that can no longer be modelled
 after a \ac{GGD}.
 
-% \input{./figures/dist_zero.tex}
-\includegraphics{./figures/dist_zero.pdf}
+\includegraphics{./figures/dist_zero_plot.pdf}
 
 \section{Conclusions}
 \label{sec:conclusions_transforms}
