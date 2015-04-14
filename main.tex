@@ -217,7 +217,7 @@ degradation.
 This stage is in charge of converting the pre-processed raw video sequence
 into a coded video stream to ease the storage and transmission.
 A deep look at the inners of a widely used coding scheme is provided
-in Section~\ref{sec:the_hybrid_video_coding_scheme}.
+in \S~\ref{sec:the_hybrid_video_coding_scheme}.
 
 \subsection{Transmission}
 \label{sub:transmission}
@@ -474,7 +474,7 @@ noise that affects the fidelity of its approximation.
 It is usually defined in terms of the logarithmic decibel scale to cope
 with the wide range that signals might have.
 Defining the \ac{PSNR} in terms of the \ac{MSE} from
-equation~\ref{eqn:mse}, it can be expressed as:
+\eqref{eqn:mse}, it can be expressed as:
 \begin{equation}
 	PSNR = 10 \log_{10} \left(\frac{MAX_I^2}{MSE_{I,K}}\right)
 	= 20 \log_{10} (MAX_I) - 10 \log_{10} (MSE_{I,K})
@@ -649,7 +649,7 @@ often a trade-off between the distortion and the number of bits needed
 to represent those signals in the transform domain.
 
 Many transform design method agree on how the distortion should be
-computed, namely using the \ac{MSE} from equation~\ref{eqn:mse}.
+computed, namely using the \ac{MSE} from~\eqref{eqn:mse}.
 However, different transform designs exist, depending on the used rate
 model.
 Next sections will study different transform design approaches, based on
@@ -854,18 +854,20 @@ The constraint in the cost function is the average $\ell_0$ norm of the
 coefficients, i.e.\ the number of non-zero coefficients.
 Finally, $\lambda$ is the Lagrange multiplier of the constraint.
 
-A thorough study of equation~\ref{eqn:rdot-nsep} analysing its
-properties and consequences is detailed below.
+A thorough study of~\eqref{eqn:rdot-nsep} analysing its properties and
+consequences is detailed below.
 
 \subsection{The \acs{RDOT} metric}
 \label{sub:the_rdot_metric}
 
-The value that \acp{RDOT} minimise is expressed in
-equation~\ref{eqn:rdot_metric} for a single signal.
+The value that \acp{RDOT} minimise is expressed
+in~\eqref{eqn:rdot_metric} for a single signal.
 As it is explicitly written, this metric depends exclusively on the
 quantisation step $\Delta$ and the initial transform used $\A$.
+The relation between $\lambda$ and $\Delta$ is detailed in
+\S~\ref{sub:the_lagrange_multiplier}.
 \begin{equation}
-	\delta_{\Delta,\A} (\lambda) =
+	J_{\Delta,\A} (\lambda) =
 	{\Vert \x - \A^T \c \Vert}_2^2 + \lambda\overline{\Vert \c \Vert}_0
 	\label{eqn:rdot_metric}
 \end{equation}
@@ -891,7 +893,7 @@ hard-thresholing them:
 	\c = \lfloor \X \rfloor = \lfloor \A \x \rfloor
 \end{equation}
 The threshold value is tightly related to the Lagrange multiplier $\lambda$,
-as demonstrated in Section~\ref{sub:the_lagrange_multiplier}:
+as demonstrated in \S~\ref{sub:the_lagrange_multiplier}:
 \begin{equation}
 	\c[n] =
 	\begin{cases}
@@ -1048,7 +1050,7 @@ Even the uniform distribution can be reached by making $\gamma\to\infty$.
 However, from figure~\ref{fig:probability_density_functions} one can see
 that $1\le\gamma\le2$ for video residuals.
 
-In order to find the optimal $\lambda$, equation~\ref{eqn:rdot_metric},
+In order to find the optimal $\lambda$ from~\eqref{eqn:rdot_metric},
 which describes the trade-off between the distortion and the rate, has
 to be derived.
 The problem will be tackled in two separated steps:
@@ -1060,8 +1062,8 @@ The problem will be tackled in two separated steps:
 \subsubsection{Derivation of the distortion function}
 \label{ssub:derivation_of_the_distortion_function}
 
-The distortion introduced by the hard-thresholding from
-equation~\ref{eqn:hard_threshold} can be expressed as:
+The distortion introduced by the hard-thresholding
+from~\eqref{eqn:hard_threshold} can be expressed as:
 \begin{equation}
 	D
 	= \int_{-\infty}^{\infty} {(x - \hat x)}^2 \P_X (x)\d x
@@ -1072,7 +1074,7 @@ equation~\ref{eqn:hard_threshold} can be expressed as:
 Note that the integration intervals have been reduced to where the
 quantised values differ from the original ones, that is, the values that
 have been affected by the hard-thresholding from
-equation~\ref{eqn:hard_threshold}.
+\eqref{eqn:hard_threshold}.
 
 Substituting $P_X(x)$ by the residuals \ac{PDF}:
 \begin{align}
@@ -1093,7 +1095,7 @@ Where $\Gamma(a,z)$ is the incomplete upper gamma function, defined as:
 \begin{equation}
 	\Gamma(a,z)=\int_z^\infty t^{a-1}\e^{-t}\d t
 \end{equation}
-Deriving equation~\ref{eqn:distortion} in $\Delta$:
+Deriving~\eqref{eqn:distortion} in $\Delta$:
 \begin{equation}
 	\frac{\d D}{\d\Delta} =
 	\frac{\Delta^2 a \e^{{(-b\nicefrac{\Delta}{2})}^\gamma}}{4}
@@ -1127,7 +1129,7 @@ Substituting $P_X(x)$ by the residuals \ac{PDF}:
 		{b\gamma}
 	\label{eqn:rate}
 \end{align}
-Deriving equation~\ref{eqn:rate} in $\Delta$:
+Deriving~\eqref{eqn:rate} in $\Delta$:
 \begin{equation}
 	\frac{\d R}{\d\Delta} =
 	-a\e^{{\left(\nicefrac{-b\Delta}{2}\right)}^\gamma}
@@ -1136,8 +1138,8 @@ Deriving equation~\ref{eqn:rate} in $\Delta$:
 \subsubsection{Optimal Lagrange multiplier}
 \label{ssub:optimal_lagrange_multiplier}
 
-With both the distortion (equation~\ref{eqn:diff_distortion}) and the
-constraint (equation~\ref{eqn:diff_rate}) derived, the optimal Lagrange
+With both the distortion~\eqref{eqn:diff_distortion} and the
+constraint~\eqref{eqn:diff_rate} derived, the optimal Lagrange
 multiplier can be found as:
 \begin{equation}
 	\frac{\d J(\lambda)}{\d \Delta}
@@ -1180,7 +1182,7 @@ and derivatives of a function, one can generalise that conclusion for
 any continuous \ac{PDF}.
 
 Let $f(x)$ be the residuals \ac{PDF}.
-The distortion is computed reusing equation~\ref{eqn:int_distortion}:
+The distortion is computed reusing~\eqref{eqn:int_distortion}:
 \begin{equation}
 	D = \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}} x^2 f(x) \d x
 \end{equation}
@@ -1190,7 +1192,7 @@ Deriving the distortion with respect to $\Delta$:
 	\frac{\Delta^2}{8}\left[
 	f\left(\frac{\Delta}{2}\right)+f\left(-\frac{\Delta}{2}\right)\right]
 \end{equation}
-The rate constraint from equation~\ref{eqn:int_rate} is computed as
+The rate constraint from~\eqref{eqn:int_rate} is computed as
 follows with the generic \ac{PDF}
 $f(x)$:
 \begin{equation}
@@ -1203,7 +1205,7 @@ Again, deriving with respect to $\Delta$:
 	f\left(\frac{\Delta}{2}\right)+
 	f\left(-\frac{\Delta}{2}\right)\right]
 \end{equation}
-Combining previous equations using equation~\ref{eqn:diff_lagrange_multiplier},
+Combining previous equations using~\eqref{eqn:diff_lagrange_multiplier},
 one can see that the optimal Lagrange multiplier $\lambda$ does not
 depend on the residuals \ac{PDF}:
 \begin{equation}
@@ -1218,25 +1220,77 @@ depend on the residuals \ac{PDF}:
 	\boxed{\lambda = \frac{\Delta^2}{4}}
 \end{equation}
 
-This fact reassures the use of the $\ell_0$ norm, even in the case that
-the transform changes the \ac{PDF} in a way that can no longer be modelled
-after a \ac{GGD}.
+This fact makes the $\ell_0$ norm suitable even for distributions
+that can not be modelled after a \ac{GGD}.
+The independence from the \ac{PDF} reassures the choice of the $\ell_0$
+norm over other models that might provide a more realistic and accurate
+approximation of the rate, such as the \ac{H}.
 
-\begin{figure}[tp]
-	\centering
-	\includegraphics{./figures/dist_zero_plot.pdf}
-	\caption{Distortion and $\ell_0$ norm with $\lambda_{opt}$ at \acs{QP} 27
-	for different \acsp{PDF}}
-	\label{fig:lambda_zero_norm_dist}
-\end{figure}
+An example of the $\ell$ norm independence from the \ac{PDF} is provided
+below.
+Consider the following scenario: some residuals \acp{PDF} that follow
+\ac{GGD} with different exponents $\gamma$.
+Consider, as well, a quantisation step $\Delta=14.256$, issued from a
+\ac{QP} 27 in \ac{HEVC}.
+It has been proved previously, that $J(\lambda)$
+from~\eqref{eqn:rdot_metric} has achieves its minimum value at
+$\lambda=\frac{\Delta^2}{4}\approx50.81$, independently from the
+residuals \ac{PDF} when modelling the rate with the $\ell_0$ norm.
 
+However, if instead of using the $\ell_0$ norm, entropy is used, it can
+no longer be assumed that the optimal value of $\lambda$ providing the
+best trade-off between distortion and rate does not depend on the
+residuals \ac{PDF}.
+Due to the complexity of the calculations involved then using the
+entropy together with a uniform quantiser, the dependence to the
+\ac{PDF} when using the entropy is evident through the example from
+figure~\ref{fig:j_lambda_qp}, where the value $J(\lambda)$ is plotted
+for various \acp{GGD} at different \ac{QP} values, i.e.\ quantisation
+step $\Delta$.
+When using the $\ell_0$ norm, $J(\lambda)$ reaches its minimum value at
+QP 27, as expected.
+On the other hand, using the entropy leads to a minimum value of
+$J(\lambda)$ that is \ac{PDF}-dependent.
+The consequence of this dependence is that, for an iterative learning
+algorithm, after updating the transform at each iteration, the new
+\ac{PDF} would have to be estimated to find the new optimal Lagrange
+multiplier $\lambda$, complicating the whole learning process and
+leading to possible instabilities.
 \begin{figure}[tp]
 	\centering
 	\includegraphics{./figures/j_qp_plot.pdf}
-	\caption{$J(\lambda)$ for different \ac{GGD} modelling the rate with
+	\caption{$J(\lambda)$ for different \acp{GGD} modelling the rate with
 	the $\ell_0$ norm and the entropy (H)}
 	\label{fig:j_lambda_qp}
 \end{figure}
+\subsection{Rate-distortion improvement through the learning}
+\label{sub:learning_impact}
+
+Assuming the source \ac{PDF} can be modelled after a \ac{GGD} with a
+given variance $\sigma^2$ and exponent $\gamma$, the impact of the
+learning in terms of the $J(\lambda)$ from~\eqref{eqn:rdot_metric} can
+be illustrated with the following example.
+By learning an adapted transform over a set of residuals, the amount of
+transformed coefficients mapped to zero increases, augmenting its
+kurtosis (the distribution ``looks more sharp''), hence reducing the
+exponent $\gamma$.
+Figure~\ref{fig:j_lambda_qp} illustrates how the relationship between
+the distortion and the rate model, in this case the $\ell_0$ norm are
+related at a given quantisation step $\Delta=25.198$, corresponding to a
+\ac{QP} 32 from \ac{HEVC}.
+\begin{figure}[tp]
+	\centering
+	\includegraphics{./figures/dist_zero_qp32_plot.pdf}
+	\caption{Distortion and $\ell_0$ norm with $\lambda_{opt}$ at \acs{QP} 32
+	for different \acsp{PDF}}
+	\label{fig:lambda_zero_norm_dist}
+\end{figure}
+As the exponent $\gamma$ decreases, so do both terms of $J(\lambda)$,
+the distortion and the $\ell_0$ norm.
+It can also be seen that since the Lagrange multiplier value $\lambda$
+does not change, neither does the slope of a tangent line to the circled
+points, corresponding to the optimal trade-off between the distortion
+and the rate constraint.
 
 \section{Conclusions}
 \label{sec:conclusions_transforms}
@@ -1309,6 +1363,7 @@ to degrade its performances as least as possible.
 	\acro{CABAC}{Context Adaptive Binary Arithmetic Coding}
 	\acro{DCT}{discrete cosine transform}
 	\acro{DST}{discrete sine transform}
+	\acro{H}{entropy}
 	\acro{HVS}{Human Visual System}
 	\acro{HD}{High Definition}
 	\acro{IP}{Internet Protocol}
