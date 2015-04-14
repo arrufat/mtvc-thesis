@@ -28,38 +28,38 @@
 			},
 			% xtick={0.20,0.22,...,0.50},
 			% ytick={0,2.5,...,100},
-			xmin=0.00, xmax=0.50,
-			ymin=0.00, ymax=40,
+			xmin=0.00, xmax=0.70,
+			ymin=0.00, ymax=100,
 			legend style={nodes=right},
 			legend pos= north east,
 			unbounded coords=jump,
 		]
 
-		\pgfplotstableread{figures/dist_zero_1.50.dat}\table
+		\pgfplotstableread{figures/dist_zero_qp32.dat}\table
 		\addplot[mark=*,mark size=1pt, mygreen, thick, smooth, tension=0.3]
-		table[x=nz,y=dist,col sep=tab] from \table;
+		table[x=nz150,y=d150,col sep=tab] from \table;
 		\addlegendentry{$\gamma=1.50$}
 
-		\pgfplotstableread{figures/dist_zero_1.25.dat}\table
+		\pgfplotstableread{figures/dist_zero_qp32.dat}\table
 		\addplot[mark=*,mark size=1pt, blue, thick, smooth, tension=0.3]
-		table[x=nz,y=dist,col sep=tab] from \table;
+		table[x=nz125,y=d125,col sep=tab] from \table;
 		\addlegendentry{$\gamma=1.25$}
 
-		\pgfplotstableread{figures/dist_zero_1.00.dat}\table
+		\pgfplotstableread{figures/dist_zero_qp32.dat}\table
 		\addplot[mark=*,mark size=1pt, red, thick, smooth, tension=0.3]
-		table[x=nz,y=dist,col sep=tab] from \table;
+		table[x=nz100,y=d100,col sep=tab] from \table;
 		\addlegendentry{$\gamma=1.00$}
 
-		\pgfplotstableread{figures/dist_zero_0.75.dat}\table
+		\pgfplotstableread{figures/dist_zero_qp32.dat}\table
 		\addplot[mark=*,mark size=1pt, black, thick, smooth, tension=0.3]
-		table[x=nz,y=dist,col sep=tab] from \table;
+		table[x=nz075,y=d075,col sep=tab] from \table;
 		\addlegendentry{$\gamma=0.75$}
 
 		\addplot [only marks, mark=o, mark size=3pt, thick] table {
-		0.434317	8.396036
-		0.404402	8.36362 
-		0.364981	8.176391
-		0.310958	7.666366
+		0.144763	23.171433
+		0.164659	27.008339
+		0.178336	29.754038
+		0.18838	31.800229
 		};
 		\addlegendentry{$\lambda_{opt}$}
 
