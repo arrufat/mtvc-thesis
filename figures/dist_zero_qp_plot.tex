@@ -35,33 +35,42 @@
 			unbounded coords=jump,
 		]
 
-		\pgfplotstableread{figures/dist_zero_qp32.dat}\table
+		\pgfplotstableread{figures/dist_zero_qp.dat}\table
 		\addplot[mark=*,mark size=1pt, mygreen, thick, smooth, tension=0.3]
 		table[x=nz150,y=d150,col sep=tab] from \table;
 		\addlegendentry{$\gamma=1.50$}
 
-		\pgfplotstableread{figures/dist_zero_qp32.dat}\table
+		\pgfplotstableread{figures/dist_zero_qp.dat}\table
 		\addplot[mark=*,mark size=1pt, blue, thick, smooth, tension=0.3]
 		table[x=nz125,y=d125,col sep=tab] from \table;
 		\addlegendentry{$\gamma=1.25$}
 
-		\pgfplotstableread{figures/dist_zero_qp32.dat}\table
+		\pgfplotstableread{figures/dist_zero_qp.dat}\table
 		\addplot[mark=*,mark size=1pt, red, thick, smooth, tension=0.3]
 		table[x=nz100,y=d100,col sep=tab] from \table;
 		\addlegendentry{$\gamma=1.00$}
 
-		\pgfplotstableread{figures/dist_zero_qp32.dat}\table
+		\pgfplotstableread{figures/dist_zero_qp.dat}\table
 		\addplot[mark=*,mark size=1pt, black, thick, smooth, tension=0.3]
 		table[x=nz075,y=d075,col sep=tab] from \table;
 		\addlegendentry{$\gamma=0.75$}
 
 		\addplot [only marks, mark=o, mark size=3pt, thick] table {
+		% QP 27
+		0.434317	8.396036
+		0.404402	8.36362 
+		0.364981	8.176391
+		0.310958	7.666366
+		};
+		\addlegendentry{$\lambda_{opt}$ QP 27}
+
+		\addplot [only marks, mark=o, mark size=3pt, thick, dashed] table {
 		0.144763	23.171433
 		0.164659	27.008339
 		0.178336	29.754038
-		0.18838	31.800229
+		0.188380	31.800229
 		};
-		\addlegendentry{$\lambda_{opt}$}
+		\addlegendentry{$\lambda_{opt}$ QP 32}
 
 	\end{axis}
 

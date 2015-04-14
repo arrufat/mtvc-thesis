@@ -1258,13 +1258,14 @@ multiplier $\lambda$, complicating the whole learning process and
 leading to possible instabilities.
 \begin{figure}[tp]
 	\centering
-	\includegraphics{./figures/j_qp_plot.pdf}
+	\includegraphics{./figures/j_qp27_plot.pdf}
 	\caption{$J(\lambda)$ for different \acp{GGD} modelling the rate with
 	the $\ell_0$ norm and the entropy (H)}
 	\label{fig:j_lambda_qp}
 \end{figure}
+
 \subsection{Rate-distortion improvement through the learning}
-\label{sub:learning_impact}
+\label{sub:rate_distortion_improvement_through_the_learning}
 
 Assuming the source \ac{PDF} can be modelled after a \ac{GGD} with a
 given variance $\sigma^2$ and exponent $\gamma$, the impact of the
@@ -1275,25 +1276,33 @@ transformed coefficients mapped to zero increases, augmenting its
 kurtosis (the distribution ``looks more sharp''), hence reducing the
 exponent $\gamma$.
 Figure~\ref{fig:j_lambda_qp} illustrates how the relationship between
-the distortion and the rate model, in this case the $\ell_0$ norm are
-related at a given quantisation step $\Delta=25.198$, corresponding to a
-\ac{QP} 32 from \ac{HEVC}.
+the distortion and the rate model, at different \acp{QP}.
+\acp{QP} 27 and 32 are highlighted, corresponding to quantisation steps
+$\Delta = 14.256$ and $\Delta = 25.504$ in \ac{HEVC} respectively.
+
 \begin{figure}[tp]
 	\centering
-	\includegraphics{./figures/dist_zero_qp32_plot.pdf}
-	\caption{Distortion and $\ell_0$ norm with $\lambda_{opt}$ at \acs{QP} 32
-	for different \acsp{PDF}}
+	\includegraphics{./figures/dist_zero_qp_plot.pdf}
+	\caption{Distortion and $\ell_0$ norm with $\lambda_{opt}$ at
+	\acsp{QP} 27 and 32 for different \acsp{PDF}}
 	\label{fig:lambda_zero_norm_dist}
 \end{figure}
+
 As the exponent $\gamma$ decreases, so do both terms of $J(\lambda)$,
 the distortion and the $\ell_0$ norm.
 It can also be seen that since the Lagrange multiplier value $\lambda$
 does not change, neither does the slope of a tangent line to the circled
 points, corresponding to the optimal trade-off between the distortion
 and the rate constraint.
+The amount of improvement in each direction is weighed by $\lambda$: at
+\ac{QP} 27 there is more room for sparsity improvement than there is for
+reducing the distortion, compared to \ac{QP} 32.
 
 \section{Conclusions}
 \label{sec:conclusions_transforms}
+
+This chapter has introduced the basics of transforms, as well as two
+different ways of designing adaptive transforms for a given source.
 
 \chapter{The mode-dependent directional transforms}
 \label{cha:the_mode_dependent_directional_transforms}
