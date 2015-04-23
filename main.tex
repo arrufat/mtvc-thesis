@@ -637,7 +637,7 @@ required to obtain the transformed signal.
 \def\c{\mathbf{c}}   % quantised coefficients
 \def\d{\text{d}}     % differential
 \def\e{\text{e}}     % Euler's constant
-\def\GGD{\text{GGD}} % general gaussian distribution
+\def\GGD{\text{GGD}} % general Gaussian distribution
 \def\tr{\text{tr}}   % trace
 \def\x{\mathbf{x}}   % x vector
 \def\Lambdab{\contour[3]{black}{$\Lambda$}} % eigen values matrix
@@ -780,7 +780,7 @@ The \ac{DCT}-II can be expressed compactly as:
 	\subfloat[\acs{DST}-VII $4\times4$]
 	{\includegraphics[width=0.3\linewidth]{./figures/dst4-bases.png}}
 	\caption{Transforms used in \ac{HEVC} for $4\times4$ blocks}
-	\label{fig:part_orig_pred_res_image}
+	\label{fig:dct_dst}
 \end{figure}
 
 \subsection{Particular case: \acs{DST}}
@@ -801,8 +801,8 @@ transform that performs better on them than the \ac{DCT}: the
 \ac{DST}~\cite{han-10-spatial-adaptive-transform}.
 \begin{figure}[tb]
 	\centering
-	\subfloat[Prediction modes for the current block (white) from previously
-	reconstructed blocks (grey)]
+	\subfloat[Intra prediction modes for the current block (white) from
+	previously reconstructed blocks (grey)]
 	{\input{./figures/pred-scheme.tex}}
 	\hspace{0.2\linewidth}
 	\subfloat[Average intra prediction residual from mode 18]
@@ -812,6 +812,11 @@ transform that performs better on them than the \ac{DCT}: the
 	\label{fig:pred_scheme}
 \end{figure}
 
+Figure~\ref{fig:dct_dst}.b presents the \ac{DST}-VII bases for
+$4\times4$ blocks.
+The resemblance between an average residual block
+from figure~\ref{fig:pred_scheme}.b can be spotted by comparing it to
+the first base vector from the \ac{DST}.
 \begin{equation}
 	{\left[S_{N}^{VII} \right]}_{n,k} =
 	\frac{2}{\sqrt{2N+1}}\sin\left(\frac{\pi(2n-1)k}{2N+1}\right),
@@ -986,7 +991,7 @@ $\P=\I$
 \subsection{The Lagrange multiplier and the zero norm}
 \label{sub:the_lagrange_multiplier}
 \index{generalised normal distribution}
-\index{generalised gaussian distribution}
+\index{generalised Gaussian distribution}
 \index{exponential power distribution}
 
 It is a well-known fact that the residuals distribution can be modelled
@@ -1226,7 +1231,7 @@ The independence from the \ac{PDF} reassures the choice of the $\ell_0$
 norm over other models that might provide a more realistic and accurate
 approximation of the rate, such as the \ac{H}.
 
-An example of the $\ell$ norm independence from the \ac{PDF} is provided
+An example of the $\ell_0$ norm independence from the \ac{PDF} is provided
 below.
 Consider the following scenario: some residuals \acp{PDF} that follow
 \ac{GGD} with different exponents $\gamma$.
@@ -1243,7 +1248,7 @@ best trade-off between distortion and rate does not depend on the
 residuals \ac{PDF}.
 Due to the complexity of the calculations involved then using the
 entropy together with a uniform quantiser, the dependence to the
-\ac{PDF} when using the entropy is evident through the example from
+\ac{PDF} will be evidenced through the example from
 figure~\ref{fig:j_lambda_qp}, where the value $J(\lambda)$ is plotted
 for various \acp{GGD} at different \ac{QP} values, i.e.\ quantisation
 step $\Delta$.
@@ -1251,9 +1256,9 @@ When using the $\ell_0$ norm, $J(\lambda)$ reaches its minimum value at
 QP 27, as expected.
 On the other hand, using the entropy leads to a minimum value of
 $J(\lambda)$ that is \ac{PDF}-dependent.
-The consequence of this dependence is that, for an iterative learning
-algorithm, after updating the transform at each iteration, the new
-\ac{PDF} would have to be estimated to find the new optimal Lagrange
+An unwanted consequence of this dependence is that, for an iterative
+learning algorithm, after updating the transform at each iteration, the
+new \ac{PDF} has to be estimated to find the new optimal Lagrange
 multiplier $\lambda$, complicating the whole learning process and
 leading to possible instabilities.
 \begin{figure}[tp]
@@ -1301,8 +1306,25 @@ reducing the distortion, compared to \ac{QP} 32.
 \section{Conclusions}
 \label{sec:conclusions_transforms}
 
-This chapter has introduced the basics of transforms, as well as two
-different ways of designing adaptive transforms for a given source.
+This chapter has introduced different types of transforms and some
+basic concepts, namely separability, its relation to computational
+complexity.
+
+Two completely different approaches of transform design have been
+studied: the \ac{KLT} and the \ac{RDOT}.
+The \ac{KLT} defines the optimal transform for Gaussian sources with a
+high resolution hypothesis.
+The \ac{DCT} and \ac{DST} used in \ac{HEVC} have been obtained as the
+\ac{KLT} for particular kinds of signals.
+
+The \ac{RDOT} finds the optimal balance between the distortion
+introduced and a rate constraint.
+A thorough study on its design has been carried out to justify the
+appropriateness of the approach over other learning methods.
+
+In the next chapter, both transform designs will be tested in a real
+scenario to find out their performances in video coding.
+
 
 \chapter{The mode-dependent directional transforms}
 \label{cha:the_mode_dependent_directional_transforms}
