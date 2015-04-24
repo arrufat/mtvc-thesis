@@ -110,7 +110,7 @@
 \label{prt:state_of_the_art}
 
 \chapter{Video coding fundamentals}
-\label{sec:video_coding_fundamentals}
+\label{cha:video_coding_fundamentals}
 \chaptertoc
 
 \section{Introduction to video coding}
@@ -1354,7 +1354,33 @@ Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
 \section{Introduction to intra prediction modes in \acs{HEVC}}
 \label{sec:introduction_to_intra_prediction_modes_in_hevc}
 
+As seen in Chapter~\ref{cha:video_coding_fundamentals}, \ac{HEVC} makes
+use of predictions in order to generate a low signal energy, called
+residual.
+With regards to previous standards, such as H.264/\ac{MPEG}-4 \ac{AVC},
+which had 9 different prediction modes for intra coding, \ac{HEVC} has a
+much improved prediction system, with 35 different prediction modes.
+Figure~\ref{fig:mdcs} illustrates those prediction modes.
+Depending on the prediction mode that has been used, transformed
+coefficients present different patterns, making low and high values to
+appear at different block positions.
+This heterogeneity can be harmful for the entropy coding and the
+\ac{CABAC}, which is why different scanning patterns exist in \ac{HEVC}.
+These scanning patterns, presented in the lower part of
+figure~\ref{fig:mdcs} depend only on the \ac{IPM} used to compute the
+residual.
 
+The top-right part of figure~\ref{fig:mdcs} presents the average
+\ac{HEVC} $4\times4$ residual by scanning mode, together with their
+representation in the transform domain via de \ac{DST}.
+The average residual profiles have lower (dark) values near the
+available boundaries, which increase with the distance from the
+boundaries: residuals issued from horizontal and vertical \acp{IPM} only
+have the left and upper borders available, respectively, whereas the
+remaining \acp{IPM} tend to have both borders available.
+It can also be spotted that the scanning patterns match reasonably well
+the transform coefficients in each case, sorting them in an increasing
+order.
 
 \begin{figure}[tb]
 	\centering
@@ -1461,6 +1487,7 @@ to degrade its performances as least as possible.
 	\acro{HVS}{Human Visual System}
 	\acro{HD}{High Definition}
 	\acro{IP}{Internet Protocol}
+	\acro{IPM}{intra prediction mode}
 	\acro{ITU}{International Telecommunication Union}
 	\acro{ITU-T}{\ac{ITU} Telecommunication Standardization Sector}
 	\acro{GGD}{generalised Gaussian distribution}
