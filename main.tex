@@ -648,12 +648,12 @@ distortion introduced by the quantisation, transform design methods are
 often a trade-off between the distortion and the number of bits needed
 to represent those signals in the transform domain.
 
-Many transform design method agree on how the distortion should be
+Many transform design methods agree on how the distortion should be
 computed, namely using the \ac{MSE} from~\eqref{eqn:mse}.
-However, different transform designs exist, depending on the used rate
+However, different transform designs exist depending on the used rate
 model.
-Next sections will study different transform design approaches, based on
-different modellings of the rate constraint.
+Next sections will study different transform design approaches based on,
+amongst others, different modellings of the rate constraint.
 \begin{equation}
 	J(\lambda) = \text{Distortion} + \lambda \text{Rate}
 	\label{eqn:transform_design}
@@ -715,7 +715,7 @@ Where:
 	\item $\lambda_i$ are the eigenvalues of $\C_\x$.
 \end{itemize}
 
-\subsection{Particular case: \acs{DCT}}
+\subsection{Particular case on natural images: the \acs{DCT}}
 \index{DCT}
 \index{Markov}
 \index{AR}
@@ -783,22 +783,28 @@ The \ac{DCT}-II can be expressed compactly as:
 	\label{fig:dct_dst}
 \end{figure}
 
-\subsection{Particular case: \acs{DST}}
+\subsection{Particular case on prediction residuals: the \acs{DST}}
 \label{sub:particular_case_dst}
 \index{DST}
+\index{intra prediction}
 
 Although the \ac{DCT} has been proved to be nearly the \ac{KLT} for natural
 images, it is used in predictive transform coding based video standards.
-This kind of coding leads to signals whose nature differ from natural
-images: prediction residuals.
+This kind of coding leads to signals whose nature differs from that of
+natural images: prediction residuals.
 In particular, prediction residuals resulting from intra prediction tend
 to have particular properties.
 Those residuals are computed using predictions from already
 reconstructed blocks, usually available on the left and upper borders of
-the current residual, as shown in figure~\ref{fig:pred_scheme}.
-This facts motivated a study on this particular blocks, resulting in a
-transform that performs better on them than the \ac{DCT}: the
-\ac{DST}~\cite{han-10-spatial-adaptive-transform}.
+the current residual, as shown in figure~\ref{fig:pred_scheme}.a.
+An example of a prediction residual is provided in
+figure~\ref{fig:pred_scheme}.b.
+It can be noticed that the energy of the residual is lower (dark) near
+the borders where reconstructed blocks are available, and that the error
+gets higher (lighter) as one moves away from the boundaries.
+These facts motivated a study on this particular kind of blocks,
+resulting in a transform that performs better on them than the \ac{DCT}:
+the \ac{DST}~\cite{han-10-spatial-adaptive-transform}.
 \begin{figure}[tb]
 	\centering
 	\subfloat[Intra prediction modes for the current block (white) from
@@ -824,6 +830,10 @@ the first base vector from the \ac{DST}.
 	n,k = 1, \dots, N
 	\label{eqn:dst_vii}
 \end{equation}
+
+The use of the \ac{DST} in \ac{HEVC} over the \ac{DCT} on $4\times4$
+blocks leads to a bit-rate reduction of 1\% on
+average~\cite{sullivan-12-overview-hevc}.
 
 \section{The rate-distortion optimised transform}
 \label{sec:the_rate_distortion_optimised_transform}
@@ -872,7 +882,7 @@ quantisation step $\Delta$ and the initial transform used $\A$.
 The relation between $\lambda$ and $\Delta$ is detailed in
 \S~\ref{sub:the_lagrange_multiplier}.
 \begin{equation}
-	J_{\Delta,\A} (\lambda) =
+	J (\lambda) =
 	{\Vert \x - \A^T \c \Vert}_2^2 + \lambda\overline{\Vert \c \Vert}_0
 	\label{eqn:rdot_metric}
 \end{equation}
@@ -1055,10 +1065,17 @@ Even the uniform distribution can be reached by making $\gamma\to\infty$.
 However, from figure~\ref{fig:probability_density_functions} one can see
 that $1\le\gamma\le2$ for video residuals.
 
+In Sezer's work~\cite{sezer-11-phd,sezer-08-sparse-orthonormal-transforms},
+the optimal value of the Lagrange multiplier $\lambda$ has been claimed
+to be straightforward to obtain.
+However, no analytical way of proving its optimality has been found in
+literature.
+Hence, a complete study has been carried out below.
+
 In order to find the optimal $\lambda$ from~\eqref{eqn:rdot_metric},
-which describes the trade-off between the distortion and the rate, has
-to be derived.
-The problem will be tackled in two separated steps:
+which describes the trade-off between the distortion and the rate,
+$J(\lambda)$ has to be derived.
+The problem will be tackled in two separate steps:
 \begin{enumerate}
 	\item Compute the distortion analytically and derive it.
 	\item Compute the rate constraint and derive it.
