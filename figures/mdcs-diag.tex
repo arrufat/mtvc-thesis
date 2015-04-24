@@ -1,0 +1,45 @@
+\begin{tikzpicture}[scale=1]
+
+\def \xmax{4}
+\def \ymax{4}
+\draw[style=help lines, ystep=1, xstep=1]
+	(0,0) grid (\xmax,\ymax);
+
+\foreach \y in {0.5,1.5,...,\ymax}
+{%
+    \foreach \x in {0.5,1.5,...,\xmax}
+    {%
+      % floor the positions, as they are .5 and reverse vertical order
+      \pgfmathtruncatemacro{\posX}{\x}
+      \pgfmathtruncatemacro{\posY}{\ymax-\y}
+      % calculate the index for each position
+      \pgfmathtruncatemacro{\index}{\posX + \xmax * \posY}
+      \node[above left] at (\x,\y){\small$\quad\;\index$};
+    }
+}
+
+
+
+\def\startx{0.5}
+\def\starty{3.5}
+
+% help lines
+\draw[-latex,style=help lines, dashed] (\startx + 0,\starty - 2) --++ (1,2);
+\draw[-latex,style=help lines, dashed] (\startx + 0,\starty - 3) --++ (2,3);
+\draw[-latex,style=help lines, dashed] (\startx + 1,\starty - 3) --++ (2,3);
+\draw[-latex,style=help lines, dashed] (\startx + 2,\starty - 3) --++ (1,2);
+
+% scanning
+\draw[-latex,red,thick] (\startx + 0,\starty - 1) --++ ( 0, 1);
+\draw[-latex,red,thick] (\startx + 1,\starty - 0) --++ (-1,-1);
+\draw[-latex,red,thick] (\startx + 2,\starty - 0) --++ (-2,-2);
+\draw[-latex,red,thick] (\startx + 3,\starty - 0) --++ (-3,-3);
+\draw[-latex,red,thick] (\startx + 3,\starty - 1) --++ (-2,-2);
+\draw[-latex,red,thick] (\startx + 3,\starty - 2) --++ (-1,-1);
+\draw[-latex,red,thick] (\startx + 3,\starty - 3) --++ ( 0, 1);
+
+
+
+
+\end{tikzpicture}
+% vim:set filetype=tex et:

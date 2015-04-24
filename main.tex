@@ -72,6 +72,7 @@
 		}
 	\end{center}
 }
+\definecolor{mygreen}{RGB}{0,143,0}
 
 \numberwithin{equation}{section} % equations referred to sections
 
@@ -1349,6 +1350,46 @@ scenario to find out their performances in video coding.
 
 \vspace{0.5cm}
 Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
+
+\begin{figure}[tb]
+	\centering
+	\begin{minipage}{0.48\textwidth}
+		\input{figures/pred-directions.tex}
+	\end{minipage}
+	\begin{minipage}{0.48\textwidth}
+		\centering
+		\small
+		Average profile for residuals (prediction direction)
+		\begin{tabular}[H]{ccc}
+			\includegraphics[width=0.25\textwidth]{figures/resids-scan-diag.png}
+			& 
+			\includegraphics[width=0.25\textwidth]{figures/resids-scan-horz.png}
+			&
+			\includegraphics[width=0.25\textwidth]{figures/resids-scan-vert.png}
+			\\
+			\color{red}{diagonal} & \color{mygreen}{vertical} & \color{blue}{horizontal} \\
+			& & \\
+		\end{tabular}
+		\\
+		\small
+		Average profile for coefficients (scanning mode)
+		\begin{tabular}[H]{ccc}
+			\includegraphics[width=0.25\textwidth]{figures/coeffs-scan-diag.png}
+			& 
+			\includegraphics[width=0.25\textwidth]{figures/coeffs-scan-horz.png}
+			&
+			\includegraphics[width=0.25\textwidth]{figures/coeffs-scan-vert.png}
+			\\
+			\color{red}{diagonal} & \color{mygreen}{horizontal} & \color{blue}{vertical} \\
+		\end{tabular}
+	\end{minipage}
+	\subfloat[Diagonal scanning]{\input{figures/mdcs-diag.tex}}
+	\subfloat[Horizontal scanning]{\input{figures/mdcs-horz.tex}}
+	\subfloat[Vertical scanning]{\input{figures/mdcs-vert.tex}}
+	\caption{\acs{HEVC} intra prediction modes related to their average
+	residual signals and their transform using the appropriate scanning}
+	\label{fig:mdcs}
+\end{figure}
 
 \part{Contributions}
 \label{prt:contributions}
