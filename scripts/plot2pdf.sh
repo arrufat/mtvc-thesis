@@ -14,7 +14,8 @@ echo "\\usepackage{mathptmx}"                                                   
 echo "\\usepackage[scaled]{helvet}"                                                >> ${TMPFILE}
 echo "\\usepackage[usenames,dvipsnames]{xcolor}"                                   >> ${TMPFILE}
 echo "\\usepackage{pgfplots,tikz}"                                                 >> ${TMPFILE}
-echo "\\usetikzlibrary{decorations.markings}"                                      >> ${TMPFILE}
+echo "\\usetikzlibrary{decorations.markings,intersections}"                        >> ${TMPFILE}
+echo "\\usepgfplotslibrary{fillbetween}"                                           >> ${TMPFILE}
 echo "\\begin{document}"                                                           >> ${TMPFILE}
 echo "\\input{${PGFFILE}}"                                                         >> ${TMPFILE}
 echo "\\end{document}"                                                             >> ${TMPFILE}

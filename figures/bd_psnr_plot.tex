@@ -1,0 +1,71 @@
+\begin{tikzpicture}
+	\pgfplotsset{/tikz/font={\footnotesize}}
+	\begin{axis}[
+			% title=Bitrate savings: $-8.94\%$. SNR improvement: $0.46$ dB,
+			xlabel={Bitrate (Mbps)},
+			ylabel={PSNR Y (dB)},
+			grid=both,
+			scale only axis,
+			width=0.375\textwidth,
+			height=0.25\textheight,
+			xtick={0,3,...,21},
+			x tick label style={
+				/pgf/number format/.cd,
+				fixed,
+				fixed zerofill,
+				precision=0,
+			},
+			scaled x ticks=false,
+			ytick={32,33,...,45},
+			y tick label style={
+				/pgf/number format/.cd,
+				fixed,
+				fixed zerofill,
+				precision=0,
+				/tikz/.cd
+			},
+			xmin=0, xmax=21,
+			ymin=32, ymax=43,
+			legend style={nodes=right},
+			legend pos= south east
+		]
+		\addplot [name path=refsnr, red, thick] table {
+		3.35	32.76
+		6.07	35.40
+		11.31	38.37
+		19.81	41.40
+		};
+
+		\addplot [name path=expsnr, blue, thick] table {
+		3.35	33.60
+		5.58	35.95
+		10.75	38.93
+		19.81	42.18
+		};
+		\addplot [black, thin] table {
+		3.35	32.76
+		3.35	33.60
+		};
+		\addplot [black, thin] table {
+		19.81	41.40
+		19.81	42.18
+		};
+
+		\addplot[gray!33] fill between[ of = refsnr and expsnr];
+
+		\addplot [name path=ref, mark=*,mark size=1pt, red, thick] table {
+		3.35	32.76
+		6.07	35.40
+		11.31	38.37
+		20.81	41.76
+		};
+		\addlegendentry{REF}
+		\addlegendentry{EXP}
+		\addplot [name path=exp, mark=*,mark size=1pt, blue, thick] table {
+		3.00	33.24
+		5.58	35.95
+		10.75	38.93
+		19.81	42.18
+		};
+	\end{axis}
+\end{tikzpicture}

@@ -30,7 +30,8 @@
 
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{pgfplots,tikz}
-\usetikzlibrary{decorations.markings}
+\usetikzlibrary{decorations.markings,intersections}
+\usepgfplotslibrary{fillbetween}
 \usepackage{bookmark} % needed for \bookmarksetup{startatroot}
 \usepackage{hyperref}
 \hypersetup{
@@ -527,13 +528,17 @@ Two different metrics are defined:
 		in \deci\bel.
 \end{itemize}
 
-% TODO
-\todo{
-\begin{itemize}
-	\item Maybe place this section elsewhere.
-	\item Graphical examples as in Wien's book~\cite{wien-15-hevc}.
-\end{itemize}
-}
+\begin{figure}[tb]
+	\centering
+	\subfloat[\acs{BD}-\acs{PSNR}]
+	{\includegraphics{./figures/bd_psnr_plot.pdf}}
+	\hfill
+	\subfloat[\acs{BD}-rate]
+	{\includegraphics{./figures/bd_rate_plot.pdf}}
+	\caption{Schematic representation of rate-distortion plots using the
+	\ac{BD} measurements}
+	\label{fig:bdsnr_bdrate}
+\end{figure}
 
 \section{Conclusions}
 \label{sec:conclusions_video_coding}
