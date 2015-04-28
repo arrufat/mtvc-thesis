@@ -63,17 +63,8 @@
 	\hrule
 }
 
-\definecolor{almostwhite}{rgb}{0.9,0.9,0.95}
-\providecommand{\todo}[1]{
-	\begin{center}
-		\colorbox{almostwhite}{
-			\begin{minipage}{0.85\linewidth}
-				\textbf{TODO:} #1
-			\end{minipage}
-		}
-	\end{center}
-}
-\definecolor{mygreen}{RGB}{0,143,0}
+% import mathematical and colour definitions
+\input{./math_colour_defs.tex}
 
 \numberwithin{equation}{section} % equations referred to sections
 
@@ -614,39 +605,24 @@ performance.
 \label{sub:separability}
 
 Image and video coding deal with image blocks, which are two-dimensional
-signals and, consequently, use transforms able two deal with those
+signals and, consequently, use transforms able two process those
 signals.
 
 The naive approach to work with those signals is to use non-separable
 transforms.
 These transforms take the signal as a whole and reshape it to a
 single-dimensional signal.
+\begin{equation}
+	\X = \A \x
+\end{equation}
+where $\x$ is a $N\times N$ block, reshaped into a $N^2\times1$ vector
+and $\A$ is a $N^2\times N^2$ matrix.
 Afterwards the transform is applied normally.
 The main disadvantage of this approach is the number of calculations
 required to obtain the transformed signal.
 
 \subsection{Transform design}
 \label{sub:transform_design}
-
-\def\A{\mathbf{A}}   % transform \A
-\def\a{\mathbf{a}}   % rows of transform \A
-\def\C{\mathbf{C}}   % covariance matrix
-\def\E{\text{E}}     % expected value
-\def\I{\mathbf{I}}   % identity matrix
-\def\P{\text{P}}     % probability
-\def\R{\mathbf{R}}   % correlation matrix
-\def\U{\mathbf{U}}   % Right SVD decomposition
-\def\V{\mathbf{V}}   % Left SVD decomposition
-\def\X{\mathbf{X}}   % x in the transformed domain
-\def\Y{\mathbf{Y}}   % helper cross correlation matrix
-\def\arg{\text{arg}} % argument
-\def\c{\mathbf{c}}   % quantised coefficients
-\def\d{\text{d}}     % differential
-\def\e{\text{e}}     % Euler's constant
-\def\GGD{\text{GGD}} % general Gaussian distribution
-\def\tr{\text{tr}}   % trace
-\def\x{\mathbf{x}}   % x vector
-\def\Lambdab{\contour[3]{black}{$\Lambda$}} % eigen values matrix
 
 Since the objective of the transforms is to be able to represent the
 signal with as few coefficients as possible while minimising the
