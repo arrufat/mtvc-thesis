@@ -294,17 +294,17 @@ The optimal choice for the block size is left to the encoder.
 \subsection{Prediction}
 \label{sub:prediction}
 
-Residual coding is video coding technique that, instead of coding the
-blocks coming from the original source image directly, computes an
-estimation of the block, which is then subtracted from the original
-block, generating the residual block.
+Residual coding is video coding technique based on \ac{DPCM} that,
+instead of coding the blocks coming from the original source image
+directly, computes an estimation of the block, which is then subtracted
+from the original block, generating the residual block.
 Those block estimations are carried out by the prediction module, using
 some information from previously treated blocks.
 This way, predictable information present in the original blocks will be
-removed and their energy will be lowered.
+removed and the energy of the resulting signal will be lowered.
 
 Predictions must be performed the same way at both encoder and decoder
-side, and this computed inside the blue box in
+side, and thus computed inside the blue box in
 figure~\ref{fig:hybrid_video_coding_scheme}, referring to the decoder.
 For this reason, the encoder uses reconstructed blocks (blocks that have
 already been encoded and will make it to the bitstream) as the input
@@ -612,14 +612,39 @@ The naive approach to work with those signals is to use non-separable
 transforms.
 These transforms take the signal as a whole and reshape it to a
 single-dimensional signal.
+Afterwards the transform is applied normally:
 \begin{equation}
-	\X = \A \x
+	\X = \A \, \x
 \end{equation}
-where $\x$ is a $N\times N$ block, reshaped into a $N^2\times1$ vector
-and $\A$ is a $N^2\times N^2$ matrix.
-Afterwards the transform is applied normally.
+where $\x$ is a $N \times N$ block, reshaped into a $N^2\times1$ vector
+and $\A$ is a $N^2 \times N^2$ matrix.
 The main disadvantage of this approach is the number of calculations
-required to obtain the transformed signal.
+required to obtain the transformed signal: for a $N \times N$ block, the
+number of operations required to transform it in a non-separable way is:
+$N^4$ multiplications and $N^2(N^2-1)$ additions.
+
+Due to the high amount of operations needed to transform a block,
+separable transforms are widely used in video coding.
+They are computed as:
+\begin{equation}
+	\X = \A {\left(\A \, \x^T\right)}^T = \A \, \x \, \A^T
+\end{equation}
+where $\x$ is a $N \times N$ block and the transform $\A$ is a $N \times
+N$ matrix.
+The operation inside the parenthesis transforms the rows of $\x$, and
+the outter part, the columns of $\x$.
+By perfoming the horizontal and vertical transforms separably, the
+number of operations required has been reduced to $2N^3$ multiplications
+and $2N^2(N-1)$ additions.
+
+However, this reduction in complexity comes at a price: non-separable
+transforms were able to exploit any correlation amongst pixels within a
+block, whether separable transforms can only decorrelate pixels that
+share the same row or column.
+In other words, separable transforms are less performing than their
+non-separable counterparts.
+The impact in performance due to separability will be studied in detail
+in Chapter~\ref{cha:the_mode_dependent_directional_transforms}.
 
 \subsection{Transform design}
 \label{sub:transform_design}
@@ -753,6 +778,12 @@ The \ac{DCT}-II can be expressed compactly as:
 		1 & \text{otherwise}
 	\end{cases}
 \end{equation}
+
+The fact that the \ac{DCT} approximates the \ac{KLT} for a wide variety
+signals and its efficient implementation has made it the preferred
+choice in image and video compression algorithms to decorrelate the
+signals and concentrate their energy into few coefficients.
+cite J Sole and C Gomila.
 
 \begin{figure}[tb]
 	\centering
@@ -1306,7 +1337,7 @@ reducing the distortion, compared to \ac{QP} 32.
 \label{sec:conclusions_transforms}
 
 This chapter has introduced different types of transforms and some
-basic concepts, namely separability, its relation to computational
+basic concepts, such as separability and its relation to computational
 complexity.
 
 Two completely different approaches of transform design have been
@@ -1463,6 +1494,7 @@ to degrade its performances as least as possible.
 	\acro{BD}{Bj{\o}ntegaard Delta}
 	\acro{CABAC}{Context Adaptive Binary Arithmetic Coding}
 	\acro{DCT}{discrete cosine transform}
+	\acro{DPCM}{differential pulse-code modulation}
 	\acro{DST}{discrete sine transform}
 	\acro{H}{entropy}
 	\acro{HVS}{Human Visual System}
