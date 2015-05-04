@@ -723,10 +723,11 @@ Where:
 \end{itemize}
 
 \subsection{Particular case on natural images: the \acs{DCT}}
+\label{sub:particular_case_dct}
 \index{DCT}
 \index{Markov}
 \index{AR}
-\label{sub:particular_case_dct}
+\index{Toeplitz matrix}
 
 One of the most used transforms in image and video coding is the
 \ac{DCT}.
@@ -800,6 +801,8 @@ coefficients~\cite{sole-12-transform-coefficient-coding}.
 \label{sub:particular_case_dst}
 \index{DST}
 \index{intra prediction}
+\index{tridiagonal matrix}
+\index{Toeplitz matrix}
 
 Although the \ac{DCT} has been proved to be nearly the \ac{KLT} for natural
 images, it is used in predictive transform coding based video standards.
@@ -870,10 +873,10 @@ the first base vector from the \ac{DST}.
 The use of the \ac{DST} in \ac{HEVC} over the \ac{DCT} on $4\times4$
 blocks leads to a bit-rate reduction of 1\% on
 average~\cite{sullivan-12-overview-hevc}.
-A more detailed view on how it was discovered that the \ac{DST} was a
-good approximation of the \ac{KLT} for these signals is detailed in
+An explanation on how it was discovered that the \ac{DST} was a good
+approximation of the \ac{KLT} for these signals is detailed in
 Chapter~\ref{cha:the_mode_dependent_directional_transforms}, more
-precisely in Section~\ref{sec:the_history_behind_the_dst}.
+precisely in \S~\ref{sec:the_story_behind_the_dst}.
 
 \section{The rate-distortion optimised transform}
 \label{sec:the_rate_distortion_optimised_transform}
@@ -1387,9 +1390,6 @@ scenario to find out their performances in video coding.
 \label{cha:the_mode_dependent_directional_transforms}
 \chaptertoc
 
-\vspace{0.5cm}
-Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
-
 \section{Introduction to intra prediction modes in \acs{HEVC}}
 \label{sec:introduction_to_intra_prediction_modes_in_hevc}
 
@@ -1457,12 +1457,16 @@ order.
 	\subfloat[Horizontal scanning]{\input{figures/mdcs-horz.tex}}
 	\subfloat[Vertical scanning]{\input{figures/mdcs-vert.tex}}
 	\caption{\acs{HEVC} intra prediction modes related to their average
-	residual signals and their transform using the appropriate scanning}
+	residual signals and their appropriate scanning in the transform
+	domain}
 	\label{fig:mdcs}
 \end{figure}
 
-\section{The history behind the \acs{DST}}
-\label{sec:the_history_behind_the_dst}
+\section{The story behind the \acs{DST}}
+\label{sec:the_story_behind_the_dst}
+\index{DST}
+\index{KTA}
+\index{TMuC}
 
 The way of generating the prediction residuals leads to a particular
 kind of signals with properties that differ from those of natural
@@ -1515,6 +1519,16 @@ chroma channels, the whole system was simplified by using the \ac{DST}
 for all $4\times4$ luma intra prediction residuals, and the \ac{DCT} for
 the rest of block sizes, due to the lack of fast algorithms and limited
 gains, in both luma and chroma~\cite{JCTVC-J0021}.
+
+In the following section, the \ac{MDDT} will be re-implemented using
+both transforms designs from \S~\ref{sec:the_karhunen_loeve_transform}
+(\ac{KLT}) and \S~\ref{sec:the_rate_distortion_optimised_transform}
+(\ac{RDOT}), in both separable and non-separable fashions.
+
+\section{The mode dependent directional transforms}
+\label{sec:the_mode_dependent_directional_transforms}
+
+Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
 
 \part{Contributions}
 \label{prt:contributions}
