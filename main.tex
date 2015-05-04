@@ -751,13 +751,13 @@ The correlation matrix of this process takes the form of a Toeplitz
 matrix~\cite{akansu-12-toeplitz-approximation}:
 \begin{equation}
 	\R_x = \sigma_x^2
-	\begin{bmatrix}
+	\begin{pmatrix}
 		1          & \rho       & \rho^2     & \cdots & \rho^{N-1} \\
 		\rho       & 1          & \rho       & \cdots & \rho^{N-2} \\
 		\rho^2     & \rho       & 1          & \cdots & \rho^{N-3} \\
 		\vdots     & \vdots     & \vdots     & \ddots & \vdots     \\
 		\rho^{N-1} & \rho^{N-2} & \rho^{N-3} & \cdots & 1
-	\end{bmatrix}
+	\end{pmatrix}
 	\label{eqn:toeplitz_matrix}
 \end{equation}
 The \ac{KLT} for this kind of processes, that is, the eigenvalues of
@@ -831,11 +831,28 @@ the \ac{DST}~\cite{han-10-spatial-adaptive-transform}.
 	\label{fig:pred_scheme}
 \end{figure}
 
-Figure~\ref{fig:dct_dst}.b presents the \ac{DST}-VII bases for
-$4\times4$ blocks.
-The resemblance between an average residual block
-from figure~\ref{fig:pred_scheme}.b can be spotted by comparing it to
-the first base vector from the \ac{DST}.
+These kind of signals present a correlation matrix that can be modelled
+using a Toeplitz tridiagonal matrix, as the one
+in~\eqref{eqn:tridiagonal_matrix}.
+Note that a tilde has been used to indicate that the bottom-right corner
+value of the matrix has been modified in order to elimnate the
+irregularity (used to be 1) and be able to compute the eigenvectors
+analytically~\cite{han-10-spatial-adaptive-transform,
+yueh-05-eigenvalues-tridiagonal}.
+\begin{equation}
+	\tilde\R_x =
+	\begin{pmatrix}
+		1+\rho^2 & -\rho    & 0        & 0      & \hdots & 0            \\
+		-\rho    & 1+\rho^2 & -\rho    & 0      & \hdots & 0            \\
+		0        & -\rho    & 1+\rho^2 & -\rho  & \hdots & 0            \\
+		0        & \ddots   & \ddots   & \ddots & \ddots & \vdots       \\
+		\vdots   & \ddots   & \ddots   & \ddots & \ddots & -\rho        \\
+		0        & \hdots   & 0        & 0      & -\rho  & 1+\rho^2-\rho
+	\end{pmatrix}
+	\label{eqn:tridiagonal_matrix}
+\end{equation}
+Those eigenvalues can be expressed in a closed form using the
+\ac{DST}-VII from~\eqref{eqn:dst_vii}.
 \begin{equation}
 	{\left[S_{N}^{VII} \right]}_{n,k} =
 	\frac{2}{\sqrt{2N+1}}\sin\left(\frac{\pi(2n-1)k}{2N+1}\right),
@@ -844,9 +861,19 @@ the first base vector from the \ac{DST}.
 	\label{eqn:dst_vii}
 \end{equation}
 
+Figure~\ref{fig:dct_dst}.b presents the \ac{DST}-VII bases for
+$4\times4$ blocks.
+The resemblance between an average residual block
+from figure~\ref{fig:pred_scheme}.b can be spotted by comparing it to
+the first base vector from the \ac{DST}.
+
 The use of the \ac{DST} in \ac{HEVC} over the \ac{DCT} on $4\times4$
 blocks leads to a bit-rate reduction of 1\% on
 average~\cite{sullivan-12-overview-hevc}.
+A more detailed view on how it was discovered that the \ac{DST} was a
+good approximation of the \ac{KLT} for these signals is detailed in
+Chapter~\ref{cha:the_mode_dependent_directional_transforms}, more
+precisely in Section~\ref{sec:the_history_behind_the_dst}.
 
 \section{The rate-distortion optimised transform}
 \label{sec:the_rate_distortion_optimised_transform}
@@ -1434,6 +1461,61 @@ order.
 	\label{fig:mdcs}
 \end{figure}
 
+\section{The history behind the \acs{DST}}
+\label{sec:the_history_behind_the_dst}
+
+The way of generating the prediction residuals leads to a particular
+kind of signals with properties that differ from those of natural
+images.
+As a result, the \ac{DCT} is no longer a good approximation of the
+\ac{KLT}.
+For this reason, many studies were carried out in order to find better
+performing transform for these signals.
+
+Over the \ac{HEVC} standardisation phase, various techniques for
+improving the performance of the H.264/\acs{MPEG}-4 \acs{AVC} were
+designated as \ac{KTA}.
+Amongst those techniques, in order to improve the coding performance of
+intra prediction residuals, an adapted transform for each \ac{IPM} (at
+that time, nine) was included in the \ac{KTA} software.
+The adapted transforms were \acp{KLT}, and the resulting set was called
+\ac{MDDT}.
+It became a core component of the \ac{TMuC}~\cite{JCTVC-A204} because of
+its performance improvements over the previous standard.
+
+During the \ac{JCT-VC} meetings, many efforts were done to yield the
+first implementation of the \ac{MDDT}, which was non-separable, more
+lightweight.
+
+One of the first attempts was to make the \acp{KLT}
+separable~\cite{JCTVC-B024}.
+A fast algorithm was derived for the $4\times4$ transform by analysing
+the correlation matrix of the intra prediction residuals, which can be
+modelled using tridiagonal
+matrices~\cite{yueh-05-eigenvalues-tridiagonal}.
+In order to further reduce the complexity, rotational transforms were
+also considered in~\cite{JCTVC-C096}.
+The main idea was to use the \ac{DCT} followed by a secondary transform
+implemented in the form of Given's rotations to improve the coding
+efficiency.
+
+The \ac{DST} was theoretically proved to be the optimal transform, in
+terms of \ac{KLT} approximation, of the intra prediction residuals
+in~\cite{JCTVC-C108, JCTVC-D033}.
+It was used together with the \ac{DCT} as combinations of horizontal and
+vertical transforms, depending on the \ac{IPM}.
+However, it was not adopted in the \ac{TMuC} until the design of a fast
+algorithm of the \ac{DST}, which introduced almost no increase in the
+decoding time with regards to the \ac{DCT}.
+It was only then when it fully replaced the \ac{MDDT}~\cite{JCTVC-D048,
+JCTVC-E125, JCTVC-F283, JCTVC-G108}.
+Finally, after many \acp{CE} and cross-checks between companies and
+combinations of \ac{DST}, \ac{DCT} on different block sizes and luma and
+chroma channels, the whole system was simplified by using the \ac{DST}
+for all $4\times4$ luma intra prediction residuals, and the \ac{DCT} for
+the rest of block sizes, due to the lack of fast algorithms and limited
+gains, in both luma and chroma~\cite{JCTVC-J0021}.
+
 \part{Contributions}
 \label{prt:contributions}
 
@@ -1488,11 +1570,12 @@ to degrade its performances as least as possible.
 \chapter*{List of Acronyms}
 \label{cha:glossary}
 \addcontentsline{toc}{chapter}{List of Acronyms}
-\begin{acronym}[CABAC] % the option corresponds to the longest acronym
+\begin{acronym}[JCT-VC] % the option corresponds to the longest acronym
 	\acro{AR}{autoregressive}
 	\acro{AVC}{Advanced Video Coding}
 	\acro{BD}{Bj{\o}ntegaard Delta}
 	\acro{CABAC}{Context Adaptive Binary Arithmetic Coding}
+	\acro{CE}{core experiment}
 	\acro{DCT}{discrete cosine transform}
 	\acro{DPCM}{differential pulse-code modulation}
 	\acro{DST}{discrete sine transform}
@@ -1503,10 +1586,12 @@ to degrade its performances as least as possible.
 	\acro{H}{entropy}
 	\acro{IPM}{intra prediction mode}
 	\acro{IP}{Internet Protocol}
-	\acro{ITU-T}{\ac{ITU} Telecommunication Standardization Sector}
+	\acro{ITU-T}{\ac{ITU} Telecommunication Standardisation Sector}
 	\acro{ITU}{International Telecommunication Union}
+	\acro{JCT-VC}{Joint Collaborative Team on Video Coding}
 	\acro{KLT}{Karhunen-Loève transform}
 	\acro{KTA}{key technical areas}
+	\acro{MDDT}{mode dependent directional transform}
 	\acro{MPEG}{Moving Picture Experts Group}
 	\acro{MSE}{mean squared error}
 	\acro{PDF}{probability density function}
@@ -1516,6 +1601,7 @@ to degrade its performances as least as possible.
 	\acro{RDO}{rate-distortion optimisation}
 	\acro{RGB}{red, green and blue}
 	\acro{SOT}{sparse orthogonal transform}
+	\acro{TMuC}{Test Model under Consideration}
 	\acro{VCEG}{Video Coding Experts Group}
 	\acro{VCIP}{Visual Communications and Image Processing}
 \end{acronym}
