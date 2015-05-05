@@ -1397,9 +1397,12 @@ As seen in Chapter~\ref{cha:video_coding_fundamentals}, \ac{HEVC} makes
 use of predictions in order to generate a low signal energy, called
 residual, and improve the coding efficiency.
 With regards to previous standards, such as H.264/\ac{MPEG}-4 \ac{AVC},
-which had 9 different prediction modes for intra coding, \ac{HEVC} has a
-much improved prediction system, with 35 different prediction modes.
+which had 9 different prediction modes for intra coding, \ac{HEVC} has
+an improved prediction system, with 35 different prediction modes.
 Figure~\ref{fig:mdcs} illustrates those prediction modes.
+A detailed explanation on how predictions are derived from those
+prediction mode can be found in Chapters 6 from M.
+Wien's book on \ac{HEVC}~\cite{wien-15-hevc}.
 Depending on the prediction mode that has been used, transformed
 coefficients present different patterns, making low and high values to
 appear at different block positions.
@@ -1410,16 +1413,19 @@ figure~\ref{fig:mdcs} depend only on the \ac{IPM} used to compute the
 residual.
 
 The top-right part of figure~\ref{fig:mdcs} presents the average
-\ac{HEVC} $4\times4$ residual by scanning mode, together with their
+\ac{HEVC} $4\times4$ residuals by scanning mode, together with their
 representation in the transform domain via de \ac{DST}.
 The average residual profiles have lower (dark) values near the
-available boundaries, which increase with the distance from the
+available borders, which increase with the distance from the
 boundaries: residuals issued from horizontal and vertical \acp{IPM} only
 have the left and upper borders available, respectively, whereas the
 remaining \acp{IPM} tend to have both borders available.
-It can also be spotted that the scanning patterns match reasonably well
+It can also be observed that the scanning patterns match reasonably well
 the transform coefficients in each case, sorting them in an increasing
 order.
+
+The next section contains a summary of the most important studies
+regarding intra coding carried out during the conception of \ac{HEVC}.
 
 \begin{figure}[tb]
 	\centering
@@ -1530,6 +1536,8 @@ both transforms designs from \S~\ref{sec:the_karhunen_loeve_transform}
 \label{sec:the_mode_dependent_directional_transforms}
 
 Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
+\subsection{Encoding and decoding schemes for the \ac{MDDT}}
+\label{sub:encoding_and_decoding_schemes_for_the_mddt}
 
 \begin{figure}[tp]
 	\centering
@@ -1544,6 +1552,43 @@ Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
 	\caption{Decoding scheme for the \ac{MDDT}}
 	\label{fig:enc_mddt}
 \end{figure}
+
+\subsection{Separable implementations}
+\label{sub:separable_implementations}
+
+The methods for transform design and learning presented in
+Chapter~\ref{cha:transform_coding} regarding the \ac{KLT} and the
+\ac{RDOT} are non-separable.
+This means that the input block is linearised and then transformed in
+one step.
+In order to design and learn separable transforms, the methods have to
+be adapted.
+In the case of the \ac{KLT} is straightforward to see that one can learn
+an horizontal \ac{KLT} to transform the rows of the signal and a
+vertical \ac{KLT} for the columns.
+However, the \ac{RDOT} algorithm needs further tunning in order to
+obtain separable transforms.
+A possible way of learning a separable \ac{RDOT} was also proposed by
+Sezer~\cite{sezer-11-phd} and validated by independent
+reseaches~\cite{sole-09-sparsity-optimisation-separable-transforms}.
+The proposed method consists in updating each one of the horizontal and
+vertical transforms separately.
+
+\subsubsection{\ac{KLT}-based \ac{MDDT}}
+\label{ssub:sep_klt_based_mddt}
+\subsubsection{\ac{RDOT}-based \ac{MDDT}}
+\label{ssub:sep_rdot_based_mddt}
+
+\subsection{Non-separable implementations}
+\label{sub:non_separable_implementations}
+
+\subsubsection{\ac{KLT}-based \ac{MDDT}}
+\label{ssub:nsep_klt_based_mddt}
+\subsubsection{\ac{RDOT}-based \ac{MDDT}}
+\label{ssub:nsep_rdot_based_mddt}
+
+\section{Conclusions}
+\label{sec:conclusions}
 
 \part{Contributions}
 \label{prt:contributions}
