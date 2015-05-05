@@ -827,8 +827,8 @@ the \ac{DST}~\cite{han-10-spatial-adaptive-transform}.
 	previously reconstructed blocks (grey)]
 	{\input{./figures/pred-scheme.tex}}
 	\hspace{0.2\linewidth}
-	\subfloat[Average intra prediction residual from mode 18]
-	{\includegraphics[width=0.3\linewidth]{./figures/av-residual-s4-p18.png}}
+	\subfloat[Average intra prediction residual]
+	{\includegraphics[width=0.3\linewidth]{./figures/resids-scan-diag.png}}
 	\caption{Prediction scheme showing all intra prediction modes and a
 	prediction residual example}
 	\label{fig:pred_scheme}
@@ -1478,12 +1478,13 @@ performing transform for these signals.
 
 Over the \ac{HEVC} standardisation phase, various techniques for
 improving the performance of the H.264/\acs{MPEG}-4 \acs{AVC} were
-designated as \ac{KTA}.
+explored and designated as \ac{KTA}.
 Amongst those techniques, in order to improve the coding performance of
 intra prediction residuals, an adapted transform for each \ac{IPM} (at
-that time, nine) was included in the \ac{KTA} software.
-The adapted transforms were \acp{KLT}, and the resulting set was called
-\ac{MDDT}.
+that time nine, which evolved into 35 in \ac{HEVC}), was included in the
+\ac{KTA} software.
+The adapted transforms were \acp{KLT}, and the resulting technique was
+called \ac{MDDT}.
 It became a core component of the \ac{TMuC}~\cite{JCTVC-A204} because of
 its performance improvements over the previous standard.
 
@@ -1539,7 +1540,13 @@ Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
 
 \vspace{0.5cm}
 Maybe explain the VCIP
-publication~\cite{arrufat-14-transform-competition-rdot}
+
+\begin{itemize}
+	\item introduce transform competition with transform
+		skip~\cite{JCTVC-F077, JCTVC-H0208}
+	\item explain VCIP 2014~\cite{arrufat-14-transform-competition-rdot}
+	\item explain ICIP 2015~\cite{arrufat-15-mdtc}
+\end{itemize}
 
 \chapter{Realistic system}
 \label{cha:realistic_system}
