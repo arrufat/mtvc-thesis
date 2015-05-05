@@ -30,7 +30,7 @@
 
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{pgfplots,tikz}
-\usetikzlibrary{decorations.markings,intersections}
+\usetikzlibrary{shapes,arrows,fit,calc,decorations.markings,intersections}
 \usepgfplotslibrary{fillbetween}
 \usepackage{bookmark} % needed for \bookmarksetup{startatroot}
 \usepackage{hyperref}
@@ -1530,6 +1530,20 @@ both transforms designs from \S~\ref{sec:the_karhunen_loeve_transform}
 \label{sec:the_mode_dependent_directional_transforms}
 
 Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
+
+\begin{figure}[tp]
+	\centering
+	\input{./figures/mddt_enc.tex}
+	\caption{Encoding scheme for the \ac{MDDT}}
+	\label{fig:enc_mddt}
+\end{figure}
+
+\begin{figure}[tp]
+	\centering
+	\input{./figures/mddt_dec.tex}
+	\caption{Decoding scheme for the \ac{MDDT}}
+	\label{fig:enc_mddt}
+\end{figure}
 
 \part{Contributions}
 \label{prt:contributions}

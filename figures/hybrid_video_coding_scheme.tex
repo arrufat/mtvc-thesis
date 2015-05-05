@@ -5,18 +5,22 @@
 \pgfmathsetmacro{\nodebasesize}{1} % A node with a value of one will have this diameter
 \pgfmathsetmacro{\nodeinnersep}{0.1}
 
-\newcommand{\propnode}[5]{% position, name, options, value, label
-	\pgfmathsetmacro{\minimalwidth}{sqrt (#4*\nodebasesize)}
-	\node[#3,minimum width=\minimalwidth*1cm,inner sep=\nodeinnersep*0cm,circle,draw]
-	(#2) at (#1) {#5};
-}
-
 \tikzstyle{bloq} = [rectangle, draw, text badly centered, minimum height=2.5em, inner sep=1mm]
+
+\tikzstyle{frame} =
+[rectangle, fill=white, draw, text badly centered, minimum width=3*\h em,minimum height=3*\v em]
+
 \newcommand{\bloq}[4]{% position, name options, label
 	\node[bloq,#3] (#2) at (#1) {\textsf{#4}};
 }
 \newcommand{\add}[2]{%position, name
 	\draw (4,4) circle [radius=0.3] node (add) {\textsf$+$};
+}
+
+\newcommand{\propnode}[5]{% position, name, options, value, label
+	\pgfmathsetmacro{\minimalwidth}{sqrt (#4*\nodebasesize)}
+	\node[#3,minimum width=\minimalwidth*1cm,inner sep=\nodeinnersep*0cm,circle,draw]
+	(#2) at (#1) {#5};
 }
 
 
@@ -28,8 +32,6 @@
 	\def\h{2.0}
 	\def\v{1.0}
 
-\tikzstyle{frame} =
-[rectangle, fill=white, draw, text badly centered, minimum width=3*\h em,minimum height=3*\v em]
 % INPUT VIDEO SEQUENCE
 	\draw (\x-\h,\y+0.5*\v) node[above] {\textsf{Input Video Sequence}};
 	\draw (\x-\h,\y-3*\v) node[above] {\textsf{Split into blocks}};

@@ -1,0 +1,130 @@
+% \documentclass{book}
+% \usepackage{tikz, libertine}
+% \begin{document}
+
+\pgfmathsetmacro{\nodebasesize}{1} % A node with a value of one will have this diameter
+\pgfmathsetmacro{\nodeinnersep}{0.1}
+
+\tikzstyle{bloq} = [rectangle, draw, text badly centered, minimum height=2.5em, inner sep=1mm]
+
+\tikzstyle{frame} =
+[rectangle, fill=white, draw, text badly centered, minimum width=3*\h em,minimum height=3*\v em]
+
+\tikzset{
+	middlearrow/.style={
+		decoration={markings,
+		mark= at position 0.9 with {\arrow{#1}},
+		},
+		postaction={decorate}
+	}
+}
+
+\newcommand{\bloq}[4]{% position, name options, label
+	\node[bloq,#3] (#2) at (#1) {\textsf{#4}};
+}
+\newcommand{\add}[2]{%position, name
+	\draw (4,4) circle [radius=0.3] node (add) {\textsf$+$};
+}
+
+\newcommand{\propnode}[5]{% position, name, options, value, label
+	\pgfmathsetmacro{\minimalwidth}{sqrt (#4*\nodebasesize)}
+	\node[#3,minimum width=\minimalwidth*1cm,inner sep=\nodeinnersep*0cm,circle,draw]
+	(#2) at (#1) {#5};
+}
+
+
+\begin{tikzpicture}[scale=1.5,x=1em,y=1em]
+\tikzstyle{every node}=[font=\small]
+	\def\x{0}
+	\def\y{0}
+	\def\thickness{thick}
+	\def\h{2.0}
+	\def\v{1.0}
+
+% INPUT VIDEO SEQUENCE
+	\draw (\x-\h,\y+0.5*\v) node[above] {\textsf{Input Video Sequence}};
+	\draw (\x-\h,\y-3*\v) node[above] {\textsf{Split into blocks}};
+	\node[frame] at (\x-\h-0.3,\y-\v+0.3){};
+	\node[frame] at (\x-\h-0.2,\y-\v+0.2){};
+	\node[frame] at (\x-\h-0.1,\y-\v+0.1){};
+	\node[frame] (sequence) at (\x-\h,\y-\v){};
+	\draw[step=0.25,thin,help lines] (\x,\y) grid (-2*\h,-2*\v);
+	\draw[step=0.5,thin] (\x,\y) grid (-2*\h,-2*\v);
+	\draw[step=1.0,black,thick] (\x,\y) grid (-2*\h,-2*\v);
+
+	\propnode{\x+1*\h,\y-1*\v}{add1}{fill=green!50}{0}{$+$}
+	\propnode{\x+8*\h,\y-9*\v}{add2}{fill=green!50}{0}{$+$}
+	\propnode{\x+0.75*\h/2,\y-1*\v}{inter1}{fill=black}{0.005}{}
+	\propnode{2,\y-9*\v}{inter2}{fill=black}{0.005}{}
+
+	\draw (\x+1.25*\h,\y-0.75*\v) node[above] {\textsf{residuals}};
+
+	\bloq{\x+3*\h,\y-\v}{Transf}{text width=6em,fill=red!50}
+	{$\cdots$\\[-0.25em]
+	Transf. 10\\[-0.25em]
+	$\cdots$\\[-0.25em]
+	Transf. 18\\[-0.25em]
+	$\cdots$\\[-0.25em]
+	Transf. 26\\[-0.25em]
+	$\cdots$\\[-1.5em]};
+	\bloq{\x+6*\h,\y-\v}{Quant}{text width=6em,fill=yellow!50}{Quant.};
+	\bloq{\x+8*\h,-\y-4*\v}{InvQuant}{text width=6em,fill=yellow!50}{Inv. Quant.};
+	\bloq{\x+8*\h,\y-7*\v}{InvTransf}{text width=6em,fill=red!50}{Inv. Transf. N};
+	\bloq{\x+8*\h,\y-12.5*\v}{Reconst}{text width=4em,fill=black!15}{Reconst.\\block};
+	\bloq{\x+4.75*\h,\y-12.5*\v}{IntraPred}{text width=5em,text height=5em,fill=yellow!50}{};
+
+	\draw[-latex,\thickness] (sequence) -- (add1) node [below right] {\textsf{$-$}};
+	\draw[-latex,\thickness] (add1) -- (Transf);
+	\draw[-latex,\thickness] (Transf) -- (Quant);
+	\draw[-latex,\thickness] (Quant) -| (InvQuant);
+	\draw[-latex,\thickness] (InvQuant) -- (InvTransf);
+	\draw[-latex,\thickness] (InvTransf) -- (add2);
+	\draw[-latex,\thickness] (add2) -- (Reconst);
+	\draw[-latex,\thickness] (inter2) -- (add2);
+	\draw[-latex,\thickness] (Reconst) -- (IntraPred);
+	\draw[-latex,\thickness] (IntraPred) -| (add1);
+
+	\def\startangle{45}
+	\def\radius{0.707}
+	\def\posx{\x+4*\h}
+	\def\posy{\y-13*\v}
+
+	\draw (\posx-3,\posy+1.5) node [below] {\footnotesize\textsf{Intra Prediction}};
+
+	\tikzstyle{frame} =
+	[rectangle, fill=white, draw, text centered, minimum width=4em, minimum height=2em]
+
+	\filldraw[fill=black!15, draw=black!75] (\posx,\posy) rectangle (\posx+1,\posy+1);
+	\filldraw[fill=black!15, draw=black!75] (\posx,\posy+1) rectangle (\posx+1,\posy+2);
+	\filldraw[fill=black!15, draw=black!75] (\posx+1,\posy+1) rectangle (\posx+2,\posy+2);
+	\filldraw[fill=white, draw=black!75] (\posx+1,\posy+1) rectangle (\posx+2,\posy);
+	\filldraw[fill=black!15, draw=black!75] (\posx,\posy) rectangle (\posx+1,\posy-1);
+	\filldraw[fill=black!15, draw=black!75] (\posx+2,\posy+2) rectangle (\posx+3,\posy+1);
+
+	\draw[step=0.25,help lines] (\posx,\posy) grid (\posx+2,\posy+2);
+	\draw[step=0.25,help lines] (\posx,\posy) grid (\posx+1,\posy-1);
+	\draw[step=0.25,help lines] (\posx+2,\posy+2) grid (\posx+3,\posy+1);
+	\draw[step=1,black!75,thick] (\posx,\posy) grid (\posx+2,\posy+2);
+	\draw[step=1,black!75,thick] (\posx,\posy) grid (\posx+1,\posy-1);
+	\draw[step=1,black!75,thick] (\posx+2,\posy+2) grid (\posx+3,\posy+1);
+
+	\foreach \direction in {10,18,...,26}
+	{%
+		% set the angle of current prediction direction 
+		\pgfmathsetmacro{\angle}{\startangle - (\direction - 2) * 180 / 32 + 180}
+		\ifthenelse{\direction < 18}{\def\oper{cos}}{\def\oper{sin}}
+		\pgfmathsetmacro{\radnew}{abs(\radius / \oper(\angle))}
+		\ifthenelse{\direction=2 \OR \direction=10 \OR \direction=18 \OR \direction=26 \OR \direction=34}
+		{
+			\draw[opacity=0] (\posx+1.5,\posy+0.5) --++ (\angle:\radnew
+			+ 0.25) node [opacity=1] {\footnotesize\textsf{\direction}};
+		}{}
+		\draw[middlearrow={latex reversed},very thin] (\posx+1.5,\posy+0.5) --++ (\angle:\radnew);
+	}
+	\draw(0.2,3) node {\includegraphics[width=3em]{./figures/resids-scan-vert}\footnotesize\textsf{10}};
+	\draw(3.2,3) node {\includegraphics[width=3em]{./figures/resids-scan-diag}\footnotesize\textsf{18}};
+	\draw(6.2,3) node {\includegraphics[width=3em]{./figures/resids-scan-horz}\footnotesize\textsf{26}};
+	\draw[thick,round cap-<](2.71,0) --++ (0,1.5);
+	\draw[thick,round cap-round cap] (-1,2) ++ ( 255 : 0 ) arc ( 255:285:15 );
+\end{tikzpicture}
+% \end{document}
