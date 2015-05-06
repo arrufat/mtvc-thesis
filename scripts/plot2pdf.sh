@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+TEXFLAGS='-lualatex --shell-escape'
 PGFFILE=$1
 PDFFILE=`echo $PGFFILE | sed -e 's/\.tex/\.pdf/g'`
 TMPFILE=tmp.tex
@@ -20,7 +20,7 @@ echo "\\begin{document}"                                                        
 echo "\\input{${PGFFILE}}"                                                         >> ${TMPFILE}
 echo "\\end{document}"                                                             >> ${TMPFILE}
 
-latexmk ${TMPFILE}
+latexmk ${TEXFLAGS} ${TMPFILE}
 mv tmp.pdf ${PDFFILE}
 latexmk -c
 rm tmp.tex
