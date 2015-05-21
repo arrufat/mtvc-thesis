@@ -762,7 +762,7 @@ matrix~\cite{akansu-12-toeplitz-approximation}:
 	\end{pmatrix}
 	\label{eqn:toeplitz_matrix}
 \end{equation}
-The \ac{KLT} for this kind of processes, that is, the eigenvalues of
+The \ac{KLT} for this kind of processes, that is, the eigenvectors of
 $\R_\x$, tends to the \ac{DCT} as $\rho\to1$~\cite{britanak-06-dct-and-dst}.
 The \ac{DCT}-II can be expressed compactly as:
 \begin{equation}
@@ -782,7 +782,7 @@ The \ac{DCT}-II can be expressed compactly as:
 \end{equation}
 
 The fact that the \ac{DCT} approximates the \ac{KLT} for a wide variety
-signals and its efficient implementation has made it the preferred
+signals and its efficient implementation have made it the preferred
 choice in image and video compression algorithms to decorrelate the
 signals and concentrate their energy into few
 coefficients~\cite{sole-12-transform-coefficient-coding}.
@@ -806,7 +806,8 @@ coefficients~\cite{sole-12-transform-coefficient-coding}.
 \index{Toeplitz matrix}
 
 Although the \ac{DCT} has been proved to be nearly the \ac{KLT} for natural
-images, it is used in predictive transform coding based video standards.
+images, it is used in predictive transform coding based video standards, as
+well.
 This kind of coding leads to signals whose nature differs from that of
 natural images: prediction residuals.
 In particular, prediction residuals resulting from intra prediction tend
@@ -921,10 +922,10 @@ consequences is detailed below.
 
 The value that \acp{RDOT} minimise is expressed
 in~\eqref{eqn:rdot_metric} for a single signal.
-As it is explicitly written, this metric depends exclusively on the
-quantisation step $\Delta$ and the initial transform used $\A$.
-The relation between $\lambda$ and $\Delta$ is detailed in
-\S~\ref{sub:the_lagrange_multiplier}.
+This metric depends exclusively on the quantisation step $\Delta$ and the
+initial transform used $\A$.
+The relation between the Lagrange multiplier $\lambda$ and $\Delta$ is
+detailed in \S\ref{sub:the_lagrange_multiplier}.
 \begin{equation}
 	J (\lambda) =
 	{\Vert \x - \A^T \c \Vert}_2^2 + \lambda\overline{\Vert \c \Vert}_0
@@ -936,8 +937,8 @@ The second term serves as rate-like constraint, by ensuring that the
 number of significant values in the transform domain is minimised,
 together with the distortion.
 
-The minimisation of the metric happens in two steps, iteratively until
-convergence:
+The minimisation of the metric happens in two steps, carried out iteratively
+until convergence:
 \begin{enumerate}
 	\item Finding the optimal coefficients for a given transform.
 	\item Updating the transform for the optimal coefficients.
@@ -952,7 +953,7 @@ hard-thresholing them:
 	\c = \lfloor \X \rfloor = \lfloor \A \x \rfloor
 \end{equation}
 The threshold value is tightly related to the Lagrange multiplier $\lambda$,
-as demonstrated in \S~\ref{sub:the_lagrange_multiplier}:
+as demonstrated in\S~\ref{sub:the_lagrange_multiplier}:
 \begin{equation}
 	\c[n] =
 	\begin{cases}
@@ -1027,20 +1028,25 @@ Re-arranging the terms using the trace cyclic property:
 	-2\tr\left(\Lambdab^{\nicefrac{1}{2}}\V^T\A^T\U\right)
 	\right)
 \end{equation}
-Let $\P=\V^T\A^T\U$. Since $\V$, $\A$ and $\U$ are orthonormal, so is
-$\P$. The equation is now:
+Let $\Pb=\V^T\A^T\U$. Since $\V$, $\A$ and $\U$ are orthonormal, so is
+$\Pb$. The equation is now:
 \begin{equation}
 	\A_{opt} = \arg\max\limits_{\A}
 	\left(
-	\tr\left(\Lambdab^{\nicefrac{1}{2}}\P\right)
+	\tr\left(\Lambdab^{\nicefrac{1}{2}}\Pb\right)
 	\right)
 \end{equation}
 Since $\Lambdab$ is a diagonal matrix whose entries are non-negative by
-definition and $\P$ is orthonormal, the maximisation is achieved when
-$\P=\I$
+definition and $\Pb$ is orthonormal, the maximisation is achieved when
+$\Pb=\I$
 \begin{equation}
 	\V^T\A_{opt}^T\U=\I\quad \Rightarrow \quad \A_{opt} = \U\V^T
 \end{equation}
+
+Summing up, the optimal transform is obtained using the SVD decomposition of
+the cross-correlation matrix of the output signal (the transformed and
+quantised coefficients) with the input signal (the intra prediction
+residuals).
 
 \subsection{The Lagrange multiplier and the zero norm}
 \label{sub:the_lagrange_multiplier}
