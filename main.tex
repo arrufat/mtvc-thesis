@@ -13,6 +13,7 @@
 \usepackage{subfig}
 \usepackage{nicefrac}
 \usepackage{contour} % for inexisting bold symbols
+\usepackage{enumitem} % for custom labels
 \contourlength{0.01em}
 
 % lines and paragraphs
@@ -510,13 +511,14 @@ as both distortion and bit rate savings have to be taken into account.
 Metrics introduced by Gisle Bj{\o}ntegaard, know as \ac{BD} measurements
 have become the current \emph{de facto} standard to objectively compare
 the result of two encodings~\cite{VCEG-M33,VCEG-AI11}.
-Two different metrics are defined:
-\begin{itemize}
-	\item \ac{BD}-rate: computes the relative savings in bit rate for an
-		equivalent distortion in percent.
+Two different metrics are defined and displayed in
+figure~\ref{fig:bdsnr_bdrate}:
+\begin{enumerate}[label = (\alph{enumi})]
 	\item \ac{BD}-\ac{PSNR}: computes the relative quality improvement
 		in \deci\bel.
-\end{itemize}
+	\item \ac{BD}-rate: computes the relative savings in bit rate for an
+		equivalent distortion in percent.
+\end{enumerate}
 
 \begin{figure}[tb]
 	\centering
