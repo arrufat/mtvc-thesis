@@ -84,7 +84,7 @@
 \label{cha:acknowledgements}
 \addcontentsline{toc}{chapter}{Acknowledgements}
 
-\setcounter{tocdepth}{5}
+% \setcounter{tocdepth}{5}
 \tableofcontents
 \addcontentsline{toc}{chapter}{Contents}
 \cleardoublepage
@@ -160,6 +160,8 @@ used in state-of-the-art video coders.
 
 Figure~\ref{fig:video_coding_system} describes how a complete video
 coding system can be organised as a block diagram.
+The composing blocks of the video system are explained more in detail in
+the following subsections.
 
 \begin{figure}[tb]
 	\centering
@@ -167,9 +169,6 @@ coding system can be organised as a block diagram.
 	\caption{Video coding system}
 	\label{fig:video_coding_system}
 \end{figure}
-
-The composing blocks of the video system are explained more in detail in
-the following subsections.
 
 \subsection{Pre-processing}
 \label{sub:pre_processing}
@@ -628,13 +627,15 @@ Due to the high amount of operations needed to transform a block,
 separable transforms are widely used in video coding.
 They are computed as:
 \begin{equation}
-	\X = \A {\left(\A \, \x^T\right)}^T = \A \, \x \, \A^T
+	\X = \A_v {\left(\A_h \, \x^T\right)}^T = \A_v \, \x \, \A_h^T
+	\label{eqn:sep_transform}
 \end{equation}
-where $\x$ is a $N \times N$ block and the transform $\A$ is a $N \times
-N$ matrix.
+where $\x$ is a $N \times N$ block and the transform $\A_h$ and $A_h$ are $N
+\times N$ matrices, transforming the rows and the columns of $\x$,
+respectively.
 The operation inside the parenthesis transforms the rows of $\x$, and
-the outter part, the columns of $\x$.
-By perfoming the horizontal and vertical transforms separably, the
+the outer part, the columns of $\x$.
+By performing the horizontal and vertical transforms separately, the
 number of operations required has been reduced to $2N^3$ multiplications
 and $2N^2(N-1)$ additions.
 
@@ -1047,6 +1048,100 @@ Summing up, the optimal transform is obtained using the SVD decomposition of
 the cross-correlation matrix of the output signal (the transformed and
 quantised coefficients) with the input signal (the intra prediction
 residuals).
+
+\subsection{Separable \ac{RDOT} design}
+\label{sub:separable_rdot_design}
+
+The methods for transform design and learning presented in the previous
+sections are non-separable.
+This means that the input block is linearised and then transformed in
+one step.
+Due to complexity issues, non-separable transforms are hardly used in
+performing solutions.
+A lower complexity approach involves separable transforms, which may not be
+able to concentrate the energy in the transform domain as well as their
+non-separable counterparts.
+In order to design and learn separable transforms, the design and learning
+methods have to be adapted.
+In the case of the \ac{KLT} is straightforward to see that one can learn
+a horizontal \ac{KLT} to transform the rows of the signal and a vertical
+\ac{KLT} for the columns.
+However, the \ac{RDOT} algorithm needs further tuning in order to obtain
+separable transforms.
+A possible way of learning a separable \ac{RDOT} was also proposed by
+Sezer~\cite{sezer-11-phd} and validated by independent
+researches~\cite{sole-09-sparsity-optimisation-separable-transforms}.
+The proposed method consists in updating each one of the horizontal and
+vertical transforms separately.
+
+The separable transformation of a block $\x$ has been previously defined as a
+two step transformation in~\eqref{eqn:sep_transform}:
+\begin{equation*}
+  \X = {\A_v\left( \A_h \x^T \right)}^T = \A_v \x \A_h^T
+\end{equation*}
+
+Where $\x$ is the two-dimensional block to transform, $\A_h$ is the horizontal
+transform, used to transform the rows of $\x$ and $A_v$ is the vertical
+transform, used to transform the columns of $\x$.
+
+The equation to optimise using separable transforms reads as follows:
+\begin{equation}
+  \A_{v_{opt}}, \A_{h_{opt}} = \arg\min\limits_{\A_v,\A_h}
+  \left(
+  \sum_{\forall i} \min\limits_{\c_i}{\Vert \x_i - \A_v^T\c_i\A_h \Vert}_2^2
+  + {\Vert \c_i \Vert}_0
+  \right)
+\end{equation}
+
+This minimisation problem can be solved in a similar way to the non-separable
+version.
+
+\subsubsection{Optimal coefficients for a given transform}
+As in the non-separable problem, the optimal coefficients $\c_i$ are found by
+hard-thresholding the components of $\X_i=\A_v\x_i\A_h^T$ with $\sqrt{\lambda}$.
+\subsubsection{Optimal vertical transform for given coefficients}
+Now, the vertical transform needs to be updated accordingly:
+\begin{equation}
+  \A_{v_{opt}} = \text{arg}\min\limits_{\A_v}
+  \left(
+  \sum_{\forall i} {\Vert \x_i - \A_v^T\c_i\A_h \Vert}_2^2
+  \right)
+  \qquad \text{s.t. } \A_v\A_v^T = \I
+\end{equation}
+Expanding the expression and grouping the terms as in the non-separable
+version, we can define:
+\begin{equation}
+\Y_v = \sum_{\forall i} \c_i\A_h\x_i =
+\U_v\Lambdab^{1/2}\V_h^T
+\end{equation}
+Then the optimal transform is given by:
+\begin{equation}
+  \A_{v_{opt}} = \U_h\V_h^T
+\end{equation}
+\subsubsection{Optimal coefficients for updated vertical transform}
+As in the non-separable problem, the optimal coefficients $\c_i$ are found by
+hard-thresholding the components of $\X=\A_{v_{opt}}\x_i\A_h^T$ with
+$\sqrt{\lambda}$. However, this time we use the optimal vertical transform from
+the previous step.
+\subsubsection{Optimal horizontal transform for given coefficients}
+Now, the horizontal transform needs to be updated accordingly:
+\begin{equation}
+  \A_{h_{opt}} = \text{arg}\min\limits_{\A_h}
+  \left(
+  \sum_{\forall i} {\Vert \x_i - \A_{v_{opt}}^T\c_i\A_h \Vert}_2^2
+  \right)
+  \qquad \text{s.t. } \A_h\A_h^T = \I
+\end{equation}
+Expanding the expression and grouping the terms as in the non-separable
+version, we can define:
+\begin{equation}
+  \Y_h = \sum_{\forall i} \c_i^T\A_{v_{opt}}\x_i =
+\U_v\Lambdab^{1/2}\V_h^T
+\end{equation}
+Then the optimal transform is given by:
+\begin{equation}
+  \A_{h_{opt}} = \U_v\V_v^T
+\end{equation}
 
 \subsection{The Lagrange multiplier and the zero norm}
 \label{sub:the_lagrange_multiplier}
@@ -1566,23 +1661,6 @@ Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
 \subsection{Separable implementations}
 \label{sub:separable_implementations}
 
-The methods for transform design and learning presented in
-Chapter~\ref{cha:transform_coding} regarding the \ac{KLT} and the
-\ac{RDOT} are non-separable.
-This means that the input block is linearised and then transformed in
-one step.
-In order to design and learn separable transforms, the methods have to
-be adapted.
-In the case of the \ac{KLT} is straightforward to see that one can learn
-an horizontal \ac{KLT} to transform the rows of the signal and a
-vertical \ac{KLT} for the columns.
-However, the \ac{RDOT} algorithm needs further tunning in order to
-obtain separable transforms.
-A possible way of learning a separable \ac{RDOT} was also proposed by
-Sezer~\cite{sezer-11-phd} and validated by independent
-reseaches~\cite{sole-09-sparsity-optimisation-separable-transforms}.
-The proposed method consists in updating each one of the horizontal and
-vertical transforms separately.
 
 \subsubsection{\ac{KLT}-based \ac{MDDT}}
 \label{ssub:sep_klt_based_mddt}
