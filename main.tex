@@ -88,6 +88,11 @@
 \tableofcontents
 \addcontentsline{toc}{chapter}{Contents}
 \cleardoublepage
+\chapter*{List of Acronyms}
+\label{cha:glossary}
+\addcontentsline{toc}{chapter}{List of Acronyms}
+\input{./acronyms.tex}
+\cleardoublepage
 \listoffigures
 \cleardoublepage
 \listoftables
@@ -601,6 +606,25 @@ in image and video coding applications are the block-based transforms
 due to the good trade-off they provide in terms of complexity and
 performance.
 
+\subsection{Orthogonal transforms}
+\label{sub:orthogonal_transforms}
+
+Transforms used in image processing and video coding are orthogonal.
+Orthogonal matrices are square matrices whose rows and columns are orthogonal
+unit vectors, also known as orthonormal vectors.
+\begin{equation}
+	\A^T\A = \A\A^T = \I
+\end{equation}
+As a consequence, the inverse matrix of an orthonormal matrix is its
+transposed version:
+\begin{equation}
+	\A^T = \A^{-1}
+\end{equation}
+
+This fact has benefits in two areas: fast computation of inverse transform
+with no need to store it separately and re-use of fast algorithms for both
+direct and inverse transform applications.
+
 \subsection{Separability}
 \label{sub:separability}
 
@@ -611,7 +635,7 @@ signals.
 The naive approach to work with those signals is to use non-separable
 transforms.
 These transforms take the signal as a whole and reshape it to a
-single-dimensional signal.
+one-dimensional signal.
 Afterwards the transform is applied normally:
 \begin{equation}
 	\X = \A \, \x
@@ -989,7 +1013,7 @@ Operating:
 \begin{equation}
 	\A_{opt} = \arg\min\limits_{\A}
 	\left(\sum_{\forall i}\tr\left( 
-	\x_i^T\x_i -\x_i^T\A^T\c_i -\c_i^T\A\x_i^T + \c_i^T\A\A^T\c_i
+	\x_i^T\x_i -\x_i^T\A^T\c_i -\c_i^T\A\x_i + \c_i^T\A\A^T\c_i
 	\right)\right)
 \end{equation}
 Since the trace is a linear operator and $\A\A^T=\I$:
@@ -998,7 +1022,7 @@ Since the trace is a linear operator and $\A\A^T=\I$:
 	\left(\sum_{\forall i}
 	\tr\left(\x_i^T\x_i\right)
 	-\tr\left(\x_i^T\A^T\c_i\right)
-	-\tr\left(\c_i^T\A\x_i^T\right)
+	-\tr\left(\c_i^T\A\x_i\right)
 	+\tr\left(\c_i^T\c_i \right)
 	\right)
 \end{equation}
@@ -1573,8 +1597,8 @@ regarding intra coding carried out during the conception of \ac{HEVC}.
 	\label{fig:mdcs}
 \end{figure}
 
-\section{The story behind the \acs{DST}}
-\label{sec:the_story_behind_the_dst}
+\section{The \acs{DST} as a simplification of the \acs{MDDT}}
+\label{sec:dst_and_mddt}
 \index{DST}
 \index{KTA}
 \index{TMuC}
@@ -1734,46 +1758,6 @@ to degrade its performances as least as possible.
 %\bibliographystyle{apalike} % Surname et al. 2014
 %\bibliographystyle{alpha} % ABC14
 \bibliography{refs}
-
-\chapter*{List of Acronyms}
-\label{cha:glossary}
-\addcontentsline{toc}{chapter}{List of Acronyms}
-\begin{acronym}[JCT-VC] % the option corresponds to the longest acronym
-	\acro{AR}{autoregressive}
-	\acro{AVC}{Advanced Video Coding}
-	\acro{BD}{Bj{\o}ntegaard Delta}
-	\acro{CABAC}{Context Adaptive Binary Arithmetic Coding}
-	\acro{CE}{core experiment}
-	\acro{DCT}{discrete cosine transform}
-	\acro{DPCM}{differential pulse-code modulation}
-	\acro{DST}{discrete sine transform}
-	\acro{GGD}{generalised Gaussian distribution}
-	\acro{HD}{High Definition}
-	\acro{HEVC}{High Efficiency Video Coding}
-	\acro{HVS}{Human Visual System}
-	\acro{H}{entropy}
-	\acro{IPM}{intra prediction mode}
-	\acro{IP}{Internet Protocol}
-	\acro{ITU-T}{\ac{ITU} Telecommunication Standardisation Sector}
-	\acro{ITU}{International Telecommunication Union}
-	\acro{JCT-VC}{Joint Collaborative Team on Video Coding}
-	\acro{KLT}{Karhunen-Loève transform}
-	\acro{KTA}{key technical areas}
-	\acro{MDDT}{mode dependent directional transform}
-	\acro{MPEG}{Moving Picture Experts Group}
-	\acro{MSE}{mean squared error}
-	\acro{PDF}{probability density function}
-	\acro{PSNR}{peak signal-to-noise ratio}
-	\acro{QP}{quantisation parameter}
-	\acro{RDOT}{rate-distortion optimised transform}
-	\acro{RDO}{rate-distortion optimisation}
-	\acro{RGB}{red, green and blue}
-	\acro{SOT}{sparse orthogonal transform}
-	\acro{TMuC}{Test Model under Consideration}
-	\acro{VCEG}{Video Coding Experts Group}
-	\acro{VCIP}{Visual Communications and Image Processing}
-\end{acronym}
-\thispagestyle{empty}
 
 \label{cha:index}
 \printindex
