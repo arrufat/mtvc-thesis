@@ -1,7 +1,7 @@
 # LaTeX Makefile using latexmk
 
 TEXC		= latexmk
-TEXFLAGS	= -lualatex --shell-escape -synctex=1
+TEXFLAGS	= -lualatex --shell-escape -synctex=1 -quiet
 SOURCE		= $(shell grep -l '\\documentclass' *.tex)
 OBJECTS		= $(SOURCE:.tex=.bbl) $(SOURCE:.tex=.nav) $(SOURCE:.tex=.snm) $(SOURCE:.tex=.synctex.gz) $(SOURCE:.tex=.ptc)
 MKPLOTS		= ./scripts/plot2pdf.sh
