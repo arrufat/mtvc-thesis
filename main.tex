@@ -16,6 +16,18 @@
 \usepackage{enumitem} % for custom labels
 \contourlength{0.01em}
 
+\usepackage{color}
+\definecolor{almostwhite}{rgb}{0.9,0.9,0.95}
+\providecommand{\todo}[1]{
+	\begin{center}
+		\colorbox{almostwhite}{
+			\begin{minipage}{0.85\linewidth}
+				\textbf{TODO:} #1
+			\end{minipage}
+		}
+	\end{center}
+}
+
 % lines and paragraphs
 % \usepackage{setspace}
 % \setstretch{1}
@@ -106,6 +118,18 @@
 \chapter*{Context}
 \label{cha:context}
 
+Nowadays, video coding plays a major role in information exchanges around the
+world.
+Despite the progress done in the last years with latest video coding
+standards, improvements are still required as new technologies emerge:
+as \ac{HFR}, \ac{HDR} and \ac{UHD} formats, such as 4K and even 8K, become
+more common, new needs for video compression appear that must exploit
+properties in this domain of which we had never been aware of.
+
+All these above mentioned techniques are made possible thanks to, the
+unwritten rule for video coding: every ten years, the compression rate
+doubles for equivalent quality.
+
 \part{State of the art}
 \label{prt:state_of_the_art}
 
@@ -122,23 +146,27 @@
 The purpose of video coding is to compress video files, which consist of
 a sequence of images that, at some point, will be either transmitted or
 stored.
+Compressing means reducing the quantity of information so that the amount of
+bits required to store that information is low enough to enable the use of
+applications requiring the transmission of the video.
 
-For instance, a two-hour long film in \ac{HD} format ($1920 \times 1080$)
+For instance, a film in \ac{HD} format ($1920 \times 1080$)
 at a frame rate of 25 images per second and 8 bits to represent each one
 of the \ac{RGB} channels, requires:
 \[
 	\frac{\unit{1920\times1080}{pix}}{\unit{1}{image}}
 	\times \frac{\unit{25}{images}}{\unit{1}{s}}
-	\times \unit{2}{\hour} \times \frac{\unit{3600}{s}}{\unit{1}{\hour}}
 	\times \unit{3}{channels} \times \frac{\unit{8}{bits}}{\unit{1}{channel}}
-	\approx \unit{1}{TB}
+	\approx \unit{1.2}{\giga bit/\second}
 \]
 
 Through this simple example, it is evident that video coding is
-indispensable to store or stream video files.
+indispensable to stream or even store video files:
+the amount of bit-rate reported is this example is beyond the limit of current
+computing architectures.
+
 Depending on the target quality, it is common to have compression rates
 ranging from 100 to 1000.
-
 For content providers, being able to reduce the size of the content they
 broadcast implies increasing the number of contents they can store, as
 well as the number of subscribers they can reach using the same
@@ -149,6 +177,12 @@ streaming, and this trend is only going to increase, reaching up to 84\%
 of the \acs{IP} traffic by 2018~\cite{cisco-13-vni-forecast}.
 Such statistics highlight the need of continuing the research on
 new video coding techniques.
+
+As a network operator, being also an \ac{ISP} that delivers video services
+such as live video streaming or video on demand services, Orange is,
+therefore, particularly motivated by compression schemes allowing better
+trade-offs between the quantity of videos served and the amount of clients
+reachable.
 
 \section{The video coding system}
 \label{sec:the_video_coding_system}
@@ -208,11 +242,19 @@ light variations than to colour, this family of colour spaces supports
 sub-sampling the chroma channels without any major perceptual
 degradation.
 
+% TODO
+\todo{Explain the YCbCr colour space and the target resolutions}
+
 \subsection{Encoding}
 \label{sub:encoding}
 
 This stage is in charge of converting the pre-processed raw video sequence
 into a coded video stream to ease the storage and transmission.
+The amount of bits to represent the video stream is reduced by limiting the
+number of redundancies in the video and by introducing some approximations by
+a quantisation step while limiting the impact of these approximations on the
+perceived quality.
+
 A deep look at the inners of a widely used coding scheme is provided
 in \S\ref{sec:the_hybrid_video_coding_scheme}.
 
@@ -224,6 +266,11 @@ transferred to the decoder.
 Most typical examples are streaming and storage, which may determine
 some of the encoder and decoder behaviours, like real time or memory
 constraints.
+There is a deep impact on the coded stream organisation:
+\ac{RA}, i.e. the ability to access to a particular piece of a video sequence,
+needs to be guaranteed for some applications like TV, while the latency needs
+to be kept as low as possible to enable services like surveillance or video
+conferencing systems.
 
 \subsection{Decoding}
 \label{sub:decoding}
@@ -231,11 +278,19 @@ constraints.
 As the stream is received by the decoder, it is buffered and used to
 reconstruct the encoded data into the appropriate format, as signalled
 by the encoder.
-Video coding norms tend to define a standard video decoder, which
-follows the implemented video coding specification, such as \ac{AVC}
-or \ac{HEVC}~\cite{itu-14-h265-hevc-rec,sullivan-12-overview-hevc}.
+Video coding standards define two things: the bitstream conveying the
+compressed video data and the bit-exact decoding process, aiming at recovering
+the sequence of images.
+The \acs{MPEG} (the \acs{JCT} 1/\acs{SC} 29/\acs{WG} 11 of the
+\acs{ISO}/\acs{IEC} organisation) and \acs{VCEG} (the question 6 of
+\acs{ITU-T} Study Group 16) are the main organisation specifying video
+compression algorithms.
+The most recent video coding specifications include the \acs{MPEG}-4 part 10
+standard / \acs{ITU} H.264 recommendation, known as \ac{AVC} or \acs{MPEG}-H
+Part 2 / \acs{ITU} H.265, called \acf{HEVC}.
 The encoder must comply to this specification by generating a decodable
-stream.
+stream, there is no other normative behaviour defined by a video compression
+standard.
 
 \subsection{Post-processing}
 \label{sub:post_processing}
@@ -248,10 +303,10 @@ space and to the display format.
 \label{sec:the_hybrid_video_coding_scheme}
 
 State-of-the-art video coding standards such as H.264/\acs{MPEG}-4 \acs{AVC}
-and H.265/\acs{HEVC} use a hybrid video coding scheme that appeared in
-H.261, in the late eighties.
+and H.265/\acs{HEVC} use a hybrid video coding scheme.
+The overal coding structure appeared in H.261, in 1988.
 Since then, all video coding standards and recommendations issued by the
-\ac{ITU-T} and the \ac{MPEG} use it as their basic coding structure.
+\ac{ITU-T} and the \ac{MPEG} groups use this coding structure.
 
 The hybrid video coding scheme is named after its use of both temporal
 prediction and transform coding techniques for the prediction error.
@@ -283,14 +338,25 @@ the following subsections.
 
 In order to process the video frames, they are exhaustively partitioned
 into non-overlapping blocks.
-These blocks ease the succeeding stages of prediction and transform.
-The partitioning does not have to be uniform, allowing blocks of different
-sizes to be used.
+The subdivision blocks ease the succeeding stages of prediction and transform:
+the blocks can be processed, under some constraints, independently so that a
+parallel processing is made possible.
+The partitioning does not necessarily imply same-sized blocks, allowing
+rectangular blocks of different sizes to be used.
 The optimal choice for the block size is left to the encoder.
+
+% TODO
+\todo{Explain partitioning figure
+\begin{itemize}
+	\item intra partitioning
+	\item signal divided by uniform regions
+	\item make images a bit bigger and put them in the same page
+\end{itemize}
+}
 
 \begin{figure}[tb]
 	\centering
-	\includegraphics[width=0.6\linewidth]{./figures/partitioning-orig-all-001.png}
+	\includegraphics[width=0.8\linewidth]{./figures/partitioning-orig-all-001.png}
 	\caption{Partitioning example using \acs{HEVC} at \acs{QP} 27}
 	\label{fig:partitioning}
 \end{figure}
@@ -298,14 +364,20 @@ The optimal choice for the block size is left to the encoder.
 \subsection{Prediction}
 \label{sub:prediction}
 
-Residual coding is video coding technique based on \ac{DPCM} that,
-instead of coding the blocks coming from the original source image
-directly, computes an estimation of the block, which is then subtracted
-from the original block, generating the residual block.
+Instead of coding the blocks coming from the original source image directly,
+the encoder computes an estimation of the block pixel values, which is then
+subtracted from the original pixels, generating the residual block.
+This technique is well know as \ac{DPCM} in the literature.
+
 Those block estimations are carried out by the prediction module, using
 some information from previously treated blocks.
-This way, predictable information present in the original blocks will be
-removed and the energy of the resulting signal will be lowered.
+This way, predictable information present in the original blocks is
+removed and the energy of the resulting signal is lowered so that it requires
+less bits for a given distortion.
+This is a result of the source coding
+theory~\cite{jayant-84-digital-coding-waveforms}.
+In other terms, the prediction mechanism aims at removing redundancies in the
+video signal.
 
 Predictions must be performed the same way at both encoder and decoder
 side, and thus computed inside the blue box in
@@ -315,22 +387,28 @@ already been encoded and will make it to the bitstream) as the input
 data to compute the predictions, because these blocks are equivalent to
 those the decoder will handle.
 
-Commonly, predictions might be of two types, depending on the origin of
+Consequently, the encoder embeds a decoding path to ensure that the prediction
+mechanism will be reproduced exactly by the decoder.
+
+Commonly, predictions are of two types, depending on the origin of
 the prediction source:
-intra or spatial prediction for those blocks that
-have been predicted using information within the same frame, and inter
-or temporal prediction for those blocks predicted using other frames.
+\begin{itemize}
+	\item intra prediction, also called spatial prediction, for those blocks
+		predicted using information within the same frame.
+	\item inter prediction, also called temporal prediction for those blocks
+		predicted from frames different from the one under consideration.
+\end{itemize}
 
 \begin{figure}[tb]
 	\centering
-	\includegraphics[width=0.6\linewidth]{./figures/partitioning-pred-all-001.png}
+	\includegraphics[width=0.8\linewidth]{./figures/partitioning-pred-all-001.png}
 	\caption{Predicted image}
 	\label{fig:predicted_image}
 \end{figure}
 
 \begin{figure}[tb]
 	\centering
-	\includegraphics[width=0.6\linewidth]{./figures/partitioning-resi-all-001.png}
+	\includegraphics[width=0.8\linewidth]{./figures/partitioning-resi-all-001.png}
 	\caption{Residual image (difference between original and predicted)}
 	\label{fig:residual_image}
 \end{figure}
@@ -340,10 +418,15 @@ or temporal prediction for those blocks predicted using other frames.
 \index{intra prediction}
 
 Intra prediction, sometimes referred to as spatial prediction, is used
-to remove correlation within local regions of a picture.
-The basic principle of intra prediction is that the texture of a picture
-region is similar to the texture of its neighbourhood and can be
+to eliminate spatial redundancies by removing the correlation with local
+regions of a picture.
+The basic principle of intra prediction is based on the fact that the texture
+of a picture region is similar to the texture of its neighbourhood and can be
 predicted from there.
+
+Different models of predictions can be used, using projections of adjacent
+decoded blocks, theses models include directional projections, gradient
+projections (called planar) and the projection of the mean value (called DC).
 
 The intra prediction is analysed in
 Chapter~\ref{cha:the_mode_dependent_directional_transforms}, when
@@ -358,27 +441,50 @@ that images close in time share many similarities, and that many of
 their component regions will move as a whole.
 Since the encoding order is not necessarily the same as the viewing
 order, inter predictions can have their origins in either past or future
-frames.
-Regions that are covered and uncovered by other objects can be predicted
-using this technique.
+frames and also combine the two origins.
 
 At the encoder side, an extra operation, called motion estimation, is
 carried out.
 This stage searches for the best matching area in the reference picture
 for the current prediction block.
-It is one of the most demanding parts of video coders, with regards to
+It is one of the most demanding parts of video coders, with regard to
 the number of operations.
+
+% TODO
+\todo{
+\begin{itemize}
+	\item motion vectors
+\end{itemize}
+}
 
 \subsection{Transform}
 \label{sub:transform}
 
-The transform stage removes remaining correlations from the residual
+The transform stage reduces the remaining correlations from the residual
 block, computed as the difference between the original and the predicted
 blocks.
-The goal of the transform is to concentrate the residual energy into as
-many few coefficients as possible in the transform domain.
+The goal of the transform is to concentrate the residual signal into as
+few coefficients as possible in the transform domain.
+The residual signal is transformed form the spatial domain into the transform
+domain using the transform.
+In the spatial domain, the residual signal is spread among the pixels of the
+blocks, while the objective of transform domains is to concentrate as much as
+possible the residual signal into a few transform domain coefficients
+exhibiting a large amplitude and the rest might be considered negligible.
 
-Considering that the subject of this thesis is centred around the
+This idea of the energy compaction is the main property of the transform
+stage.
+
+Most of the transforms used in standardised video coding schemes belong to the
+\ac{DTT} family.
+Amongst those, the \ac{DCT} of type II has received a considerable amount of
+attention in the past and is the \emph{de facto} standard transform used in
+\acs{ITU} and \acs{MPEG} codecs since \acs{MPEG}-1/H.261.
+
+Additional choices were introduced recently, especially in \ac{HEVC}, where
+the \ac{DST} of type VII was adopted.
+
+Provided that the subject of this thesis is centred around the
 transforms for video coding, the transform stage will be explained
 thoroughly in Chapter~\ref{cha:transform_coding}.
 
@@ -386,11 +492,16 @@ thoroughly in Chapter~\ref{cha:transform_coding}.
 \label{sub:quantisation}
 \index{QP}\index{lossy}\index{lossless}
 
-The quantisation, applied in the transform domain, it is used to discard
+The quantisation, applied in the transform domain, it is used as an
+approximation operator, which limits the amount of possible output values.
+In standards like \ac{HEVC}, the quantisation is scalar:
+each coefficient is approximated independently from its neighbouring values.
+In these coding schemes, the quantisation step is controlled by a \ac{QP} that
+to discard
 any coefficient whose energy level is below a certain threshold.
 High energy coefficients are also be affected by the quantisation.
 In standards like \acs{HEVC}, the quantisation step is controlled by a
-\ac{QP}.
+\ac{QP} that regulates the amount of approximations carried out.
 It is worth noticing that it is the only non-reversible step in the whole
 hybrid video coding scheme, and therefore what makes video coding lossy.
 Lossless video coding can be attained by not using quantification in the
@@ -415,10 +526,21 @@ process.
 \label{sub:entropy_coding}
 \index{CABAC}
 
-Once the transform coefficients have been quantised, they have to be
-treated to conform the bitstream.
+The last operation consists in reducing the amount of bits transmitted through
+the use of an entropy code.
+This is a lossless operation, as such the bit reduction performed during this
+stage is completely reversible: no approximation operation is performed at
+this stage.
+
+Once the transform coefficients have been quantised, they are processed to
+conform the bitstream.
 That is, the transform coefficients are scanned to make sure they are
 sorted in a way that will make the entropy coder work more efficiently.
+
+The scanning operation is a conversion from a 2D array, containing the
+quantised transformed coefficients, towards 1D vector containing the same
+values sorted in a way that facilitates a compact transmission.
+
 Signalling is also conveyed into the bitstream at this point, and the
 entropy coder ensures a correct binarisation while using the adequate
 number of bits thanks to the \ac{CABAC}.
@@ -428,12 +550,19 @@ number of bits thanks to the \ac{CABAC}.
 
 The encoder control is used by essentially all blocks in the diagram
 from figure~\ref{fig:hybrid_video_coding_scheme}.
-This technique allows the encoder to take decisions related to coding
+This set of operations allow the encoder to take decisions related to coding
 based on the application requirements.
 These decisions include the block sizes and the prediction to use.
-For each block size and kind of prediction, the encoder computes the
-distortion, using its own decoder, and estimates the rate as illustrated
-in figure~\ref{fig:rate_distortion_scheme}.
+For each block size and kind of prediction, the encoder usually computes the
+distortion, using its own decoder, and estimates the rate as illustrated in
+figure~\ref{fig:rate_distortion_scheme}.
+
+The appropriate set of choices, mainly among the prediction modes and block
+sizes, is performed by comparing the Lagrangian values, which balance the
+distortion and rates obtained for each coding choice.
+
+% TODO
+\todo{Some words on \ac{AI} and \ac{RA}}
 
 \begin{figure}[tb]
 	\centering
@@ -465,9 +594,9 @@ Where $I$ and $K$ are two images of $m \times n$ pixels.
 \label{ssub:peak_signal_to_noise_ratio}
 \index{PSNR}
 
-The \ac{PSNR} is an objective quality measure that computes the ratio
-between the maximum possible value of a signal and the power of the
-noise that affects the fidelity of its approximation.
+The \ac{PSNR} is an objective measure of quality that computes the ratio
+between the maximum possible value of a signal and the power of the noise that
+affects the fidelity of its approximation.
 It is usually defined in terms of the logarithmic decibel scale to cope
 with the wide range that signals might have.
 Defining the \ac{PSNR} in terms of the \ac{MSE} from
@@ -477,7 +606,8 @@ Defining the \ac{PSNR} in terms of the \ac{MSE} from
 	= 20 \log_{10} (MAX_I) - 10 \log_{10} (MSE_{I,K})
 	\label{eqn:psnr}
 \end{equation}
-For 8-bit depth images, $MAX = 2^{8} - 1 = 255$.
+For 8-bit depth images, which are the main format considered in this thesis,
+the maximum pixel values writes: $MAX = 2^{8} - 1 = 255$.
 
 \subsection{Rate-distortion optimisation}
 \label{sub:rate_distortion_optimisation}
@@ -501,7 +631,7 @@ reasonably straightforward.
 However, estimating the bit rate is a bit more delicate, since the whole
 entropy coder cannot be run each time the encoder explores the different
 possibilities for a block.
-As a consequence, an estimation of the bit rate is used in the \ac{RDO}
+As a consequence, an estimation of the bit rate is often used in the \ac{RDO}
 loop.
 
 \section{Bj{\o}ntegaard Delta measurements}
@@ -510,7 +640,7 @@ loop.
 \index{BD-PSNR}
 
 Comparing two video coding techniques objectively might be complicated,
-as both distortion and bit rate savings have to be taken into account.
+as both distortion and bit rate savings have to be taken into account jointly.
 
 Metrics introduced by Gisle Bj{\o}ntegaard, know as \ac{BD} measurements
 have become the current \emph{de facto} standard to objectively compare
@@ -536,6 +666,9 @@ figure~\ref{fig:bdsnr_bdrate}:
 	\label{fig:bdsnr_bdrate}
 \end{figure}
 
+The \ac{BD}-rate measurement will be used extensively in this thesis to
+appreciate the performance of the proposed systems.
+
 \section{Conclusions}
 \label{sec:conclusions_video_coding}
 
@@ -547,12 +680,23 @@ the video sequence via predictions.
 These predictions can be either spatial or temporal, depending on
 whether the prediction source is the same image or another image,
 respectively.
-Unpredictable parts of the image, called residuals, are then transformed
-in order to concentrate their energy in as few coefficients as possible.
+Unpredictable parts of the image, called residuals, are then passed through a
+transformation in order to concentrate the transformed domain residual in as
+few coefficients as possible.
 
-Next chapter will explore the details of the transforms used in video
-coding, namely their design principles and a comparison between two
-design approaches.
+The appropriate block size is selected for the prediction and the transform
+sizes.
+These are the so-called \ac{PU} and \ac{TU} elements in the HEVC syntax.
+A lot of flexibility is allowed in the syntax for the prediction and sizes
+while the set of choices for a given codec is rather limited for the
+transform.
+
+This thesis will focus on the extension of the choices for the transform
+stage, as set of transforms will be provided such that the encoder is able to
+better adapt the transform to the varying nature of the prediction residuals.
+
+Next chapter will explore the details of the transforms used in video coding,
+namely their design principles and a comparison between two design approaches.
 
 \chapter{Transform coding}
 \label{cha:transform_coding}
@@ -570,16 +714,20 @@ A transform is a mathematical operation that takes an input signal and
 represents the same input signal in a different domain.
 
 High energy compaction provided by transform coding has led this
-technique to be present in the international video coding standards.
+technique to be present in all the international video coding standards.
 
-Transform coding allows removing existing signal correlations in the
-spatial domain, leading to a decorrelated signal in the transform
-domain.
+Transform coding allows reducing existing signal correlations in the
+spatial domain, leading to a more decorrelated signal in the transform
+domain and ensuring a more compact representation.
 This is of great importance for the upcoming stages of scanning and
 entropy coding.
 
-Transforms can be very abstract since they tend to work in N-dimensional
-spaces.
+Transforms can be very abstract since they tend to work in $N$-dimensional
+spaces, where $N$ represents the number of pixel residuals processed by the
+transform.
+Typical values vary from $N=4\times4$ to $N=32\times32$ in modern video
+codecs, such as \ac{HEVC}.
+
 However, restraining ourselves to two dimensions, one of the most visual
 and representative example of transforms are rotations.
 The example in figure~\ref{fig:transform_rotation} helps visualising the
@@ -592,11 +740,10 @@ transform role in signal compression.
 	\label{fig:transform_rotation}
 \end{figure}
 
-Whereas on the left signal (in blue), both the horizontal and vertical
-dimensions are needed to describe the signal completely, on the right
-signal (in red), the vertical dimension is enough to provide an equally
-accurate signal representation, since the horizontal dimension remains
-constant.
+Whereas on the left signal (in blue), both coordinates are needed to describe
+the signal accurately, on the right signal (in red), one coordinate, namely
+the vertical dimension is enough to provide an equally accurate signal
+representation, since the horizontal dimension remains constant.
 
 \subsection{Block-based transforms}
 \label{sub:block_based_transforms}
@@ -634,8 +781,9 @@ signals.
 
 The naive approach to work with those signals is to use non-separable
 transforms.
-These transforms take the signal as a whole and reshape it to a
-one-dimensional signal.
+These transforms take the residual pixels from a block and reshape it to a
+single-dimensional signal. E.g. a $4\times4$ block of pixels becomes a
+$16\times1$ vector.
 Afterwards the transform is applied normally:
 \begin{equation}
 	\X = \A \, \x
@@ -647,16 +795,23 @@ required to obtain the transformed signal: for a $N \times N$ block, the
 number of operations required to transform it in a non-separable way is:
 $N^4$ multiplications and $N^2(N^2-1)$ additions.
 
-Due to the high amount of operations needed to transform a block,
-separable transforms are widely used in video coding.
-They are computed as:
+% TODO
+\todo{illustration on how a $4\times4$ block becomes $16\times1$}
+
+On the other hand, any linear correlation can be exploited between any pixel
+within a block:
+complex relationships between distant pixels can be handled regardless their
+position in the block.
+
+Due to the high amount of operations needed to transform a block, using
+non-separable transforms, separable transforms are widely used in video
+coding.
+A block is transformed using horizontal and vertical separable transforms
+$\A_h, \A_v$ for rows and columns, respectively, as:
 \begin{equation}
 	\X = \A_v {\left(\A_h \, \x^T\right)}^T = \A_v \, \x \, \A_h^T
 	\label{eqn:sep_transform}
 \end{equation}
-where $\x$ is a $N \times N$ block and the transform $\A_h$ and $A_h$ are $N
-\times N$ matrices, transforming the rows and the columns of $\x$,
-respectively.
 The operation inside the parenthesis transforms the rows of $\x$, and
 the outer part, the columns of $\x$.
 By performing the horizontal and vertical transforms separately, the
@@ -667,64 +822,102 @@ However, this reduction in complexity comes at a price: non-separable
 transforms were able to exploit any correlation amongst pixels within a
 block, whether separable transforms can only decorrelate pixels that
 share the same row or column.
-In other words, separable transforms are less performing than their
+In other words, separable transforms might be less performing than their
 non-separable counterparts.
 The impact in performance due to separability will be studied in detail
 in Chapter~\ref{cha:the_mode_dependent_directional_transforms}.
 
+A non-separable transform can be expressed from a set of two separable
+transforms via the Kronecker product, denoted as $\otimes$:
+$$
+\mathbf{A}\otimes\mathbf{B} = \begin{bmatrix} a_{11} \mathbf{B} & \cdots &
+a_{1n}\mathbf{B} \\ \vdots & \ddots & \vdots \\ a_{m1} \mathbf{B} & \cdots &
+a_{mn} \mathbf{B} \end{bmatrix}
+$$
+$$
+\mathbf{A}\otimes\mathbf{B}} = \begin{bmatrix}
+   a_{11} b_{11} & a_{11} b_{12} & \cdots & a_{11} b_{1q} & 
+                   \cdots & \cdots & a_{1n} b_{11} & a_{1n} b_{12} & \cdots & a_{1n} b_{1q} \\
+   a_{11} b_{21} & a_{11} b_{22} & \cdots & a_{11} b_{2q} & 
+                   \cdots & \cdots & a_{1n} b_{21} & a_{1n} b_{22} & \cdots & a_{1n} b_{2q} \\
+   \vdots & \vdots & \ddots & \vdots & & & \vdots & \vdots & \ddots & \vdots \\
+   a_{11} b_{p1} & a_{11} b_{p2} & \cdots & a_{11} b_{pq} & 
+                   \cdots & \cdots & a_{1n} b_{p1} & a_{1n} b_{p2} & \cdots & a_{1n} b_{pq} \\
+   \vdots & \vdots & & \vdots & \ddots & & \vdots & \vdots & & \vdots \\
+   \vdots & \vdots & & \vdots & & \ddots & \vdots & \vdots & & \vdots \\
+   a_{m1} b_{11} & a_{m1} b_{12} & \cdots & a_{m1} b_{1q} & 
+                   \cdots & \cdots & a_{mn} b_{11} & a_{mn} b_{12} & \cdots & a_{mn} b_{1q} \\
+   a_{m1} b_{21} & a_{m1} b_{22} & \cdots & a_{m1} b_{2q} & 
+                   \cdots & \cdots & a_{mn} b_{21} & a_{mn} b_{22} & \cdots & a_{mn} b_{2q} \\
+   \vdots & \vdots & \ddots & \vdots & & & \vdots & \vdots & \ddots & \vdots \\
+   a_{m1} b_{p1} & a_{m1} b_{p2} & \cdots & a_{m1} b_{pq} & 
+                   \cdots & \cdots & a_{mn} b_{p1} & a_{mn} b_{p2} & \cdots & a_{mn} b_{pq} 
+\end{bmatrix}
+$$
 \subsection{Transform design}
 \label{sub:transform_design}
 
-Since the objective of the transforms is to be able to represent the
-signal with as few coefficients as possible while minimising the
-distortion introduced by the quantisation, transform design methods are
-often a trade-off between the distortion and the number of bits needed
-to represent those signals in the transform domain.
+Since the objective of the transforms is to be able to represent the signal
+with as few coefficients as possible while minimising the distortion
+introduced by the quantisation, transform design methods need to consider
+trade-offs between the distortion and the number of bits needed to represent
+those signals in the transform domain.
 
-Many transform design methods agree on how the distortion should be
-computed, namely using the \ac{MSE} from~\eqref{eqn:mse}.
+Transform design methods agree on how the distortion is evaluated, namely
+using the \ac{MSE} from~\eqref{eqn:mse}.
 However, different transform designs exist depending on the used rate
 model.
-Next sections will study different transform design approaches based on,
-amongst others, different modellings of the rate constraint.
+The trade-off between the distortion and the rate is commonly expressed
+using a Lagrangian measure.
+
 \begin{equation}
 	J(\lambda) = \text{Distortion} + \lambda \text{Rate}
 	\label{eqn:transform_design}
 \end{equation}
 
+Next sections will study different transform design approaches based on,
+amongst others, different modellings of the rate constraint.
 \section{The Karhunen-Loève transform}
 \label{sec:the_karhunen_loeve_transform}
 \index{KLT}
-In general, the components of source signals are correlated with one
-another.
+The components of source signals within a residual block are correlated with
+one another.
+This correlation is expressed in terms of a correlation matrix containing the
+linear inter pixel correlations:
+% TODO
+\todo{Example of a correlation matrix}
+\begin{equation}
+	\Gamma_{x_n,x_m} = etc
+\end{equation}
 However, it is indeed, possible to select an orthogonal matrix $\A$, for
 a given \ac{PDF} describing the source that will make $\X=\A\x$ have
 pairwise uncorrelated components~\cite{gersho-92-vector-quantization}.
-The \ac{KLT} is a linear transform that removes the redundancy by
-decorrelating the data, so that the signal can be stored more
-efficiently~\cite{rao-01-transform-data-compression-book}.
+The \ac{KLT} is defined as the linear orthogonal transform that reduces the
+redundancy by a maximum decorrelation of the data, so that the signal can be
+stored more efficiency~\cite{rao-01-transform-data-compression-book}.
 
-The \ac{KLT} is often presented as the optimal transform in a general
-case, sometimes even for all possible sources of signals.
-However, it has been proved to be suboptimal in the transform coding /
-bit allocation sense~\cite{effros-04-suboptimal-klt}.
+The \ac{KLT} is often presented as the optimal transform, sometimes even for
+all possible sources of signals.
+However, it has been proved to be suboptimal in the transform coding / bit
+allocation sense~\cite{effros-04-suboptimal-klt}.
 
 In this section, the \ac{KLT} is presented under its well-known optimal
 conditions: Gaussian sources with high resolution quantisation
 assumptions~\cite{goyal-00-high-resolution}.
 The high resolution assumption states that the number of quantisation
-levels $N$ is very high, the maximum quantisation step size
-$\Delta_{\max}$ is sufficiently small compared to the range of the
-granular region and the \ac{PDF} is relatively smooth.
-This means that, for a specific \ac{PDF}, increasing $N$ directly
-implies that $\Delta_{\max}$ decreases inversely with $N$.
+levels is high, the quantisation step size is small enough to consider the
+\ac{PDF} constant for each quantisation interval.
+% TODO
+\todo{Add a bit more about the demonstration and the bit allocation}
 Under those conditions, the \ac{KLT} is the optimal transform in terms
-of bit allocation that minimises the overall
+of bit allocation and minimises the overall
 distortion~\cite{gersho-92-vector-quantization}.
 
-Since the \ac{KLT} decorrelates the signal in the transform domain, it
-can be computed as follows.
-Let $\x$ be a zero-mean Gaussian process and $\A$ an orthonormal transform.
+The \ac{KLT} decorrelates the signal in the transform domain, that is the
+correlation function of the signal in the transform domain $\C_\X$ is a
+diagonal matrix.
+It can be computed as follows.
+Let $\x$ be a zero-mean process and $\A$ an orthonormal transform.
 In the transform domain:
 \begin{equation}
 	\X = \A \x \qquad \text{s.t. } \A \A^T = \I
@@ -738,7 +931,7 @@ Or equivalently:
 \begin{equation}
 	\A^T\C_\X = \C_\x\A^T
 \end{equation}
-And since $\C_\X$ is diagonal by construction:
+And since $\C_\X$ is diagonal:
 \begin{equation}
 	\C_\x \a_i = \lambda_i\a_i
 \end{equation}
@@ -757,12 +950,12 @@ Where:
 
 One of the most used transforms in image and video coding is the
 \ac{DCT}.
-In this section, the \ac{DCT} will be justified over a particular kind
+In this section, the \ac{DCT} is justified over a particular kind
 of signals: natural images.
-Natural images exhibit a first order \ac{AR} structure.
-A first order \ac{AR} model, also known as Markov-1 process, is a
-stochastic process that can be generated through the following
-regression formula:
+The statistics of pixels in natural images match closely a first order
+\ac{AR} process.
+A first order \ac{AR} model, also known as Markov-1 process, is a stochastic
+process that can be generated through the following regression formula:
 \begin{equation}
 	x(n) = \rho x(n-1) + w(n)
 	\label{eqn:first_order_ar_model}
@@ -806,11 +999,10 @@ The \ac{DCT}-II can be expressed compactly as:
 	\end{cases}
 \end{equation}
 
-The fact that the \ac{DCT} approximates the \ac{KLT} for a wide variety
-signals and its efficient implementation have made it the preferred
-choice in image and video compression algorithms to decorrelate the
-signals and concentrate their energy into few
-coefficients~\cite{sole-12-transform-coefficient-coding}.
+The fact that the \ac{DCT} approximates the \ac{KLT} for image signals and its
+efficient implementation has made it the preferred choice in image and video
+compression algorithms to decorrelate the signals and provide optimal bit
+allocation~\cite{sole-12-transform-coefficient-coding}.
 
 \begin{figure}[tb]
 	\centering
@@ -831,23 +1023,23 @@ coefficients~\cite{sole-12-transform-coefficient-coding}.
 \index{Toeplitz matrix}
 
 Although the \ac{DCT} has been proved to be nearly the \ac{KLT} for natural
-images, it is used in predictive transform coding based video standards, as
-well.
+images, it is used in predictive transform coding based video standards.
 This kind of coding leads to signals whose nature differs from that of
 natural images: prediction residuals.
 In particular, prediction residuals resulting from intra prediction tend
 to have particular properties.
 Those residuals are computed using predictions from already
-reconstructed blocks, usually available on the left and upper borders of
-the current residual, as shown in figure~\ref{fig:pred_scheme}.a.
-An example of a prediction residual is provided in
+reconstructed blocks, usually available on the left and upper borders (in
+grey) of the current residual (in white), as shown in
+figure~\ref{fig:pred_scheme}.a.
+An example of an average intra prediction residual is provided in
 figure~\ref{fig:pred_scheme}.b.
 It can be noticed that the energy of the residual is lower (dark) near
 the borders where reconstructed blocks are available, and that the error
 gets higher (lighter) as one moves away from the boundaries.
-These facts motivated a study on this particular kind of blocks,
+These properties motivated a study on this particular kind of blocks,
 resulting in a transform that performs better on them than the \ac{DCT}:
-the \ac{DST}~\cite{han-10-spatial-adaptive-transform}.
+the \acf{DST}~\cite{han-10-spatial-adaptive-transform}.
 \begin{figure}[tb]
 	\centering
 	\subfloat[Intra prediction modes for the current block (white) from
@@ -861,14 +1053,13 @@ the \ac{DST}~\cite{han-10-spatial-adaptive-transform}.
 	\label{fig:pred_scheme}
 \end{figure}
 
-These kind of signals present a correlation matrix that can be modelled
+Intra prediction residuals present a correlation matrix that can be modelled
 using a Toeplitz tridiagonal matrix, as the one
-in~\eqref{eqn:tridiagonal_matrix}.
-Note that a tilde has been used to indicate that the bottom-right corner
-value of the matrix has been modified in order to elimnate the
-irregularity (used to be 1) and be able to compute the eigenvectors
-analytically~\cite{han-10-spatial-adaptive-transform,
+in~\eqref{eqn:tridiagonal_matrix}~\cite{han-10-spatial-adaptive-transform,
 yueh-05-eigenvalues-tridiagonal}.
+Those eigenvalues can be expressed in a closed form using the \ac{DST}-VII
+from~\eqref{eqn:dst_vii}.
+
 \begin{equation}
 	\tilde\R_x =
 	\begin{pmatrix}
@@ -881,8 +1072,7 @@ yueh-05-eigenvalues-tridiagonal}.
 	\end{pmatrix}
 	\label{eqn:tridiagonal_matrix}
 \end{equation}
-Those eigenvalues can be expressed in a closed form using the
-\ac{DST}-VII from~\eqref{eqn:dst_vii}.
+
 \begin{equation}
 	{\left[S_{N}^{VII} \right]}_{n,k} =
 	\frac{2}{\sqrt{2N+1}}\sin\left(\frac{\pi(2n-1)k}{2N+1}\right),
@@ -893,34 +1083,37 @@ Those eigenvalues can be expressed in a closed form using the
 
 Figure~\ref{fig:dct_dst}.b presents the \ac{DST}-VII bases for
 $4\times4$ blocks.
-The resemblance between an average residual block
-from figure~\ref{fig:pred_scheme}.b can be spotted by comparing it to
-the first base vector from the \ac{DST}.
+The resemblance between an average residual block from
+figure~\ref{fig:pred_scheme}.b can be spotted by comparing it to the first
+base vector from the \ac{DST}.
 
 The use of the \ac{DST} in \ac{HEVC} over the \ac{DCT} on $4\times4$
 blocks leads to a bit-rate reduction of 1\% on
 average~\cite{sullivan-12-overview-hevc}.
-An explanation on how it was discovered that the \ac{DST} was a good
-approximation of the \ac{KLT} for these signals is detailed in
-Chapter~\ref{cha:the_mode_dependent_directional_transforms}, more
-precisely in \S\ref{sec:the_story_behind_the_dst}.
+
+An explanation on the adoption of the\ac{DST} into \ac{HEVC} is detailed in
+Chapter~\ref{cha:the_mode_dependent_directional_transforms}, more precisely in
+\S\ref{sub:dst_and_mddt}.
 
 \section{The rate-distortion optimised transform}
 \label{sec:the_rate_distortion_optimised_transform}
 \index{RDOT}
 
-State-of-the-art video coding standard, such as \ac{HEVC} take advantage
-of sparse signals.
-As discussed before, transforms try to concentrate the energy of the
-residuals into as few coefficients as possible, maximising the number of
-zeroes in the transform domain.
-There are even syntax elements in \ac{HEVC} to deal with this:
-for a given transformed residual, the position of the last non-zero
-value is indicated, meaning that from that point onwards, all the
-following values are zero.
+As discussed before, transforms try to find a compact representation of the
+signal in the transform domain.
+The \ac{KLT}, under certain assumptions, provides optimal bit allocation and
+signal decorrelation.
 
-In order to better fit the video coding demands, Sezer proposes a kind
-of transforms that take into account the sparsity of the output in their
+However, state-of-the-art video coding standard, such as \ac{HEVC} take
+advantage of sparse signals.
+There are even syntax elements in \ac{HEVC} to deal with this:
+for a given transformed residual, the position of the last non-zero value is
+signalled, meaning that, instead of explicitly transmitting all the following
+zeroes, it is indicated that from that point onwards, all the following values
+are zero.
+
+In order to better fit the video coding demands, Sezer proposes a kind of
+transforms that take into account the sparsity of the output in their
 design~\cite{sezer-11-phd}.
 The proposed \ac{RDOT} can be expressed as:
 \begin{equation}
@@ -938,6 +1131,10 @@ $\A^T$ is its transposed matrix, as $\A$ is chosen orthonormal.
 The constraint in the cost function is the average $\ell_0$ norm of the
 coefficients, i.e.\ the number of non-zero coefficients.
 Finally, $\lambda$ is the Lagrange multiplier of the constraint.
+
+% TODO
+\todo{Recheck the way of introducing the RDOT, Pierrick says I'm doing the
+other way around}
 
 A thorough study of~\eqref{eqn:rdot-nsep} analysing its properties and
 consequences is detailed below.
@@ -978,7 +1175,7 @@ hard-thresholing them:
 	\c = \lfloor \X \rfloor = \lfloor \A \x \rfloor
 \end{equation}
 The threshold value is tightly related to the Lagrange multiplier $\lambda$,
-as demonstrated in\S~\ref{sub:the_lagrange_multiplier}:
+as demonstrated in \S\ref{sub:the_lagrange_multiplier}:
 \begin{equation}
 	\c[n] =
 	\begin{cases}
@@ -1001,8 +1198,8 @@ the reconstruction error.
 	\right)
 	\qquad \text{s.t. } \A\A^T = \I
 \end{equation}
-Since the expression represents a scalar value, it can be rewritten
-using the trace:
+Since the expression is a scalar value, it can be rewritten using the trace
+(the sum of a matrix diagonal):
 \begin{equation}
 	\A_{opt} = \arg\min\limits_{\A}
 	\left(\sum_{\forall i}\tr\left( 
@@ -1036,7 +1233,7 @@ $\A$-independent terms:
 \end{equation}
 We now define $\Y=\displaystyle\sum_{\forall i}\c_i\x_i^T$ and its SVD
 decomposition $\Y=\U\Lambdab^{\nicefrac{1}{2}}\V^T$, where $\U$ and $\V$
-are orthonormal and $\Lambdab$ is diagonal.
+are orthonormal and $\Lambdab$ is a positive semi-definite diagonal matrix.
 The equation rewrites as follows:
 \begin{equation}
 	\A_{opt} = \arg\min\limits_{\A}
@@ -1053,8 +1250,9 @@ Re-arranging the terms using the trace cyclic property:
 	-2\tr\left(\Lambdab^{\nicefrac{1}{2}}\V^T\A^T\U\right)
 	\right)
 \end{equation}
-Let $\Pb=\V^T\A^T\U$. Since $\V$, $\A$ and $\U$ are orthonormal, so is
-$\Pb$. The equation is now:
+Let $\Pb=\V^T\A^T\U$.
+Since $\V$, $\A$ and $\U$ are orthonormal, so is $\Pb$.
+The equation is now:
 \begin{equation}
 	\A_{opt} = \arg\max\limits_{\A}
 	\left(
@@ -1063,7 +1261,7 @@ $\Pb$. The equation is now:
 \end{equation}
 Since $\Lambdab$ is a diagonal matrix whose entries are non-negative by
 definition and $\Pb$ is orthonormal, the maximisation is achieved when
-$\Pb=\I$
+$\Pb=\I$:
 \begin{equation}
 	\V^T\A_{opt}^T\U=\I\quad \Rightarrow \quad \A_{opt} = \U\V^T
 \end{equation}
@@ -1173,9 +1371,8 @@ Then the optimal transform is given by:
 \index{generalised Gaussian distribution}
 \index{exponential power distribution}
 
-It is a well-known fact that the residuals distribution can be modelled
-using a \ac{GGD}, also known as generalised normal distribution or
-exponential power
+Video coding residuals distribution can be modelled using a \ac{GGD}, also
+known as generalised normal distribution or exponential power
 distribution~\cite{lam-00-dct-coefficient-distribution,
 yovanof-96-analysis-dct-coefficients}.
 For this reason, in order to obtain the optimal Lagrange multiplier in a
@@ -1185,12 +1382,12 @@ residuals \ac{PDF}.
 Figure~\ref{fig:probability_density_functions} illustrates the \acp{PDF}
 of a set of residuals transformed with the \ac{DCT} and the same residuals
 transformed with an adapted \ac{RDOT}.
-As expected, the use of an adapted transform has increased the number
-of zeroes in the transform domain and, consequently, lowered the amount
-of values elsewhere.
-Changing the transform, modifies the resulting \ac{PDF}, but
-since the used transforms are orthonormal, the variance remains
-unaltered.
+As expected, the red curve, representing the \ac{RDOT} presents higher
+sparsity than the generic \ac{DCT}:
+its value is above the \ac{DCT} on zero, meaning that the resulting
+coefficients have more zeros when using the \ac{RDOT}.
+Using different the transforms, modifies the resulting \ac{PDF}, but since the
+used transforms are orthonormal, the variance remains unaltered.
 Residuals are computed as the difference between predicted and original
 blocks, meaning they are prediction errors.
 These errors are made by excess or defect evenly, evidenced by their
@@ -1262,10 +1459,9 @@ from~\eqref{eqn:hard_threshold} can be expressed as:
 	\label{eqn:int_distortion}
 	x^2\P_X (x) \d x
 \end{equation}
-Note that the integration intervals have been reduced to where the
-quantised values differ from the original ones, that is, the values that
-have been affected by the hard-thresholding from
-\eqref{eqn:hard_threshold}.
+The integration intervals have been reduced to where the quantised values
+differ from the original ones, that is, the values that have been affected by
+the hard-thresholding from \eqref{eqn:hard_threshold}.
 
 Substituting $P_X(x)$ by the residuals \ac{PDF}:
 \begin{align}
@@ -1346,20 +1542,20 @@ Substituting both derivatives:
 	\quad \Rightarrow \quad \boxed{\lambda = \frac{\Delta^2}{4}}
 \end{equation}
 
-This proves how the Lagrange multiplier is only related to the
-quantisation step.
-In other words, once the quantisation step is fixed, so is the optimal
-balance between the distortion and the rate constraint.
+This proves how the Lagrange multiplier is only related to the quantisation
+step.
+In other words, once this level is fixed, so is the optimal balance between
+the distortion and the rate constraint.
 
 An important consequence of using the $\ell_0$ norm is that the optimal
-Lagrange multiplier is independent from the data's \ac{PDF} (it doest
+Lagrange multiplier is independent from the data's \ac{PDF} (it does
 not depend on $\sigma$ neither on $\gamma$), meaning that the optimal
 Lagrange multiplier remains the same, no matter which transform has been
 used.
 In fact, these results can be generalised to any \ac{PDF}, making the
 $\ell_0$ norm a robust approximation of the rate, suitable for this
 iterative learning method, where the transform changes at each iteration
-and so does the \ac{PDF} of the training data.
+and so does the \ac{PDF} of the training data in the transform domain.
 
 \subsection{Independence from the \ac{PDF}}
 \label{sub:independence_from_the_pdf}
@@ -1436,8 +1632,8 @@ Due to the complexity of the calculations involved then using the
 entropy together with a uniform quantiser, the dependence to the
 \ac{PDF} will be evidenced through the example from
 figure~\ref{fig:j_lambda_qp}, where the value $J(\lambda)$ is plotted
-for various \acp{GGD} at different \ac{QP} values, i.e.\ quantisation
-step $\Delta$.
+for various \acp{GGD} at different \ac{QP} values, which served as the
+hard-threshold value.
 When using the $\ell_0$ norm, $J(\lambda)$ reaches its minimum value at
 QP 27, as expected.
 On the other hand, using the entropy leads to a minimum value of
@@ -1504,9 +1700,9 @@ The \ac{DCT} and \ac{DST} used in \ac{HEVC} have been obtained as the
 \ac{KLT} for particular kinds of signals.
 
 The \ac{RDOT} finds the optimal balance between the distortion
-introduced and a rate constraint.
+introduced and a rate constraint, expressed in terms of signal sparseness.
 A thorough study on its design has been carried out to justify the
-appropriateness of the approach over other learning methods.
+appropriateness of the approach.
 
 In the next chapter, both transform designs will be tested in a real
 scenario to find out their performances in video coding.
@@ -1516,22 +1712,25 @@ scenario to find out their performances in video coding.
 \label{cha:the_mode_dependent_directional_transforms}
 \chaptertoc
 
-\section{Introduction to intra prediction modes in \acs{HEVC}}
-\label{sec:introduction_to_intra_prediction_modes_in_hevc}
+\section{Introduction}
+\label{sec:introduction_mddt}
+
+\subsection{The intra prediction modes in \acs{HEVC}}
+\label{sub:the_intra_prediction_modes_in_hevc}
 
 As seen in Chapter~\ref{cha:video_coding_fundamentals}, \ac{HEVC} makes
 use of predictions in order to generate a low signal energy, called
 residual, and improve the coding efficiency.
-With regards to previous standards, such as H.264/\ac{MPEG}-4 \ac{AVC},
+With regard to previous standards, such as H.264/\ac{MPEG}-4 \ac{AVC},
 which had 9 different prediction modes for intra coding, \ac{HEVC} has
 an improved prediction system, with 35 different prediction modes.
 Figure~\ref{fig:mdcs} illustrates those prediction modes.
 A detailed explanation on how predictions are derived from those
 prediction mode can be found in Chapter 6 from M.
 Wien's book on \ac{HEVC}~\cite{wien-15-hevc}.
-Depending on the prediction mode that has been used, transformed
-coefficients present different patterns, making low and high values to
-appear at different block positions.
+Depending on the selected prediction mode, transformed coefficients might
+present different patterns, making low and high values to appear at different
+block positions.
 This heterogeneity can be harmful for the entropy coding and the
 \ac{CABAC}, which is why different scanning patterns exist in \ac{HEVC}.
 These scanning patterns, presented in the lower part of
@@ -1597,8 +1796,8 @@ regarding intra coding carried out during the conception of \ac{HEVC}.
 	\label{fig:mdcs}
 \end{figure}
 
-\section{The \acs{DST} as a simplification of the \acs{MDDT}}
-\label{sec:dst_and_mddt}
+\subsection{The \acs{DST} as a simplification of the \acs{MDDT}}
+\label{sub:dst_and_mddt}
 \index{DST}
 \index{KTA}
 \index{TMuC}
@@ -1646,7 +1845,7 @@ It was used together with the \ac{DCT} as combinations of horizontal and
 vertical transforms, depending on the \ac{IPM}.
 However, it was not adopted in the \ac{TMuC} until the design of a fast
 algorithm of the \ac{DST}, which introduced almost no increase in the
-decoding time with regards to the \ac{DCT}.
+decoding time with regard to the \ac{DCT}.
 It was only then when it fully replaced the \ac{MDDT}~\cite{JCTVC-D048,
 JCTVC-E125, JCTVC-F283, JCTVC-G108}.
 Finally, after many \acp{CE}, cross-checks between companies and
@@ -1668,12 +1867,37 @@ Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
 \subsection{Encoding and decoding schemes for the \ac{MDDT}}
 \label{sub:encoding_and_decoding_schemes_for_the_mddt}
 
+One of the positive aspects of the \ac{MDDT} is the fact that, despite having
+more than one transform for a particular block size, only the transform
+corresponding to the selected \ac{IPM} will be used to transform that
+residual.
+This means that, the \ac{IPM} defines which transform is used, so there is not
+an extra step in the \ac{RDO} loop for the transform.
+The increase in the coding complexity is not due to the quantity of
+transforms, but to the lack of fast algorithms for the transforms.
+
+Figure~\ref{fig:enc_mddt} illustrates how the \ac{MDDT} can be implemented in
+the encoder.
+Three examples of residuals are shown: 10, 18 and 26, which are obtained as
+the differences between the predictions derived from their corresponding
+\acp{IPM} and the original image.
+When inside the \ac{RDO} loop, each \ac{IPM} is tested against its residual
+using the assigned transform.
+Then, the \ac{IPM} that provides the best rate-distortion trade-off is
+selected and signalled into the bitstream.
+
 \begin{figure}[tp]
 	\centering
 	\input{./figures/mddt_enc.tex}
 	\caption{Encoding scheme for the \ac{MDDT}}
 	\label{fig:enc_mddt}
 \end{figure}
+
+In the decoder side (figure~\ref{fig:dec_mddt}), the only information needed
+is represented in coloured blocks: the transformed coefficients and the used
+\ac{IPM}.
+The signalled \ac{IPM} allows the decoder to know which transform to use to
+convert the transformed coefficients back to the pixel domain.
 
 \begin{figure}[tp]
 	\centering
@@ -1741,6 +1965,14 @@ to degrade its performances as least as possible.
 	\item Storage requirements
 \end{itemize}
 
+\section{Intra prediction mode symmetries}
+\label{sec:intra_prediction_mode_symmetries}
+
+\section{Non-homogeneous number of transforms per intra prediction mode}
+\label{sec:non_homogeneous_number_of_transforms_per_intra_prediction_mode}
+
+
+
 \subsection{Proposals}
 \label{sub:proposals}
 
@@ -1748,6 +1980,58 @@ to degrade its performances as least as possible.
 	\item Usage of separable transforms
 	\item Making use of symmetries in prediction modes
 	\item Non-homogeneous transform repartition amongst prediction modes
+\end{itemize}
+
+\chapter{Incomplete transforms}
+\label{cha:incomplete_transforms}
+
+\section{Motivation}
+\label{sec:motivation}
+
+Reference~\cite{arrufat-15-inc-transforms}
+
+\begin{itemize}
+	\item Force the number of non-zeroes to 1.
+	\item Try to keep good performances from non-separable transforms.
+\end{itemize}
+
+\chapter{Discrete trigonometric transforms}
+\label{cha:discrete_trigonometric_transforms}
+
+\section{Introduction}
+\label{sec:introduction}
+
+\begin{itemize}
+	\item Decrease coding complexity $\rightarrow$ fast algorithms.
+	\item Reduce the ROM requirements $\rightarrow$ mathematical formula
+\end{itemize}
+
+Chapter~\ref{cha:the_mode_dependent_transform_competition} has unveiled the
+potential of gains achievable through the \ac{MDTC} technique.
+Nevertheless, the presented system had a level of complexity which was to
+high to be used in real life applications.
+As a result, the following Chapters presented two different approaches to
+yield the system less complex.
+Chapter~\ref{cha:realistic_system} proposed several ways of reducing the
+complexity: taking advantage of the symmetries that might exist within
+different \acp{IPM} as well as using a different number of transforms in each
+mode.
+Chapter~\ref{cha:incomplete_transforms} tried to simplify the system by
+designing transforms that make use of only basis vector.
+This makes transforming a block less complex than using a regular transform,
+even if the incomplete transform is non-separable.
+Benefits of this approach are observed on the decoder, being less complex than
+that of \ac{HEVC}.
+
+Since the systems presented above have flaws in some aspect, a third approach
+is presented in this Chapter to cover them.
+
+\section{The identity as a transform}
+\label{sec:the_identity_as_a_transform}
+
+\begin{itemize}
+	\item Amongst the \ac{DTT} family, add the identity matrix.
+	\item Benefits in terms of computational complexity.
 \end{itemize}
 
 \bookmarksetup{startatroot}% to remove Bibliography from the last part
