@@ -267,7 +267,7 @@ Most typical examples are streaming and storage, which may determine
 some of the encoder and decoder behaviours, like real time or memory
 constraints.
 There is a deep impact on the coded stream organisation:
-\ac{RA}, i.e. the ability to access to a particular piece of a video sequence,
+\ac{RA}, i.e.\ the ability to access to a particular piece of a video sequence,
 needs to be guaranteed for some applications like TV, while the latency needs
 to be kept as low as possible to enable services like surveillance or video
 conferencing systems.
@@ -782,7 +782,7 @@ signals.
 The naive approach to work with those signals is to use non-separable
 transforms.
 These transforms take the residual pixels from a block and reshape it to a
-single-dimensional signal. E.g. a $4\times4$ block of pixels becomes a
+single-dimensional signal. For instance, a $4\times4$ block of pixels becomes a
 $16\times1$ vector.
 Afterwards the transform is applied normally:
 \begin{equation}
@@ -828,32 +828,34 @@ The impact in performance due to separability will be studied in detail
 in Chapter~\ref{cha:the_mode_dependent_directional_transforms}.
 
 A non-separable transform can be expressed from a set of two separable
-transforms via the Kronecker product, denoted as $\otimes$:
-$$
-\mathbf{A}\otimes\mathbf{B} = \begin{bmatrix} a_{11} \mathbf{B} & \cdots &
-a_{1n}\mathbf{B} \\ \vdots & \ddots & \vdots \\ a_{m1} \mathbf{B} & \cdots &
-a_{mn} \mathbf{B} \end{bmatrix}
-$$
-$$
-\mathbf{A}\otimes\mathbf{B}} = \begin{bmatrix}
-   a_{11} b_{11} & a_{11} b_{12} & \cdots & a_{11} b_{1q} & 
-                   \cdots & \cdots & a_{1n} b_{11} & a_{1n} b_{12} & \cdots & a_{1n} b_{1q} \\
-   a_{11} b_{21} & a_{11} b_{22} & \cdots & a_{11} b_{2q} & 
-                   \cdots & \cdots & a_{1n} b_{21} & a_{1n} b_{22} & \cdots & a_{1n} b_{2q} \\
-   \vdots & \vdots & \ddots & \vdots & & & \vdots & \vdots & \ddots & \vdots \\
-   a_{11} b_{p1} & a_{11} b_{p2} & \cdots & a_{11} b_{pq} & 
-                   \cdots & \cdots & a_{1n} b_{p1} & a_{1n} b_{p2} & \cdots & a_{1n} b_{pq} \\
-   \vdots & \vdots & & \vdots & \ddots & & \vdots & \vdots & & \vdots \\
-   \vdots & \vdots & & \vdots & & \ddots & \vdots & \vdots & & \vdots \\
-   a_{m1} b_{11} & a_{m1} b_{12} & \cdots & a_{m1} b_{1q} & 
-                   \cdots & \cdots & a_{mn} b_{11} & a_{mn} b_{12} & \cdots & a_{mn} b_{1q} \\
-   a_{m1} b_{21} & a_{m1} b_{22} & \cdots & a_{m1} b_{2q} & 
-                   \cdots & \cdots & a_{mn} b_{21} & a_{mn} b_{22} & \cdots & a_{mn} b_{2q} \\
-   \vdots & \vdots & \ddots & \vdots & & & \vdots & \vdots & \ddots & \vdots \\
-   a_{m1} b_{p1} & a_{m1} b_{p2} & \cdots & a_{m1} b_{pq} & 
-                   \cdots & \cdots & a_{mn} b_{p1} & a_{mn} b_{p2} & \cdots & a_{mn} b_{pq} 
-\end{bmatrix}
-$$
+transforms via the Kronecker product, denoted as $\otimes$.
+\begin{equation}
+	\mathbf{A}\otimes\mathbf{B} = 
+	\begin{bmatrix}
+		a_{11} \mathbf{B} & \cdots & a_{1n}\mathbf{B} \\
+		\vdots & \ddots & \vdots \\
+		a_{m1} \mathbf{B} & \cdots & a_{mn} \mathbf{B}
+	\end{bmatrix}
+\end{equation}
+Where $\mathbf{A}$ is an $m \times n$ matrix and $\mathbf{B}$ is a $p \times
+q$ matrix.
+More explicitly:
+\begin{equation}
+	\mathbf{A}\otimes\mathbf{B} =
+	\begin{bmatrix}
+		a_{11} b_{11} & a_{11} b_{12} & \cdots & a_{11} b_{1q} & \cdots & \cdots & a_{1n} b_{11} & a_{1n} b_{12} & \cdots & a_{1n} b_{1q} \\
+		a_{11} b_{21} & a_{11} b_{22} & \cdots & a_{11} b_{2q} & \cdots & \cdots & a_{1n} b_{21} & a_{1n} b_{22} & \cdots & a_{1n} b_{2q} \\
+		\vdots & \vdots & \ddots & \vdots & & & \vdots & \vdots & \ddots & \vdots \\
+		a_{11} b_{p1} & a_{11} b_{p2} & \cdots & a_{11} b_{pq} & \cdots & \cdots & a_{1n} b_{p1} & a_{1n} b_{p2} & \cdots & a_{1n} b_{pq} \\
+		\vdots & \vdots & & \vdots & \ddots & & \vdots & \vdots & & \vdots \\
+		\vdots & \vdots & & \vdots & & \ddots & \vdots & \vdots & & \vdots \\
+		a_{m1} b_{11} & a_{m1} b_{12} & \cdots & a_{m1} b_{1q} & \cdots & \cdots & a_{mn} b_{11} & a_{mn} b_{12} & \cdots & a_{mn} b_{1q} \\
+		a_{m1} b_{21} & a_{m1} b_{22} & \cdots & a_{m1} b_{2q} & \cdots & \cdots & a_{mn} b_{21} & a_{mn} b_{22} & \cdots & a_{mn} b_{2q} \\
+		\vdots & \vdots & \ddots & \vdots & & & \vdots & \vdots & \ddots & \vdots \\
+		a_{m1} b_{p1} & a_{m1} b_{p2} & \cdots & a_{m1} b_{pq} & \cdots & \cdots & a_{mn} b_{p1} & a_{mn} b_{p2} & \cdots & a_{mn} b_{pq} 
+	\end{bmatrix}
+\end{equation}
+
 \subsection{Transform design}
 \label{sub:transform_design}
 
@@ -1461,7 +1463,7 @@ from~\eqref{eqn:hard_threshold} can be expressed as:
 \end{equation}
 The integration intervals have been reduced to where the quantised values
 differ from the original ones, that is, the values that have been affected by
-the hard-thresholding from \eqref{eqn:hard_threshold}.
+the hard-thresholding from~\eqref{eqn:hard_threshold}.
 
 Substituting $P_X(x)$ by the residuals \ac{PDF}:
 \begin{align}
