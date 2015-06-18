@@ -29,14 +29,14 @@
 			legend style={nodes=right},
 			legend pos= south east
 		]
-		\addplot [name path=refsnr, red, thick] table {
+		\addplot [name path=refsnr, blue, thick] table {
 		3.35	32.76
 		6.07	35.40
 		11.31	38.37
 		19.81	41.40
 		};
 
-		\addplot [name path=expsnr, blue, thick] table {
+		\addplot [name path=expsnr, red, thick] table {
 		3.35	33.60
 		5.58	35.95
 		10.75	38.93
@@ -53,7 +53,7 @@
 
 		\addplot[gray!33] fill between[ of = refsnr and expsnr];
 
-		\addplot [name path=ref, mark=*,mark size=1pt, red, thick] table {
+		\addplot [name path=ref, mark=*,mark size=1pt, blue, thick] table {
 		3.35	32.76
 		6.07	35.40
 		11.31	38.37
@@ -61,7 +61,7 @@
 		};
 		\addlegendentry{REF}
 		\addlegendentry{EXP}
-		\addplot [name path=exp, mark=*,mark size=1pt, blue, thick] table {
+		\addplot [name path=exp, mark=*,mark size=1pt, red, thick] table {
 		3.00	33.24
 		5.58	35.95
 		10.75	38.93
