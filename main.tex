@@ -39,7 +39,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{mathptmx}
 \usepackage[scaled]{helvet}
-% \usepackage{courier}
+\usepackage{courier}
 
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{pgfplots,tikz}
@@ -160,13 +160,13 @@ of the \ac{RGB} channels, requires:
 	\approx \unit{1.2}{\giga bit/\second}
 \]
 
-Through this simple example, it is evident that video coding is
-indispensable to stream or even store video files:
+Through this simple example, it is obvious that video coding is compulsory
+to stream or even store video files:
 the amount of bit-rate reported is this example is beyond the limit of current
 computing architectures.
 
 Depending on the target quality, it is common to have compression rates
-ranging from 100 to 1000.
+ranging from 10 to 1000.
 For content providers, being able to reduce the size of the content they
 broadcast implies increasing the number of contents they can store, as
 well as the number of subscribers they can reach using the same
@@ -197,10 +197,10 @@ proper decisions when delivering a video coding solution.
 This section presents a scheme containing the most important concepts
 used in state-of-the-art video coders.
 
-Figure~\ref{fig:video_coding_system} describes how a complete video
-coding system can be organised as a block diagram.
-The composing blocks of the video system are explained more in detail in
-the following subsections.
+Figure~\ref{fig:video_coding_system} describes how a complete video coding
+system can be organised as a block diagram.
+The composing blocks of the video system are explained more in details in the
+following subsections.
 
 \begin{figure}[tb]
 	\centering
@@ -212,12 +212,30 @@ the following subsections.
 \subsection{Pre-processing}
 \label{sub:pre_processing}
 
-After the digital video has been acquired at the source, which may be of
-many different sorts, such as natural scenes or synthetic
-computer-generated content, it has to be processed in order to be
-encoded.
-Usually, the pre-processing stage can include some filtering, scaling
-and colour space conversions on the raw video sequence.
+After the digital video has been captured at the source, which may be of many
+different sorts such as natural scenes or synthetic computer-generated
+content, it has to be processed in order to be encoded.
+Usually, the pre-processing stage can include some filtering, scaling and
+colour space conversions on the raw video sequence.
+
+\subsubsection{Up-sampling and down-sampling}
+\label{ssub:up-sampling_and_down-sampling}
+
+The video captured at source might not have the desired resolution.
+Consequently, scaling operations should be applied at source so as to assure
+the minimum impact to quality.
+
+Since the scaling is usually performed by linear filters, the input data must
+be also linear.
+For example, in order to rescale a R'G'B' file, it must be first converted to
+the linear domain using the gamma transfer function of the capture device to
+RGB.
+Then, the filter can be applied and converted back to R'G'B'.
+
+The sequences used in this thesis are centred around the \ac{HD} formats (720p
+and 1080p).
+However, other resolutions will also be considered, such as WVGA
+($800\times480$) and WQXGA ($2560\times1600$).
 
 \subsubsection{Colour space conversions}
 \label{ssub:colour_space_conversions}
@@ -227,33 +245,54 @@ and colour space conversions on the raw video sequence.
 \index{luma}
 \index{chroma}
 
-Colour space conversions are used to change the colour
-representation of the content to better fit the \ac{HVS}.
-The raw video data is normally in \ac{RGB} format, corrected by the
-transfer function of the camera ($\gamma$), hence denoted R'G'B'.
+A colour space is an abstract mathematical model specified by primary colours
+that is used to describe a representation of a picture, usually as a set of
+tristimulus values.
+
+To understand why there are many of them, a new concept must be introduced:
+the gamut.
+Each colour space and device can be characterised by their gamut, that is, the
+subset of colours they can represent.
+Depending on the colour space or device used, the gamut will cover different
+portions of the colours the \ac{HVS} can perceive.
+
+Colour space conversions are used to change the colour representation of the
+content to better fit the \ac{HVS}.
+The raw video data captured at source is usually in \ac{RGB} format, corrected
+by the transfer function of the camera ($\gamma$), hence denoted R'G'B'.
 
 For historical reasons, in order to be backwards compatible with black
 and white displays, the raw video file is converted to another colour
 space that separates the light information (luma) from the colour
 information (chroma), typically referred to as the YUV colour space
 family~\cite{poynton-95-color-space}.
-Moreover, due to the way the \ac{HVS} works, being more sensible to
-light variations than to colour, this family of colour spaces supports
-sub-sampling the chroma channels without any major perceptual
-degradation.
+Moreover, due to the fact that the \ac{HVS} is more sensible to light
+variations than to colour, this family of colour spaces supports down-sampling
+the chroma channels without any major perceptual degradation.
 
-% TODO
-\todo{Explain the YCbCr colour space and the target resolutions}
+A typical colour space is the Y'CbCr, used in most MPEG coding standards.
+The Y' component is the luma, computed with a weighed sum of gamma corrected
+RGB components.
+Cb and Cr are the difference between gamma-corrected red or blue and the luma,
+respectively.
+In a more intuitive way, Y' can be seen as a grey scale picture, where no
+information of colour is present.
+The other components represent what needs to be added to the grey scale
+picture to obtain the colour picture.
+
+In this thesis, the improvements on video coding quality will focus the luma
+component, since it plays a more important role in perceptual quality and
+represents an important part in the final bitstream.
 
 \subsection{Encoding}
 \label{sub:encoding}
 
-This stage is in charge of converting the pre-processed raw video sequence
-into a coded video stream to ease the storage and transmission.
-The amount of bits to represent the video stream is reduced by limiting the
-number of redundancies in the video and by introducing some approximations by
-a quantisation step while limiting the impact of these approximations on the
-perceived quality.
+This stage converts the pre-processed raw video sequence into a coded video
+stream to ease the storage and transmission.
+The amount of bits required to represent the video stream is reduced by
+limiting the number of redundancies in the video and by introducing some
+approximations such as the quantisation step, while limiting the impact of
+these approximations on the perceived quality.
 
 A deep look at the inners of a widely used coding scheme is provided
 in \S\ref{sec:the_hybrid_video_coding_scheme}.
@@ -261,16 +300,20 @@ in \S\ref{sec:the_hybrid_video_coding_scheme}.
 \subsection{Transmission}
 \label{sub:transmission}
 
-The transmission stage stands for the way the encoded bitstream is
-transferred to the decoder.
-Most typical examples are streaming and storage, which may determine
-some of the encoder and decoder behaviours, like real time or memory
-constraints.
-There is a deep impact on the coded stream organisation:
-\ac{RA}, i.e.\ the ability to access to a particular piece of a video sequence,
-needs to be guaranteed for some applications like TV, while the latency needs
-to be kept as low as possible to enable services like surveillance or video
-conferencing systems.
+The transmission stage represents the channel through which the encoded
+bitstream is made available to the decoder.
+The channel can be physical storage, such as optical discs, or any other
+transmission channel: wired/wireless connections with 1 to 1 (unicast) or 1 to
+many (multicast) transmissions.
+
+Depending on the application and the channel, the behaviour of the encoder may
+vary:
+a video that is encoded for storage purposes will not have a real time
+constraint, present in streaming applications.
+For example, the \ac{RA} technique, i.e.\ the ability to access to a
+particular piece of a video sequence, needs to be guaranteed for some
+applications like TV, while the latency needs to be kept as low as possible to
+enable services like surveillance or video conferencing systems.
 
 \subsection{Decoding}
 \label{sub:decoding}
@@ -286,8 +329,9 @@ The \acs{MPEG} (the \acs{JCT} 1/\acs{SC} 29/\acs{WG} 11 of the
 \acs{ITU-T} Study Group 16) are the main organisation specifying video
 compression algorithms.
 The most recent video coding specifications include the \acs{MPEG}-4 part 10
-standard / \acs{ITU} H.264 recommendation, known as \ac{AVC} or \acs{MPEG}-H
-Part 2 / \acs{ITU} H.265, called \acf{HEVC}.
+standard / \acs{ITU} H.264 recommendation, known as \ac{AVC}~\cite{itu-03-avc}
+or \acs{MPEG}-H Part 2 / \acs{ITU} H.265, called
+\acf{HEVC}~\cite{itu-13-hevc}.
 The encoder must comply to this specification by generating a decodable
 stream, there is no other normative behaviour defined by a video compression
 standard.
@@ -304,7 +348,7 @@ space and to the display format.
 
 State-of-the-art video coding standards such as H.264/\acs{MPEG}-4 \acs{AVC}
 and H.265/\acs{HEVC} use a hybrid video coding scheme.
-The overal coding structure appeared in H.261, in 1988.
+The overall coding structure appeared in H.261, in 1988.
 Since then, all video coding standards and recommendations issued by the
 \ac{ITU-T} and the \ac{MPEG} groups use this coding structure.
 
@@ -336,30 +380,21 @@ the following subsections.
 \label{sub:partitioning}
 \index{partitioning}
 
-In order to process the video frames, they are exhaustively partitioned
-into non-overlapping blocks.
+In order to process the video frames, they are exhaustively partitioned into
+non-overlapping blocks.
 The subdivision blocks ease the succeeding stages of prediction and transform:
 the blocks can be processed, under some constraints, independently so that a
 parallel processing is made possible.
 The partitioning does not necessarily imply same-sized blocks, allowing
-rectangular blocks of different sizes to be used.
+rectangular blocks of different sizes to be used, as illustrated in
+figure~\ref{fig:part_orig_pred_res_image} (a).
+This figure provides a partitioning for a certain level of quantisation using
+information available in the current image.
+It can be seen that the image has been divided into uniform regions.
+
 The optimal choice for the block size is left to the encoder.
-
-% TODO
-\todo{Explain partitioning figure
-\begin{itemize}
-	\item intra partitioning
-	\item signal divided by uniform regions
-	\item make images a bit bigger and put them in the same page
-\end{itemize}
-}
-
-\begin{figure}[tb]
-	\centering
-	\includegraphics[width=0.8\linewidth]{./figures/partitioning-orig-all-001.png}
-	\caption{Partitioning example using \acs{HEVC} at \acs{QP} 27}
-	\label{fig:partitioning}
-\end{figure}
+In \ac{HEVC}, the \ac{PU} size does not always match the \ac{TU} size,
+allowing a \ac{PU} to be split into four \acp{TU}.
 
 \subsection{Prediction}
 \label{sub:prediction}
@@ -367,95 +402,145 @@ The optimal choice for the block size is left to the encoder.
 Instead of coding the blocks coming from the original source image directly,
 the encoder computes an estimation of the block pixel values, which is then
 subtracted from the original pixels, generating the residual block.
-This technique is well know as \ac{DPCM} in the literature.
+This technique is known as \ac{DPCM} in the literature.
 
-Those block estimations are carried out by the prediction module, using
-some information from previously treated blocks.
-This way, predictable information present in the original blocks is
-removed and the energy of the resulting signal is lowered so that it requires
-less bits for a given distortion.
+Those block estimations are carried out by the prediction module, using some
+information from previously processed blocks.
+This way, predictable information present in the original blocks is removed
+and the energy of the resulting signal is lowered so that it requires less
+bits for a given distortion.
 This is a result of the source coding
 theory~\cite{jayant-84-digital-coding-waveforms}.
 In other terms, the prediction mechanism aims at removing redundancies in the
 video signal.
 
-Predictions must be performed the same way at both encoder and decoder
-side, and thus computed inside the blue box in
+Predictions must be performed the same way at both encoder and decoder side,
+and thus computed inside the blue box in
 figure~\ref{fig:hybrid_video_coding_scheme}, referring to the decoder.
 For this reason, the encoder uses reconstructed blocks (blocks that have
 already been encoded and will make it to the bitstream) as the input
-data to compute the predictions, because these blocks are equivalent to
-those the decoder will handle.
+data to compute the predictions, as these blocks are equivalent to those the
+decoder will handle.
 
 Consequently, the encoder embeds a decoding path to ensure that the prediction
 mechanism will be reproduced exactly by the decoder.
-
 Commonly, predictions are of two types, depending on the origin of
-the prediction source:
+the prediction source, listed below.
 \begin{itemize}
-	\item intra prediction, also called spatial prediction, for those blocks
+	\item Intra prediction, also called spatial prediction, for those blocks
 		predicted using information within the same frame.
-	\item inter prediction, also called temporal prediction for those blocks
-		predicted from frames different from the one under consideration.
+	\item Inter prediction, also called temporal prediction for those blocks
+		predicted from frames other than the one under consideration.
 \end{itemize}
 
-\begin{figure}[tb]
-	\centering
-	\includegraphics[width=0.8\linewidth]{./figures/partitioning-pred-all-001.png}
-	\caption{Predicted image}
-	\label{fig:predicted_image}
-\end{figure}
+Figure~\ref{fig:part_orig_pred_res_image} (b) provides an example of an intra
+predicted picture using the partitioning from above.
+Figure~\ref{fig:part_orig_pred_res_image} (c) displays the residual image (the
+difference between the original and predicted images).
+This image evidences the parts of the image that could not be predicted and
+will have to be encoded and transmitted.
 
 \begin{figure}[tb]
 	\centering
-	\includegraphics[width=0.8\linewidth]{./figures/partitioning-resi-all-001.png}
-	\caption{Residual image (difference between original and predicted)}
-	\label{fig:residual_image}
+	\subfloat[Partitioning]
+	{\includegraphics[width=0.5\linewidth]{./figures/partitioning-orig-all-001.png}}
+	\\
+	\subfloat[Predicted Image]
+	{\includegraphics[width=0.5\linewidth]{./figures/pred_image-all-001.png}}
+	\\
+	\subfloat[Residual Image]
+	{\includegraphics[width=0.5\linewidth]{./figures/res_image-all-001.png}}
+	\caption{Example of an image at different encoding points for a
+	certain level of quantisation}
+	\label{fig:part_orig_pred_res_image}
 \end{figure}
 
 \subsubsection{Intra prediction}
 \label{ssub:intra_prediction}
 \index{intra prediction}
 
-Intra prediction, sometimes referred to as spatial prediction, is used
-to eliminate spatial redundancies by removing the correlation with local
-regions of a picture.
+Intra prediction, sometimes referred to spatial prediction, is used to
+eliminate spatial redundancies by removing the correlation with local regions
+of a picture.
 The basic principle of intra prediction is based on the fact that the texture
 of a picture region is similar to the texture of its neighbourhood and can be
 predicted from there.
+Images coded using this technique exclusively are named I-frames.
 
-Different models of predictions can be used, using projections of adjacent
-decoded blocks, theses models include directional projections, gradient
-projections (called planar) and the projection of the mean value (called DC).
+Different models of predictions can be used through projections of adjacent
+decoded blocks.
+These models include directional projections, gradient projections (called
+planar) and the projection of the mean value (called DC).
+In \ac{HEVC} there are 35 \acfp{IPM}, from which 33 are directional (2 to 34),
+as presented in the upper left part of figure~\ref{fig:mdcs}.
+These \acp{IPM} are used to derive the predictions of the current block from
+its the available boundaries, formed by reconstructed blocks.
 
-The intra prediction is analysed in
-Chapter~\ref{cha:the_mode_dependent_directional_transforms}, when
-introducing a kind of prediction-adapted transforms.
+\begin{figure}[tb]
+	\centering
+	\begin{minipage}{0.48\textwidth}
+		\input{figures/pred-directions.tex}
+	\end{minipage}
+	\begin{minipage}{0.48\textwidth}
+		\centering
+		\small
+		Average profile for residuals (prediction direction)
+		\begin{tabular}[H]{ccc}
+			\includegraphics[width=0.25\textwidth]{figures/resids-scan-diag.png}
+			&
+			\includegraphics[width=0.25\textwidth]{figures/resids-scan-horz.png}
+			&
+			\includegraphics[width=0.25\textwidth]{figures/resids-scan-vert.png}
+			\\
+			\color{red}{diagonal} & \color{mygreen}{vertical} & \color{blue}{horizontal} \\
+			& & \\
+		\end{tabular}
+		\\
+		\small
+		Average profile for coefficients (scanning mode)
+		\begin{tabular}[H]{ccc}
+			\includegraphics[width=0.25\textwidth]{figures/coeffs-scan-diag.png}
+			&
+			\includegraphics[width=0.25\textwidth]{figures/coeffs-scan-horz.png}
+			&
+			\includegraphics[width=0.25\textwidth]{figures/coeffs-scan-vert.png}
+			\\
+			\color{red}{diagonal} & \color{mygreen}{horizontal} & \color{blue}{vertical} \\
+		\end{tabular}
+	\end{minipage}
+	\subfloat[Diagonal scanning]{\input{figures/mdcs-diag.tex}}
+	\subfloat[Horizontal scanning]{\input{figures/mdcs-horz.tex}}
+	\subfloat[Vertical scanning]{\input{figures/mdcs-vert.tex}}
+	\caption{\acs{HEVC} intra prediction modes related to their average
+	residual signals and their appropriate scanning in the transform
+	domain for $4\times4$ \acsp{TU}}
+	\label{fig:mdcs}
+\end{figure}
+
 
 \subsubsection{Inter prediction}
 \label{ssub:inter_prediction}
 \index{inter prediction}
 
-Inter prediction, or temporal prediction, takes advantage of the fact
-that images close in time share many similarities, and that many of
-their component regions will move as a whole.
-Since the encoding order is not necessarily the same as the viewing
-order, inter predictions can have their origins in either past or future
-frames and also combine the two origins.
+Inter prediction, or temporal prediction, takes advantage of the fact that
+images close in time share many similarities, and that some of their component
+regions will move as a whole.
+Since the encoding order is not necessarily the same as the viewing one, inter
+predictions can have their origins in either past or future frames, and also
+combine the two origins.
+Images that are predicted using only one image either from the past or from
+the future are called predicted images or P-frames.
+Bi-predicted images or B-frames have prediction origins in two different
+images.
 
 At the encoder side, an extra operation, called motion estimation, is
 carried out.
 This stage searches for the best matching area in the reference picture
 for the current prediction block.
-It is one of the most demanding parts of video coders, with regard to
-the number of operations.
-
-% TODO
-\todo{
-\begin{itemize}
-	\item motion vectors
-\end{itemize}
-}
+It is one of the most complex parts of video coders in terms of computational
+requirements.
+Once a good prediction has been found, a motion vector is created, indicating
+the offset that has to be applied in the block from the reference image.
 
 \subsection{Transform}
 \label{sub:transform}
@@ -463,10 +548,10 @@ the number of operations.
 The transform stage reduces the remaining correlations from the residual
 block, computed as the difference between the original and the predicted
 blocks.
-The goal of the transform is to concentrate the residual signal into as
-few coefficients as possible in the transform domain.
-The residual signal is transformed form the spatial domain into the transform
-domain using the transform.
+The goal of the transform is to concentrate the residual signal into as few
+coefficients as possible in the transform domain.
+The residual signal is transformed from the spatial domain into the
+transformed one using the transform.
 In the spatial domain, the residual signal is spread among the pixels of the
 blocks, while the objective of transform domains is to concentrate as much as
 possible the residual signal into a few transform domain coefficients
@@ -484,6 +569,10 @@ attention in the past and is the \emph{de facto} standard transform used in
 Additional choices were introduced recently, especially in \ac{HEVC}, where
 the \ac{DST} of type VII was adopted.
 
+The average profiles for some $4\times4$ intra residuals in \ac{HEVC} are
+displayed in the upper-right part of figure~\ref{fig:mdcs}, along with their
+corresponding representations in the transform domain.
+
 Provided that the subject of this thesis is centred around the
 transforms for video coding, the transform stage will be explained
 thoroughly in Chapter~\ref{cha:transform_coding}.
@@ -493,34 +582,18 @@ thoroughly in Chapter~\ref{cha:transform_coding}.
 \index{QP}\index{lossy}\index{lossless}
 
 The quantisation, applied in the transform domain, it is used as an
-approximation operator, which limits the amount of possible output values.
+approximation operator, reducing the amount of possible output values.
 In standards like \ac{HEVC}, the quantisation is scalar:
 each coefficient is approximated independently from its neighbouring values.
 In these coding schemes, the quantisation step is controlled by a \ac{QP} that
-to discard
-any coefficient whose energy level is below a certain threshold.
+discards any coefficient whose energy level is below a certain threshold.
 High energy coefficients are also be affected by the quantisation.
 In standards like \acs{HEVC}, the quantisation step is controlled by a
 \ac{QP} that regulates the amount of approximations carried out.
 It is worth noticing that it is the only non-reversible step in the whole
-hybrid video coding scheme, and therefore what makes video coding lossy.
-Lossless video coding can be attained by not using quantification in the
-process.
-
-% \begin{figure}[tb]
-% 	\centering
-% 	\subfloat[Partitioning]
-% 	{\includegraphics[width=0.8\linewidth]{./figures/partitioning-orig-all-001.png}}
-% 	\\
-% 	\subfloat[Predicted Image]
-% 	{\includegraphics[width=0.8\linewidth]{./figures/pred_image-all-001.png}}
-% 	\\
-% 	\subfloat[Residual Image]
-% 	{\includegraphics[width=0.8\linewidth]{./figures/res_image-all-001.png}}
-% 	\caption{Example of an image at different encoding points for a
-% 	certain level of quantisation}
-% 	\label{fig:part_orig_pred_res_image}
-% \end{figure}
+hybrid video coding scheme, which induces lossy video coding.
+Lossless (or near-lossless) video coding can be attained by not using
+quantification in the process.
 
 \subsection{Entropy coding}
 \label{sub:entropy_coding}
@@ -540,6 +613,14 @@ sorted in a way that will make the entropy coder work more efficiently.
 The scanning operation is a conversion from a 2D array, containing the
 quantised transformed coefficients, towards 1D vector containing the same
 values sorted in a way that facilitates a compact transmission.
+For instance, in \ac{HEVC}, depending on the selected \ac{IPM}, residuals
+present different patterns, and so do their transforms, as illustrated in
+figure~\ref{fig:mdcs}.
+These patterns in the transform domain will determine different scanning
+orders (in different colours), as presented in the lower part of
+figure~\ref{fig:mdcs}.
+An adapted mode to different patterns ensures, in average, a correct order of
+the coefficients that will group all the zeroes together.
 
 Signalling is also conveyed into the bitstream at this point, and the
 entropy coder ensures a correct binarisation while using the adequate
@@ -553,7 +634,7 @@ from figure~\ref{fig:hybrid_video_coding_scheme}.
 This set of operations allow the encoder to take decisions related to coding
 based on the application requirements.
 These decisions include the block sizes and the prediction to use.
-For each block size and kind of prediction, the encoder usually computes the
+For each block size and kind of prediction, the encoder computes the
 distortion, using its own decoder, and estimates the rate as illustrated in
 figure~\ref{fig:rate_distortion_scheme}.
 
@@ -561,8 +642,11 @@ The appropriate set of choices, mainly among the prediction modes and block
 sizes, is performed by comparing the Lagrangian values, which balance the
 distortion and rates obtained for each coding choice.
 
-% TODO
-\todo{Some words on \ac{AI} and \ac{RA}}
+Depending on the coding configuration, the encoder may also decide whether to
+use references from the current image or from other images.
+The \ac{AI} configuration, encodes each image independently from the rest,
+whereas in the \ac{RA} configuration, the images conforming the sequences are
+organised into \acp{GOP}, formed by an I-frame, and several P and B-frames.
 
 \begin{figure}[tb]
 	\centering
@@ -594,7 +678,7 @@ Where $I$ and $K$ are two images of $m \times n$ pixels.
 \label{ssub:peak_signal_to_noise_ratio}
 \index{PSNR}
 
-The \ac{PSNR} is an objective measure of quality that computes the ratio
+The \ac{PSNR} is also an objective measure of quality that computes the ratio
 between the maximum possible value of a signal and the power of the noise that
 affects the fidelity of its approximation.
 It is usually defined in terms of the logarithmic decibel scale to cope
@@ -625,6 +709,17 @@ The encoder performs this computation iteratively the same block,
 exploring many different coding possibilities and finally selects the
 one that provides the best score in terms of rate and distortion.
 This is called the \ac{RDO} loop.
+For instance, in \ac{HEVC}, it allows choosing the best \ac{PU} size
+(4,8,16,32,64), \ac{TU} size (4,8,16,32), \ac{IPM} (0,1,\ldots,34), prediction
+source (intra, inter), amongst others.
+
+The trade-off between the distortion and the rate is commonly expressed
+using a Lagrangian measure.
+
+\begin{equation}
+	J(\lambda) = \text{Distortion} + \lambda \text{Rate}
+	\label{eqn:lagrangian_rdo}
+\end{equation}
 
 As seen in the previous subsections, computing the distortion is
 reasonably straightforward.
@@ -634,6 +729,9 @@ possibilities for a block.
 As a consequence, an estimation of the bit rate is often used in the \ac{RDO}
 loop.
 
+Next chapter will present a way of using~\eqref{eqn:lagrangian_rdo} to design
+performing transforms based on different rate models.
+
 \section{Bj{\o}ntegaard Delta measurements}
 \label{sub:bjontegaard_delta_measurements}
 \index{BD-rate}
@@ -642,9 +740,9 @@ loop.
 Comparing two video coding techniques objectively might be complicated,
 as both distortion and bit rate savings have to be taken into account jointly.
 
-Metrics introduced by Gisle Bj{\o}ntegaard, know as \ac{BD} measurements
-have become the current \emph{de facto} standard to objectively compare
-the result of two encodings~\cite{VCEG-M33,VCEG-AI11}.
+Metrics introduced by Gisle Bjøntegaard, know as \ac{BD} measurements have
+become the current \emph{de facto} standard to objectively compare the result
+of two encodings~\cite{VCEG-M33,VCEG-AI11}.
 Two different metrics are defined and displayed in
 figure~\ref{fig:bdsnr_bdrate}:
 \begin{enumerate}[label = (\alph{enumi})]
@@ -672,24 +770,30 @@ appreciate the performance of the proposed systems.
 \section{Conclusions}
 \label{sec:conclusions_video_coding}
 
-This chapter has presented the motivation for video coding as well as
-some general concepts concerning an overview of the video coding system.
+This chapter has presented the motivation for video coding as well as some
+general concepts concerning an overview of the video coding system.
 
-Current video coders exploit both redundancies existing within images of
-the video sequence via predictions.
+Current video coders exploit redundancies existing within images of the video
+sequence via predictions.
 These predictions can be either spatial or temporal, depending on
 whether the prediction source is the same image or another image,
 respectively.
 Unpredictable parts of the image, called residuals, are then passed through a
-transformation in order to concentrate the transformed domain residual in as
-few coefficients as possible.
+transformation in order to concentrate the transformed residual in as few
+coefficients as possible.
 
 The appropriate block size is selected for the prediction and the transform
-sizes.
-These are the so-called \ac{PU} and \ac{TU} elements in the HEVC syntax.
+sizes, named \acp{PU} and \acp{TU}, respectively.
 A lot of flexibility is allowed in the syntax for the prediction and sizes
 while the set of choices for a given codec is rather limited for the
 transform.
+
+This thesis will focus on the extension of the choices for the transform
+stage.
+Currently, the decision of the coding mode (\ac{AI}, \ac{RA}), the block sizes
+and \acp{IPM} are is based on a single transform, usually the \ac{DCT}-II.
+However, a single transform cannot provide optimal signal compaction for all
+kinds of possible signals.
 
 This thesis will focus on the extension of the choices for the transform
 stage, as set of transforms will be provided such that the encoder is able to
@@ -725,8 +829,8 @@ entropy coding.
 Transforms can be very abstract since they tend to work in $N$-dimensional
 spaces, where $N$ represents the number of pixel residuals processed by the
 transform.
-Typical values vary from $N=4\times4$ to $N=32\times32$ in modern video
-codecs, such as \ac{HEVC}.
+Typical values vary from $N=4\times4$ to $N=32\times32$ using powers of two in
+modern video codecs, such as \ac{HEVC}.
 
 However, restraining ourselves to two dimensions, one of the most visual
 and representative example of transforms are rotations.
@@ -758,7 +862,7 @@ performance.
 
 Transforms used in image processing and video coding are orthogonal.
 Orthogonal matrices are square matrices whose rows and columns are orthogonal
-unit vectors, also known as orthonormal vectors.
+unit vectors, also known as orthonormal vectors, with:
 \begin{equation}
 	\A^T\A = \A\A^T = \I
 \end{equation}
@@ -768,7 +872,7 @@ transposed version:
 	\A^T = \A^{-1}
 \end{equation}
 
-This fact has benefits in two areas: fast computation of inverse transform
+This property has benefits in two areas: fast computation of inverse transform
 with no need to store it separately and re-use of fast algorithms for both
 direct and inverse transform applications.
 
@@ -869,13 +973,6 @@ Transform design methods agree on how the distortion is evaluated, namely
 using the \ac{MSE} from~\eqref{eqn:mse}.
 However, different transform designs exist depending on the used rate
 model.
-The trade-off between the distortion and the rate is commonly expressed
-using a Lagrangian measure.
-
-\begin{equation}
-	J(\lambda) = \text{Distortion} + \lambda \text{Rate}
-	\label{eqn:transform_design}
-\end{equation}
 
 Next sections will study different transform design approaches based on,
 amongst others, different modellings of the rate constraint.
@@ -1093,7 +1190,7 @@ The use of the \ac{DST} in \ac{HEVC} over the \ac{DCT} on $4\times4$
 blocks leads to a bit-rate reduction of 1\% on
 average~\cite{sullivan-12-overview-hevc}.
 
-An explanation on the adoption of the\ac{DST} into \ac{HEVC} is detailed in
+An explanation on the adoption of the \ac{DST} into \ac{HEVC} is detailed in
 Chapter~\ref{cha:the_mode_dependent_directional_transforms}, more precisely in
 \S\ref{sub:dst_and_mddt}.
 
@@ -1158,8 +1255,8 @@ detailed in \S\ref{sub:the_lagrange_multiplier}.
 The first part of the equation represents the distortion introduced by
 the quantisation.
 The second term serves as rate-like constraint, by ensuring that the
-number of significant values in the transform domain is minimised,
-together with the distortion.
+number of significant values in the transform domain is minimised together
+with the distortion.
 
 The minimisation of the metric happens in two steps, carried out iteratively
 until convergence:
@@ -1403,7 +1500,7 @@ zero-mean \ac{PDF}.
 \end{figure}
 Figure~\ref{fig:probability_density_functions} also includes the
 \ac{PDF} of a Laplace distribution and a normal distribution.
-Those two distribution are particular cases of a \ac{GGD}.
+Those two distributions are particular cases of a \ac{GGD}.
 
 The centred \ac{GGD} \ac{PDF} can be expressed compactly as:
 \index{gamma function}
@@ -1664,8 +1761,8 @@ By learning an adapted transform over a set of residuals, the amount of
 transformed coefficients mapped to zero increases, augmenting its
 kurtosis (the distribution ``looks more sharp''), hence reducing the
 exponent $\gamma$.
-Figure~\ref{fig:j_lambda_qp} illustrates how the relationship between
-the distortion and the rate model, at different \acp{QP}.
+Figure~\ref{fig:lambda_zero_norm_dist} illustrates how the relationship
+between the distortion and the rate model, at different \acp{QP}.
 \acp{QP} 27 and 32 are highlighted, corresponding to quantisation steps
 $\Delta = 14.256$ and $\Delta = 25.504$ in \ac{HEVC} respectively.
 
@@ -1756,47 +1853,6 @@ order.
 
 The next section contains a summary of the most important studies
 regarding intra coding carried out during the conception of \ac{HEVC}.
-
-\begin{figure}[tb]
-	\centering
-	\begin{minipage}{0.48\textwidth}
-		\input{figures/pred-directions.tex}
-	\end{minipage}
-	\begin{minipage}{0.48\textwidth}
-		\centering
-		\small
-		Average profile for residuals (prediction direction)
-		\begin{tabular}[H]{ccc}
-			\includegraphics[width=0.25\textwidth]{figures/resids-scan-diag.png}
-			& 
-			\includegraphics[width=0.25\textwidth]{figures/resids-scan-horz.png}
-			&
-			\includegraphics[width=0.25\textwidth]{figures/resids-scan-vert.png}
-			\\
-			\color{red}{diagonal} & \color{mygreen}{vertical} & \color{blue}{horizontal} \\
-			& & \\
-		\end{tabular}
-		\\
-		\small
-		Average profile for coefficients (scanning mode)
-		\begin{tabular}[H]{ccc}
-			\includegraphics[width=0.25\textwidth]{figures/coeffs-scan-diag.png}
-			& 
-			\includegraphics[width=0.25\textwidth]{figures/coeffs-scan-horz.png}
-			&
-			\includegraphics[width=0.25\textwidth]{figures/coeffs-scan-vert.png}
-			\\
-			\color{red}{diagonal} & \color{mygreen}{horizontal} & \color{blue}{vertical} \\
-		\end{tabular}
-	\end{minipage}
-	\subfloat[Diagonal scanning]{\input{figures/mdcs-diag.tex}}
-	\subfloat[Horizontal scanning]{\input{figures/mdcs-horz.tex}}
-	\subfloat[Vertical scanning]{\input{figures/mdcs-vert.tex}}
-	\caption{\acs{HEVC} intra prediction modes related to their average
-	residual signals and their appropriate scanning in the transform
-	domain}
-	\label{fig:mdcs}
-\end{figure}
 
 \subsection{The \acs{DST} as a simplification of the \acs{MDDT}}
 \label{sub:dst_and_mddt}
@@ -1945,12 +2001,25 @@ Maybe explain the VCIP
 	\item explain ICIP 2015~\cite{arrufat-15-mdtc}
 \end{itemize}
 
+\chapter{Incomplete transforms}
+\label{cha:incomplete_transforms}
+
+Motivation: try to use non-separable transforms in a simpler way
+
+The previous chapters unveiled notable differences in bit-rate savings when
+using separable and non-separable transforms.
+Nevertheless, non-separate transforms are really computer costy and unusable
+in real life applications.
+In this chapter, an approach using non-separable transforms is proposed,
+called incomplete transforms.
+
+Reference~\cite{arrufat-15-inc-transforms}
+
 \chapter{Realistic system}
 \label{cha:realistic_system}
 \chaptertoc
 
-\section{Motivation}
-\label{sec:motivation}
+Motivation: reduce complexity and ROM
 
 This chapter will take a look at different approaches to simplify the
 system presented in
@@ -1967,13 +2036,11 @@ to degrade its performances as least as possible.
 	\item Storage requirements
 \end{itemize}
 
-\section{Intra prediction mode symmetries}
-\label{sec:intra_prediction_mode_symmetries}
-
 \section{Non-homogeneous number of transforms per intra prediction mode}
 \label{sec:non_homogeneous_number_of_transforms_per_intra_prediction_mode}
 
-
+\section{Intra prediction mode symmetries}
+\label{sec:intra_prediction_mode_symmetries}
 
 \subsection{Proposals}
 \label{sub:proposals}
@@ -1983,14 +2050,6 @@ to degrade its performances as least as possible.
 	\item Making use of symmetries in prediction modes
 	\item Non-homogeneous transform repartition amongst prediction modes
 \end{itemize}
-
-\chapter{Incomplete transforms}
-\label{cha:incomplete_transforms}
-
-\section{Motivation}
-\label{sec:motivation}
-
-Reference~\cite{arrufat-15-inc-transforms}
 
 \begin{itemize}
 	\item Force the number of non-zeroes to 1.
