@@ -23,4 +23,4 @@ echo "\\end{document}"                                                          
 latexmk ${TEXFLAGS} ${TMPFILE}
 mv tmp.pdf ${PDFFILE}
 latexmk -c
-rm tmp.tex
+rm ${TMPFILE}
