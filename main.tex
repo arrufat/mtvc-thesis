@@ -271,7 +271,7 @@ variations than to colour, this family of colour spaces supports down-sampling
 the chroma channels without any major perceptual degradation.
 
 A typical colour space is the Y'CbCr, used in most MPEG coding standards.
-The Y' component is the luma, computed with a weighed sum of gamma corrected
+The Y' component is the luma, computed with a weighted sum of gamma corrected
 RGB components.
 Cb and Cr are the difference between gamma-corrected red or blue and the luma,
 respectively.
@@ -1029,17 +1029,12 @@ can be computed as:
 \end{align}
 If $\x=\y$, the covariance matrix is the correlation matrix of $\x$.
 
-However, it is indeed, possible to select an orthogonal matrix $\A$, for
-a given \ac{PDF} describing the source that will make $\X=\A\x$ have
-pairwise uncorrelated components~\cite{gersho-92-vector-quantization}.
+It is possible to select an orthogonal matrix $\A$, for a given \ac{PDF}
+describing the source that will make $\X=\A\x$ have pairwise uncorrelated
+components in the transform domain~\cite{gersho-92-vector-quantization}.
 The \ac{KLT} is defined as the linear orthogonal transform that reduces the
 redundancy by a maximum decorrelation of the data, so that the signal can be
 stored more efficiency~\cite{rao-01-transform-data-compression-book}.
-
-The \ac{KLT} is often presented as the optimal transform, sometimes even for
-all possible sources of signals.
-However, it has been proved to be suboptimal in the transform coding / bit
-allocation sense~\cite{effros-04-suboptimal-klt}.
 
 In this section, the \ac{KLT} is presented under its well-known optimal
 conditions: Gaussian sources with high resolution quantisation
@@ -1047,10 +1042,11 @@ assumptions~\cite{goyal-00-high-resolution}.
 The high resolution assumption states that the number of quantisation
 levels is high, the quantisation step size is small enough to consider the
 \ac{PDF} constant for each quantisation interval.
-% TODO
-\todo{Add a bit more about the demonstration and the bit allocation}
-Under those conditions, the \ac{KLT} is the optimal transform in terms
-of bit allocation and minimises the overall
+
+Under those conditions, the \ac{KLT} is the transform that achieves optimal
+bit allocation by distributing the transformed coefficient variances in such a
+way as to minimise their geometric
+mean~\cite{jayant-84-digital-coding-waveforms} and minimises the overall
 distortion~\cite{gersho-92-vector-quantization}.
 
 The \ac{KLT} decorrelates the signal in the transform domain, that is the
@@ -1234,6 +1230,16 @@ average~\cite{sullivan-12-overview-hevc}.
 An explanation on the adoption of the \ac{DST} into \ac{HEVC} is detailed in
 Chapter~\ref{cha:the_mode_dependent_directional_transforms}, more precisely in
 \S\ref{sub:dst_and_mddt}.
+
+\subsubsection{Final note on the \ac{KLT}}
+\label{ssub:final_note_on_the_klt}
+
+The \ac{KLT} is often presented as the optimal transform, sometimes even for
+all possible sources of signals.
+However, it has been proved to be suboptimal in the transform coding / bit
+allocation sense~\cite{effros-04-suboptimal-klt}.
+For this reason, next section studies another kind of transform design that
+leads to optimal transforms under different conditions.
 
 \section{The rate-distortion optimised transform}
 \label{sec:the_rate_distortion_optimised_transform}
@@ -1821,7 +1827,7 @@ It can also be seen that since the Lagrange multiplier value $\lambda$
 does not change, neither does the slope of a tangent line to the circled
 points, corresponding to the optimal trade-off between the distortion
 and the rate constraint.
-The amount of improvement in each direction is weighed by $\lambda$: at
+The amount of improvement in each direction is weighted by $\lambda$: at
 \ac{QP} 27 there is more room for sparsity improvement than there is for
 reducing the distortion, compared to \ac{QP} 32.
 
