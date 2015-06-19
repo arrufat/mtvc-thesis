@@ -471,10 +471,27 @@ Different models of predictions can be used through projections of adjacent
 decoded blocks.
 These models include directional projections, gradient projections (called
 planar) and the projection of the mean value (called DC).
-In \ac{HEVC} there are 35 \acfp{IPM}, from which 33 are directional (2 to 34),
-as presented in the upper left part of figure~\ref{fig:mdcs}.
 These \acp{IPM} are used to derive the predictions of the current block from
 its the available boundaries, formed by reconstructed blocks.
+The top-right part of figure~\ref{fig:mdcs} presents the average
+\ac{HEVC} $4\times4$ residuals by scanning mode, together with their
+representation in the transform domain.
+The average residual profiles have lower (dark) values near the
+available borders, which increase with the distance from the
+boundaries: residuals issued from horizontal and vertical \acp{IPM} only
+have the left and upper borders available, respectively, whereas the
+remaining \acp{IPM} tend to have both borders available.
+It can also be observed that the scanning patterns match reasonably well
+the transform coefficients in each case, sorting them in an increasing
+order.
+
+With regards to previous standards, such as H.264/\ac{MPEG}-4 \ac{AVC}, which
+has 9 different prediction modes for intra coding, \ac{HEVC} has an improved
+prediction system, with 35 different prediction modes.
+The upper-left part of figure~\ref{fig:mdcs} illustrates them.
+A detailed explanation on how predictions are derived from the block
+boundaries using those prediction modes can be found in Chapter 6 from Wien's
+book on \ac{HEVC}~\cite{wien-15-hevc}.
 
 \begin{figure}[tb]
 	\centering
@@ -1862,21 +1879,21 @@ scenario to find out their performances in video coding.
 \chaptertoc
 
 \section{Introduction}
-\label{sec:introduction_mddt}
+\label{sec:introduction_to_mddt}
 
-\subsection{The intra prediction modes in \acs{HEVC}}
-\label{sub:the_intra_prediction_modes_in_hevc}
+Previous Chapter has introduced two different approaches on designing adapted
+transforms.
+In order to test their performances for video coding, a technique called
+\ac{MDDT} will be used in this section.
+The principle of the \ac{MDDT} lies on using an adapted transform learnt
+specifically for each \acf{IPM}.
 
-As seen in Chapter~\ref{cha:video_coding_fundamentals}, \ac{HEVC} makes
-use of predictions in order to generate a low signal energy, called
-residual, and improve the coding efficiency.
-With regard to previous standards, such as H.264/\ac{MPEG}-4 \ac{AVC},
-which had 9 different prediction modes for intra coding, \ac{HEVC} has
-an improved prediction system, with 35 different prediction modes.
-Figure~\ref{fig:mdcs} illustrates those prediction modes.
-A detailed explanation on how predictions are derived from those
-prediction mode can be found in Chapter 6 from M.
-Wien's book on \ac{HEVC}~\cite{wien-15-hevc}.
+The \ac{MDDT} was proposed during the \ac{HEVC} standardisation phase, but is
+was finally discarded in favour of a new transform, the \ac{DST}.
+
+\subsection{Motivation of the \acs{MDDT}}
+\label{sub:motivation_of_the_mddt}
+
 Depending on the selected prediction mode, transformed coefficients might
 present different patterns, making low and high values to appear at different
 block positions.
@@ -1889,20 +1906,11 @@ The patterns are described for $4\times4$ blocks, and the same pattern is used
 on higher block sizes, which are recursively split into 4 sub-blocks until
 size $4\times4$ is reached.
 
-The top-right part of figure~\ref{fig:mdcs} presents the average
-\ac{HEVC} $4\times4$ residuals by scanning mode, together with their
-representation in the transform domain via de \ac{DST}.
-The average residual profiles have lower (dark) values near the
-available borders, which increase with the distance from the
-boundaries: residuals issued from horizontal and vertical \acp{IPM} only
-have the left and upper borders available, respectively, whereas the
-remaining \acp{IPM} tend to have both borders available.
-It can also be observed that the scanning patterns match reasonably well
-the transform coefficients in each case, sorting them in an increasing
-order.
-
-The next section contains a summary of the most important studies
-regarding intra coding carried out during the conception of \ac{HEVC}.
+The \ac{MDDT} was motivated by the fact that residuals issued from different
+\acp{IPM} present notable differences and an adapted transform for each
+\ac{IPM} can provide good signal compaction by specialisation.
+An example of this differences has been presented in figure~\ref{fig:mdcs} for
+$4\times4$ prediction residuals.
 
 \subsection{The \acs{DST} as a simplification of the \acs{MDDT}}
 \label{sub:dst_and_mddt}
@@ -1957,7 +1965,7 @@ It was used together with the \ac{DCT} as combinations of horizontal and
 vertical transforms, depending on the \ac{IPM}.
 However, it was not adopted in the \ac{TMuC} until the design of a fast
 algorithm of the \ac{DST}, which introduced almost no increase in the
-decoding time with regard to the \ac{DCT}.
+decoding time with regards to the \ac{DCT}.
 It was only then when it fully replaced the \ac{MDDT}~\cite{JCTVC-D048,
 JCTVC-E125, JCTVC-F283, JCTVC-G108}.
 Finally, after many \acp{CE}, cross-checks between companies and
@@ -1976,7 +1984,7 @@ both transforms designs from \S\ref{sec:the_karhunen_loeve_transform}
 \label{sec:the_mode_dependent_directional_transforms}
 
 Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
-\subsection{Encoding and decoding schemes for the \ac{MDDT}}
+\subsection{Encoding and decoding schemes for the \acs{MDDT}}
 \label{sub:encoding_and_decoding_schemes_for_the_mddt}
 
 One of the positive aspects of the \ac{MDDT} is the fact that, despite having
