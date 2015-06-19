@@ -1265,7 +1265,7 @@ The proposed \ac{RDOT} can be expressed as:
 	\A_{opt} = \arg\min\limits_{\A}
 	\sum_{\forall i} \min\limits_{\c_i}
 	\left(
-	{\Vert \x_i - \A^T\c_i \Vert}_2^2 + \lambda\overline{\Vert \c_i \Vert}_0
+	{\Vert \x_i - \A^T\c_i \Vert}_2^2 + \lambda{\Vert \c_i \Vert}_0
 	\right)
 	\label{eqn:rdot-nsep}
 \end{equation}
@@ -1295,7 +1295,7 @@ The relation between the Lagrange multiplier $\lambda$ and $\Delta$ is
 detailed in \S\ref{sub:the_lagrange_multiplier}.
 \begin{equation}
 	J (\lambda) =
-	{\Vert \x - \A^T \c \Vert}_2^2 + \lambda\overline{\Vert \c \Vert}_0
+	{\Vert \x - \A^T \c \Vert}_2^2 + \lambda{\Vert \c \Vert}_0
 	\label{eqn:rdot_metric}
 \end{equation}
 The first part of the equation represents the distortion introduced by
@@ -1456,7 +1456,7 @@ The equation to optimise using separable transforms reads as follows:
   \A_{v_{opt}}, \A_{h_{opt}} = \arg\min\limits_{\A_v,\A_h}
   \left(
   \sum_{\forall i} \min\limits_{\c_i}{\Vert \x_i - \A_v^T\c_i\A_h \Vert}_2^2
-  + \overline{\Vert \c_i \Vert}_0
+  + {\Vert \c_i \Vert}_0
   \right)
 \end{equation}
 
@@ -1591,6 +1591,9 @@ The problem will be tackled in two separate steps:
 	\item Compute the distortion analytically and derive it.
 	\item Compute the rate constraint and derive it.
 \end{enumerate}
+It has been decided to normalise the~\eqref{eqn:rdot_metric} by $N$ (the
+signal dimension) so as to simplify the equations.
+This scaling factor does not affect the solution.
 
 \subsubsection{Derivation of the distortion function}
 \label{ssub:derivation_of_the_distortion_function}
@@ -1599,7 +1602,7 @@ The distortion introduced by the hard-thresholding
 from~\eqref{eqn:hard_threshold} can be expressed as:
 \begin{equation}
 	D
-	= \int_{-\infty}^{\infty} {(x - \hat x)}^2 \P_X (x)\d x
+	= \frac{1}{N} \int_{-\infty}^{\infty} N {(x - \hat x)}^2 \P_X (x)\d x
 	= \int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
 	\label{eqn:int_distortion}
 	x^2\P_X (x) \d x
@@ -1642,7 +1645,6 @@ elements in a vector.
 Consequently, the constraint can be expressed as:
 \begin{equation}
 	R 
-	= \overline{\Vert \c \Vert}_0 = \frac{1}{N}{\Vert \c \Vert}_0
 	= \frac{1}{N} N \P_X\left(\vert X \vert \ge \frac{\Delta}{2}\right)
 	= 1-P_X\left(\vert X \vert < \frac{\Delta}{2}\right)
 	= 1-\int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}\P_X(x)\d x
