@@ -876,7 +876,7 @@ unit vectors, also known as orthonormal vectors, with:
 \begin{equation}
 	\A^T\A = \A\A^T = \I
 \end{equation}
-As a consequence, the inverse matrix of an orthonormal matrix is its
+As a consequence, the inverse matrix of an orthogonal matrix is its
 transposed version:
 \begin{equation}
 	\A^T = \A^{-1}
@@ -1052,7 +1052,7 @@ distortion~\cite{gersho-92-vector-quantization}.
 The \ac{KLT} decorrelates the signal in the transform domain, that is the
 correlation function of the signal in the transform domain $\C_\X$ is a
 diagonal matrix, which can be computed as follows.
-Let $\x$ be a zero-mean process and $\A$ an orthonormal transform, then, in
+Let $\x$ be a zero-mean process and $\A$ an orthogonal transform, then, in
 the transform domain:
 \begin{equation}
 	\X = \A \x \qquad \text{s.t. } \A \A^T = \I
@@ -1249,17 +1249,15 @@ signal in the transform domain.
 The \ac{KLT}, under certain assumptions, provides optimal bit allocation and
 signal decorrelation.
 
-However, state-of-the-art video coding standard, such as \ac{HEVC} take
-advantage of sparse signals.
-There are even syntax elements in \ac{HEVC} to deal with this:
-for a given transformed residual, the position of the last non-zero value is
-signalled, meaning that, instead of explicitly transmitting all the following
-zeroes, it is indicated that from that point onwards, all the following values
-are zero.
-
-In order to better fit the video coding demands, Sezer proposes a kind of
-transforms that take into account the sparsity of the output in their
-design~\cite{sezer-11-phd}.
+Sezer proposes an alternative kind of transforms to minimise the trade-off
+between the distortion and the rate from~\eqref{eqn:lagrangian_rdo} by taking
+into account the sparsity of the output signal in their
+design~\cite{sezer-11-phd,sezer-08-sparse-orthonormal-transforms}.
+This transform, named \ac{RDOT}, contrary to the \ac{KLT}, does not make use
+of the high resolution assumption.
+Instead, the bit-rate constraint is modelled via the sparsity of the
+transformed coefficients, by the introduction of the $\ell_0$ norm, which
+counts the number of non-zero coefficients in a vector.
 The proposed \ac{RDOT} can be expressed as:
 \begin{equation}
 	\A_{opt} = \arg\min\limits_{\A}
@@ -1272,14 +1270,18 @@ The proposed \ac{RDOT} can be expressed as:
 Where $\x_i$ are the input signals, i.e.\ a block of the training set,
 $\c_i$ are its quantised transformed coefficients using the transform
 $\A$.
-$\A^T$ is its transposed matrix, as $\A$ is chosen orthonormal.
+$\A^T$ is its transposed matrix, as $\A$ is chosen orthogonal.
 The constraint in the cost function is the average $\ell_0$ norm of the
 coefficients, i.e.\ the number of non-zero coefficients.
 Finally, $\lambda$ is the Lagrange multiplier of the constraint.
 
-% TODO
-\todo{Recheck the way of introducing the RDOT, Pierrick says I'm doing the
-other way around}
+The fact that this transform design strives to obtain sparse signals in the
+transform domain fits the state-of-the-art video coding standard, \ac{HEVC}.
+There are even syntax elements in \ac{HEVC} that deal with sparsity:
+for a given transformed residual, the position of the last non-zero value is
+signalled, meaning that, instead of explicitly transmitting all the following
+zeroes, it is indicated that from that point onwards, all the following values
+are zero.
 
 A thorough study of~\eqref{eqn:rdot-nsep} analysing its properties and
 consequences is detailed below.
@@ -1314,7 +1316,8 @@ until convergence:
 \subsubsection{Optimal coefficients for a given transform}
 \label{ssub:optimal_coefficients_for_a_given_transform}
 
-The optimal coefficients are obtained by transforming the signal and
+The optimal coefficients that introduce the minimum distortion for a given
+quantisation step $\Delta$ are obtained by transforming the signal and
 hard-thresholing them:
 \begin{equation}
 	\c = \lfloor \X \rfloor = \lfloor \A \x \rfloor
@@ -1376,9 +1379,9 @@ $\A$-independent terms:
 	-2\tr\left(\c_i\x_i^T\A^T\right)
 	\right)
 \end{equation}
-We now define $\Y=\displaystyle\sum_{\forall i}\c_i\x_i^T$ and its SVD
+Defining $\Y=\displaystyle\sum_{\forall i}\c_i\x_i^T$ and its SVD
 decomposition $\Y=\U\Lambdab^{\nicefrac{1}{2}}\V^T$, where $\U$ and $\V$
-are orthonormal and $\Lambdab$ is a positive semi-definite diagonal matrix.
+are orthogonal and $\Lambdab$ is a positive semi-definite diagonal matrix.
 The equation rewrites as follows:
 \begin{equation}
 	\A_{opt} = \arg\min\limits_{\A}
@@ -1396,7 +1399,7 @@ Re-arranging the terms using the trace cyclic property:
 	\right)
 \end{equation}
 Let $\Pb=\V^T\A^T\U$.
-Since $\V$, $\A$ and $\U$ are orthonormal, so is $\Pb$.
+Since $\V$, $\A$ and $\U$ are orthogonal, so is $\Pb$.
 The equation is now:
 \begin{equation}
 	\A_{opt} = \arg\max\limits_{\A}
@@ -1405,18 +1408,17 @@ The equation is now:
 	\right)
 \end{equation}
 Since $\Lambdab$ is a diagonal matrix whose entries are non-negative by
-definition and $\Pb$ is orthonormal, the maximisation is achieved when
+definition and $\Pb$ is orthogonal, the maximisation is achieved when
 $\Pb=\I$:
 \begin{equation}
 	\V^T\A_{opt}^T\U=\I\quad \Rightarrow \quad \A_{opt} = \U\V^T
 \end{equation}
 
 Summing up, the optimal transform is obtained using the SVD decomposition of
-the cross-correlation matrix of the output signal (the transformed and
-quantised coefficients) with the input signal (the intra prediction
-residuals).
+the covariance matrix between the output signal (the transformed and quantised
+coefficients) with the input signal (the intra prediction residuals).
 
-\subsection{Separable \ac{RDOT} design}
+\subsection{Separable \acs{RDOT} design}
 \label{sub:separable_rdot_design}
 
 The methods for transform design and learning presented in the previous
@@ -1453,11 +1455,11 @@ transform, used to transform the columns of $\x$.
 
 The equation to optimise using separable transforms reads as follows:
 \begin{equation}
-  \A_{v_{opt}}, \A_{h_{opt}} = \arg\min\limits_{\A_v,\A_h}
-  \left(
-  \sum_{\forall i} \min\limits_{\c_i}{\Vert \x_i - \A_v^T\c_i\A_h \Vert}_2^2
-  + {\Vert \c_i \Vert}_0
-  \right)
+	\A_{v_{opt}}, \A_{h_{opt}} = \arg\min\limits_{\A_v,\A_h}
+	\left(
+	\sum_{\forall i} \min\limits_{\c_i}{\Vert \x_i - \A_v^T\c_i\A_h \Vert}_2^2
+	+ {\Vert \c_i \Vert}_0
+	\right)
 \end{equation}
 
 This minimisation problem can be solved in a similar way to the non-separable
@@ -1469,21 +1471,21 @@ hard-thresholding the components of $\X_i=\A_v\x_i\A_h^T$ with $\sqrt{\lambda}$.
 \subsubsection{Optimal vertical transform for given coefficients}
 Now, the vertical transform needs to be updated accordingly:
 \begin{equation}
-  \A_{v_{opt}} = \text{arg}\min\limits_{\A_v}
-  \left(
-  \sum_{\forall i} {\Vert \x_i - \A_v^T\c_i\A_h \Vert}_2^2
-  \right)
-  \qquad \text{s.t. } \A_v\A_v^T = \I
+	\A_{v_{opt}} = \text{arg}\min\limits_{\A_v}
+	\left(
+	\sum_{\forall i} {\Vert \x_i - \A_v^T\c_i\A_h \Vert}_2^2
+	\right)
+	\qquad \text{s.t. } \A_v\A_v^T = \I
 \end{equation}
 Expanding the expression and grouping the terms as in the non-separable
-the cross-correlation matrix $\Y_v$ can be defined as:
+the covariance matrix $\Y$ can be defined as:
 \begin{equation}
-\Y_v = \sum_{\forall i} \c_i\A_h\x_i =
-\U_v\Lambdab^{1/2}\V_h^T
+\Y = \sum_{\forall i} \c_i\A_h\x_i =
+\U\Lambdab^{1/2}\V^T
 \end{equation}
 Then the optimal transform is given by:
 \begin{equation}
-  \A_{v_{opt}} = \U_h\V_h^T
+  \A_{v_{opt}} = \U\V^T
 \end{equation}
 \subsubsection{Optimal coefficients for updated vertical transform}
 As in the non-separable problem, the optimal coefficients $\c_i$ are found by
@@ -1493,21 +1495,21 @@ the previous step.
 \subsubsection{Optimal horizontal transform for given coefficients}
 Now, the horizontal transform needs to be updated accordingly:
 \begin{equation}
-  \A_{h_{opt}} = \text{arg}\min\limits_{\A_h}
-  \left(
-  \sum_{\forall i} {\Vert \x_i - \A_{v_{opt}}^T\c_i\A_h \Vert}_2^2
-  \right)
-  \qquad \text{s.t. } \A_h\A_h^T = \I
+	\A_{h_{opt}} = \text{arg}\min\limits_{\A_h}
+	\left(
+	\sum_{\forall i} {\Vert \x_i - \A_{v_{opt}}^T\c_i\A_h \Vert}_2^2
+	\right)
+	\qquad \text{s.t. } \A_h\A_h^T = \I
 \end{equation}
 Expanding the expression and grouping the terms as in the non-separable
-the cross-correlation matrix $\Y_h$ can be defined as:
+the covariance matrix $\Y$ can be defined as:
 \begin{equation}
-  \Y_h = \sum_{\forall i} \c_i^T\A_{v_{opt}}\x_i =
-\U_v\Lambdab^{1/2}\V_h^T
+	\Y = \sum_{\forall i} \c_i^T\A_{v_{opt}}\x_i =
+\U\Lambdab^{1/2}\V^T
 \end{equation}
 Then the optimal transform is given by:
 \begin{equation}
-  \A_{h_{opt}} = \U_v\V_v^T
+	\A_{h_{opt}} = \U\V^T
 \end{equation}
 
 \subsection{The Lagrange multiplier and the zero norm}
@@ -1532,7 +1534,7 @@ sparsity than the generic \ac{DCT}:
 its value is above the \ac{DCT} on zero, meaning that the resulting
 coefficients have more zeros when using the \ac{RDOT}.
 Using different the transforms, modifies the resulting \ac{PDF}, but since the
-used transforms are orthonormal, the variance remains unaltered.
+used transforms are orthogonal, the variance remains unaltered.
 Residuals are computed as the difference between predicted and original
 blocks, meaning they are prediction errors.
 These errors are made by excess or defect evenly, evidenced by their
@@ -1908,13 +1910,17 @@ regarding intra coding carried out during the conception of \ac{HEVC}.
 \index{KTA}
 \index{TMuC}
 
+In \S~\ref{sub:particular_case_dst} the \ac{DST} has been presented as the
+\ac{KLT} for intra prediction residuals.
 The way of generating the prediction residuals leads to a particular
 kind of signals with properties that differ from those of natural
 images.
 As a result, the \ac{DCT} is no longer a good approximation of the
 \ac{KLT}.
-For this reason, many studies were carried out in order to find better
-performing transform for these signals.
+However, it was not straightforward to realise that the \ac{KLT} for those
+signals is the \ac{DST}:
+many studies were carried out in order to find better performing transform for
+these signals.
 
 Over the \ac{HEVC} standardisation phase, various techniques for
 improving the performance of the H.264/\acs{MPEG}-4 \acs{AVC} were
