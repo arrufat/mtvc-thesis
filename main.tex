@@ -997,12 +997,38 @@ different modellings of the rate constraint.
 The components of source signals within a residual block are correlated with
 one another.
 This correlation is expressed in terms of a correlation matrix containing the
-linear inter pixel correlations:
-% TODO
-\todo{Example of a correlation matrix}
-\begin{equation}
-	\Gamma_{x_n,x_m} = etc
-\end{equation}
+linear inter pixel correlations.
+For two $N$-dimensional signals $\x,\y$, the covariance signal between them
+can be computed as:
+\begin{align}
+	\nonumber
+	\C_{\x,\y} & = \E\left\{\x\y^T\right\} =
+	\E\left\{
+	\begin{bmatrix}
+		x_0 \\ x_1 \\ \vdots \\ x_{N-1}
+	\end{bmatrix}
+	\begin{bmatrix}
+		y_0 & y_1 & \cdots & y_{N-1}
+	\end{bmatrix}
+	\right\} \\
+	& = \E\left\{
+	\begin{bmatrix}
+		x_0y_0 & x_0y_1 & \hdots & x_{0}y_{N-1} \\
+		x_1y_0 & x_1y_1 & \hdots & x_{1}y_{N-1} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		x_{N-1}y_0 & x_{N-1}y_1 & \hdots & x_{N-1}y_{N-1}
+	\end{bmatrix}
+	\right\} \\ \nonumber
+	& =
+	\begin{bmatrix}
+		\E\left\{x_0y_0\right\} & \E\left\{x_0y_1\right\} & \hdots & \E\left\{x_{0}y_{N-1}\right\} \\
+		\E\left\{x_1y_0\right\} & \E\left\{x_1y_1\right\} & \hdots & \E\left\{x_{1}y_{N-1}\right\} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		\E\left\{x_{N-1}y_0\right\} & \E\left\{x_{N-1}y_1\right\} & \hdots & \E\left\{x_{N-1}y_{N-1}\right\}
+	\end{bmatrix}
+\end{align}
+If $\x=\y$, the covariance matrix is the correlation matrix of $\x$.
+
 However, it is indeed, possible to select an orthogonal matrix $\A$, for
 a given \ac{PDF} describing the source that will make $\X=\A\x$ have
 pairwise uncorrelated components~\cite{gersho-92-vector-quantization}.
