@@ -849,13 +849,23 @@ the signal accurately, on the right signal (in red), one coordinate, namely
 the vertical dimension is enough to provide an equally accurate signal
 representation, since the horizontal dimension remains constant.
 
-\subsection{Block-based transforms}
-\label{sub:block_based_transforms}
+\subsection{Block transforms}
+\label{sub:block_transforms}
 
-Amongst all the different kinds of transforms available, the ones used
-in image and video coding applications are the block-based transforms
-due to the good trade-off they provide in terms of complexity and
-performance.
+Block-based coding is widely adopted in image/video systems, such as
+\acs{JPEG}, \ac{AVC} and \ac{HEVC}.
+In these systems, an image is divided into non-overlapping blocks and for each
+
+In these systems, the image to be transformed is split into non-overlapping
+blocks, and each one will be transformed independently.
+Although this has the disadvantage of not being able to exploit correlations
+of different blocks, contrary to wavelet transforms used in \acs{JPEG}
+2000~\cite{jpeg2000}, the block-based scheme leads to a reduced complexity and
+allows treating each block differently according to its
+content~\cite{xu-09-intra-predictive-transforms}.
+
+Since block transforms are used exclusively in state-of-the-art video coding
+systems, they will be the targeted type of transforms in this thesis.
 
 \subsection{Orthogonal transforms}
 \label{sub:orthogonal_transforms}
@@ -898,9 +908,6 @@ The main disadvantage of this approach is the number of calculations
 required to obtain the transformed signal: for a $N \times N$ block, the
 number of operations required to transform it in a non-separable way is:
 $N^4$ multiplications and $N^2(N^2-1)$ additions.
-
-% TODO
-\todo{illustration on how a $4\times4$ block becomes $16\times1$}
 
 \begin{figure}[tb]
 	\centering
@@ -974,15 +981,16 @@ Since the objective of the transforms is to be able to represent the signal
 with as few coefficients as possible while minimising the distortion
 introduced by the quantisation, transform design methods need to consider
 trade-offs between the distortion and the number of bits needed to represent
-those signals in the transform domain.
+those signals in the transform domain, as shown previously in
+\S\ref{sub:rate_distortion_optimisation}.
 
 Transform design methods agree on how the distortion is evaluated, namely
 using the \ac{MSE} from~\eqref{eqn:mse}.
-However, different transform designs exist depending on the used rate
-model.
+However, different transform designs exist depending on how the bit-rate is
+estimated and modelled.
 
-Next sections will study different transform design approaches based on,
-amongst others, different modellings of the rate constraint.
+Next sections will study different transform design approaches based on
+different modellings of the rate constraint.
 \section{The Karhunen-Loève transform}
 \label{sec:the_karhunen_loeve_transform}
 \index{KLT}
@@ -1417,7 +1425,7 @@ The equation to optimise using separable transforms reads as follows:
   \A_{v_{opt}}, \A_{h_{opt}} = \arg\min\limits_{\A_v,\A_h}
   \left(
   \sum_{\forall i} \min\limits_{\c_i}{\Vert \x_i - \A_v^T\c_i\A_h \Vert}_2^2
-  + {\Vert \c_i \Vert}_0
+  + \overline{\Vert \c_i \Vert}_0
   \right)
 \end{equation}
 
