@@ -1039,22 +1039,21 @@ stored more efficiency~\cite{rao-01-transform-data-compression-book}.
 In this section, the \ac{KLT} is presented under its well-known optimal
 conditions: Gaussian sources with high resolution quantisation
 assumptions~\cite{goyal-00-high-resolution}.
-The high resolution assumption states that the number of quantisation
-levels is high, the quantisation step size is small enough to consider the
+The high resolution assumption states that the number of quantisation levels
+is high and the quantisation step size is small enough to consider the
 \ac{PDF} constant for each quantisation interval.
 
 Under those conditions, the \ac{KLT} is the transform that achieves optimal
-bit allocation by distributing the transformed coefficient variances in such a
-way as to minimise their geometric
-mean~\cite{jayant-84-digital-coding-waveforms} and minimises the overall
+bit allocation for the quantisation of transform coefficients by distributing
+their variances in such a way as to minimise their geometric
+mean~\cite{jayant-84-digital-coding-waveforms}, while minimising the overall
 distortion~\cite{gersho-92-vector-quantization}.
 
 The \ac{KLT} decorrelates the signal in the transform domain, that is the
 correlation function of the signal in the transform domain $\C_\X$ is a
-diagonal matrix.
-It can be computed as follows.
-Let $\x$ be a zero-mean process and $\A$ an orthonormal transform.
-In the transform domain:
+diagonal matrix, which can be computed as follows.
+Let $\x$ be a zero-mean process and $\A$ an orthonormal transform, then, in
+the transform domain:
 \begin{equation}
 	\X = \A \x \qquad \text{s.t. } \A \A^T = \I
 \end{equation}
@@ -1231,13 +1230,13 @@ An explanation on the adoption of the \ac{DST} into \ac{HEVC} is detailed in
 Chapter~\ref{cha:the_mode_dependent_directional_transforms}, more precisely in
 \S\ref{sub:dst_and_mddt}.
 
-\subsubsection{Final note on the \ac{KLT}}
-\label{ssub:final_note_on_the_klt}
+\subsection{Final note on the \ac{KLT}}
+\label{sub:final_note_on_the_klt}
 
 The \ac{KLT} is often presented as the optimal transform, sometimes even for
 all possible sources of signals.
 However, it has been proved to be suboptimal in the transform coding / bit
-allocation sense~\cite{effros-04-suboptimal-klt}.
+allocation sense in some cases~\cite{effros-04-suboptimal-klt}.
 For this reason, next section studies another kind of transform design that
 leads to optimal transforms under different conditions.
 
