@@ -638,8 +638,12 @@ orders (in different colours), as presented in the lower part of
 figure~\ref{fig:mdcs}.
 An adapted mode to different patterns ensures, in average, a correct order of
 the coefficients that will group all the zeroes
-together~\cite{sole-12-transform-coefficient-coding,
-ye-08-intra-directional-scanning-mddt}.
+together.
+The patterns are described for $4\times4$ blocks, and the same pattern is used
+on higher block sizes, which are recursively split into 4 sub-blocks until
+size $4\times4$ is reached~\cite{sole-12-transform-coefficient-coding}.
+An appropriate scanning is crucial for the entropy
+coding~\cite{ye-08-intra-directional-scanning-mddt}.
 
 Signalling is also conveyed into the bitstream at this point, and the
 entropy coder ensures a correct binarisation while using the adequate
@@ -1904,9 +1908,6 @@ This heterogeneity can be harmful for the entropy coding and the
 These scanning patterns, presented in the lower part of
 figure~\ref{fig:mdcs} depend only on the \ac{IPM} used to compute the
 residual.
-The patterns are described for $4\times4$ blocks, and the same pattern is used
-on higher block sizes, which are recursively split into 4 sub-blocks until
-size $4\times4$ is reached.
 
 The \ac{MDDT} was motivated by the fact that residuals issued from different
 \acp{IPM} present notable differences and an adapted transform for each
