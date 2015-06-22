@@ -1949,26 +1949,39 @@ In \ac{HEVC}, this means having one adapted transform in each one of the 35
 	\label{fig:residual_differences}
 \end{figure}
 
-An implementation of the \ac{MDDT} inside a video coding scheme is exemplified
-in figure~\ref{fig:mddt_enc}.
+A possible implementation of the \ac{MDDT} inside a video coding scheme is
+exemplified in figure~\ref{fig:mddt_enc}.
 The encoder works in the same way as the hybrid coder from
 figure~\ref{fig:hybrid_video_coding_scheme}, with the exception that, in this
 case, each \ac{IPM} will be tested in the \ac{RDO} loop with its corresponding
 transform.
-The scheme shows that, depending on the \ac{IPM} the residual has been
-calculated from, it will present a certain pattern, that will be matched by an
-adapted transform.
+Three examples of residuals are shown: 10, 18 and 26, which are obtained as
+the differences between the predictions derived from their corresponding
+\acp{IPM} and the original image.
+When inside the \ac{RDO} loop, each \ac{IPM} is tested against its residual
+using the assigned transform.
+Then, the \ac{IPM} that provides the best rate-distortion trade-off is
+selected and signalled into the bitstream.
 
-Figure~\ref{fig:mddt_dec} contains a decoder using the \ac{MDDT} technique.
+In the decoder side (figure~\ref{fig:mddt_dec}), the only information needed
+to decode the block is represented in coloured blocks:
+the transformed coefficients and the used \ac{IPM}.
 No additional information has to be sent to the decoder, with regards to the
 hybrid video coding scheme:
-using the already signalled prediction mode, the decoder will know which
-transform to use, without having to perform any calculations or take any
-decisions.
+The signalled \ac{IPM} allows the decoder to know which transform to use to
+convert the transformed coefficients back to the pixel domain, without having
+to perform any extra calculations or take any decisions.
 
-There might be an increase in the complexity of both \ac{MDDT} encoder and
-decoder, depending on how efficient the implementation of the adapted
-transforms is.
+One of the positive aspects of the \ac{MDDT} is the fact that, despite having
+more than one transform for a particular block size, only the transform
+corresponding to the selected \ac{IPM} will be used to transform that
+residual.
+This means that, the \ac{IPM} defines which transform is used, so there is not
+an extra step in the \ac{RDO} loop for the transform.
+However, there might be an increase in the complexity of both \ac{MDDT}
+encoder and decoder.
+This complexity increase it will not be due to the number of transforms, but
+to the possible lack of fast algorithms for the adapted transforms.
 
 \begin{figure}[tp]
 	\centering
@@ -2059,30 +2072,6 @@ Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
 \subsection{Encoding and decoding schemes for the \acs{MDDT}}
 \label{sub:encoding_and_decoding_schemes_for_the_mddt}
 
-One of the positive aspects of the \ac{MDDT} is the fact that, despite having
-more than one transform for a particular block size, only the transform
-corresponding to the selected \ac{IPM} will be used to transform that
-residual.
-This means that, the \ac{IPM} defines which transform is used, so there is not
-an extra step in the \ac{RDO} loop for the transform.
-The increase in the coding complexity is not due to the quantity of
-transforms, but to the lack of fast algorithms for the transforms.
-
-Figure~\ref{fig:enc_mddt} illustrates how the \ac{MDDT} can be implemented in
-the encoder.
-Three examples of residuals are shown: 10, 18 and 26, which are obtained as
-the differences between the predictions derived from their corresponding
-\acp{IPM} and the original image.
-When inside the \ac{RDO} loop, each \ac{IPM} is tested against its residual
-using the assigned transform.
-Then, the \ac{IPM} that provides the best rate-distortion trade-off is
-selected and signalled into the bitstream.
-
-In the decoder side (figure~\ref{fig:dec_mddt}), the only information needed
-is represented in coloured blocks: the transformed coefficients and the used
-\ac{IPM}.
-The signalled \ac{IPM} allows the decoder to know which transform to use to
-convert the transformed coefficients back to the pixel domain.
 
 \subsection{Separable implementations}
 \label{sub:separable_implementations}
