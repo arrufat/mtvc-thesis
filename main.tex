@@ -1904,16 +1904,85 @@ Depending on the selected prediction mode, transformed coefficients might
 present different patterns, making low and high values to appear at different
 block positions.
 This heterogeneity can be harmful for the entropy coding and the
-\ac{CABAC}, which is why different scanning patterns exist in \ac{HEVC}.
+\ac{CABAC}, which is one of the reasons why different scanning patterns exist
+in \ac{HEVC}~\cite{sole-12-transform-coefficient-coding}.
 These scanning patterns, presented in the lower part of
 figure~\ref{fig:mdcs} depend only on the \ac{IPM} used to compute the
 residual.
 
 The \ac{MDDT} was motivated by the fact that residuals issued from different
-\acp{IPM} present notable differences and an adapted transform for each
-\ac{IPM} can provide good signal compaction by specialisation.
-An example of this differences has been presented in figure~\ref{fig:mdcs} for
-$4\times4$ prediction residuals.
+\acp{IPM} present notable differences.
+An example of this differences is presented in
+figure~\ref{fig:residual_differences} for $4\times4$ and $8\times8$ prediction
+residuals.
+An adapted transform for each \ac{IPM} can provide good signal compaction by
+specialisation.
+In \ac{HEVC}, this means having one adapted transform in each one of the 35
+\acp{IPM}.
+
+\begin{figure}[tb]
+	\centering
+	\subfloat[$4\times4$ --- \acs{IPM} 6]
+	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s4-p06.png}}
+	\hfill
+	\subfloat[$4\times4$ --- \acs{IPM} 10]
+	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s4-p10.png}}
+	\hfill
+	\subfloat[$4\times4$ --- \acs{IPM} 18]
+	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s4-p18.png}}
+	\hfill
+	\subfloat[$4\times4$ --- \acs{IPM} 26]
+	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s4-p26.png}}
+	\\
+	\subfloat[$8\times8$ --- \acs{IPM} 6]
+	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s8-p06.png}}
+	\hfill
+	\subfloat[$8\times8$ --- \acs{IPM} 10]
+	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s8-p10.png}}
+	\hfill
+	\subfloat[$8\times8$ --- \acs{IPM} 18]
+	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s8-p18.png}}
+	\hfill
+	\subfloat[$8\times8$ --- \acs{IPM} 26]
+	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s8-p26.png}}
+	\caption{Residual differences for different \acsp{IPM}}
+	\label{fig:residual_differences}
+\end{figure}
+
+An implementation of the \ac{MDDT} inside a video coding scheme is exemplified
+in figure~\ref{fig:mddt_enc}.
+The encoder works in the same way as the hybrid coder from
+figure~\ref{fig:hybrid_video_coding_scheme}, with the exception that, in this
+case, each \ac{IPM} will be tested in the \ac{RDO} loop with its corresponding
+transform.
+The scheme shows that, depending on the \ac{IPM} the residual has been
+calculated from, it will present a certain pattern, that will be matched by an
+adapted transform.
+
+Figure~\ref{fig:mddt_dec} contains a decoder using the \ac{MDDT} technique.
+No additional information has to be sent to the decoder, with regards to the
+hybrid video coding scheme:
+using the already signalled prediction mode, the decoder will know which
+transform to use, without having to perform any calculations or take any
+decisions.
+
+There might be an increase in the complexity of both \ac{MDDT} encoder and
+decoder, depending on how efficient the implementation of the adapted
+transforms is.
+
+\begin{figure}[tp]
+	\centering
+	\input{./figures/mddt_enc.tex}
+	\caption{Encoding scheme for the \acs{MDDT}}
+	\label{fig:mddt_enc}
+\end{figure}
+
+\begin{figure}[tp]
+	\centering
+	\input{./figures/mddt_dec.tex}
+	\caption{Decoding scheme for the \acs{MDDT}}
+	\label{fig:mddt_dec}
+\end{figure}
 
 \subsection{The \acs{DST} as a simplification of the \acs{MDDT}}
 \label{sub:dst_and_mddt}
@@ -1921,8 +1990,8 @@ $4\times4$ prediction residuals.
 \index{KTA}
 \index{TMuC}
 
-In \S~\ref{sub:particular_case_dst} the \ac{DST} has been presented as the
-\ac{KLT} for intra prediction residuals.
+The \ac{DST} has been presented as the \ac{KLT} for intra prediction residuals
+in \S\ref{sub:particular_case_dct}.
 The way of generating the prediction residuals leads to a particular
 kind of signals with properties that differ from those of natural
 images.
@@ -2009,25 +2078,11 @@ using the assigned transform.
 Then, the \ac{IPM} that provides the best rate-distortion trade-off is
 selected and signalled into the bitstream.
 
-\begin{figure}[tp]
-	\centering
-	\input{./figures/mddt_enc.tex}
-	\caption{Encoding scheme for the \ac{MDDT}}
-	\label{fig:enc_mddt}
-\end{figure}
-
 In the decoder side (figure~\ref{fig:dec_mddt}), the only information needed
 is represented in coloured blocks: the transformed coefficients and the used
 \ac{IPM}.
 The signalled \ac{IPM} allows the decoder to know which transform to use to
 convert the transformed coefficients back to the pixel domain.
-
-\begin{figure}[tp]
-	\centering
-	\input{./figures/mddt_dec.tex}
-	\caption{Decoding scheme for the \ac{MDDT}}
-	\label{fig:dec_mddt}
-\end{figure}
 
 \subsection{Separable implementations}
 \label{sub:separable_implementations}
