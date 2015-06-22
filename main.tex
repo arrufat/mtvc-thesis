@@ -1874,7 +1874,7 @@ The \ac{DCT} and \ac{DST} used in \ac{HEVC} have been obtained as the
 The \ac{RDOT} finds the optimal balance between the distortion
 introduced and a rate constraint, expressed in terms of signal sparseness.
 A thorough study on its design has been carried out to justify the
-appropriateness of the approach.
+appropriateness of the approach, lacking in current literature.
 
 In the next chapter, both transform designs will be tested in a real
 scenario to find out their performances in video coding.
@@ -1897,7 +1897,7 @@ specifically for each \acf{IPM}.
 The \ac{MDDT} was proposed during the \ac{HEVC} standardisation phase, but is
 was finally discarded in favour of a new transform, the \ac{DST}.
 
-\subsection{Motivation of the \acs{MDDT}}
+\subsection{Motivation and principles of the \acs{MDDT}}
 \label{sub:motivation_of_the_mddt}
 
 Depending on the selected prediction mode, transformed coefficients might
@@ -1979,9 +1979,8 @@ residual.
 This means that, the \ac{IPM} defines which transform is used, so there is not
 an extra step in the \ac{RDO} loop for the transform.
 However, there might be an increase in the complexity of both \ac{MDDT}
-encoder and decoder.
-This complexity increase it will not be due to the number of transforms, but
-to the possible lack of fast algorithms for the adapted transforms.
+encoder and decoder due not to the number of transforms, but to the possible
+lack of fast algorithms for the adapted transforms.
 
 \begin{figure}[tp]
 	\centering
@@ -2065,13 +2064,13 @@ both transforms designs from \S\ref{sec:the_karhunen_loeve_transform}
 (\ac{KLT}) and \S\ref{sec:the_rate_distortion_optimised_transform}
 (\ac{RDOT}), in both separable and non-separable fashions.
 
-\section{The mode dependent directional transforms}
-\label{sec:the_mode_dependent_directional_transforms}
+\section{Design and implementation of \acs{MDDT} systems}
+\label{sec:design_and_implementation_of_mddt_systems}
 
 Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
-\subsection{Encoding and decoding schemes for the \acs{MDDT}}
-\label{sub:encoding_and_decoding_schemes_for_the_mddt}
 
+Four \ac{MDDT} systems will be designed, implemented and tested in this
+section.
 
 \subsection{Separable implementations}
 \label{sub:separable_implementations}
@@ -2099,6 +2098,13 @@ Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
 \chapter{The mode-dependent transform competition}
 \label{cha:the_mode_dependent_transform_competition}
 \chaptertoc
+
+\begin{figure}[tp]
+	\centering
+	\includegraphics{./figures/clustering_plot.pdf}
+	\caption{Clustering and transform learning}
+	\label{fig:clustering}
+\end{figure}
 
 \vspace{0.5cm}
 Maybe explain the VCIP
