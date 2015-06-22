@@ -2,7 +2,7 @@
 
 \def \xmax{4}
 \def \ymax{4}
-\draw[thick, ystep=1, xstep=1]
+\draw[ystep=1, xstep=1]
 	(0,0) grid (\xmax,\ymax);
 
 \foreach \y in {0.5,1.5,...,\ymax}
@@ -37,7 +37,7 @@
 \def\startx{-6}
 \def\starty{-2}
 
-\draw[thick, ystep=1, xstep=1]
+\draw[ystep=1, xstep=1]
 	(\startx,\starty) grid (\startx+\xmax,\starty+\ymax);
 \foreach \x in {0,1,...,15}
 {%
