@@ -17,12 +17,13 @@
 \contourlength{0.01em}
 
 \usepackage{color}
-\definecolor{almostwhite}{rgb}{0.9,0.9,0.95}
+\definecolor{yellowish}{rgb}{1,1,0.5}
+\definecolor{redish}{rgb}{1,0.25,0.25}
 \providecommand{\todo}[1]{
 	\begin{center}
-		\colorbox{almostwhite}{
-			\begin{minipage}{0.85\linewidth}
-				\textbf{TODO:} #1
+		\colorbox{yellowish}{
+			\begin{minipage}{0.95\linewidth}
+				\textbf{\color{redish}{TODO}:} #1
 			\end{minipage}
 		}
 	\end{center}
@@ -1107,7 +1108,7 @@ Where:
 \index{Toeplitz matrix}
 
 One of the most used transforms in image and video coding is the
-\ac{DCT}.
+\acf{DCT}.
 In this section, the \ac{DCT} is justified over a particular kind
 of signals: natural images.
 The statistics of pixels in natural images match closely a first order
@@ -1606,7 +1607,7 @@ the optimal value of the Lagrange multiplier $\lambda$ has been claimed
 to be straightforward to obtain.
 However, no analytical way of proving its optimality has been found in
 literature.
-Hence, a complete study has been carried out below.
+Hence, a detailed study has been carried out below.
 
 In order to find the optimal $\lambda$ from~\eqref{eqn:rdot_metric},
 which describes the trade-off between the distortion and the rate,
@@ -1873,8 +1874,8 @@ The \ac{DCT} and \ac{DST} used in \ac{HEVC} have been obtained as the
 
 The \ac{RDOT} finds the optimal balance between the distortion
 introduced and a rate constraint, expressed in terms of signal sparseness.
-A thorough study on its design has been carried out to justify the
-appropriateness of the approach, lacking in current literature.
+A thorough study on its design based on the $\ell_0$ norm has been carried out
+to justify the appropriateness of the approach, lacking in current literature.
 
 In the next chapter, both transform designs will be tested in a real
 scenario to find out their performances in video coding.
@@ -2067,30 +2068,108 @@ both transforms designs from \S\ref{sec:the_karhunen_loeve_transform}
 \section{Design and implementation of \acs{MDDT} systems}
 \label{sec:design_and_implementation_of_mddt_systems}
 
-Explain the VCIP publication~\cite{arrufat-14-mddt-rdot}
+The experiment carried out in this section is closely related to the
+publication in~\cite{arrufat-14-mddt-rdot}.
 
-Four \ac{MDDT} systems will be designed, implemented and tested in this
-section.
+\subsection{Transform learning}
+\label{sub:mddt_transform_learning}
 
-\subsection{Separable implementations}
-\label{sub:separable_implementations}
+The transforms designs presented in the previous Chapter, namely the \ac{KLT}
+and the \ac{RDOT}, will be tested in this Section, using the \ac{MDDT}
+technique.
+This experiment will unveil the ability of each design approach to adapt to a
+particular kind of signals and to fit the video coding demands.
+
+% TODO
+\todo{Choose one of the following learning sets}
+
+In order to build the learning set, intra prediction residuals issued from
+\ac{HEVC} encodings at four \acp{QP} (22, 27, 32, 37), coming from 59
+sequences at different resolutions ($1920\times1080$, $1280\times720$,
+$800\times480$) and various frame rates (25, 30, 50, 60, 100, 120, 240
+frames per second).
+
+In order to build the learning set, intra prediction residuals issued from
+\ac{HEVC} encodings at four \acp{QP} (22, 27, 32, 37), coming from classes B
+and C from the \ac{HEVC} test set, defined by the \ac{JCT-VC} in the common
+test conditions~\cite{bossen-12-common-test-conditions}.
+These classes contain sequences of $1920\times1080$ and $800\times480$,
+respectively, and frame rates of 24, 30, 50 and 60 frames per second.
+
+These residuals, grouped by the \ac{IPM} they are issued from, have served to
+compute an adapted transform per \ac{IPM} using both \ac{KLT} and \ac{RDOT}
+design approaches in separable and non-separable versions.
+
+In order to validate intuitively the results of the iterative learning
+algorithm for the \ac{RDOT}, presented in
+\S\ref{sec:the_rate_distortion_optimised_transform},
+figure~\ref{fig:rdot_metric_learning} shows the value of the \ac{RDOT} metric
+during the learning phase, averaged accross all \acp{IPM}, for separable and
+non-separable designs.
+
+\begin{figure}[tb]
+	\centering
+	% TODO
+	\todo{
+	\begin{itemize}
+		\item Figure showing the learning behaviour.
+		\item Compare sep and nsep \ac{RDOT}.
+		\item Add marks for sep and nsep \ac{KLT} values.
+		\item Add marks for the \ac{DST} and \ac{DCT} used in HEVC.
+		\item For which \ac{IPM} \to{} average?
+	\end{itemize}
+	}
+	% \includegraphics[width=0.8\linewidth]{name.ext}
+	\caption{\ac{RDOT} metric evolution during different transform learnings}
+	\label{fig:rdot_metric_learning}
+\end{figure}
+
+As expected, the non-separable \ac{RDOT} presents a lower metric value than
+the separable version.
+As stated in Chapter~\ref{cha:transform_coding}, non-separable transforms are
+able to exploit any linear correlation between a pair of pixels in a block,
+allowing for sparser signals in the transform domain.
+Furthermore, the figure also contains the \ac{RDOT} metric evaluated on the
+\ac{KLT}, both separable and non-separable, and the default \ac{HEVC}
+transforms.
+The use of this metric corroborates some points stated in
+\$\ref{sub:particular_case_dst} in the \ac{BD}-rate domain that justified the
+use of the \ac{DST}-VII over the \ac{DCT}-II:
+the value of the metric using the \ac{DST}-VII is notably lower than that of
+the \ac{DCT}-II.
+
+After having corroborated that the learning has output better performing
+transforms in terms of distortion and sparseness, their implementation on top
+of \ac{HEVC} is tested and discussed in next section.
+
+\subsection{\acs{MDDT} results on video coding}
+\label{sub:mddt_results_on_video_coding}
 
 
-\subsubsection{\ac{KLT}-based \ac{MDDT}}
-\label{ssub:sep_klt_based_mddt}
-\subsubsection{\ac{RDOT}-based \ac{MDDT}}
-\label{ssub:sep_rdot_based_mddt}
-
-\subsection{Non-separable implementations}
-\label{sub:non_separable_implementations}
-
-\subsubsection{\ac{KLT}-based \ac{MDDT}}
-\label{ssub:nsep_klt_based_mddt}
-\subsubsection{\ac{RDOT}-based \ac{MDDT}}
-\label{ssub:nsep_rdot_based_mddt}
 
 \section{Conclusions}
 \label{sec:conclusions}
+
+Transform designs presented in Chapter~\ref{cha:transform_coding}, namely the
+\ac{KLT} and the \ac{RDOT}, have been put to the test through the \ac{MDDT}, a
+technique for intra coded blocks that consists in designing an adapted
+transform per \ac{IPM}.
+During the learning phase, the \ac{RDOT} metric has presented coherent results
+with, corroborating some known facts in the \ac{BD}-rate domain:
+for intra prediction residuals, the \ac{DST}-VII has a better \ac{BD}-rate
+score than the \ac{DCT}-II, and so does using the \ac{RDOT} metric.
+
+The designed transforms have been tested in a modified version of \ac{HEVC}
+using the \ac{MDDT} technique.
+Non-separable transforms present a significant improvement in terms of
+bit-rate savings over their separable counterparts.
+Moreover, the \ac{RDOT} design approach has provided better results in terms
+of \ac{BD}-rate than the \ac{KLT}.
+Consequently, the \ac{KLT} will not be considered in the upcoming sections.
+
+The following chapter presents an improvement on \ac{MDDT}, which will allow
+transforms to be better adapted to intra prediction residuals and provide new
+coding alternatives to \ac{HEVC}.
 
 \part{Contributions}
 \label{prt:contributions}
