@@ -2181,7 +2181,7 @@ coding alternatives to \ac{HEVC}.
 \begin{figure}[tp]
 	\centering
 	\includegraphics{./figures/clustering_plot.pdf}
-	\caption{Clustering and transform learning}
+	\caption{Clustering and transform learning for a given set of residuals}
 	\label{fig:clustering}
 \end{figure}
 
@@ -2194,6 +2194,21 @@ Maybe explain the VCIP
 	\item explain VCIP 2014~\cite{arrufat-14-transform-competition-rdot}
 	\item explain ICIP 2015~\cite{arrufat-15-mdtc}
 \end{itemize}
+
+Chapter~\ref{cha:the_mode_dependent_directional_transforms} introduced the
+\acf{MDDT} technique, its origins and motivation and how it was discarded in
+the final \ac{HEVC} standard in favour of a more simplified approach.
+However, the \ac{MDDT} technique has good potential when used with \acp{RDOT},
+especially in their non-separable design.
+
+This Chapter is focused on improving upon the \ac{MDDT} technique by
+increasing the number of transform.
+The main idea is to provide a fixed number of transform per \acf{IPM} that
+will compete against each other in the \ac{RDO} loop, in the same ways as
+block sizes and \acp{IPM} do.
+This implies that, for a given block size and \ac{IPM}, there will be no
+longer a unique transform, but a set of them, and the encoder will choose the
+one that provides the best trade-off in terms of rate-distortion.
 
 \chapter{Incomplete transforms}
 \label{cha:incomplete_transforms}
