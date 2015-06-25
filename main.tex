@@ -14,6 +14,7 @@
 \usepackage{nicefrac}
 \usepackage{contour} % for inexisting bold symbols
 \usepackage{enumitem} % for custom labels
+\usepackage{algorithm2e}
 \contourlength{0.01em}
 
 \usepackage{color}
@@ -1484,6 +1485,7 @@ The equation to optimise using separable transforms reads as follows:
 	\sum_{\forall i} \min\limits_{\c_i}{\Vert \x_i - \A_v^T\c_i\A_h \Vert}_2^2
 	+ {\Vert \c_i \Vert}_0
 	\right)
+	\label{eqn:rdot-sep}
 \end{equation}
 
 This minimisation problem can be solved in a similar way to the non-separable
@@ -2178,13 +2180,6 @@ coding alternatives to \ac{HEVC}.
 \label{cha:the_mode_dependent_transform_competition}
 \chaptertoc
 
-\begin{figure}[tp]
-	\centering
-	\includegraphics{./figures/clustering_plot.pdf}
-	\caption{Clustering and transform learning for a given set of residuals}
-	\label{fig:clustering}
-\end{figure}
-
 \vspace{0.5cm}
 Maybe explain the VCIP
 
@@ -2209,6 +2204,45 @@ block sizes and \acp{IPM} do.
 This implies that, for a given block size and \ac{IPM}, there will be no
 longer a unique transform, but a set of them, and the encoder will choose the
 one that provides the best trade-off in terms of rate-distortion.
+
+\begin{algorithm}
+	\SetKwData{append}{append}
+	\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+	\Input{Residuals $\x$ from a given \acl{IPM}}
+	\Output{Set of $N$ \acp{RDOT} $A_n$}
+	\BlankLine%
+	Initial random classification into $1+N$ classes
+	\BlankLine%
+	\While{!convergence}
+	{
+			\For{$n=1$ \KwTo{} $N$}
+			{
+				Learn a \ac{RDOT} on $\text{Class}_n$
+				using~\eqref{eqn:rdot-nsep} or~\eqref{eqn:rdot-sep}, depending
+				on separability
+			}
+			\ForEach{block $\x$}
+			{
+				\For{$n=0$ \KwTo{} $N$}
+				{
+					$\delta_n =
+					{\Vert \x - \A^T_n\c\Vert}^2 + \lambda{\Vert\c\Vert}_0$
+				}
+				$\displaystyle n^* = \text{arg}\min\limits_n(\delta_n)$\\
+				$\text{Class}_{n^*}$.append ($\x$)
+			}
+	}
+	\caption{Multiple transform design}
+	\label{alg:clustering}
+\end{algorithm}
+
+\begin{figure}[tp]
+	\centering
+	\includegraphics{./figures/clustering_plot.pdf}
+	\caption{Clustering and transform learning for a given set of residuals}
+	\label{fig:clustering}
+\end{figure}
+
 
 \chapter{Incomplete transforms}
 \label{cha:incomplete_transforms}
