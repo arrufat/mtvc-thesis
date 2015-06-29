@@ -1,0 +1,54 @@
+\begin{tikzpicture}
+	\pgfplotsset{/tikz/font={\small}}
+	\begin{axis}[
+			xlabel={iteration},
+			ylabel={RDOT metric},
+			grid=both,
+			scale only axis,
+			width=0.80\textwidth,
+			height=0.30\textheight,
+			scaled y ticks = false,
+			x tick label style={
+				/pgf/number format/.cd,
+				set thousands separator={\thinspace},
+				set decimal separator={.},
+				fixed,
+				fixed zerofill,
+				precision=0,
+				/tikz/.cd
+			},
+			y tick label style={
+				/pgf/number format/.cd,
+				set decimal separator={.},
+				fixed,
+				fixed zerofill,
+				precision=1,
+				/tikz/.cd
+			},
+			% xtick={0.20,0.22,...,0.50},
+			% ytick={0,2.5,...,100},
+			xmin=0, xmax=1000,
+			ymin=24, ymax=27.5,
+			legend style={nodes=right},
+			legend pos= north east,
+			unbounded coords=jump,
+		]
+
+		\pgfplotstableread{figures/rdot_learning_8.dat}\table
+		\addplot[black, thick]
+		table[x=iter,y=dct,col sep=tab] from \table;
+		\addlegendentry{DCT-II}
+
+		\pgfplotstableread{figures/rdot_learning_8.dat}\table
+		\addplot[red, dashed, thick, smooth]
+		table[x=iter,y=rdot_sep,col sep=tab] from \table;
+		\addlegendentry{RDOT-sep}
+
+		\pgfplotstableread{figures/rdot_learning_8.dat}\table
+		\addplot[red, thick, smooth]
+		table[x=iter,y=rdot_nsep,col sep=tab] from \table;
+		\addlegendentry{RDOT-nsep}
+
+	\end{axis}
+
+\end{tikzpicture}

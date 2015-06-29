@@ -1,0 +1,86 @@
+\begin{tikzpicture}
+	\pgfplotsset{/tikz/font={\small}}
+	\begin{axis}[
+			xlabel={iteration},
+			ylabel={RDOT metric},
+			grid=both,
+			scale only axis,
+			width=0.80\textwidth,
+			height=0.30\textheight,
+			scaled y ticks = false,
+			x tick label style={
+				/pgf/number format/.cd,
+				set thousands separator={\thinspace},
+				set decimal separator={.},
+				fixed,
+				fixed zerofill,
+				precision=0,
+				/tikz/.cd
+			},
+			y tick label style={
+				/pgf/number format/.cd,
+				set decimal separator={.},
+				fixed,
+				fixed zerofill,
+				precision=1,
+				/tikz/.cd
+			},
+			% xtick={0.20,0.22,...,0.50},
+			% ytick={0,2.5,...,100},
+			xmin=0, xmax=1000,
+			ymin=33, ymax=35,
+			legend style={nodes=right},
+			legend pos= north east,
+			unbounded coords=jump,
+		]
+
+		\pgfplotstableread{figures/rdot_learning_4.dat}\table
+		\addplot[black, thick]
+		table[x=iter,y=dst,col sep=tab] from \table;
+		\addlegendentry{DST-VII}
+
+		\pgfplotstableread{figures/rdot_learning_4.dat}\table
+		\addplot[red, dashed, thick, smooth]
+		table[x=iter,y=rdot_sep,col sep=tab] from \table;
+		\addlegendentry{RDOT-sep}
+
+		\pgfplotstableread{figures/rdot_learning_4.dat}\table
+		\addplot[red, thick, smooth]
+		table[x=iter,y=rdot_nsep,col sep=tab] from \table;
+		\addlegendentry{RDOT-nsep}
+
+		% \pgfplotstableread{figures/dist_zero_qp.dat}\table
+		% \addplot[mark=*,mark size=1pt, blue, thick, smooth, tension=0.3]
+		% table[x=nz125,y=d125,col sep=tab] from \table;
+		% \addlegendentry{$\gamma=1.25$}
+        %
+		% \pgfplotstableread{figures/dist_zero_qp.dat}\table
+		% \addplot[mark=*,mark size=1pt, red, thick, smooth, tension=0.3]
+		% table[x=nz100,y=d100,col sep=tab] from \table;
+		% \addlegendentry{$\gamma=1.00$}
+        %
+		% \pgfplotstableread{figures/dist_zero_qp.dat}\table
+		% \addplot[mark=*,mark size=1pt, black, thick, smooth, tension=0.3]
+		% table[x=nz075,y=d075,col sep=tab] from \table;
+		% \addlegendentry{$\gamma=0.75$}
+        %
+		% \addplot [only marks, mark=o, mark size=3pt, thick] table {
+		% % QP 27
+		% 0.434317	8.396036
+		% 0.404402	8.363620
+		% 0.364981	8.176391
+		% 0.310958	7.666366
+		% };
+		% \addlegendentry{$\lambda_{opt}$ QP 27}
+        %
+		% \addplot [only marks, mark=o, mark size=3pt, thick, dashed] table {
+		% 0.144763	23.171433
+		% 0.164659	27.008339
+		% 0.178336	29.754038
+		% 0.188380	31.800229
+		% };
+		% \addlegendentry{$\lambda_{opt}$ QP 32}
+
+	\end{axis}
+
+\end{tikzpicture}

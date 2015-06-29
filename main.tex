@@ -2121,8 +2121,11 @@ non-separable designs.
 		\item For which \ac{IPM} \to{} average?
 	\end{itemize}
 	}
-	% \includegraphics[width=0.8\linewidth]{name.ext}
-	\caption{\ac{RDOT} metric evolution during different transform learnings}
+	\subfloat[$4\times4$]{\includegraphics{./figures/rdot_learning_4_plot.pdf}}
+	
+	\subfloat[$8\times8$]{\includegraphics{./figures/rdot_learning_8_plot.pdf}}
+	\caption{Average \ac{RDOT} metric evolution during different transform
+	learnings}
 	\label{fig:rdot_metric_learning}
 \end{figure}
 
@@ -2242,7 +2245,6 @@ one that provides the best trade-off in terms of rate-distortion.
 	\caption{Clustering and transform learning for a given set of residuals}
 	\label{fig:clustering}
 \end{figure}
-
 
 \chapter{Incomplete transforms}
 \label{cha:incomplete_transforms}
