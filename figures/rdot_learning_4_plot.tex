@@ -28,16 +28,16 @@
 			% xtick={0.20,0.22,...,0.50},
 			% ytick={0,2.5,...,100},
 			xmin=0, xmax=1000,
-			ymin=33, ymax=35,
+			ymin=32.5, ymax=36.5,
 			legend style={nodes=right},
 			legend pos= north east,
 			unbounded coords=jump,
 		]
 
-		% \pgfplotstableread{figures/rdot_learning_4.dat}\table
-		% \addplot[black, thick, dashed]
-		% table[x=iter,y=dct,col sep=tab] from \table;
-		% \addlegendentry{DCT-II}
+		\pgfplotstableread{figures/rdot_learning_4.dat}\table
+		\addplot[black, dotted, thick]
+		table[x=iter,y=dct,col sep=tab] from \table;
+		\addlegendentry{DCT-II}
 
 		\pgfplotstableread{figures/rdot_learning_4.dat}\table
 		\addplot[black, dashed, thick]
