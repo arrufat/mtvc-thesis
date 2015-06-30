@@ -34,13 +34,28 @@
 			unbounded coords=jump,
 		]
 
+		% \pgfplotstableread{figures/rdot_learning_4.dat}\table
+		% \addplot[black, thick, dashed]
+		% table[x=iter,y=dct,col sep=tab] from \table;
+		% \addlegendentry{DCT-II}
+
 		\pgfplotstableread{figures/rdot_learning_4.dat}\table
-		\addplot[black, thick]
+		\addplot[black, dashed, thick]
 		table[x=iter,y=dst,col sep=tab] from \table;
 		\addlegendentry{DST-VII}
 
 		\pgfplotstableread{figures/rdot_learning_4.dat}\table
-		\addplot[red, dashed, thick, smooth]
+		\addplot[blue, dashed, thick, smooth]
+		table[x=iter,y=klt_sep,col sep=tab] from \table;
+		\addlegendentry{KLT-sep}
+
+		\pgfplotstableread{figures/rdot_learning_4.dat}\table
+		\addplot[blue, thick]
+		table[x=iter,y=klt_nsep,col sep=tab] from \table;
+		\addlegendentry{KLT-nsep}
+
+		\pgfplotstableread{figures/rdot_learning_4.dat}\table
+		\addplot[red, dashed, thick]
 		table[x=iter,y=rdot_sep,col sep=tab] from \table;
 		\addlegendentry{RDOT-sep}
 
