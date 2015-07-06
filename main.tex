@@ -15,6 +15,8 @@
 \usepackage{contour} % for inexisting bold symbols
 \usepackage{enumitem} % for custom labels
 \usepackage{algorithm2e}
+\usepackage{multirow}
+\usepackage{tabularx}
 \contourlength{0.01em}
 
 \usepackage{color}
@@ -1897,8 +1899,9 @@ In order to test their performances for video coding, a technique called
 The principle of the \ac{MDDT} lies on using an adapted transform learnt
 specifically for each \acf{IPM}.
 
-The \ac{MDDT} was proposed during the \ac{HEVC} standardisation phase, but is
-was finally discarded in favour of a new transform, the \ac{DST}.
+The \ac{MDDT} technique was proposed during the \ac{HEVC} standardisation
+phase, but is was finally discarded in favour of a new transform, the
+\ac{DST}.
 
 \subsection{Motivation and principles of the \acs{MDDT}}
 \label{sub:motivation_of_the_mddt}
@@ -1983,7 +1986,7 @@ This means that, the \ac{IPM} defines which transform is used, so there is not
 an extra step in the \ac{RDO} loop for the transform.
 However, there might be an increase in the complexity of both \ac{MDDT}
 encoder and decoder due not to the number of transforms, but to the possible
-lack of fast algorithms for the adapted transforms.
+lack of fast algorithms for the adapted transforms implementation.
 
 \begin{figure}[tp]
 	\centering
@@ -2026,8 +2029,8 @@ that time nine, which evolved into 35 in \ac{HEVC}), was included in the
 \ac{KTA} software.
 The adapted transforms were \acp{KLT}, and the resulting technique was
 called \ac{MDDT}.
-It became a core component of the \ac{TMuC}~\cite{JCTVC-A204} because of
-its performance improvements over the previous standard.
+It became a core component of the \ac{TMuC}~\cite{JCTVC-A204} due to its
+performance improvements over the previous standard.
 
 During the \ac{JCT-VC} meetings, many efforts were done to yield the
 first implementation of the \ac{MDDT}, which was non-separable, more
@@ -2062,16 +2065,17 @@ for all $4\times4$ luma intra prediction residuals, and the \ac{DCT} for
 the rest of block sizes, due to the lack of fast algorithms and limited
 gains, in both luma and chroma~\cite{JCTVC-J0021}.
 
-In the following section, the \ac{MDDT} will be re-implemented using
-both transforms designs from \S\ref{sec:the_karhunen_loeve_transform}
-(\ac{KLT}) and \S\ref{sec:the_rate_distortion_optimised_transform}
-(\ac{RDOT}), in both separable and non-separable fashions.
+In the following section, the \ac{MDDT} will be re-implemented using both
+transforms designs from \S\ref{sec:the_karhunen_loeve_transform} (\ac{KLT})
+and \S\ref{sec:the_rate_distortion_optimised_transform} (\ac{RDOT}), in both
+separable and non-separable fashions, to empirically compare its performance
+with regards to the current standard, \ac{HEVC}.
 
 \section{Design and implementation of \acs{MDDT} systems}
 \label{sec:design_and_implementation_of_mddt_systems}
 
-The experiment carried out in this section is closely related to the
-publication in~\cite{arrufat-14-mddt-rdot}.
+Preliminary work carried out for this section has been published in the form
+of an article~\cite{arrufat-14-mddt-rdot}.
 
 \subsection{\acs{MDDT} system learning}
 \label{sub:mddt_system_learning}
@@ -2081,15 +2085,6 @@ and the \ac{RDOT}, will be tested in this Section, using the \ac{MDDT}
 technique.
 This experiment will unveil the ability of each design approach to adapt to a
 particular kind of signals and to fit the video coding demands.
-
-% TODO
-\todo{Choose one of the following learning sets}
-
-In order to build the learning set, intra prediction residuals issued from
-\ac{HEVC} encodings at four \acp{QP} (22, 27, 32, 37), coming from 59
-sequences at different resolutions ($1920\times1080$, $1280\times720$,
-$800\times480$) and various frame rates (25, 30, 50, 60, 100, 120, 240
-frames per second).
 
 In order to build the learning set, intra prediction residuals issued from
 \ac{HEVC} encodings at four \acp{QP} (22, 27, 32, 37), coming from classes B
@@ -2102,46 +2097,39 @@ These residuals, grouped by the \ac{IPM} they are issued from, have served to
 compute an adapted transform per \ac{IPM} using both \ac{KLT} and \ac{RDOT}
 design approaches in separable and non-separable versions.
 
-In order to validate intuitively the results of the iterative learning
-algorithm for the \ac{RDOT}, presented in
+To validate intuitively the results of the iterative learning algorithm for
+the \ac{RDOT}, presented in
 \S\ref{sec:the_rate_distortion_optimised_transform},
 figure~\ref{fig:rdot_metric_learning} shows the value of the \ac{RDOT} metric
-during the learning phase, averaged accross all \acp{IPM}, for separable and
+during the learning phase, averaged across all \acp{IPM}, for separable and
 non-separable designs.
 
 \begin{figure}[tb]
 	\centering
-	% TODO
-	\todo{
-	\begin{itemize}
-		\item Figure showing the learning behaviour.
-		\item Compare sep and nsep \ac{RDOT}.
-		\item Add marks for sep and nsep \ac{KLT} values.
-		\item Add marks for the \ac{DST} and \ac{DCT} used in HEVC.
-		\item For which \ac{IPM} \to{} average?
-	\end{itemize}
-	}
-	\subfloat[$4\times4$]{\includegraphics{./figures/rdot_learning_4_plot.pdf}}
-	
-	\subfloat[$8\times8$]{\includegraphics{./figures/rdot_learning_8_plot.pdf}}
+	\subfloat[$4\times4$ transforms]{\includegraphics{./figures/rdot_learning_4_plot.pdf}}
+	\\	
+	\subfloat[$8\times8$ transforms]{\includegraphics{./figures/rdot_learning_8_plot.pdf}}
 	\caption{Average \ac{RDOT} metric evolution during different transform
-	learnings}
+	learnings: separable (S) and non-separable (NS)}
 	\label{fig:rdot_metric_learning}
 \end{figure}
 
+The learning algorithm of the \ac{RDOT} converges smoothly for both separable
+and non-separable designs.
 As expected, the non-separable \ac{RDOT} presents a lower metric value than
-the separable version.
-As stated in Chapter~\ref{cha:transform_coding}, non-separable transforms are
-able to exploit any linear correlation between a pair of pixels in a block,
-allowing for sparser signals in the transform domain.
+the separable version, since non-separable transforms are able to exploit any
+linear correlation between a pair of pixels in a block, allowing for sparser
+signals in the transform domain.
+
 Furthermore, the figure also contains the \ac{RDOT} metric evaluated on the
 \ac{KLT}, both separable and non-separable, and the default \ac{HEVC}
 transforms.
 The use of this metric corroborates some points stated in
 \$\ref{sub:particular_case_dst} in the \ac{BD}-rate domain that justified the
-use of the \ac{DST}-VII over the \ac{DCT}-II:
+use of the \ac{DST}-VII over the \ac{DCT}-II for $4\times4$ blocks:
 the value of the metric using the \ac{DST}-VII is notably lower than that of
-the \ac{DCT}-II.
+the \ac{DCT}-II, and the \ac{DST} for these blocks is close to the separable
+\ac{KLT}, even in terms of the \ac{RDOT} metric.
 
 After having corroborated that the learning has output better performing
 transforms in terms of distortion and sparseness, their implementation on top
@@ -2150,7 +2138,157 @@ of \ac{HEVC} is tested and discussed in next section.
 \subsection{\acs{MDDT} results on video coding}
 \label{sub:mddt_results_on_video_coding}
 
+The \ac{MDDT} systems designed in the previous tested have been using on
+\ac{HEVC} using the common test conditions, defined by the
+\ac{JCT-VC}~\cite{bossen-12-common-test-conditions}, for \ac{AI} and \ac{RA}
+configurations.
+The common test conditions consist in encoding each sequence at four different
+\ac{QP} points (22, 27, 32, 37) and computing the average bit-rate savings
+with regards to \ac{HEVC}.
 
+\begin{table}[tb]
+	\centering
+	\scriptsize
+	\begin{tabular}{l|rr|rr|rr|rr|rr|rr}
+		\multicolumn{1}{c}{} &
+		\multicolumn{4}{c|}{$4\times4$} &
+		\multicolumn{4}{c|}{$8\times8$} &
+		\multicolumn{4}{c}{$4\times4$ \& $8\times8$} \\
+		\cline{2-13}
+		\multicolumn{1}{c}{} &
+		\multicolumn{2}{c|} {sep} &
+		\multicolumn{2}{c|} {non-sep} &
+		\multicolumn{2}{c|} {sep} &
+		\multicolumn{2}{c|} {non-sep} &
+		\multicolumn{2}{c|} {sep} &
+		\multicolumn{2}{c} {non-sep} \\
+		\hline
+		Class & KLT & RDOT & KLT & RDOT & KLT & RDOT & KLT & RDOT & KLT & RDOT & KLT & RDOT \\
+		\hline\hline
+		A ($2560\times1600$) & 0.1  & 0.1  & -0.2 & -0.2 & -1.0 & -1.0 & -1.6 & -1.6 & -0.9 & -0.9 & -1.6 & -1.6 \\
+		B ($1920\times1080$) & -0.1 & -0.2 & -0.5 & -0.8 & -0.4 & -0.8 & -1.5 & -2.5 & -0.4 & -0.9 & -1.6 & -2.8 \\
+		C ($832\times480$)   & -0.2 & -0.6 & -1.5 & -2.5 & -0.4 & -0.8 & -2.4 & -4.0 & -0.5 & -1.3 & -3.1 & -5.1 \\
+		D ($416\times240$)   & -0.1 & -0.6 & -1.2 & -2.0 & -0.2 & -0.6 & -1.2 & -2.1 & -0.3 & -1.1 & -1.9 & -3.4 \\
+		E ($1280\times720$)  & 0.4  & 0.3  & -0.1 & -0.4 & -0.9 & -1.2 & -2.1 & -2.9 & -0.6 & -0.9 & -1.8 & -3.0 \\
+		F (various res.)     & 0.1  & -0.8 & -0.6 & -2.0 & 0.1  & -0.2 & -1.1 & -2.4 & 0.3  & -0.9 & -1.2 & -3.5 \\
+		\hline\hline           
+		Seq. Avg. & 0.0  & -0.3 & -0.7 & -1.3 & -0.5 & -0.7 & -1.6 & -2.6 & -0.4 & -1.0 & -1.9 & -3.2 \\
+	\end{tabular}
+	\caption{Average bit-rate savings (\%) for each \ac{HEVC} Class in \acs{AI}}
+	\label{tab:mddt_ai}
+\end{table}
+
+\begin{table}[tb]
+	\centering
+	\scriptsize
+	\begin{tabular}{l|rr|rr|rr|rr|rr|rr}
+		\multicolumn{1}{c}{} &
+		\multicolumn{4}{c|}{$4\times4$} &
+		\multicolumn{4}{c|}{$8\times8$} &
+		\multicolumn{4}{c}{$4\times4$ \& $8\times8$} \\
+		\cline{2-13}
+		\multicolumn{1}{c}{} &
+		\multicolumn{2}{c|} {sep} &
+		\multicolumn{2}{c|} {non-sep} &
+		\multicolumn{2}{c|} {sep} &
+		\multicolumn{2}{c|} {non-sep} &
+		\multicolumn{2}{c|} {sep} &
+		\multicolumn{2}{c} {non-sep} \\
+		\hline
+		Class & KLT & RDOT & KLT & RDOT & KLT & RDOT & KLT & RDOT & KLT & RDOT & KLT & RDOT \\
+		\hline\hline
+		A ($2560\times1600$) & 0.0  & 0.1  & 0.0  & -0.1 & -0.3 & -0.4 & -0.7 & -0.8 & -0.3 & -0.4 & -0.7 & -0.9 \\
+		B ($1920\times1080$) & 0.0  & -0.1 & -0.3 & -0.5 & -0.2 & -0.5 & -0.9 & -1.4 & -0.2 & -0.6 & -1.0 & -1.6 \\
+		C ($832\times480$)   & -0.1 & -0.4 & -0.8 & -1.4 & -0.2 & -0.4 & -1.2 & -2.2 & -0.2 & -0.7 & -1.6 & -2.9 \\
+		D ($416\times240$)   & 0.0  & -0.2 & -0.5 & -1.1 & -0.1 & -0.3 & -0.5 & -1.1 & -0.1 & -0.5 & -0.9 & -1.7 \\
+		E ($1280\times720$)  & 0.1  & -0.2 & -0.4 & -0.9 & -0.3 & -0.7 & -1.0 & -2.0 & -0.3 & -0.9 & -1.1 & -2.5 \\
+		F (various res.)     & 0.1  & -0.6 & -0.3 & -1.3 & 0.1  & -0.1 & -0.5 & -1.4 & 0.2  & -0.7 & -0.6 & -2.2 \\
+		\hline\hline
+		Seq. Avg. & 0.0  & -0.2 & -0.4 & -0.8 & -0.2 & -0.4 & -0.8 & -1.5 & -0.2 & -0.6 & -1.0 & -1.9 \\
+	\end{tabular}
+	\caption{Average bit-rate savings (\%) for each \ac{HEVC} Class in \acs{RA}}
+	\label{tab:mddt_ra}
+\end{table}
+
+\begin{table}[tb]
+	\centering
+	\scriptsize
+	\begin{tabularx}{\textwidth}{c|X|rr|rr|rr|rr}
+		\multicolumn{2}{c}{} &
+		\multicolumn{8}{c}{$4\times4$ \& $8\times8$} \\
+		\cline{3-10}
+		\multicolumn{2}{c}{} &
+		\multicolumn{4}{c|}{AI} &
+		\multicolumn{4}{c}{RA} \\
+		\cline{3-10}
+		\multicolumn{2}{c}{} &
+		\multicolumn{2}{c|}{sep} &
+		\multicolumn{2}{c|}{non-sep} &
+		\multicolumn{2}{c|}{sep} &
+		\multicolumn{2}{c}{non-sep} \\
+		\cline{2-10}
+		\multicolumn{1}{c}{} & {Sequence} &
+		{KLT} & {RDOT} & {KLT} & {RDOT} &
+		{KLT} & {RDOT} & {KLT} & {RDOT} \\
+		\hline\hline
+		\multirow{5}{0.10\textwidth}{\centering Class A ($2560\times1600$)}
+		& NebutaFestival       & -0.5 & -0.4 & -0.7 & -0.4  & -0.1 & -0.1 & -0.1 & -0.1 \\
+		& PeopleOnStreet       & -1.2 & -1.3 & -2.5 & -2.5  & -0.5 & -0.5 & -1.1 & -1.1 \\
+		& SteamLocomotiveTrain & -0.5 & -0.4 & -0.6 & -0.5  & 0.0  & 0.0  & -0.1 & -0.3 \\
+		& Traffic              & -1.3 & -1.5 & -2.7 & -2.9  & -0.6 & -0.9 & -1.5 & -2.0 \\
+		\cline{2-10}
+		& Average              & -0.9 & -0.9 & -1.6 & -1.6  & -0.3 & -0.4 & -0.7 & -0.9 \\
+		\hline\hline
+		\multirow{6}{0.10\textwidth}{\centering Class B ($1920\times1080$)}
+		& BasketballDrive      & 0.1  & -0.6 & -1.1 & -2.8  & -0.2 & -0.4 & -1.2 & -1.8 \\
+		& BQTerrace            & 0.3  & -0.9 & -2.2 & -4.6  & 0.0  & -0.6 & -1.3 & -2.5 \\
+		& Cactus               & -0.9 & -1.5 & -2.3 & -3.4  & -0.3 & -0.8 & -1.2 & -2.2 \\
+		& Kimono1              & -0.4 & -0.5 & -0.9 & -1.1  & 0.0  & -0.2 & -0.3 & -0.5 \\
+		& ParkScene            & -1.2 & -1.3 & -1.7 & -1.9  & -0.6 & -0.7 & -0.9 & -1.2 \\
+		\cline{2-10}
+		& Average              & -0.4 & -0.9 & -1.6 & -2.8  & -0.2 & -0.6 & -1.0 & -1.6 \\
+		\hline\hline
+		\multirow{5}{0.10\textwidth}{\centering Class C ($832\times480$)}
+		& BasketballDrill      & -1.2 & -1.8 & -7.9 & -11.9 & -0.6 & -0.9 & -3.8 & -6.3 \\
+		& BQMall               & 0.0  & -1.1 & -0.8 & -2.6  & 0.1  & -0.6 & -0.3 & -1.5 \\
+		& PartyScene           & 0.0  & -1.1 & -1.0 & -2.6  & -0.1 & -0.7 & -0.7 & -1.7 \\
+		& RaceHorses           & -0.8 & -1.3 & -2.6 & -3.6  & -0.4 & -0.6 & -1.4 & -2.0 \\
+		\cline{2-10}
+		& Average              & -0.5 & -1.3 & -3.1 & -5.1  & -0.2 & -0.7 & -1.6 & -2.9 \\
+		\hline\hline
+		\multirow{5}{0.10\textwidth}{\centering Class D ($416\times240$)}
+		& BasketballPass       & -0.1 & -0.9 & -1.5 & -3.1  & -0.1 & -0.5 & -1.0 & -1.8 \\
+		& BQSquare             & -0.1 & -1.0 & -1.8 & -3.5  & -0.1 & -0.5 & -0.9 & -1.9 \\
+		& BlowingBubbles       & 0.1  & -1.0 & -0.9 & -2.7  & 0.1  & -0.5 & -0.2 & -1.4 \\
+		& RaceHorses           & -1.0 & -1.3 & -3.4 & -4.3  & -0.3 & -0.4 & -1.4 & -1.8 \\
+		\cline{2-10}
+		& Average              & -0.3 & -1.1 & -1.9 & -3.4  & -0.1 & -0.5 & -0.9 & -1.7 \\
+		\hline\hline
+		\multirow{4}{0.10\textwidth}{\centering Class E ($1280\times720$)}
+		& FourPeople           & -1.2 & -1.5 & -2.4 & -3.2  & -0.6 & -1.2 & -1.5 & -2.5 \\
+		& Johnny               & -0.3 & -0.7 & -1.5 & -2.8  & -0.1 & -0.8 & -1.0 & -2.4 \\    
+		& KristenAndSara       & -0.2 & -0.6 & -1.6 & -3.0  & -0.1 & -0.7 & -0.9 & -2.5 \\
+		\cline{2-10}
+		& Average              & -0.6 & -0.9 & -1.8 & -3.0  & -0.3 & -0.9 & -1.1 & -2.5 \\
+		\hline\hline
+		\multirow{5}{0.10\textwidth}{\centering Class F (various resolutions)}
+		& BasketDrillText      & -0.8 & -1.8 & -6.1 & -10.0 & -0.5 & -0.9 & -3.1 & -5.6 \\
+		& ChinaSpeed           & 0.4  & -0.8 & 0.0  & -1.8  & 0.2  & -0.4 & -0.1 & -1.0 \\
+		& SlideEditing         & 0.7  & -0.6 & 1.0  & -0.5  & 0.5  & -0.8 & 0.8  & -0.8 \\
+		& SlideShow            & 0.7  & -0.5 & 0.4  & -1.8  & 0.5  & -0.5 & 0.2  & -1.5 \\
+		\cline{2-10}
+		& Average              & 0.3  & -0.9 & -1.2 & -3.5  & 0.2  & -0.7 & -0.6 & -2.2 \\
+		\hline\hline
+		\bf All classes
+		& \bf Overall          & -0.4 & -1.0 & -1.9 & -3.2  & -0.2 & -0.6 & -1.0 & -1.9 \\
+	\end{tabularx}
+	\caption{Detailed bit-rate savings (\%) for combined $4\times4$ \& $8\times8$
+	\acs{MDDT} systems}
+	\label{tab:detailed_mddt_bd_rate}
+\end{table}
+
+% TODO
+\todo{Add figure for detailed mddt table}
 
 \section{Conclusions}
 \label{sec:conclusions}
@@ -2183,9 +2321,6 @@ coding alternatives to \ac{HEVC}.
 \label{cha:the_mode_dependent_transform_competition}
 \chaptertoc
 
-\vspace{0.5cm}
-Maybe explain the VCIP
-
 \begin{itemize}
 	\item introduce transform competition with transform
 		skip~\cite{JCTVC-F077, JCTVC-H0208}
@@ -2193,7 +2328,10 @@ Maybe explain the VCIP
 	\item explain ICIP 2015~\cite{arrufat-15-mdtc}
 \end{itemize}
 
-Chapter~\ref{cha:the_mode_dependent_directional_transforms} introduced the
+\section{Introduction}
+\label{sec:introduction_mdtc}
+
+Chapter~\ref{cha:the_mode_dependent_directional_transforms} revisited the
 \acf{MDDT} technique, its origins and motivation and how it was discarded in
 the final \ac{HEVC} standard in favour of a more simplified approach.
 However, the \ac{MDDT} technique has good potential when used with \acp{RDOT},
@@ -2207,6 +2345,19 @@ block sizes and \acp{IPM} do.
 This implies that, for a given block size and \ac{IPM}, there will be no
 longer a unique transform, but a set of them, and the encoder will choose the
 one that provides the best trade-off in terms of rate-distortion.
+
+Transform competition is not an entirely new concept in \ac{HEVC}.
+A rudimentary form of competition already exists for $4\times4$ intra
+predicted luma residuals: the choice between using the \ac{DST}-VII and not
+using a transform at all already exists.
+This behaviour is controlled by the
+\texttt{transform\_skip\_flag}~\cite{JCTVC-F077, JCTVC-H0208}, since some
+residuals may contain only noise, and transforming them does not suppose any
+benefit in terms of rate-distortion.
+
+Early work on transform competition in \ac{HEVC} is detailed
+in~\cite{arrufat-14-transform-competition-rdot}, and the actual work in this
+Chapter has been published in~\cite{arrufat-15-mdtc}.
 
 \begin{algorithm}
 	\SetKwData{append}{append}
@@ -2284,6 +2435,14 @@ to degrade its performances as least as possible.
 \section{Non-homogeneous number of transforms per intra prediction mode}
 \label{sec:non_homogeneous_number_of_transforms_per_intra_prediction_mode}
 
+Iterations
+
+In order to build the learning set, intra prediction residuals issued from
+\ac{HEVC} encodings at four \acp{QP} (22, 27, 32, 37), coming from 59
+sequences at different resolutions ($1920\times1080$, $1280\times720$,
+$800\times480$) and various frame rates (25, 30, 50, 60, 100, 120, 240
+frames per second).
+
 \section{Intra prediction mode symmetries}
 \label{sec:intra_prediction_mode_symmetries}
 
@@ -2339,6 +2498,9 @@ is presented in this Chapter to cover them.
 	\item Amongst the \ac{DTT} family, add the identity matrix.
 	\item Benefits in terms of computational complexity.
 \end{itemize}
+
+\chapter{Perspectives and future work}
+\label{cha:perspectives_and_future_work}
 
 \bookmarksetup{startatroot}% to remove Bibliography from the last part
 \addtocontents{toc}{\bigskip}% add a separation to the ToC

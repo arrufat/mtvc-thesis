@@ -42,22 +42,22 @@
 		\pgfplotstableread{figures/rdot_learning_8.dat}\table
 		\addplot[blue, dashed, thick]
 		table[x=iter,y=klt_sep,col sep=tab] from \table;
-		\addlegendentry{KLT-sep}
+		\addlegendentry{S-KLT}
 
 		\pgfplotstableread{figures/rdot_learning_8.dat}\table
 		\addplot[blue, thick]
 		table[x=iter,y=klt_nsep,col sep=tab] from \table;
-		\addlegendentry{KLT-nsep}
+		\addlegendentry{NS-KLT}
 
 		\pgfplotstableread{figures/rdot_learning_8.dat}\table
 		\addplot[red, dashed, thick, smooth]
 		table[x=iter,y=rdot_sep,col sep=tab] from \table;
-		\addlegendentry{RDOT-sep}
+		\addlegendentry{S-RDOT}
 
 		\pgfplotstableread{figures/rdot_learning_8.dat}\table
 		\addplot[red, thick, smooth]
 		table[x=iter,y=rdot_nsep,col sep=tab] from \table;
-		\addlegendentry{RDOT-nsep}
+		\addlegendentry{NS-RDOT}
 
 	\end{axis}
 

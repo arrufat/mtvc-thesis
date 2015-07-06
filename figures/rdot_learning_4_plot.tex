@@ -28,7 +28,7 @@
 			% xtick={0.20,0.22,...,0.50},
 			% ytick={0,2.5,...,100},
 			xmin=0, xmax=1000,
-			ymin=32.5, ymax=36.5,
+			ymin=33, ymax=36.5,
 			legend style={nodes=right},
 			legend pos= north east,
 			unbounded coords=jump,
@@ -47,22 +47,22 @@
 		\pgfplotstableread{figures/rdot_learning_4.dat}\table
 		\addplot[blue, dashed, thick, smooth]
 		table[x=iter,y=klt_sep,col sep=tab] from \table;
-		\addlegendentry{KLT-sep}
+		\addlegendentry{S-KLT}
 
 		\pgfplotstableread{figures/rdot_learning_4.dat}\table
 		\addplot[blue, thick]
 		table[x=iter,y=klt_nsep,col sep=tab] from \table;
-		\addlegendentry{KLT-nsep}
+		\addlegendentry{NS-KLT}
 
 		\pgfplotstableread{figures/rdot_learning_4.dat}\table
 		\addplot[red, dashed, thick]
 		table[x=iter,y=rdot_sep,col sep=tab] from \table;
-		\addlegendentry{RDOT-sep}
+		\addlegendentry{S-RDOT}
 
 		\pgfplotstableread{figures/rdot_learning_4.dat}\table
 		\addplot[red, thick, smooth]
 		table[x=iter,y=rdot_nsep,col sep=tab] from \table;
-		\addlegendentry{RDOT-nsep}
+		\addlegendentry{NS-RDOT}
 
 		% \pgfplotstableread{figures/dist_zero_qp.dat}\table
 		% \addplot[mark=*,mark size=1pt, blue, thick, smooth, tension=0.3]
