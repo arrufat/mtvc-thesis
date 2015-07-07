@@ -27,5 +27,5 @@ reset: clean
 continuous:
 	$(TEXC) $(TEXFLAGS) $(SOURCE) -pdf -pvc -silent
 
-release: plots build reset
+release: figures build reset
 	mv ${SOURCE:.tex=.pdf} $(REL_NAME:.pdf=).pdf
