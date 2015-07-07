@@ -1785,7 +1785,7 @@ depend on the residuals \ac{PDF}:
 \end{equation}
 
 This fact makes the $\ell_0$ norm suitable even for distributions
-that can not be modelled after a \ac{GGD}.
+that cannot be modelled after a \ac{GGD}.
 The independence from the \ac{PDF} reassures the choice of the $\ell_0$
 norm over other models that might provide a more realistic and accurate
 approximation of the rate, such as the \ac{H}.
@@ -1923,7 +1923,7 @@ figure~\ref{fig:residual_differences} for $4\times4$ and $8\times8$ prediction
 residuals.
 An adapted transform for each \ac{IPM} can provide good signal compaction by
 specialisation.
-In \ac{HEVC}, this means having one adapted transform in each one of the 35
+In \ac{HEVC}, this means having an adapted transform for each one of the 35
 \acp{IPM}.
 
 \begin{figure}[tb]
@@ -1951,7 +1951,7 @@ In \ac{HEVC}, this means having one adapted transform in each one of the 35
 	\hfill
 	\subfloat[$8\times8$ --- \acs{IPM} 26]
 	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s8-p26.png}}
-	\caption{Residual differences for different \acsp{IPM}}
+	\caption{Residual profiles for different \acsp{IPM}}
 	\label{fig:residual_differences}
 \end{figure}
 
@@ -1969,12 +1969,12 @@ using the assigned transform.
 Then, the \ac{IPM} that provides the best rate-distortion trade-off is
 selected and signalled into the bitstream.
 
-In the decoder side (figure~\ref{fig:mddt_dec}), the only information needed
+On the decoder side (figure~\ref{fig:mddt_dec}), the only information needed
 to decode the block is represented in coloured blocks:
 the transformed coefficients and the used \ac{IPM}.
 No additional information has to be sent to the decoder, with regards to the
 hybrid video coding scheme:
-The signalled \ac{IPM} allows the decoder to know which transform to use to
+the signalled \ac{IPM} allows the decoder to know which transform to use to
 convert the transformed coefficients back to the pixel domain, without having
 to perform any extra calculations or take any decisions.
 
@@ -2020,9 +2020,8 @@ signals is the \ac{DST}:
 many studies were carried out in order to find better performing transform for
 these signals.
 
-Over the \ac{HEVC} standardisation phase, various techniques for
-improving the performance of the H.264/\acs{MPEG}-4 \acs{AVC} were
-explored and designated as \ac{KTA}.
+Over the \ac{HEVC} standardisation phase, various techniques to
+improve the performance of \ac{AVC} were explored and designated as \ac{KTA}.
 Amongst those techniques, in order to improve the coding performance of
 intra prediction residuals, an adapted transform for each \ac{IPM} (at
 that time nine, which evolved into 35 in \ac{HEVC}), was included in the
@@ -2092,6 +2091,8 @@ and C from the \ac{HEVC} test set, defined by the \ac{JCT-VC} in the common
 test conditions~\cite{bossen-12-common-test-conditions}.
 These classes contain sequences of $1920\times1080$ and $800\times480$,
 respectively, and frame rates of 24, 30, 50 and 60 frames per second.
+As a result, the number of the residuals used for the learning set exceeds the
+96 million for $4\times4$ \acp{TU} and 140 million for $8\times8$ \acp{TU}.
 
 These residuals, grouped by the \ac{IPM} they are issued from, have served to
 compute an adapted transform per \ac{IPM} using both \ac{KLT} and \ac{RDOT}
@@ -2106,9 +2107,11 @@ non-separable designs.
 
 \begin{figure}[tb]
 	\centering
-	\subfloat[$4\times4$ transforms]{\includegraphics{./figures/rdot_learning_4_plot.pdf}}
+	\subfloat[$4\times4$ transforms]
+	{\includegraphics{./figures/rdot_learning_4_plot.pdf}}
 	\\	
-	\subfloat[$8\times8$ transforms]{\includegraphics{./figures/rdot_learning_8_plot.pdf}}
+	\subfloat[$8\times8$ transforms]
+	{\includegraphics{./figures/rdot_learning_8_plot.pdf}}
 	\caption{Average \ac{RDOT} metric evolution during different transform
 	learnings: separable (S) and non-separable (NS)}
 	\label{fig:rdot_metric_learning}
@@ -2117,19 +2120,61 @@ non-separable designs.
 The learning algorithm of the \ac{RDOT} converges smoothly for both separable
 and non-separable designs.
 As expected, the non-separable \ac{RDOT} presents a lower metric value than
-the separable version, since non-separable transforms are able to exploit any
-linear correlation between a pair of pixels in a block, allowing for sparser
-signals in the transform domain.
+the separable version, since non-separable transforms are able to exploit
+linear correlations between any pair of pixels within a block, allowing for
+sparser signals in the transform domain.
 
-Furthermore, the figure also contains the \ac{RDOT} metric evaluated on the
-\ac{KLT}, both separable and non-separable, and the default \ac{HEVC}
-transforms.
+Furthermore, figure~\ref{fig:rdot_metric_learning} also contains the \ac{RDOT}
+metric evaluated on the \ac{KLT}, both separable and non-separable, and the
+default \ac{HEVC} transforms.
 The use of this metric corroborates some points stated in
 \$\ref{sub:particular_case_dst} in the \ac{BD}-rate domain that justified the
 use of the \ac{DST}-VII over the \ac{DCT}-II for $4\times4$ blocks:
 the value of the metric using the \ac{DST}-VII is notably lower than that of
-the \ac{DCT}-II, and the \ac{DST} for these blocks is close to the separable
-\ac{KLT}, even in terms of the \ac{RDOT} metric.
+the \ac{DCT}-II, and the fact that the \ac{DST} for these blocks is close to
+the separable \ac{KLT} is observable in terms of the \ac{RDOT} metric.
+
+Some examples of $4\times4$ learnt \acp{RDOT} are displayed in
+figure~\ref{fig:rdot_4x4_bases}.
+Although it is complicated to compare transform bases visually, non-separable
+transforms have captured the main direction for diagonal \acp{IPM} (2, 6, 18).
+These directions can be observed in the base vectors.
+Separable transforms are not able to capture those directions by construction.
+
+\begin{figure}[tb]
+	\centering
+	\subfloat[sep. \acs{IPM} 2]
+	{\includegraphics[width=0.15\linewidth]{./figures/mddt_sep_rdot_s4_p02.png}}
+	\hfill
+	\subfloat[sep. \acs{IPM} 6]
+	{\includegraphics[width=0.15\linewidth]{./figures/mddt_sep_rdot_s4_p06.png}}
+	\hfill
+	\subfloat[sep. \acs{IPM} 10]
+	{\includegraphics[width=0.15\linewidth]{./figures/mddt_sep_rdot_s4_p10.png}}
+	\hfill
+	\subfloat[sep. \acs{IPM} 18]
+	{\includegraphics[width=0.15\linewidth]{./figures/mddt_sep_rdot_s4_p18.png}}
+	\hfill
+	\subfloat[sep. \acs{IPM} 26]
+	{\includegraphics[width=0.15\linewidth]{./figures/mddt_sep_rdot_s4_p26.png}}
+	\\
+	\subfloat[n-sep. \acs{IPM} 2]
+	{\includegraphics[width=0.15\linewidth]{./figures/mddt_nsep_rdot_s4_p02.png}}
+	\hfill
+	\subfloat[n-sep. \acs{IPM} 6]
+	{\includegraphics[width=0.15\linewidth]{./figures/mddt_nsep_rdot_s4_p06.png}}
+	\hfill
+	\subfloat[n-sep. \acs{IPM} 10]
+	{\includegraphics[width=0.15\linewidth]{./figures/mddt_nsep_rdot_s4_p10.png}}
+	\hfill
+	\subfloat[n-sep. \acs{IPM} 18]
+	{\includegraphics[width=0.15\linewidth]{./figures/mddt_nsep_rdot_s4_p18.png}}
+	\hfill
+	\subfloat[n-sep. \acs{IPM} 26]
+	{\includegraphics[width=0.15\linewidth]{./figures/mddt_nsep_rdot_s4_p26.png}}
+	\caption{$4\times4$ separable and non-separable \acs{RDOT} for different \acsp{IPM}}
+	\label{fig:rdot_4x4_bases}
+\end{figure}
 
 After having corroborated that the learning has output better performing
 transforms in terms of distortion and sparseness, their implementation on top
@@ -2145,6 +2190,15 @@ configurations.
 The common test conditions consist in encoding each sequence at four different
 \ac{QP} points (22, 27, 32, 37) and computing the average bit-rate savings
 with regards to \ac{HEVC}.
+
+\subsubsection{Bit-rate savings}
+\label{ssub:mddt_bit_rate_savings}
+
+Tables~\ref{tab:mddt_ai} and~\ref{tab:mddt_ra} contain the performances of
+different \ac{MDDT} systems for \ac{AI} and \ac{RA} configurations,
+respectively, for the different sequence classes of the \ac{HEVC} test set.
+The last line of the table represents the average bit-rate savings for all
+sequences (it does not correspond to the averaged bit-rate savings per class).
 
 \begin{table}[tb]
 	\centering
@@ -2209,6 +2263,38 @@ with regards to \ac{HEVC}.
 	\caption{Average bit-rate savings (\%) for each \ac{HEVC} Class in \acs{RA}}
 	\label{tab:mddt_ra}
 \end{table}
+
+
+The first column of both tables corresponds to the separable \ac{KLT}-based
+\ac{MDDT} for $4\times4$ \acp{TU}, which, as demonstrated
+in~\cite{jain-75-nearest-neighbors, jain-76-klt-random-process}, corresponds
+to using a \ac{DST}.
+The average bit-rate savings with regards to \ac{HEVC} for this system are
+non-existing \ac{HEVC}, as it already uses the \ac{DST} for those blocks.
+
+The differences between both transform learning approaches (\ac{KLT} and
+\ac{RDOT}) can be observed by looking at each pair of columns.
+Results are very consistent with what was anticipated in the \ac{RDOT} metric
+domain:
+the \ac{RDOT}-based \ac{MDDT} outperforms the \ac{KLT} in every case
+(separability, \ac{TU} size, class and coding configuration).
+
+It is also worth-noticing the impact of separability:
+non-separable configurations provide systematically higher gains than the
+separable ones, especially important for those systems involving $8\times8$
+\acp{TU}.
+
+For the combined $4\times4$ and $8\times8$ system in \ac{AI} the bit-rate
+savings are over 3\% and almost 2\% in \ac{RA}.
+The \ac{KLT} systems are about one point below.
+The detailed performances of the combined systems are included in
+table~\ref{tab:detailed_mddt_bd_rate}.
+Despite having used classes B and C for the transform learning, consistent
+bit-rate savings are achieved across the whole test set.
+Moreover, classes D and E (not included in the learning set) present higher
+bit-rate savings than class B.
+It is also worth noticing that the \ac{RDOT} systems do not present losses for
+any sequence, which is not the case for the \ac{KLT}.
 
 \begin{table}[tb]
 	\centering
@@ -2287,8 +2373,44 @@ with regards to \ac{HEVC}.
 	\label{tab:detailed_mddt_bd_rate}
 \end{table}
 
+A remarkable point stands out of the test set: the \emph{BasketballDrill}
+sequence from class C, with bit-rate savings of almost 12\% using the
+non-separable \ac{RDOT} in \ac{AI}.
+This is due to the fact that this sequence presents highly directional
+patterns that cannot be dealt with separable transforms, as the table
+indicates.
+Almost all the performance is lost when using separable systems.
+For illustrative purposes, figure~\ref{fig:detailed_mddt_bd_rate} represents
+graphically the results from table~\ref{tab:detailed_mddt_bd_rate}.
+
+\begin{figure}[tp]
+	\centering
+	\includegraphics[width=1\linewidth]{./figures/detailed_mddt_4_8.pdf}
+	\caption{Bit-rate savings for combined $4\times4$ \& $8\times$ \acs{MDDT}
+	systems (table~\ref{tab:detailed_mddt_bd_rate})}
+	\label{fig:detailed_mddt_bd_rate}
+\end{figure}
+
+As a final note on the results, all transforms learnt for the presented
+\ac{MDDT} systems have used residuals issued from \ac{AI} coding
+configurations and have only been enabled for intra coded residuals in
+\ac{HEVC}.
+Nonetheless, around two thirds of the bit-rate savings achieved for the
+\ac{AI} coding configurations have been achieved in \ac{RA}.
+
+\subsubsection{Coding complexity}
+\label{ssub:mddt_coding_complexity}
+
+Regarding the complexity of the system,
 % TODO
-\todo{Add figure for detailed mddt table}
+\todo{Discuss the complexity
+\begin{itemize}
+	\item Encoding
+	\item Decoding
+	\item Separability
+\end{itemize}
+}
+
 
 \section{Conclusions}
 \label{sec:conclusions}
@@ -2298,7 +2420,10 @@ Transform designs presented in Chapter~\ref{cha:transform_coding}, namely the
 technique for intra coded blocks that consists in designing an adapted
 transform per \ac{IPM}.
 During the learning phase, the \ac{RDOT} metric has presented coherent results
-with, corroborating some known facts in the \ac{BD}-rate domain:
+with the knowledge acquired from literature regarding the \ac{KLT}, \ac{DCT}
+and \ac{DST}.
+These transforms have been evaluated using the \ac{RDOT} metric and have
+corroborated the results obtained in the \ac{BD}-rate domain:
 for intra prediction residuals, the \ac{DST}-VII has a better \ac{BD}-rate
 score than the \ac{DCT}-II, and so does using the \ac{RDOT} metric.
 
@@ -2307,11 +2432,13 @@ using the \ac{MDDT} technique.
 Non-separable transforms present a significant improvement in terms of
 bit-rate savings over their separable counterparts.
 Moreover, the \ac{RDOT} design approach has provided better results in terms
-of \ac{BD}-rate than the \ac{KLT}.
-Consequently, the \ac{KLT} will not be considered in the upcoming sections.
+of \ac{BD}-rate than the \ac{KLT} consistently all over the tested sequences,
+with no losses for any of them.
+Consequently, the \ac{KLT} will no longer be considered in the upcoming
+sections, only \ac{RDOT}-based systems will be designed.
 
 The following chapter presents an improvement on \ac{MDDT}, which will allow
-transforms to be better adapted to intra prediction residuals and provide new
+transforms to be more adapted to intra prediction residuals and provide new
 coding alternatives to \ac{HEVC}.
 
 \part{Contributions}
@@ -2421,6 +2548,12 @@ This chapter will take a look at different approaches to simplify the
 system presented in
 Chapter~\ref{cha:the_mode_dependent_transform_competition} while trying
 to degrade its performances as least as possible.
+
+Tears of Steel
+\begin{itemize}
+	\item $4\times4$ residuals: over 142 million
+	\item $8\times8$ residuals: over 343 million
+\end{itemize}
 
 \subsection{Main drawbacks}
 \label{sub:main_drawbacks}
