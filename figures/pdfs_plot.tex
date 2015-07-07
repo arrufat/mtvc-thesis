@@ -1,4 +1,4 @@
-\definecolor{mygreen}{RGB}{0,143,0}
+\definecolor{greenish}{RGB}{0,145,0}
 \begin{tikzpicture}[
 	declare function={gamma(\z)=
     (2.506628274631*sqrt(1/\z) + 0.20888568*(1/\z)^(1.5) + 0.00870357*(1/\z)^(2.5) - (174.2106599*(1/\z)^(3.5))/25920 - (715.6423511*(1/\z)^(4.5))/1244160)*exp((-ln(1/\z)-1)*\z);},
@@ -54,7 +54,7 @@
 		{ggd(5.1,1,x)};
 		\addlegendentry{GGD($\sigma$,1,$x$)}
 
-		\addplot[mygreen, dashed, thick, samples=51, smooth, domain=-20:20]
+		\addplot[greenish, dashed, thick, samples=51, smooth, domain=-20:20]
 		{ggd(5.1,2,x)};
 		\addlegendentry{GGD($\sigma$,2,$x$)}
 	\end{axis}

@@ -1,3 +1,4 @@
+\definecolor{greenish}{RGB}{0,145,0}
 \begin{tikzpicture}[scale=1.5]
 
     \def\startx{0}
@@ -16,7 +17,7 @@
         % horizontal directions (vertical scanning)
         \ifthenelse{\direction > 5 \AND \direction < 15}{\def\colour{blue}};
         % vertical directions (horizontal scanning)
-        \ifthenelse{\direction > 21 \AND \direction < 31}{\def\colour{mygreen}};
+        \ifthenelse{\direction > 21 \AND \direction < 31}{\def\colour{greenish}};
         % draw the prediction direction lines with the appropriate colour
         \draw[-latex,\colour, thin] (\startx,\starty) --++ (\angle:\radius);
         % label each prediction direction

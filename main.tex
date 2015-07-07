@@ -208,7 +208,7 @@ following subsections.
 
 \begin{figure}[tb]
 	\centering
-	\input{./figures/video_coding_system.tex}
+	\includegraphics{./figures/video_coding_system.pdf}
 	\caption{Video coding system}
 	\label{fig:video_coding_system}
 \end{figure}
@@ -363,7 +363,7 @@ figure~\ref{fig:hybrid_video_coding_scheme}.
 
 \begin{figure}[tb]
 	\centering
-	\input{./figures/hybrid_video_coding_scheme.tex}
+	\includegraphics{./figures/hybrid_video_coding_scheme.pdf}
 	\caption{Hybrid video coding scheme}
 	\label{fig:hybrid_video_coding_scheme}
 \end{figure}
@@ -500,7 +500,7 @@ book on \ac{HEVC}~\cite{wien-15-hevc}.
 \begin{figure}[tb]
 	\centering
 	\begin{minipage}{0.48\textwidth}
-		\input{figures/pred-directions.tex}
+		\includegraphics{./figures/pred-directions.pdf}
 	\end{minipage}
 	\begin{minipage}{0.48\textwidth}
 		\centering
@@ -513,7 +513,7 @@ book on \ac{HEVC}~\cite{wien-15-hevc}.
 			&
 			\includegraphics[width=0.25\textwidth]{figures/resids-scan-vert.png}
 			\\
-			\color{red}{diagonal} & \color{mygreen}{vertical} & \color{blue}{horizontal} \\
+			\color{red}{diagonal} & \color{greenish}{vertical} & \color{blue}{horizontal} \\
 			& & \\
 		\end{tabular}
 		\\
@@ -526,12 +526,12 @@ book on \ac{HEVC}~\cite{wien-15-hevc}.
 			&
 			\includegraphics[width=0.25\textwidth]{figures/coeffs-scan-vert.png}
 			\\
-			\color{red}{diagonal} & \color{mygreen}{horizontal} & \color{blue}{vertical} \\
+			\color{red}{diagonal} & \color{greenish}{horizontal} & \color{blue}{vertical} \\
 		\end{tabular}
 	\end{minipage}
-	\subfloat[Diagonal scanning]{\input{figures/mdcs-diag.tex}}
-	\subfloat[Horizontal scanning]{\input{figures/mdcs-horz.tex}}
-	\subfloat[Vertical scanning]{\input{figures/mdcs-vert.tex}}
+	\subfloat[Diagonal scanning]{\includegraphics{figures/mdcs-diag.pdf}}
+	\subfloat[Horizontal scanning]{\includegraphics{figures/mdcs-horz.pdf}}
+	\subfloat[Vertical scanning]{\includegraphics{figures/mdcs-vert.pdf}}
 	\caption{\acs{HEVC} intra prediction modes related to their average
 	residual signals and their appropriate scanning in the transform
 	domain for $4\times4$ \acsp{TU}}
@@ -677,7 +677,7 @@ organised into \acp{GOP}, formed by an I-frame, and several P and B-frames.
 
 \begin{figure}[tb]
 	\centering
-	\input{./figures/rate_distortion_scheme.tex}
+	\includegraphics{./figures/rate_distortion_scheme.pdf}
 	\caption{Rate-distortion scheme of a transform-based codec}
 	\label{fig:rate_distortion_scheme}
 \end{figure}
@@ -938,7 +938,7 @@ $N^4$ multiplications and $N^2(N^2-1)$ additions.
 
 \begin{figure}[tb]
 	\centering
-	\input{./figures/block_linearisation.tex}
+	\includegraphics{./figures/block_linearisation.pdf}
 	\caption{Example of a $4\times4$ block linearisation}
 	\label{fig:block_linearisation}
 \end{figure}
@@ -1206,7 +1206,7 @@ the \acf{DST}~\cite{han-10-spatial-adaptive-transform}.
 	\centering
 	\subfloat[Intra prediction modes for the current block (white) from
 	previously reconstructed blocks (grey)]
-	{\input{./figures/pred-scheme.tex}}
+	{\includegraphics{./figures/pred-scheme.pdf}}
 	\hspace{0.2\linewidth}
 	\subfloat[Average intra prediction residual]
 	{\includegraphics[width=0.3\linewidth]{./figures/resids-scan-diag.png}}
@@ -1990,14 +1990,14 @@ lack of fast algorithms for the adapted transforms implementation.
 
 \begin{figure}[tp]
 	\centering
-	\input{./figures/mddt_enc.tex}
+	\includegraphics{./figures/mddt_enc.pdf}
 	\caption{Encoding scheme for the \acs{MDDT}}
 	\label{fig:mddt_enc}
 \end{figure}
 
 \begin{figure}[tp]
 	\centering
-	\input{./figures/mddt_dec.tex}
+	\includegraphics{./figures/mddt_dec.pdf}
 	\caption{Decoding scheme for the \acs{MDDT}}
 	\label{fig:mddt_dec}
 \end{figure}
@@ -2519,7 +2519,7 @@ Chapter has been published in~\cite{arrufat-15-mdtc}.
 
 \begin{figure}[tp]
 	\centering
-	\includegraphics{./figures/clustering_plot.pdf}
+	\includegraphics{./figures/clustering.pdf}
 	\caption{Clustering and transform learning for a given set of residuals}
 	\label{fig:clustering}
 \end{figure}
@@ -2537,6 +2537,15 @@ In this chapter, an approach using non-separable transforms is proposed,
 called incomplete transforms.
 
 Reference~\cite{arrufat-15-inc-transforms}
+
+\begin{figure}[tp]
+	\centering
+	\includegraphics{./figures/inc_tr_diagram.pdf}
+	\caption{Illustration of the incomplete transform concepts.
+	An additional basis vector ($w_0$ is added to assist an orthogonal
+	transform ($v_0,v_1$))}
+	\label{fig:inc_tr_diagram}
+\end{figure}
 
 \chapter{Realistic system}
 \label{cha:realistic_system}

@@ -1,4 +1,4 @@
-\definecolor{mygreen}{RGB}{0,143,0}
+\definecolor{greenish}{RGB}{0,145,0}
 \begin{tikzpicture}
 	\pgfplotsset{/tikz/font={\small}}
 	\begin{axis}[
@@ -35,7 +35,7 @@
 			unbounded coords=jump,
 		]
 		\pgfplotstableread{figures/j_qp27.dat}\table
-		\addplot[dashed, mark=*,mark size=1pt, mygreen, thick, smooth, tension=0.3]
+		\addplot[dashed, mark=*,mark size=1pt, greenish, thick, smooth, tension=0.3]
 		table[x=qp,y=jh150,col sep=tab] from \table;
 		\addlegendentry{$\gamma=1.50$ with H}
 
@@ -56,7 +56,7 @@
 
 
 		\pgfplotstableread{figures/j_qp27.dat}\table
-		\addplot[mark=*,mark size=1pt, mygreen, thick, smooth, tension=0.3]
+		\addplot[mark=*,mark size=1pt, greenish, thick, smooth, tension=0.3]
 		table[x=qp,y=jnz150,col sep=tab] from \table;
 		\addlegendentry{$\gamma=1.50$ with $\ell_0$}
 

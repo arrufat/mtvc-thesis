@@ -1,4 +1,4 @@
-\definecolor{mygreen}{RGB}{0,143,0}
+\definecolor{greenish}{RGB}{0,145,0}
 \begin{tikzpicture}
 	\pgfplotsset{/tikz/font={\small}}
 	\begin{axis}[
@@ -36,7 +36,7 @@
 		]
 
 		\pgfplotstableread{figures/dist_zero_qp.dat}\table
-		\addplot[mark=*,mark size=1pt, mygreen, thick, smooth, tension=0.3]
+		\addplot[mark=*,mark size=1pt, greenish, thick, smooth, tension=0.3]
 		table[x=nz150,y=d150,col sep=tab] from \table;
 		\addlegendentry{$\gamma=1.50$}
 
