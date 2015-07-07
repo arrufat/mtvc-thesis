@@ -16,6 +16,7 @@ echo "\\usepackage[usenames,dvipsnames]{xcolor}"                                
 echo "\\usepackage{pgfplots,tikz}"                                                 >> ${TMPFILE}
 echo "\\usetikzlibrary{decorations.markings,intersections}"                        >> ${TMPFILE}
 echo "\\usepgfplotslibrary{fillbetween}"                                           >> ${TMPFILE}
+echo "\\pgfplotsset{compat=1.12}"                                                  >> ${TMPFILE}
 echo "\\begin{document}"                                                           >> ${TMPFILE}
 echo "\\input{${PGFFILE}}"                                                         >> ${TMPFILE}
 echo "\\end{document}"                                                             >> ${TMPFILE}
