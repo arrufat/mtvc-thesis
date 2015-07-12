@@ -2437,6 +2437,8 @@ with no losses for any of them.
 Consequently, the \ac{KLT} will no longer be considered in the upcoming
 sections, only \ac{RDOT}-based systems will be designed.
 
+The complexity\ldots
+
 The following chapter presents an improvement on \ac{MDDT}, which will allow
 transforms to be more adapted to intra prediction residuals and provide new
 coding alternatives to \ac{HEVC}.
@@ -2465,7 +2467,7 @@ However, the \ac{MDDT} technique has good potential when used with \acp{RDOT},
 especially in their non-separable design.
 
 This Chapter is focused on improving upon the \ac{MDDT} technique by
-increasing the number of transform.
+increasing the number of transforms.
 The main idea is to provide a fixed number of transform per \acf{IPM} that
 will compete against each other in the \ac{RDO} loop, in the same ways as
 block sizes and \acp{IPM} do.
@@ -2522,6 +2524,35 @@ Chapter has been published in~\cite{arrufat-15-mdtc}.
 	\includegraphics{./figures/clustering.pdf}
 	\caption{Clustering and transform learning for a given set of residuals}
 	\label{fig:clustering}
+\end{figure}
+
+
+\begin{figure}[tb]
+	\centering
+	\subfloat[\acs{RDOT} metric evolution with the number of $4\times4$
+	transforms]
+	{\includegraphics{./figures/rdot_ntransforms_4_plot.pdf}}
+	\\	
+	\subfloat[\acs{RDOT} metric evolution with the number of $8\times8$
+	transforms]
+	{\includegraphics{./figures/rdot_ntransforms_8_plot.pdf}}
+	\caption{Average \ac{RDOT} metric evolution for the learning set depending
+	on the number of transforms}
+	\label{fig:rdot_metric_ntransforms}
+\end{figure}
+
+\begin{figure}[tb]
+	\centering
+	\subfloat[\acs{BD}-rate evolution with the number of $4\times4$
+	transforms]
+	{\includegraphics{./figures/bdrate_ntransforms_4_plot.pdf}}
+	\\	
+	\subfloat[\acs{BD}-rate evolution with the number of $8\times8$
+	transforms]
+	{\includegraphics{./figures/bdrate_ntransforms_8_plot.pdf}}
+	\caption{Average \ac{BD}-rate evolution for the learning set depending
+	on the number of transforms}
+	\label{fig:bdrate_ntransforms}
 \end{figure}
 
 \chapter{Incomplete transforms}

@@ -1,0 +1,62 @@
+\begin{tikzpicture}
+	\pgfplotsset{/tikz/font={\footnotesize}}
+	\begin{axis}[
+			% title=Bitrate savings: $-8.94\%$. SNR improvement: $0.46$ dB,
+			% xlabel={Number of $8\times8$ transforms},
+			ylabel={RDOT metric},
+			grid=both,
+			scale only axis,
+			width=0.8\textwidth,
+			height=0.225\textheight,
+			xtick={0,1,2,4,8,16,32},
+			x tick label style={
+				rotate=-45, anchor=west,
+				/pgf/number format/.cd,
+				fixed,
+				fixed zerofill,
+				precision=0,
+			},
+			xlabel near ticks,
+			scaled x ticks=false,
+			ytick={0,1,...,99},
+			y tick label style={
+				/pgf/number format/.cd,
+				fixed,
+				fixed zerofill,
+				precision=0,
+				/tikz/.cd
+			},
+			xmin=0, xmax=32,
+			ymin=19, ymax=28,
+			legend style={nodes=right},
+			legend pos= north east,
+            xticklabels={DCT, DCT + 1 RDOT, DCT + 2RDOT, DCT + 4 RDOT, DCT + 8 RDOT,
+			DCT + 16 RDOT, DCT + 32 RDOT},
+		]
+
+		% 1	25.97
+		\addplot [mark=*,mark size=1pt, red, thick, dashed] table {
+		0	27.04
+		1	25.00
+		2	24.28
+		4	23.62
+		8	23.03
+		16	22.37
+		32	21.78
+		};
+		\addlegendentry{Separable}
+
+		% 1	24.38
+		\addplot [mark=*,mark size=1pt, red, thick] table {
+		0	27.04
+		1	23.61
+		2	22.81
+		4	22.02
+		8	21.26
+		16	20.53
+		32	19.82
+		};
+		\addlegendentry{Non-separable}
+
+		\end{axis}
+	\end{tikzpicture}
