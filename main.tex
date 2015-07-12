@@ -2398,6 +2398,15 @@ configurations and have only been enabled for intra coded residuals in
 Nonetheless, around two thirds of the bit-rate savings achieved for the
 \ac{AI} coding configurations have been achieved in \ac{RA}.
 
+A final comment on the designed transforms regarding the scanning of the
+transformed coeffients:
+the transform base vectors for each \ac{IPM} have been sorted taking into
+account the scanning that \ac{HEVC} performs implicitly, illustrated in
+figure~\ref{fig:mdcs}.
+For non-separable transforms, base vectors can be placed in any order, but
+separable transforms does not have this freedom, as such, a scanning matrix is
+needed to make sure the transform coefficients are sorted properly.
+
 \subsubsection{Coding complexity}
 \label{ssub:mddt_coding_complexity}
 
@@ -2450,13 +2459,6 @@ coding alternatives to \ac{HEVC}.
 \label{cha:the_mode_dependent_transform_competition}
 \chaptertoc
 
-\begin{itemize}
-	\item introduce transform competition with transform
-		skip~\cite{JCTVC-F077, JCTVC-H0208}
-	\item explain VCIP 2014~\cite{arrufat-14-transform-competition-rdot}
-	\item explain ICIP 2015~\cite{arrufat-15-mdtc}
-\end{itemize}
-
 \section{Introduction}
 \label{sec:introduction_mdtc}
 
@@ -2477,16 +2479,50 @@ one that provides the best trade-off in terms of rate-distortion.
 
 Transform competition is not an entirely new concept in \ac{HEVC}.
 A rudimentary form of competition already exists for $4\times4$ intra
-predicted luma residuals: the choice between using the \ac{DST}-VII and not
-using a transform at all already exists.
+predicted luma residuals:
+the choice between using the \ac{DST}-VII and not using a transform at all
+already exists.
 This behaviour is controlled by the
-\texttt{transform\_skip\_flag}~\cite{JCTVC-F077, JCTVC-H0208}, since some
-residuals may contain only noise, and transforming them does not suppose any
-benefit in terms of rate-distortion.
+\texttt{transform\_skip\_flag}~\cite{JCTVC-F077, JCTVC-H0208}.
+This flag is activated when transforming a residual does not suppose any
+benefit in terms of rate-distortion, which might be due to the fact that the
+residuals contains only noise, amongst others.
 
 Early work on transform competition in \ac{HEVC} is detailed
 in~\cite{arrufat-14-transform-competition-rdot}, and the actual work in this
 Chapter has been published in~\cite{arrufat-15-mdtc}.
+
+\section{Multiple transform design using the \acs{RDOT} metric}
+\label{sec:multiple_transform_design}
+
+Since the main purpose of the transforms is to increase the bit-rate savings
+in \ac{HEVC}, the design process is carried out accordingly:
+the default \ac{HEVC} transforms for $4\times4$ and $8\times8$ blocks (the
+\ac{DST} and \ac{DCT}, respectively) are kept and a number of additional
+transforms are learnt to capture those residuals \ac{HEVC} transforms are not
+adapted to.
+
+The learning set is the same as in
+Chapter~\ref{cha:the_mode_dependent_directional_transforms}:
+residuals issued from an \ac{AI} \ac{HEVC} coding of classes B and C from the
+\ac{HEVC} test set, grouped by \ac{IPM}.
+
+For each \ac{IPM} $2^N$ transforms have been learnt, in addition to the
+\ac{HEVC} default transforms.
+Algorithm~\ref{alg:clustering} describes how the learning has been carried out
+in each \ac{IPM}.
+Assuming the desired output are $N$ additional transforms, the performed steps
+are:
+\begin{enumerate}
+	\item Initial random classification of the residuals into $1+N$ classes.
+	\item For the $N$ classes that are not assigned to the \ac{HEVC}
+		transform, learn a separable or non-separable transform, depending on
+		the desired configuration.
+	\item Evaluate each residual using the RDOT metric and assign it to the
+		transform that minimises the value.
+	\item Repeat steps 2 and 3 until convergence.
+\end{enumerate}
+An example for $N=2$ is provided in figure~\ref{fig:clustering}.
 
 \begin{algorithm}
 	\SetKwData{append}{append}
@@ -2526,13 +2562,12 @@ Chapter has been published in~\cite{arrufat-15-mdtc}.
 	\label{fig:clustering}
 \end{figure}
 
-
 \begin{figure}[tb]
 	\centering
 	\subfloat[\acs{RDOT} metric evolution with the number of $4\times4$
 	transforms]
 	{\includegraphics{./figures/rdot_ntransforms_4_plot.pdf}}
-	\\	
+	\\
 	\subfloat[\acs{RDOT} metric evolution with the number of $8\times8$
 	transforms]
 	{\includegraphics{./figures/rdot_ntransforms_8_plot.pdf}}
@@ -2546,7 +2581,7 @@ Chapter has been published in~\cite{arrufat-15-mdtc}.
 	\subfloat[\acs{BD}-rate evolution with the number of $4\times4$
 	transforms]
 	{\includegraphics{./figures/bdrate_ntransforms_4_plot.pdf}}
-	\\	
+	\\
 	\subfloat[\acs{BD}-rate evolution with the number of $8\times8$
 	transforms]
 	{\includegraphics{./figures/bdrate_ntransforms_8_plot.pdf}}
@@ -2554,6 +2589,83 @@ Chapter has been published in~\cite{arrufat-15-mdtc}.
 	on the number of transforms}
 	\label{fig:bdrate_ntransforms}
 \end{figure}
+
+\begin{table*}[t]
+	\centering
+	\scriptsize
+	\begin{tabular}{c|l|rr|rr|rr|rr}
+		\multicolumn{2}{c|}{} &
+		\multicolumn{4}{c|}{$4\times4$: 1+1 --- $8\times8$: 1+1} &
+		\multicolumn{4}{c}{$4\times4$: 1+16 --- $8\times8$: 1+32} \\
+		\cline{3-10}
+		\multicolumn{1}{c}{} & &
+		\multicolumn{2}{c|}{sep} &
+		\multicolumn{2}{c|}{non-sep} &
+		\multicolumn{2}{c|}{sep} &
+		\multicolumn{2}{c}{non-sep} \\
+		\hline
+		\multicolumn{1}{c}{} & {Sequence} &
+		\multicolumn{1}{c}{ \acs{AI}} & \multicolumn{1}{c|}{ \acs{RA}} &
+		\multicolumn{1}{c}{ \acs{AI}} & \multicolumn{1}{c|}{ \acs{RA}} &
+		\multicolumn{1}{c}{ \acs{AI}} & \multicolumn{1}{c|}{ \acs{RA}} &
+		\multicolumn{1}{c}{ \acs{AI}} & \multicolumn{1}{c}{ \acs{RA}} \\
+		\hline
+		\hline
+		\multirow{5}{2cm}{\centering Class A ($2560\times1600$)}
+		& NebutaFestival  &  0.0 &  -0.5 & -0.1 & -0.3 &  -0.1 &  -1.2 & -0.1 & -1.1 \\
+		& PeopleOnStreet  & -1.2 &  -2.8 & -0.5 & -1.4 &  -2.3 &  -5.7 & -1.5 & -4.2 \\
+		& SteamLocTrain   & -0.4 &  -0.5 &  0.3 & -0.4 &   0.0 &  -0.7 &  0.2 & -0.6 \\
+		& Traffic         & -1.7 &  -3.1 & -1.3 & -1.7 &  -5.1 &  -6.1 & -3.7 & -4.5 \\
+		\cline{2-10} &                                                                        
+		Average           & -0.9 &  -1.7 & -0.4 & -0.9 &  -1.9 &  -3.4 & -1.3 & -2.6 \\
+		\hline                                                                                
+		\multirow{6}{2cm}{\centering Class B ($1920\times1080$)}
+		& BasketballDrive & -1.8 &  -3.2 & -0.4 & -1.2 &  -2.4 &  -5.5 & -0.7 & -3.2 \\
+		& BQTerrace       & -2.8 &  -5.1 & -1.1 & -1.8 &  -4.9 &  -9.2 & -2.7 & -4.7 \\
+		& Cactus          & -2.4 &  -3.8 & -1.2 & -2.0 &  -7.7 & -10.9 & -3.1 & -5.2 \\
+		& Kimono1         & -0.5 &  -1.1 & -0.3 & -0.5 &  -1.2 &  -1.8 & -0.8 & -1.1 \\
+		& ParkScene       & -1.5 &  -2.2 & -1.1 & -1.7 &  -3.7 &  -5.3 & -3.2 & -4.6 \\
+		\cline{2-10} &                                                                        
+		 Average          & -1.8 &  -3.1 & -0.8 & -1.4 &  -4.0 &  -6.6 &  -2.1 & -3.8 \\
+		\hline                                                                                
+		\multirow{5}{2cm}{\centering Class C ($832\times480$)}
+		& BasketballDrill & -7.1 & -12.8 & -1.3 & -2.1 & -14.8 & -25.1 & -3.5 & -5.9 \\
+		& BQMall          & -1.9 &  -3.3 & -1.2 & -2.0 &  -3.6 &  -6.2 & -2.8 & -4.8 \\
+		& PartyScene      & -2.3 &  -3.3 & -1.4 & -2.2 &  -4.3 &  -6.2 & -3.2 & -4.9 \\
+		& RaceHorses      & -2.2 &  -4.0 & -0.7 & -1.7 &  -3.2 &  -6.8 & -1.6 & -4.3 \\
+		\cline{2-10} &                                                                        
+		Average           & -3.4 &  -5.9 & -1.2 & -2.0 &  -6.5 & -11.0 & -2.8 & -5.0 \\
+		\hline                                                                                
+		\multirow{5}{2cm}{\centering Class D ($416\times240$)}
+		& BasketballPass  & -2.0 &  -3.7 & -0.8 & -1.7 & -3.1  &  -6.2 & -1.8 & -3.9 \\
+		& BlowingBubbles  & -2.4 &  -4.2 & -1.2 & -2.0 & -4.0  &  -6.7 & -2.7 & -4.3 \\
+		& BQSquare        & -2.0 &  -3.7 & -1.2 & -2.3 & -3.6  &  -6.1 & -2.7 & -4.6 \\
+		& RaceHorses      & -2.0 &  -4.6 & -0.6 & -1.6 & -3.2  &  -7.1 & -1.5 & -3.9 \\
+		\cline{2-10} &                                                                        
+		Average           & -2.1 &  -4.1 & -1.0 & -1.9 & -4.5  &  -6.5 & -2.2 & -4.2 \\
+		\hline                                                                                
+		\multirow{4}{2cm}{\centering Class E ($1280\times720$)}
+		& FourPeople      & -3.3 &  -3.4 & -1.9 & -1.8 & -3.1  &  -6.2 & -5.2 & -4.6 \\
+		& Johnny          & -2.9 &  -3.0 & -1.6 & -1.3 & -3.o  &  -6.7 & -4.2 & -3.3 \\
+		& KristenAndSara  & -3.3 &  -3.5 & -1.8 & -1.3 & -3.6  &  -6.1 & -4.5 & -3.8 \\
+		\cline{2-10} &                                                                        
+		Average           & -3.2 &  -4.2 & -1.8 & -2.0 & -6.4  &  -7.7 & -4.4 & -4.7 \\
+		\hline                                                                                
+		\multirow{5}{2cm}{\centering Class F (various resolutions)}
+		& BasketDrillText & -6.3 & -11.0 & -1.5 & -2.4 & -13.2 & -21.1 & -3.7 & -6.2 \\
+		& ChinaSpeed      & -1.6 &  -2.9 & -1.2 & -2.0 &  -3.0 &  -4.9 & -2.7 & -4.3 \\
+		& SlideEditing    & -2.0 &  -1.8 & -2.2 & -2.0 &  -4.1 &  -3.7 & -5.1 & -4.8 \\
+		& SlideShow       & -3.0 &  -3.5 & -2.3 & -2.5 &  -5.9 &  -6.0 & -5.6 & -5.7 \\
+		\cline{2-10} &                                                                        
+		Average           & -3.2 &  -4.8 & -1.8 & -2.2 &  -6.5 &  -9.0 & -4.3 & -5.2 \\
+		\hline                                                                                
+		\hline                                                                                
+		All sequences &                                                                       
+		Overall           & -2.4 & -3.8  & -1.1 & -1.7 &  -4.7 &  -7.1 & -2.8 & -4.1 \\
+	\end{tabular}
+	\caption{Y \acs{BD}-rate (\%) for low complexity and high performance \acs{MDTC} systems}
+	\label{tab:bd-rate-mdtc}
+\end{table*}
 
 \chapter{Incomplete transforms}
 \label{cha:incomplete_transforms}
