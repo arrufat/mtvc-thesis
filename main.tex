@@ -2506,35 +2506,35 @@ The learning set is the same as in
 Chapter~\ref{cha:the_mode_dependent_directional_transforms}:
 residuals issued from an \ac{AI} \ac{HEVC} coding of classes B and C from the
 \ac{HEVC} test set, grouped by \ac{IPM}.
-
-For each \ac{IPM} $2^N$ transforms have been learnt, in addition to the
-\ac{HEVC} default transforms.
+For each \ac{IPM}, $2^N$ transforms are learnt, in addition to the \ac{HEVC}
+default transforms.
 Algorithm~\ref{alg:clustering} describes how the learning has been carried out
 in each \ac{IPM}.
-Assuming the desired output are $N$ additional transforms, the performed steps
-are:
+Assuming the desired output are $2^N$ additional transforms, the performed
+steps are:
 \begin{enumerate}
-	\item Initial random classification of the residuals into $1+N$ classes.
-	\item For the $N$ classes that are not assigned to the \ac{HEVC}
+	\item Initial random classification of the residuals into $1+2^N$ classes.
+	\item For the $2^N$ classes that are not assigned to the \ac{HEVC}
 		transform, learn a separable or non-separable transform, depending on
 		the desired configuration.
 	\item Evaluate each residual using the RDOT metric and assign it to the
 		transform that minimises the value.
 	\item Repeat steps 2 and 3 until convergence.
 \end{enumerate}
-An example for $N=2$ is provided in figure~\ref{fig:clustering}.
+An example for $N=1\Rightarrow2^N=2$ additional transforms is provided in
+figure~\ref{fig:clustering}.
 
 \begin{algorithm}
 	\SetKwData{append}{append}
 	\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
 	\Input{Residuals $\x$ from a given \acl{IPM}}
-	\Output{Set of $N$ \acp{RDOT} $A_n$}
+	\Output{Set of $2^N$ \acp{RDOT} $A_n$}
 	\BlankLine%
-	Initial random classification into $1+N$ classes
+	Initial random classification into $1+2^N$ classes
 	\BlankLine%
 	\While{!convergence}
 	{
-			\For{$n=1$ \KwTo{} $N$}
+			\For{$n=1$ \KwTo{} $2^N$}
 			{
 				Learn a \ac{RDOT} on $\text{Class}_n$
 				using~\eqref{eqn:rdot-nsep} or~\eqref{eqn:rdot-sep}, depending
@@ -2542,7 +2542,7 @@ An example for $N=2$ is provided in figure~\ref{fig:clustering}.
 			}
 			\ForEach{block $\x$}
 			{
-				\For{$n=0$ \KwTo{} $N$}
+				\For{$n=0$ \KwTo{} $2^N$}
 				{
 					$\delta_n =
 					{\Vert \x - \A^T_n\c\Vert}^2 + \lambda{\Vert\c\Vert}_0$
@@ -2562,6 +2562,23 @@ An example for $N=2$ is provided in figure~\ref{fig:clustering}.
 	\label{fig:clustering}
 \end{figure}
 
+Figure~\ref{fig:rdot_metric_ntransforms} presents the averaged \ac{RDOT}
+metric value for all \acp{IPM} residuals when using an increasing number of
+transforms for $4\times4$ and $8\times8$ residuals.
+The starting point in~\ref{fig:rdot_metric_ntransforms}.a
+and~\ref{fig:rdot_metric_ntransforms}.b corresponds to the \ac{RDOT} metric
+evaluated on \ac{HEVC} default transforms, which corresponds to the one shown
+in figure~\ref{fig:rdot_metric_learning}, from the previous Chapter.
+
+The \ac{RDOT} metric decreases with the number of transforms, but it can be
+seen how it stagnates when the number of transforms is considerably high.
+
+Furthermore, there is an important gap in the \ac{RDOT} metric between
+separable and non-separable transform.
+For $4\times4$ blocks, the value achieved with separable transforms, is
+achieved with half the number of non-separable transforms.
+The gap is even more important for $8\times8$ blocks.
+
 \begin{figure}[tb]
 	\centering
 	\subfloat[\acs{RDOT} metric evolution with the number of $4\times4$
@@ -2578,17 +2595,38 @@ An example for $N=2$ is provided in figure~\ref{fig:clustering}.
 
 \begin{figure}[tb]
 	\centering
-	\subfloat[\acs{BD}-rate evolution with the number of $4\times4$
+	\subfloat[\acs{BD}-rate evolution with the number of additional $4\times4$
 	transforms]
 	{\includegraphics{./figures/bdrate_ntransforms_4_plot.pdf}}
 	\\
-	\subfloat[\acs{BD}-rate evolution with the number of $8\times8$
+	\subfloat[\acs{BD}-rate evolution with the number additional of $8\times8$
 	transforms]
 	{\includegraphics{./figures/bdrate_ntransforms_8_plot.pdf}}
 	\caption{Average \ac{BD}-rate evolution for the learning set depending
 	on the number of transforms}
 	\label{fig:bdrate_ntransforms}
 \end{figure}
+
+Two systems have been evaluated on the full \ac{HEVC} test set in \ac{AI} and
+\ac{RA} coding configurations, named:
+\begin{itemize}
+	\item Low complexity system: one additional transform per \ac{IPM}
+		for both $4\times4$ and $8\times8$ \acp{TU}.
+	\item High performance system: 16 additional transforms per \ac{IPM} for
+		$4\times4$ \acp{TU} and 32 for $8\times8$ \acp{TU}.
+\end{itemize}
+The performances of the low complexity and high performance systems are
+summarised in table~\ref{tab:bd_rate_mdtc}.
+The first thing to notice is that no losses are observed with regards
+\ac{HEVC} in any sequence.
+On one hand, the low complexity system is able to achieve average bit-rate savings of
+around 3.8\% with non-separable transforms, and around 2.4\% with separable
+transforms.
+On the other hand, the high complexity system provides average bit-rate
+savings of over 4\% for its separable version, and over 7\% for the
+non-separable one.
+Around two thirds of the gain observed in the \ac{AI} configuration is
+obtained in the \ac{RA} coding.
 
 \begin{table*}[t]
 	\centering
@@ -2664,8 +2702,22 @@ An example for $N=2$ is provided in figure~\ref{fig:clustering}.
 		Overall           & -2.4 & -3.8  & -1.1 & -1.7 &  -4.7 &  -7.1 & -2.8 & -4.1 \\
 	\end{tabular}
 	\caption{Y \acs{BD}-rate (\%) for low complexity and high performance \acs{MDTC} systems}
-	\label{tab:bd-rate-mdtc}
+	\label{tab:bd_rate_mdtc}
 \end{table*}
+
+\begin{figure}[tb]
+	\centering
+	\includegraphics[width=1\linewidth]{./figures/mdtc_perf_simple.pdf}
+	\caption{\acs{BD}-rate for low complexity \acs{MDTC} system}
+	\label{fig:mdtc_perf_simple}
+\end{figure}
+
+\begin{figure}[tb]
+	\centering
+	\includegraphics[width=1\linewidth]{./figures/mdtc_perf_complex.pdf}
+	\caption{\acs{BD}-rate for high performance \acs{MDTC} system}
+	\label{fig:mdtc_perf_complex}
+\end{figure}
 
 \chapter{Incomplete transforms}
 \label{cha:incomplete_transforms}
