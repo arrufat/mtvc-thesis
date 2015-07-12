@@ -1,0 +1,53 @@
+\begin{tikzpicture}
+
+	\pgfplotsset{/tikz/font={\small},compat=1.11}
+	\begin{axis}[
+			xlabel={Bitrate (Mbps)},
+			ylabel={PSNR (dB)},
+			grid=both,
+			scale only axis,
+			width=0.8\textwidth,
+			height=0.3\textheight,
+			scaled x ticks = false,
+			x tick label style={
+				/pgf/number format/.cd,
+				set thousands separator={\thinspace},
+				/tikz/.cd
+			},
+			xtick={0,3,...,24},
+			ytick={32,34,36,...,44},
+			y tick label style={
+				/pgf/number format/.cd,
+				set decimal separator={.},
+				fixed,
+				fixed zerofill,
+				precision=0,
+				/tikz/.cd
+			},
+			xmin=0, xmax=21,
+			ymin=32, ymax=44,
+			% legend entries={HEVC,HEVC-MDTC},
+			legend style={nodes=right},
+			legend pos= south east
+		]
+
+		\addplot [mark=*,mark size=1pt, blue, thick, dashed] table {
+		20.8089288	41.7621
+		11.313408	38.3717
+		6.0750904	35.4066
+		3.3555608	32.7673
+		};
+		\addlegendentry{HEVC}
+
+		\addplot [mark=*,mark size=1pt, red, thick] table {
+		18.3998656	42.4747
+		10.4338896	39.5278
+		5.8089984	36.5717
+		3.3217624	33.8179
+		};
+		\addlegendentry{HEVC-MDTC}
+
+	\end{axis}
+\end{tikzpicture}
+
+% vim:set filetype=tex:
