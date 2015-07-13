@@ -2085,7 +2085,7 @@ technique.
 This experiment will unveil the ability of each design approach to adapt to a
 particular kind of signals and to fit the video coding demands.
 
-In order to build the learning set, intra prediction residuals issued from
+The learning set has been built with intra prediction residuals issued from
 \ac{HEVC} encodings at four \acp{QP} (22, 27, 32, 37), coming from classes B
 and C from the \ac{HEVC} test set, defined by the \ac{JCT-VC} in the common
 test conditions~\cite{bossen-12-common-test-conditions}.
@@ -2492,14 +2492,14 @@ coding alternatives to \ac{HEVC}.
 \label{sec:introduction_mdtc}
 
 Chapter~\ref{cha:the_mode_dependent_directional_transforms} revisited the
-\acf{MDDT} technique, its origins and motivation and how it was discarded in
+\acf{MDDT} technique, its origins and motivation, and how it was discarded in
 the final \ac{HEVC} standard in favour of a more simplified approach.
 However, the \ac{MDDT} technique has good potential when used with \acp{RDOT},
 especially in their non-separable design.
 
 This Chapter is focused on improving upon the \ac{MDDT} technique by
-increasing the number of transforms.
-The main idea is to provide a fixed number of transform per \acf{IPM} that
+increasing the number of available transforms.
+The main idea is to provide a fixed number of transforms per \acf{IPM} that
 will compete against each other in the \ac{RDO} loop, in the same ways as
 block sizes and \acp{IPM} do.
 This implies that, for a given block size and \ac{IPM}, there will be no
