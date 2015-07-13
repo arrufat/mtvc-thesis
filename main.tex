@@ -2410,16 +2410,42 @@ needed to make sure the transform coefficients are sorted properly.
 \subsubsection{Coding complexity}
 \label{ssub:mddt_coding_complexity}
 
-Regarding the complexity of the system,
-% TODO
-\todo{Discuss the complexity
-\begin{itemize}
-	\item Encoding
-	\item Decoding
-	\item Separability
-\end{itemize}
-}
-
+Regarding the complexity of the system, the increase in the encoding and
+decoding time is only due to the lack of fast algorithms for \acp{KLT} and
+\acp{RDOT}.
+Due to the way the quad-tree partitioning works in \ac{HEVC}, if, for
+instance, a $16\times16$ \ac{TU} provides a better rate-distortion trade-off
+than splitting it into $8\times8$ \acp{TU}, the $4\times4$ will not be
+explored.
+Since the \ac{MDDT} system improves $4\times4$ and $8\times8$ \acp{TU}, it
+becomes more likely that a split $16\times16$ \ac{TU} into four $8\times8$
+\acp{TU} works better than without splitting.
+In that case, the $4\times4$ \acp{TU} will also be explored, which will lead
+to an increase in complexity with regards to \ac{HEVC}, since more coding
+possibilities are being explored.
+Table~\ref{tab:mddt_complexity} summarises the coding complexity for \ac{MDDT}
+systems using separable and non-separable transforms for $4\times4$ and
+$8\times8$ \acp{TU}.
+The complexity for \ac{KLT} and \ac{RDOT} based systems is equivalent, since
+transforms are performed as generic matrix multiplications.
+For $4\times4$ \acp{TU}, the complexity in both coding and decoding times
+remains approximatively the same as that of \ac{HEVC}, however, for bigger
+\acp{TU}, the differences due to fast algorithms start becoming more
+noticeable.
+\begin{table}[tb]
+	\centering
+	\begin{tabular}{l|rr|rr|rr}
+		& \multicolumn{2}{c|}{$4\times4$}
+		& \multicolumn{2}{c|}{$8\times8$}
+		& \multicolumn{2}{c}{$4\times4$ \& $8\times8$} \\
+		& sep & non-sep & sep & non-sep & sep & non-sep \\
+		\hline\hline
+		Encoding & 101\% & 102\% & 107\% & 111\% & 108\% & 112\% \\
+		Decoding & 101\% & 102\% & 103\% & 105\% & 105\% & 107\% \\
+	\end{tabular}
+	\caption{Relative average complexity of \acs{MDDT} systems to \acs{HEVC}}
+	\label{tab:mddt_complexity}
+\end{table}
 
 \section{Conclusions}
 \label{sec:conclusions}
@@ -2446,7 +2472,10 @@ with no losses for any of them.
 Consequently, the \ac{KLT} will no longer be considered in the upcoming
 sections, only \ac{RDOT}-based systems will be designed.
 
-The complexity\ldots
+The complexity of the \ac{MDDT} systems remains comparable to that of
+\ac{HEVC}, since the default transform is replaced with an adapted one.
+Therefore, the increase in complexity is only due to the fact that transforms
+are implemented as matrix multiplications due to the lack of fast algorithms.
 
 The following chapter presents an improvement on \ac{MDDT}, which will allow
 transforms to be more adapted to intra prediction residuals and provide new
