@@ -2432,8 +2432,10 @@ For $4\times4$ \acp{TU}, the complexity in both coding and decoding times
 remains approximatively the same as that of \ac{HEVC}, however, for bigger
 \acp{TU}, the differences due to fast algorithms start becoming more
 noticeable.
+
 \begin{table}[tb]
 	\centering
+	\small
 	\begin{tabular}{l|rr|rr|rr}
 		& \multicolumn{2}{c|}{$4\times4$}
 		& \multicolumn{2}{c|}{$8\times8$}
@@ -2445,6 +2447,57 @@ noticeable.
 	\end{tabular}
 	\caption{Relative average complexity of \acs{MDDT} systems to \acs{HEVC}}
 	\label{tab:mddt_complexity}
+\end{table}
+
+\subsubsection{\acs{MDDT} storage requirements}
+\label{ssub:mddt_storage_requirements}
+
+The transforms used in the \ac{MDDT} system are, in general, not describable
+with a mathematical formula in the same way the \ac{DCT} and the \ac{DST} are.
+As such, additional memory is required to store these transforms and make them
+available to the encoder and the decoder.
+Assuming each transform coefficient is quantised to one byte, the storage
+requirements for a non-separable transform for $N\times N$ \acp{TU} is:
+\begin{equation}
+	\acs{ROM}_{\text{non-sep}} =
+	N^2 \cdot N^2 \cdot \frac{\unit{1}{\kilo B}}{\unit{1024}{B}} \cdot M
+	\label{eqn:rom_nsep}
+\end{equation}
+The needed \acs{ROM} for separable transforms is:
+\begin{equation}
+	\acs{ROM}_{\text{sep}} =
+	3 \cdot N \cdot N \cdot \frac{\unit{1}{\kilo B}}{\unit{1024}{B}} \cdot M
+	\label{eqn:rom_sep}
+\end{equation}
+Where the number of \acp{IPM} $M$ is 35 for the \ac{MDDT} system.
+Sorting the transform base vectors in the proper order is crucial to assist
+the entropy coding~\cite{ye-08-intra-directional-scanning-mddt}.
+For this reason, there is a factor 3 for the \acs{ROM} requirements in the
+separable case: horizontal transform, vertical transform and scanning matrix
+for each pair of transforms.
+The non-separable transforms do not need a scanning matrix, since the base
+vectors can be sorted to output the signal with an appropriate coeffient
+order.
+Table~\ref{tab:mddt_rom} contains the \acs{ROM} requirements for the \ac{MDDT}
+systems in both separable and non-separable designs.
+This table illustrates the drawback of using non-separable transforms
+regarding the storage.
+Even the \ac{MDDT} system using only non-separable transforms for $4\times4$
+\acp{TU} needs more \acs{ROM} than the complete separable \ac{MDDT} system.
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabular}{l|rr|rr|rr}
+		& \multicolumn{2}{c|}{$4\times4$}
+		& \multicolumn{2}{c|}{$8\times8$}
+		& \multicolumn{2}{c}{$4\times4$ \& $8\times8$} \\
+		& sep & non-sep & sep & non-sep & sep & non-sep \\
+		\hline\hline
+		\acs{ROM} (kB) & 1.64 & 8.75 & 6.56 & 140.00 & 8.20 & 148.75 \\
+	\end{tabular}
+	\caption{Additional \acs{ROM} required to store \acs{MDDT} transforms}
+	\label{tab:mddt_rom}
 \end{table}
 
 \section{Conclusions}
