@@ -2988,6 +2988,106 @@ is presented in this Chapter to cover them.
 \chapter{Perspectives and future work}
 \label{cha:perspectives_and_future_work}
 
+\chapter{Publications}
+\label{cha:publications}
+
+\section{Non-separable mode dependent transforms for intra coding in HEVC}
+\label{sec:non_separable_mode_dependent_transforms_for_intra_coding_in_hevc}
+
+\subsection{Abstract}
+\label{sub:mddt_abstract}
+
+Transform coding plays a crucial role in video coders.
+Recently, additional transforms based on the \acs{DST} and the \acs{DCT} have
+been included in the latest video coding standard, \acs{HEVC}.
+Those transforms were introduced after a thoroughly analysis of the video
+signal properties.
+In this paper, we design additional transforms by using an alternative
+learning approach.
+The appropriateness of the design over the classical \acs{KLT} learning is
+also shown.
+Subsequently, the additional designed transforms are applied to the latest
+\acs{HEVC} scheme.
+Results show that coding performance is improved compared to the standard.
+Additional results show that the coding performance can be significantly
+further improved by using non-separable transforms.
+Bit-rate reductions in the range of 2\% over \acs{HEVC} are achieved with
+those proposed transforms.
+
+\section{Rate-distortion optimised transform competition for intra coding in
+HEVC}
+\label{sec:rate_distortion_optimised_transform_competition_for_intra_coding_in_hevc}
+
+\subsection{Abstract}
+\label{sub:tc_abstract}
+
+State of the art video coders are based on prediction and transform coding.
+The transform decorrelates the signal to achieve high compression levels.
+In this paper we propose improving the performances of the latest video coding
+standard, \acs{HEVC}, by adding a set of \acp{RDOT}.
+The transform design is based upon a cost function that incorporates a bit
+rate constraint.
+These new \acp{RDOT} compete against classical \acs{HEVC} transforms in the
+\ac{RDO} loop in the same way as prediction modes and block sizes, providing
+additional coding possibilities.
+Reductions in \acs{BD}-rate of around 2\% are demonstrated when making these
+transforms available in \acs{HEVC}.
+
+\section{Mode-dependent transform competition in HEVC}
+\label{sec:mode_dependent_transform_competition_in_hevc}
+
+\subsection{Abstract}
+\label{sub:mdtc_abstract}
+
+Transform coding plays a key role in state-of-the-art video coders, such as
+\acs{HEVC}.
+However, transforms used in current solutions do not cover the varieties
+of video coding signals.
+This work presents an adaptive transform design method that enables the use of
+multiple transforms in \acs{HEVC}.
+A different transform set is learnt for each intra prediction mode, allowing
+the video encoder to perform better decisions regarding block sizes,
+prediction modes and transforms.
+Different systems are proposed to accommodate trade-offs between complexity
+and performance.
+Bit rate reductions in the range of 2\% to 7\% are reported, depending on
+complexity.
+
+\section{Image coding with incomplete transforms for HEVC}
+\label{sec:image_coding_with_incomplete_transforms_for_hevc}
+
+\subsection{Abstract}
+\label{sub:it_bstract}
+
+Overcomplete transforms have received considerable attention over the past
+years.
+However, they often suffer from a complexity burden.
+In this paper, a low complexity approach is provided, where an orthonormal
+basis is complemented with a set of incomplete transforms: those incomplete
+transforms include a reduced number of basis vectors that allow a reduction on
+the coding complexity and ensure a certain level of sparsity.
+The solution has been implemented in the \acs{HEVC}  standard and compression
+gains of around 1\% on average are reported while reducing the decoder
+complexity in about 5\%.
+
+\section{Low complexity transform competition for HEVC}
+\label{sec:low_complexity_transform_competition_for_hevc}
+
+\subsection{Abstract}
+\label{sub:dtt_abstract}
+
+The use of multiple transforms in video coding can lead to substantial
+bit-rate savings.
+However, these savings come at the expense of increased coding complexity and
+storage requirements, which challenge the usability of this approach.
+In this paper, a systematic procedure is proposed to design low complexity
+systems making use of transform competition.
+Multiple trade-offs accommodating the complexity are unveiled and it is
+demonstrated that they can keep a certain level of performance.
+Compared to the \acs{HEVC} standard, some of them provide bit-rate savings
+around 2\% with a 50\% increase in the encoding time, using less than 4 kB of
+extra ROM and no added decoding complexity.
+
 \bookmarksetup{startatroot}% to remove Bibliography from the last part
 \addtocontents{toc}{\bigskip}% add a separation to the ToC
 \backmatter
