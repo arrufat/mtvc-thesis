@@ -970,7 +970,7 @@ share the same row or column.
 In other words, separable transforms might be less performing than their
 non-separable counterparts.
 The impact in performance due to separability will be studied in detail
-in Chapter~\ref{cha:the_mode_dependent_directional_transforms}.
+in Chapter~\ref{cha:mddt}.
 
 A non-separable transform can be expressed from a set of two separable
 transforms via the Kronecker product, denoted as $\otimes$.
@@ -1254,8 +1254,7 @@ blocks leads to a bit-rate reduction of 1\% on
 average~\cite{sullivan-12-overview-hevc}.
 
 An explanation on the adoption of the \ac{DST} into \ac{HEVC} is detailed in
-Chapter~\ref{cha:the_mode_dependent_directional_transforms}, more precisely in
-\S\ref{sub:dst_and_mddt}.
+Chapter~\ref{cha:mddt}, more precisely in \S\ref{sub:dst_and_mddt}.
 
 \subsection{Final note on the \acs{KLT}}
 \label{sub:final_note_on_the_klt}
@@ -1268,7 +1267,7 @@ For this reason, next section studies another kind of transform design that
 leads to optimal transforms under different conditions.
 
 \section{The rate-distortion optimised transform}
-\label{sec:the_rate_distortion_optimised_transform}
+\label{sec:rdot}
 \index{RDOT}
 
 As discussed before, transforms try to find a compact representation of the
@@ -1406,8 +1405,8 @@ $\A$-independent terms:
 	-2\tr\left(\c_i\x_i^T\A^T\right)
 	\right)
 \end{equation}
-Defining $\Y=\displaystyle\sum_{\forall i}\c_i\x_i^T$ and its SVD
-decomposition $\Y=\U\Lambdab^{\nicefrac{1}{2}}\V^T$, where $\U$ and $\V$
+Defining $\Y=\displaystyle\sum_{\forall i}\c_i\x_i^T$ and its \ac{SVD}
+$\Y=\U\Lambdab^{\nicefrac{1}{2}}\V^T$, where $\U$ and $\V$
 are orthogonal and $\Lambdab$ is a positive semi-definite diagonal matrix.
 The equation rewrites as follows:
 \begin{equation}
@@ -1416,13 +1415,12 @@ The equation rewrites as follows:
 	-2\tr\left(\U\Lambdab^{\nicefrac{1}{2}}\V^T\A^T\right)
 	\right)
 \end{equation}
-Minimising a negative expression is equivalent to maximise its positive
-version.
-Re-arranging the terms using the trace cyclic property:
+Minimising a negative expression is equivalent to maximising its positive
+version, and re-arranging the terms using the trace cyclic property:
 \begin{equation}
-	\A_{opt} = \arg\min\limits_{\A}
+	\A_{opt} = \arg\max\limits_{\A}
 	\left(
-	-2\tr\left(\Lambdab^{\nicefrac{1}{2}}\V^T\A^T\U\right)
+	2\tr\left(\Lambdab^{\nicefrac{1}{2}}\V^T\A^T\U\right)
 	\right)
 \end{equation}
 Let $\Pb=\V^T\A^T\U$.
@@ -1886,11 +1884,11 @@ scenario to find out their performances in video coding.
 
 
 \chapter{The mode-dependent directional transforms}
-\label{cha:the_mode_dependent_directional_transforms}
+\label{cha:mddt}
 \chaptertoc
 
 \section{Introduction}
-\label{sec:introduction_to_mddt}
+\label{sec:mddt_introduction}
 
 Previous Chapter has introduced two different approaches on designing adapted
 transforms.
@@ -1904,7 +1902,7 @@ phase, but is was finally discarded in favour of a new transform, the
 \ac{DST}.
 
 \subsection{Motivation and principles of the \acs{MDDT}}
-\label{sub:motivation_of_the_mddt}
+\label{sub:mddt_motivation}
 
 Depending on the selected prediction mode, transformed coefficients might
 present different patterns, making low and high values to appear at different
@@ -1929,28 +1927,28 @@ In \ac{HEVC}, this means having an adapted transform for each one of the 35
 \begin{figure}[tb]
 	\centering
 	\subfloat[$4\times4$ --- \acs{IPM} 6]
-	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s4-p06.png}}
+	{\includegraphics[width=0.2\linewidth]{./figures/avg-residual-s4-p06.png}}
 	\hfill
 	\subfloat[$4\times4$ --- \acs{IPM} 10]
-	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s4-p10.png}}
+	{\includegraphics[width=0.2\linewidth]{./figures/avg-residual-s4-p10.png}}
 	\hfill
 	\subfloat[$4\times4$ --- \acs{IPM} 18]
-	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s4-p18.png}}
+	{\includegraphics[width=0.2\linewidth]{./figures/avg-residual-s4-p18.png}}
 	\hfill
 	\subfloat[$4\times4$ --- \acs{IPM} 26]
-	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s4-p26.png}}
+	{\includegraphics[width=0.2\linewidth]{./figures/avg-residual-s4-p26.png}}
 	\\
 	\subfloat[$8\times8$ --- \acs{IPM} 6]
-	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s8-p06.png}}
+	{\includegraphics[width=0.2\linewidth]{./figures/avg-residual-s8-p06.png}}
 	\hfill
 	\subfloat[$8\times8$ --- \acs{IPM} 10]
-	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s8-p10.png}}
+	{\includegraphics[width=0.2\linewidth]{./figures/avg-residual-s8-p10.png}}
 	\hfill
 	\subfloat[$8\times8$ --- \acs{IPM} 18]
-	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s8-p18.png}}
+	{\includegraphics[width=0.2\linewidth]{./figures/avg-residual-s8-p18.png}}
 	\hfill
 	\subfloat[$8\times8$ --- \acs{IPM} 26]
-	{\includegraphics[width=0.2\linewidth]{./figures/av-residual-s8-p26.png}}
+	{\includegraphics[width=0.2\linewidth]{./figures/avg-residual-s8-p26.png}}
 	\caption{Residual profiles for different \acsp{IPM}}
 	\label{fig:residual_differences}
 \end{figure}
@@ -2066,12 +2064,12 @@ gains, in both luma and chroma~\cite{JCTVC-J0021}.
 
 In the following section, the \ac{MDDT} will be re-implemented using both
 transforms designs from \S\ref{sec:the_karhunen_loeve_transform} (\ac{KLT})
-and \S\ref{sec:the_rate_distortion_optimised_transform} (\ac{RDOT}), in both
+and \S\ref{sec:rdot} (\ac{RDOT}), in both
 separable and non-separable fashions, to empirically compare its performance
 with regards to the current standard, \ac{HEVC}.
 
 \section{Design and implementation of \acs{MDDT} systems}
-\label{sec:design_and_implementation_of_mddt_systems}
+\label{sec:mddt_design_and_implementation}
 
 Preliminary work carried out for this section has been published in the form
 of an article~\cite{arrufat-14-mddt-rdot}.
@@ -2100,7 +2098,7 @@ design approaches in separable and non-separable versions.
 
 To validate intuitively the results of the iterative learning algorithm for
 the \ac{RDOT}, presented in
-\S\ref{sec:the_rate_distortion_optimised_transform},
+\S\ref{sec:rdot},
 figure~\ref{fig:rdot_metric_learning} shows the value of the \ac{RDOT} metric
 during the learning phase, averaged across all \acp{IPM}, for separable and
 non-separable designs.
@@ -2399,7 +2397,7 @@ Nonetheless, around two thirds of the bit-rate savings achieved for the
 \ac{AI} coding configurations have been achieved in \ac{RA}.
 
 A final comment on the designed transforms regarding the scanning of the
-transformed coeffients:
+transformed coefficients:
 the transform base vectors for each \ac{IPM} have been sorted taking into
 account the scanning that \ac{HEVC} performs implicitly, illustrated in
 figure~\ref{fig:mdcs}.
@@ -2479,7 +2477,7 @@ For this reason, there is a factor 3 for the \acs{ROM} requirements in the
 separable case: horizontal transform, vertical transform and scanning matrix
 for each pair of transforms.
 The non-separable transforms do not need a scanning matrix, since the base
-vectors can be sorted to output the signal with an appropriate coeffient
+vectors can be sorted to output the signal with an appropriate coefficients
 order.
 Table~\ref{tab:mddt_rom} contains the \acs{ROM} requirements for the \ac{MDDT}
 systems in both separable and non-separable designs.
@@ -2541,15 +2539,15 @@ coding alternatives to \ac{HEVC}.
 \label{prt:contributions}
 
 \chapter{The mode-dependent transform competition}
-\label{cha:the_mode_dependent_transform_competition}
+\label{cha:mdtc}
 \chaptertoc
 
 \section{Introduction}
 \label{sec:introduction_mdtc}
 
-Chapter~\ref{cha:the_mode_dependent_directional_transforms} revisited the
-\acf{MDDT} technique, its origins and motivation, and how it was discarded in
-the final \ac{HEVC} standard in favour of a more simplified approach.
+Chapter~\ref{cha:mddt} revisited the \acf{MDDT} technique, its origins and
+motivation, and how it was discarded in the final \ac{HEVC} standard in favour
+of a more simplified approach.
 However, the \ac{MDDT} technique has good potential when used with \acp{RDOT},
 especially in their non-separable design.
 
@@ -2886,10 +2884,10 @@ For higher bit-rates, the improvements are present in both axis.
 
 \begin{figure}[tb]
 	\centering
-	\includegraphics{./figures/bdrate_basketballdrill_wvga_plot.pdf}
+	\includegraphics{./figures/bdrate_bdrill_wvga_plot.pdf}
 	\caption{\emph{BasketballDrill} \acs{BD}-rate curves for non-separable
 	high performance \acs{MDTC}}
-	\label{fig:mdtc_bdrate_basketball_drill}
+	\label{fig:mdtc_bdrate_bdrill}
 \end{figure}
 
 The visual improvements are provided in figure~\ref{fig:mdtc_bdrill_visual}.
@@ -2898,7 +2896,7 @@ yet, and the two other sub-figures the result of coding that block using
 \ac{HEVC} and the non-separable high performance \ac{MDTC}.
 The comparison is pertinent, as both sequences have the same bit-rate at
 \ac{QP} 37 (around \unit{3.3}{\mega bps}, see
-figure~\ref{fig:mdtc_bdrate_basketball_drill}).
+figure~\ref{fig:mdtc_bdrate_bdrill}).
 It is easy to see the improvements made by the \ac{MDTC} system along the
 diagonal patterns of the image:
 The lines are cut when coding with \ac{HEVC} but they remain continuous using
@@ -2925,11 +2923,10 @@ The lines are cut when coding with \ac{HEVC} but they remain continuous using
 
 In this section, the complexity of the \ac{MDTC} systems is analised.
 Contrary to the \ac{MDDT} systems presented in
-Chapter~\ref{cha:the_mode_dependent_directional_transforms}, \ac{MDTC} explore
-many more coding alternatives, which leads to signficant increments in terms
-of encoding time: up to 8--10 times the complexity of the reference \ac{HEVC}
-encodings for the high performance \acs{MDTC} system, depending on
-separability.
+Chapter~\ref{cha:mddt}, \ac{MDTC} explore many more coding alternatives, which
+leads to significant increments in terms of encoding time: up to 8--10 times
+the complexity of the reference \ac{HEVC} encodings for the high performance
+\acs{MDTC} system, depending on separability.
 
 The decoding time is incremented due to the lack of efficient fast algorithms
 for the designed \acp{RDOT}, as in the \ac{MDDT} systems.
@@ -3033,10 +3030,8 @@ requirements) while trying to keep most of the bit-rate savings.
 \section{Introduction}
 \label{sec:it_introduction}
 
-Chapters~\ref{cha:the_mode_dependent_directional_transforms}
-and~\ref{cha:the_mode_dependent_transform_competition} have presented the
-great potential of non-separable transforms in terms of bit-rate savings for
-video coding.
+Chapters~\ref{cha:mddt} and~\ref{cha:mdtc} have presented the great potential
+of non-separable transforms in terms of bit-rate savings for video coding.
 However, they come at a cost:
 the amount of operations needed to transform a block is highly increased with
 respect to a transform having a fast implementation.
@@ -3048,14 +3043,181 @@ video coding applications.
 The work presented in this here is based on the one published
 in~\cite{arrufat-15-inc-transforms}.
 
+\section{Principles of incomplete transforms}
+\label{sec:principles_of_incomplete_transforms}
+
+\subsection{Forcing sparse data representation}
+\label{sub:it_forcing_sparse_data_representation}
+
+Sparse data representation has been an important field of study in the last
+years thanks to its countless applications in many domains, in which,
+compression and feature extraction stand out.
+Sparse representation focuses on finding the most compact representation for a
+given signal~\cite{huang-06-sparse-representation}.
+Amongst them, the K-\acs{SVD} is one way of designing overcomplete
+dictionaries to achieve sparse data
+representation~\cite{aharon-06-overcomplete-sparse-dict}.
+
+The usage of multiple complementary transforms to provide sparse
+representations has been addressed in Chapter~\ref{cha:mdtc}, with the
+\ac{MDTC} systems, where high computational requirements were pointed out.
+In this Chapter, a low complexity solution for sparse data representation is
+proposed.
+The approach is based on a standard orthogonal transform, the \acf{DCT}, in
+competition with multiple elementary sparse transforms, named \emph{incomplete
+transforms}.
+The competition exists in the sense that the encoder selects, for each
+\ac{TU}, the transform that provides the best signal representation in the
+distortion-sparsity plane.
+The effectiveness of this approach is measured using the \ac{RDOT} metric,
+defined in~\ref{eqn:rdot-nsep}.
+
+Incomplete transforms can be considered as a special case of \acfp{RDOT},
+introduced in \S\ref{sec:rdot}, in which
+only one base vector is retained and considered.
+Consequently, a signal transformed using an incomplete transform has only one
+coefficient different from zero in the transform domain.
+In order to be able to represent any signal within a given distortion,
+incomplete transforms are conceived to work as companions of a main orthogonal
+transform, such as the \ac{DCT} for image coding.
+
+To illustrate a case where incomplete transforms might be useful,
+figure~\ref{fig:it_diagram} presents a two-dimensional scenario, where the
+small dots symbolise the 2D signals to be transformed.
+The main transform, whose base vectors are $v_0$ and $v_1$, is able to
+represent the signal efficiently, as $v_0$ follows the main direction of the
+dark dots.
+By construction, $v_1$ is orthogonal to $v_0$.
+
 \begin{figure}[tp]
 	\centering
-	\includegraphics{./figures/inc_tr_diagram.pdf}
+	\includegraphics{./figures/it_diagram.pdf}
 	\caption{Illustration of the incomplete transform concepts.
 	An additional basis vector ($w_0$ is added to assist an orthogonal
 	transform ($v_0,v_1$))}
-	\label{fig:inc_tr_diagram}
+	\label{fig:it_diagram}
 \end{figure}
+
+However, there exists a secondary direction that cannot be represented
+compactly using the $(v_0,v_1)$ base vectors:
+both axis are required to describe the coordinates of those points.
+Just by adding an extra axis, $w_0$, adapted to this secondary direction, an
+effective and sparser representation of those dots can be achieved.
+
+Therefore, the dots plotted in this space can be represented efficiently thanks
+to the union of two transforms.
+One transform is complete, the second one, which can be conceived as a
+complete transform, is restricted to only one base vector, the principal
+component:
+this way, the compactness is guaranteed, as only one transform coefficient is
+needs to be transmitted.
+
+If only one adapted transform had been used in figure~\ref{fig:inc_tr_diagram}
+to adapt to all those points, such as the \acl{KLT}, the main axis would have
+been placed somewhere in between $v_0$ and $w_0$.
+
+\subsection{Complexity analysis}
+\label{sub:it_complexity_analysis}
+
+A remarkable consequence of using incomplete transforms is a decrease in
+complexity when decoding a signal, since there will be one coefficient
+different from zero, decoding implies multiplying the base vector by the
+transformed coefficient.
+
+In image coding, a separable two-dimensional is expressed as
+in~\eqref{eqn:sep_transform}.
+Assuming the image is composed of $8\times8$ blocks, $\x$ stands for the
+$8\times8$ pixels, and $\X$ their frequency representation.
+$\A$ is the $8\times8$ 1D transform.
+The usual transform used in image coding is the \ac{DCT}, whose fast algorithm
+requires 12 multiplications and 29 additions per $8\times1$ vector.
+As $8$ vectors per block need to be processed both for the vertical and
+horizontal transform, processing an $8\times8$ block requires a total of 192
+multiplications and 464 additions.
+This number of operations is identical for the inverse transform.
+
+For an incomplete transform, only one axis needs to be processed:
+each axis being formed by 64 values in this example.
+Consequently, only 64 multiplications and 63 additions are need to transform
+the input block $\x$ into the transform domain.
+For the inverse transformation, only 64 multiplications are needed.
+
+As a result, in this case, the incomplete transforms can be applied with an
+number of operations of approximatively one third of the cost of regular
+separable transforms.
+This complexity reduction benefits both the encoder and the decoder.
+
+It is also worth noticing, that those incomplete transforms are non-separable
+and, therefore, able to exploit any linear correlation amongst pixels
+within a block.
+Separable transforms, on the other hand, are only able to exploit correlation
+of pixels sharing the same row or column.
+
+\section{Design of incomplete transforms}
+\label{sec:it_design_of_incomplete_transforms}
+
+The incomplete transform design is based upon the \ac{RDOT} model proposed
+in~\cite{sezer-08-sparse-orthonormal-transforms} and detailed in
+\S\ref{sec:rdot}.
+The original method describes a way of deriving one optimal transform
+iteratively for some given training data and an initial transform by using a
+metric that includes a sparsity constraint.
+This section adapts the learning method for incomplete transforms.
+
+\subsection{Incomplete transform learning}
+\label{sub:it_incomplete_transform_learning}
+
+The learning phase of incomplete transforms uses the same method presented in
+\S\ref{sec:rdot}, particularly in~\eqref{eqn:rdot-nsep}.
+The design of an incomplete transform take one extra step apart from those
+required in the \ac{RDOT} learning:
+after the hard-thresholding of the coefficients, only the first coefficient is
+kept.
+Consequently, the $\ell_0$ norm of the transform coefficients is always equal
+to one.
+Therefore, for a given set of training signals, one obtains a transform
+consisting of one meaningful base vector.
+The remaining vectors, albeit constituting a complete transform, are useless
+for the aim of the application.
+
+\subsubsection{Multiple incomplete transforms}
+\label{ssub:it_multiple_incomplete_transforms}
+
+In Chapter~\ref{cha:mdtc} the use of multiple transforms inside each \ac{IPM}
+was introduced.
+A decision was made to keep the default \ac{HEVC} transform in each \ac{TU}
+size for compatibility reasons.
+However, since incomplete transforms are designed with a strong sparsity
+constraint on the quantised coefficients, a complete transform is needed to
+guarantee that all signals can be expressed in the transform domain.
+By using the same design as in the previous Chapter (one main transform plus
+$2^N$ incomplete transforms), signals would be able to have a fall-back
+transform in case the incomplete transforms do not provide the desired level
+of fidelity in terms of distortion.
+
+As a result, the learning algorithm for non-separable transforms has remained
+almost untouched from algorithm~\ref{alg:clustering}, described in
+\S\ref{sub:mdtc_learning_algorithm}, only the design of the transform has been
+modified by just keeping the first coefficient after the hard-thresholding.
+After that, residuals are evaluated using the \ac{RDOT} metric to assign them
+to a particular transform.
+
+To illustrate the effectiveness of the learning process,
+figure~\ref{fig:it_num_zero} presents how an increase on the number of
+incomplete transforms is able to to provide a more sparse representation of
+the signal in the transform domain.
+To evaluate this, the average number of significant coefficients is computed
+for different coding configurations (from 1 to 32 incomplete transforms used
+in conjunction with the \ac{DCT}).
+The results are presented relative to the reference system, which consists of
+a coding system using the \ac{DCT} alone, such as the \ac{HEVC}.
+As the number of incomplete transforms is increased, the proportion of
+significant coefficients is decreased to 66\% of its original value:
+this validates the fact that more sparse representations can be achieved with
+the adjunction of incomplete transforms to the traditional \ac{DCT}.
+
+\section{Conclusions}
+\label{sec:it_conclusions}
 
 \chapter{Realistic system}
 \label{cha:realistic_system}
@@ -3064,9 +3226,8 @@ in~\cite{arrufat-15-inc-transforms}.
 Motivation: reduce complexity and ROM
 
 This chapter will take a look at different approaches to simplify the
-system presented in
-Chapter~\ref{cha:the_mode_dependent_transform_competition} while trying
-to degrade its performances as least as possible.
+system presented in Chapter~\ref{cha:mdtc} while trying to degrade its
+performances as least as possible.
 
 Tears of Steel
 \begin{itemize}
@@ -3124,9 +3285,9 @@ frames per second).
 	\item Reduce the ROM requirements $\rightarrow$ mathematical formula
 \end{itemize}
 
-Chapter~\ref{cha:the_mode_dependent_transform_competition} has unveiled the
-potential of gains achievable through the \ac{MDTC} technique.
-Nevertheless, the presented system had a level of complexity which was to
+Chapter~\ref{cha:mdtc} has unveiled the potential of gains achievable through
+the \ac{MDTC} technique.
+Nevertheless, the presented system has a level of complexity which is to
 high to be used in real life applications.
 As a result, the following Chapters presented two different approaches to
 yield the system less complex.
