@@ -29,7 +29,7 @@ do
 
 	echo "Generating figure ${PDFFILE}"
 	latexmk ${TEXFLAGS} ${TMPFILE}
-	mv tmp.pdf ${PDFFILE}
+	mv ${TMPFILE%%.*}.pdf ${PDFFILE}
 	latexmk -c
 	rm ${TMPFILE}
 	echo
