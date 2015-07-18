@@ -1840,7 +1840,7 @@ exponent $\gamma$.
 Figure~\ref{fig:lambda_zero_norm_dist} illustrates how the relationship
 between the distortion and the rate model, at different \acp{QP}.
 \acp{QP} 27 and 32 are highlighted, corresponding to quantisation steps
-$\Delta = 14.256$ and $\Delta = 25.504$ in \ac{HEVC} respectively.
+$\Delta = 14.256$ and $\Delta = 25.504$ in \ac{HEVC}, respectively.
 
 \begin{figure}[tp]
 	\centering
@@ -2258,7 +2258,7 @@ sequences (it does not correspond to the averaged bit-rate savings per class).
 		\hline\hline
 		Seq. Avg. & 0.0  & -0.2 & -0.4 & -0.8 & -0.2 & -0.4 & -0.8 & -1.5 & -0.2 & -0.6 & -1.0 & -1.9 \\
 	\end{tabular}
-	\caption{Average bit-rate savings (\%) for each \ac{HEVC} Class in \acs{RA}}
+	\caption{Average bit-rate savings (\%) for each \acs{HEVC} Class in \acs{RA}}
 	\label{tab:mddt_ra}
 \end{table}
 
@@ -2718,7 +2718,7 @@ If the flag is enabled, a code word of fixed length ($N$ bits) is used to
 signal the selected transform by the encoder.
 
 \subsection{Performances of different configurations}
-\label{sub:performances_of_different_configurations}
+\label{sub:mdtc_performances}
 
 Different \ac{MDTC} systems have been considered and tested, corresponding to
 different number of additional transforms for $4\times4$ and $8\times8$
@@ -3174,11 +3174,15 @@ required in the \ac{RDOT} learning:
 after the hard-thresholding of the coefficients, only the first coefficient is
 kept.
 Consequently, the $\ell_0$ norm of the transform coefficients is always equal
-to one.
+to one for any incomplete transform.
 Therefore, for a given set of training signals, one obtains a transform
 consisting of one meaningful base vector.
 The remaining vectors, albeit constituting a complete transform, are useless
 for the aim of the application.
+
+For consistency with previous Chapters, the learning set consists of
+prediction residuals issued from an \ac{HEVC} \ac{AI} coding for $8\times8$
+blocks, the same one used in Chapters~\ref{cha:mddt} and~\ref{cha:mdtc}.
 
 \subsubsection{Multiple incomplete transforms}
 \label{ssub:it_multiple_incomplete_transforms}
@@ -3206,6 +3210,14 @@ To illustrate the effectiveness of the learning process,
 figure~\ref{fig:it_num_zero} presents how an increase on the number of
 incomplete transforms is able to to provide a more sparse representation of
 the signal in the transform domain.
+
+\begin{figure}[tp]
+	\centering
+	\includegraphics{./figures/it_num_zero_plot.pdf}
+	\caption{Percentage of non-zero coefficients referred to the \acs{DCT}}
+	\label{fig:it_num_zero}
+\end{figure}
+
 To evaluate this, the average number of significant coefficients is computed
 for different coding configurations (from 1 to 32 incomplete transforms used
 in conjunction with the \ac{DCT}).
@@ -3216,24 +3228,138 @@ significant coefficients is decreased to 66\% of its original value:
 this validates the fact that more sparse representations can be achieved with
 the adjunction of incomplete transforms to the traditional \ac{DCT}.
 
+The result of a learning experiment is shown in
+figure~\ref{fig:it_32_transforms}, where 32 $8\times8$ incomplete transforms
+are presented.
+\begin{figure}[tp]
+	\centering
+	\includegraphics[width=0.8\linewidth]{./figures/it_32_transforms.png}
+	\caption{List of 32 incomplete transforms for $8\times8$ blocks}
+	\label{fig:it_32_transforms}
+\end{figure}
+For each one, only the first base vector is displayed, since it is the only
+one delivering significant transformed coefficients.
+In the case of two-dimensional signals, like images, incomplete transforms can
+be directly interpreted as texture patterns against whom the input signal is
+matched.
+The learning set in this experiment is made of prediction residuals extracted
+from a directional mode from the \ac{HEVC} coding scheme.
+The selected mode (\ac{IPM} 6) corresponds to an angular prediction of
+approximately $+\unit{26}{\degree}$.
+Accordingly, the blocks selected by \ac{HEVC} for this mode mostly present a
+directional pattern following that prediction.
+It can be observed how the incomplete transforms have patterns containing that
+particular direction, each exhibiting a particular band-shaped pattern.
+Note that the \ac{DCT} requires a significant number of coefficients to
+represent such directional, and inherently non-separable, patterns.
+
+\section{Incomplete transforms in video coding}
+\label{sec:it_video_coding}
+
+The usefulness of incomplete transforms has also been applied to a practical
+real world scenario: \ac{HEVC}.
+To evaluate the performance of the approach, a set of $8\times8$ incomplete
+transforms is designed for each \ac{HEVC} \ac{IPM}.
+At the encoder, for each block, the best \ac{IPM}/transform pair is selected,
+exactly in the same way as the \ac{MDTC} system from Chapter~\ref{cha:mdtc}.
+
+\subsection{Signalling of incomplete transforms}
+\label{sub:it_signalling}
+
+The signalling scheme for incomplete transforms is inherited from the
+\ac{MDTC} system:
+a flag indicates whether the default \ac{HEVC} transform is used.
+If that is not the case a fixed length codeword indicates which incomplete
+transform has been chosen by the encoder for that \ac{IPM}.
+
+Incomplete transforms have a special feature that generic \acp{RDOT} used in
+the \ac{MDTC} system do not have:
+they always output a signal that has only one coefficient different from zero.
+This fact can be taken advantage of by removing the
+\texttt{last\_sig\_coeff\_x} and \texttt{last\_sig\_coeff\_y} prefix and
+suffix syntax elements from the conveyed bitstream, since the position of the
+last element different from zero is known when using incomplete transforms.
+
+\subsection{Performances of different coding configurations}
+\label{sub:it_performances}
+
+Experiments have been performed following the common test conditions described
+in~\cite{bossen-12-common-test-conditions} for the \ac{HEVC} test set.
+Incomplete transforms have been enabled for $4\times4$ and $8\times8$
+\acp{TU}.
+
+\subsection{Coding complexity}
+\label{sub:it_coding_complexity}
+
+Despite using non-separable incomplete transforms, which are notably less
+complex than regular non-separable and even separable transforms, the encoding
+complexity is increased.
+This is due to the fact that incomplete transforms are used as a simplified
+\ac{MDTC} system, where many transforms are tested for a same block size.
+This make the encoder explore many coding possibilities that were unavailable
+in \ac{HEVC}.
+That being said, the increase in encoding complexity is lower than for a
+full-fledged \ac{MDTC} system, since testing incomplete transforms is much
+faster.
+
+On the decoder side, the situation changes in favour of the incomplete
+transforms with regards to \ac{HEVC}.
+Since all coding choices are made by the encoder and the decoder only has to
+apply the signalled transform, the decoding complexity is a bit lower that
+that of \ac{HEVC}.
+
+\subsection{Storage requirements}
+\label{sub:it_storage_requirements}
+
+Due to the similarities to the \ac{MDTC} system, the non-separable incomplete
+transforms also need to be stored.
+However, in this case, the storage requirements are divided by $N^2$, with $N$
+being the \ac{TU} size for which the transforms are conceived, since only one
+base vector is retained.
+Assuming each transform coefficient is quantised to 1 byte, as in the
+\ac{MDTC} systems, this leads to storage requirements of:
+\begin{itemize}
+	\item $4\times4$ transforms: \unit{16}{B} per transform
+	\item $8\times8$ transforms: \unit{64}{B} per transform
+\end{itemize}
+For the system using 8 $4\times4$ transforms and 32 $8\times8$, the global
+storage requirements are \unit{74.375}{\kilo B}, as there are 35 \acp{IPM}.
+
 \section{Conclusions}
 \label{sec:it_conclusions}
+
+Incomplete transforms provide a simplified version of the \ac{MDTC} system,
+presented in Chapter~\ref{cha:mdtc}.
+These complementary transforms are able to increment the sparsity of the
+signal in the transform domain:
+the number of non-zero coefficients has been reduced to around two thirds of
+its original value.
+
+Experimental results on \ac{HEVC} prove that the sparsity improvements can
+lead to bit-rate savings of around 1\% with peaks of up to 6\%, while keeping
+the decoding complexity lower than that of \ac{HEVC}.
+As a result, incomplete transforms provide an example of application for
+non-separable transforms that can lead to bit-rate savings for reasonable
+complexity and storage amount.
 
 \chapter{Realistic system}
 \label{cha:realistic_system}
 \chaptertoc
+
+\section{Introduction}
+\label{sec:rw_introduction}
+
+Chapter~\ref{cha:mdtc} introduced the \acf{MDTC} system for video coding.
+Significant bit-rate savings were obtained with regards to \ac{HEVC},
+especially when using the non-separable high-performance system, where many
+non-separable transforms were provided in each \ac{IPM}:
+up to 7\% on average for the \ac{AI} coding configuration.
 
 Motivation: reduce complexity and ROM
 
 This chapter will take a look at different approaches to simplify the
 system presented in Chapter~\ref{cha:mdtc} while trying to degrade its
 performances as least as possible.
-
-Tears of Steel
-\begin{itemize}
-	\item $4\times4$ residuals: over 142 million
-	\item $8\times8$ residuals: over 343 million
-\end{itemize}
 
 \subsection{Main drawbacks}
 \label{sub:main_drawbacks}
@@ -3245,16 +3371,37 @@ Tears of Steel
 	\item Storage requirements
 \end{itemize}
 
-\section{Non-homogeneous number of transforms per intra prediction mode}
-\label{sec:non_homogeneous_number_of_transforms_per_intra_prediction_mode}
+\section{Source of the learning set}
+\label{sec:rw_source_of_the_learning_set}
 
-Iterations
+\subsection{Completely independent sets}
+\label{sub:rw_completely_independent_sets}
+
+Tears of Steel
+
+Tears of Steel
+\begin{itemize}
+	\item $4\times4$ residuals: over 142 million
+	\item $8\times8$ residuals: over 343 million
+\end{itemize}
+
+59 sequences
 
 In order to build the learning set, intra prediction residuals issued from
 \ac{HEVC} encodings at four \acp{QP} (22, 27, 32, 37), coming from 59
 sequences at different resolutions ($1920\times1080$, $1280\times720$,
 $800\times480$) and various frame rates (25, 30, 50, 60, 100, 120, 240
 frames per second).
+
+\subsection{Performances of the new data sets}
+\label{sub:rw_performances_new_data_set}
+
+Table and plots showing the performances of MDTC systems with different data-sets
+
+\section{Non-homogeneous number of transforms per intra prediction mode}
+\label{sec:non_homogeneous_number_of_transforms_per_intra_prediction_mode}
+
+Iterations
 
 \section{Intra prediction mode symmetries}
 \label{sec:intra_prediction_mode_symmetries}
