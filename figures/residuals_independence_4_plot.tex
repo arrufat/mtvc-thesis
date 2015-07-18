@@ -1,0 +1,122 @@
+\definecolor{greenish}{RGB}{0,145,0}
+\begin{tikzpicture}
+	\pgfplotsset{/tikz/font={\footnotesize}}
+	\begin{axis}[
+			xlabel={Additional $4\times4$ transforms},
+			ylabel={Y BD-rate (\%)},
+			grid=both,
+			scale only axis,
+			width=0.8\textwidth,
+			height=0.3\textheight,
+			xtick={0, 1, 2, 4, 8, 16, 32},
+			x tick label style={
+				/pgf/number format/.cd,
+				fixed,
+				fixed zerofill,
+				precision=0,
+			},
+			y tick label style={
+				/pgf/number format/.cd,
+				fixed,
+				fixed zerofill,
+				precision=2,
+			},
+			ytick={0,-0.25,...,-4},
+			xmin=0, xmax=32,
+			ymin=-2.0, ymax=0,
+			legend style={nodes=right},
+			legend pos= north east,
+		]
+
+		\addplot [mark=*,mark size=1pt, red, thick] table {
+		0	0
+		1	-0.69
+		2	-0.93
+		4	-1.08
+		8	-1.23
+		16	-1.28
+		32  -1.28
+		};
+		\addlegendentry{BC | BC}
+
+		\addplot [mark=*,mark size=1pt, red, thick, dashed] table {
+		0	0
+		1	-0.61
+		2	-0.85
+		4	-1.05
+		8	-1.14
+		16	-1.22
+		32  -1.25
+		};
+		\addlegendentry{BC | ToS}
+
+		\addplot [mark=*,mark size=1pt, blue, thick] table {
+		0	0
+		1	-0.85
+		2	-1.16
+		4	-1.32
+		8	-1.48
+		16	-1.65
+		32  -1.76
+		};
+		\addlegendentry{ADEF | BC}
+
+		\addplot [mark=*,mark size=1pt, blue, thick, dashed] table {
+		0	0
+		1	-0.95
+		2	-1.21
+		4	-1.54
+		8	-1.68
+		16	-1.85
+		32  -1.89
+		};
+		\addlegendentry{ADEF | ToS}
+
+		\addplot [mark=*,mark size=1pt, greenish, thick] table {
+		0	0
+		1	-0.48
+		2	-0.66
+		4	-0.76
+		8	-0.86
+		16	-0.93
+		32  -0.93
+		};
+		\addlegendentry{59seq | BC}
+
+		\addplot [mark=*,mark size=1pt, greenish, thick, dashed] table {
+		0	0
+		1	-0.48
+		2	-0.66
+		4	-0.80
+		8	-0.91
+		16	-0.96
+		32  -0.99
+		};
+		\addlegendentry{59seq | ToS}
+
+		\addplot [mark=*,mark size=1pt, black, thick] table {
+		0	0
+		1	-0.13
+		2	-0.21
+		4	-0.23
+		8	-0.27
+		16	-0.30
+		32  -0.27
+		};
+		\addlegendentry{ToS | BC}
+
+		\addplot [mark=*,mark size=1pt, black, thick, dashed] table {
+		0	0
+		1	-0.17
+		2	-0.25
+		4	-0.31
+		8	-0.34
+		16	-0.34
+		32  -0.35
+		};
+		\addlegendentry{ToS | ToS}
+
+	\end{axis}
+\end{tikzpicture}
+
+% vim:set filetype=tex:
