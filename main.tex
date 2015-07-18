@@ -3378,6 +3378,22 @@ performances as least as possible.
 \subsection{Completely independent sets}
 \label{sub:rw_completely_independent_sets}
 
+A criticism that could be made in
+Chapters~\ref{cha:mddt},~\ref{cha:mdtc} and~\ref{cha:incomplete_transforms} is
+that the testing set includes the learning set:
+classes B and C have served as the learning set and the resulting transforms
+to build the \ac{MDDT} and \ac{MDTC} systems have been tested against those
+classes.
+That beeing said, peformances on classes not included in the learning set (A,
+D, E and F) have similar levels of performances as described previously on
+different tables.
+
+For this reason, in order to remove all doubts about the effect of the
+learning data set, a completely independent data set has been chosen and
+transforms have been designed using it.
+The resulting transforms have served to build a new \ac{MDTC} system that has
+been compared to the previous one on different sequence sets.
+
 Tears of Steel
 
 Tears of Steel
@@ -3399,6 +3415,15 @@ frames per second).
 
 Table and plots showing the performances of MDTC systems with different data-sets
 
+Figures~\ref{fig:residuals_independence_4}
+and~\ref{fig:residuals_independence_8} show the results of using transforms
+learnt from different data sets on various sequence sets for $4\times4$ and
+$8\times8$ blocks, respectively.
+For the $4\times4$ case, there are few differences in performances between
+both learning sets (Classes B and C, and Tears of Steel).
+Only classes A, D, E and F (in blue) present some preference for the Tears of
+Steel data set.
+
 \begin{figure}[tb]
 	\centering
 	\includegraphics{./figures/residuals_independence_4_plot.pdf}
@@ -3414,6 +3439,46 @@ Table and plots showing the performances of MDTC systems with different data-set
 	$8\times8$ blocks}
 	\label{fig:residuals_independence_8}
 \end{figure}
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabularx}{\linewidth}{r|cc|cc|cc|cc}
+		\# tr. & BC | BC & BC | ToS & ADEF | BC & ADEF | ToS & 59seq | BC &
+		59seq | ToS & ToS | BC & ToS | ToS \\
+		\hline\hline
+		1  & -0.69 & -0.61 & -0.85 & -0.95 & -0.48 & -0.48 & -0.13 & -0.17 \\
+		2  & -0.93 & -0.85 & -1.16 & -1.21 & -0.66 & -0.66 & -0.21 & -0.25 \\
+		4  & -1.08 & -1.05 & -1.32 & -1.54 & -0.76 & -0.80 & -0.23 & -0.31 \\
+		8  & -1.23 & -1.14 & -1.48 & -1.68 & -0.86 & -0.91 & -0.27 & -0.34 \\
+		16 & -1.28 & -1.22 & -1.65 & -1.85 & -0.93 & -0.96 & -0.30 & -0.34 \\
+		32 & -1.28 & -1.25 & -1.76 & -1.89 & -0.93 & -0.99 & -0.27 & -0.35 \\
+	\end{tabularx}
+	\caption{\acs{BD}-rate for different testing and learning sets for
+	$4\times4$ blocks}
+	\label{tab:residuals_independence_4}
+\end{table}
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabularx}{\linewidth}{r|cc|cc|cc|cc}
+		\# tr. & BC | BC & BC | ToS & ADEF | BC & ADEF | ToS & 59seq | BC &
+		59seq | ToS & ToS | BC & ToS | ToS \\
+		\hline\hline
+		1   & -0.97 & -0.68 & -0.82 & -0.74 & -0.93 & -0.83 & -0.75 & -1.00 \\
+		2   & -1.43 & -1.11 & -1.20 & -1.13 & -1.38 & -1.32 & -1.01 & -1.33 \\
+		4   & -1.91 & -1.44 & -1.55 & -1.47 & -1.84 & -1.70 & -1.30 & -1.59 \\
+		8   & -2.35 & -1.81 & -1.91 & -1.83 & -2.15 & -2.08 & -1.48 & -1.84 \\
+		16  & -2.81 & -2.19 & -2.27 & -2.12 & -2.50 & -2.46 & -1.69 & -2.05 \\
+		32  & -3.32 & -2.51 & -2.63 & -2.43 & -2.84 & -2.76 & -1.84 & -2.17 \\
+		64  & -3.88 & -2.79 & -3.01 & -2.66 & -3.10 & -3.04 & -1.93 & -2.28 \\
+		128 & ---   & -3.07 & ---   & -2.92 & ---   & -3.30 & ---   & -2.38 \\
+	\end{tabularx}
+	\caption{\acs{BD}-rate for different testing and learning sets for
+	$8\times8$ blocks}
+	\label{tab:residuals_independence_8}
+\end{table}
 
 \section{Non-homogeneous number of transforms per intra prediction mode}
 \label{sec:non_homogeneous_number_of_transforms_per_intra_prediction_mode}
