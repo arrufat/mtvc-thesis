@@ -14,7 +14,12 @@
 \usepackage{amsmath, amssymb}
 \usepackage{MnSymbol} % for the \curvearrowupdown symbol
 \usepackage[nottoc]{tocbibind} % see http://www.howtotex.com/packages/how-to-add-bibliography-and-more-to-table-of-contents/
+\usepackage[Lenny]{fncychap}
+\ChTitleVar{\Huge\bfseries\sf}
 \usepackage{titlesec,titletoc} % to modify titles and add partial tocs
+\titleformat*{\section}{\Large\bfseries\sffamily}
+\titleformat*{\subsection}{\large\bfseries\sffamily}
+\titleformat*{\subsubsection}{\bfseries\sffamily}
 \usepackage[printonlyused,withpage]{acronym} % options: printonlyused, withpage
 \usepackage{imakeidx} % allows customizing the index in the makeindex command
 \usepackage{emptypage} % removes headers and footers from empty pages
@@ -28,7 +33,6 @@
 \usepackage{multirow} % for columns that expland among multiple rows in tables
 \usepackage{tabularx} % for fixed width tables
 
-\usepackage[Lenny]{fncychap}
 
 % lines and paragraphs
 % \usepackage{setspace}
@@ -3047,8 +3051,8 @@ video coding applications.
 The work presented in this here is based on the one published
 in~\cite{arrufat-15-inc-transforms}.
 
-\section{Principles of incomplete transforms}
-\label{sec:principles_of_incomplete_transforms}
+\section{Motivations of incomplete transforms}
+\label{sec:it_motivations}
 
 \subsection{Forcing sparse data representation}
 \label{sub:it_forcing_sparse_data_representation}
@@ -3281,8 +3285,9 @@ the \ac{MDTC} system do not have:
 they always output a signal that has only one coefficient different from zero.
 This fact can be taken advantage of by removing the
 \texttt{last\_sig\_coeff\_x} and \texttt{last\_sig\_coeff\_y} prefix and
-suffix syntax elements from the conveyed bitstream, since the position of the
-last element different from zero is known when using incomplete transforms.
+suffix syntax elements from the conveyed bitstream~\cite{JCTVC-G704}, since
+the position of the last element different from zero is known when using
+incomplete transforms.
 
 \subsection{Performances of different coding configurations}
 \label{sub:it_performances}
@@ -3291,6 +3296,9 @@ Experiments have been performed following the common test conditions described
 in~\cite{bossen-12-common-test-conditions} for the \ac{HEVC} test set.
 Incomplete transforms have been enabled for $4\times4$ and $8\times8$
 \acp{TU}.
+
+% TODO
+\todo{Add tables and comment them}
 
 \subsection{Coding complexity}
 \label{sub:it_coding_complexity}
@@ -3346,8 +3354,8 @@ As a result, incomplete transforms provide an example of application for
 non-separable transforms that can lead to bit-rate savings for reasonable
 complexity and storage amount.
 
-\chapter{Realistic system}
-\label{cha:realistic_system}
+\chapter{Real world system}
+\label{cha:real_world_system}
 \chaptertoc
 
 \section{Introduction}
@@ -3526,13 +3534,6 @@ Iterations
 		\A \, \curvearrowupdown\x & 11 \le \ac{IPM} \le 18 \\
 		\A \, \curvearrowupdown\x^T & 19 \le \ac{IPM} \le 25 \\
 		\A \, \x^T & 26 \le \ac{IPM} \le 34 \\
-	\end{cases}
-\end{equation}
-
-\begin{equation}
-	\begin{cases}
-		1 & 2\\
-		3 & 4\\
 	\end{cases}
 \end{equation}
 
