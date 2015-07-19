@@ -25,6 +25,7 @@
 \usepackage{emptypage} % removes headers and footers from empty pages
 \usepackage[thickqspace,amssymb,noams]{SIunits} % consistent units support
 \usepackage{subfig} % subfloat environment
+\usepackage{flafter} % make sure floats appear after they have been referenced
 \usepackage{nicefrac} % nicer fractions
 \usepackage{contour} % for inexisting bold symbols
 \contourlength{0.01em}
@@ -471,7 +472,7 @@ will have to be encoded and transmitted.
 \label{ssub:intra_prediction}
 \index{intra prediction}
 
-Intra prediction, sometimes referred to spatial prediction, is used to
+Intra prediction, sometimes referred to as spatial prediction, is used to
 eliminate spatial redundancies by removing the correlation with local regions
 of a picture.
 The basic principle of intra prediction is based on the fact that the texture
@@ -800,7 +801,8 @@ figure~\ref{fig:bdsnr_bdrate}:
 \end{figure}
 
 The \ac{BD}-rate measurement will be used extensively in this thesis to
-appreciate the performance of the proposed systems.
+appreciate the performance of the proposed systems, as is the metric used by
+\ac{MPEG} in normalisation.
 
 \section{Conclusions}
 \label{sec:conclusions_video_coding}
@@ -1107,8 +1109,8 @@ And since $\C_\X$ is diagonal:
 \end{equation}
 Where:
 \begin{itemize}
-	\item $\a_i$ are the eigenvectors of $\C_\x$.
-	\item $\lambda_i$ are the eigenvalues of $\C_\x$.
+	\item $\a_i$'s are the eigenvectors of $\C_\x$.
+	\item $\lambda_i$'s are the eigenvalues of $\C_\x$.
 \end{itemize}
 
 \subsection{Particular case on natural images: the \acs{DCT}}
@@ -1196,8 +1198,8 @@ Although the \ac{DCT} has been proved to be nearly the \ac{KLT} for natural
 images, it is used in predictive transform coding based video standards.
 This kind of coding leads to signals whose nature differs from that of
 natural images: prediction residuals.
-In particular, prediction residuals resulting from intra prediction tend
-to have particular properties.
+More precisely, prediction residuals resulting from intra prediction tend to
+have particular properties.
 Those residuals are computed using predictions from already
 reconstructed blocks, usually available on the left and upper borders (in
 grey) of the current residual (in white), as shown in
@@ -3373,15 +3375,27 @@ This chapter will take a look at different approaches to simplify the
 system presented in Chapter~\ref{cha:mdtc} while trying to degrade its
 performances as least as possible.
 
-\subsection{Main drawbacks}
-\label{sub:main_drawbacks}
+\subsection{Discarding non-separable transforms}
+\label{sub:discarding_non_separable_transforms}
 
+In order to conceive a low complexity system that makes use of transform
+competition, some concessions are required.
+This Chapter proposes simplifications to the areas leading to significant
+complexity increases in \ac{MDTC} systems, especially:
 \begin{itemize}
-	\item Testing and learning on almost the same sequences
-	\item Encoding time
-	\item Decoding time
-	\item Storage requirements
+	\item storage requirements
+	\item decoding time
+	\item encoding time
 \end{itemize}
+
+The first approach for simplification is to suppress the use of non-separable
+transforms, even though they provide notably better performances than their
+separable counterparts, as seen in Chapters~\ref{cha:mddt} and~\ref{cha:mdtc}.
+Non-separable transforms can definitively not accommodate a system with
+neither storage restrictions, nor coding complexity limitations.
+
+For this reason, this Chapter will only cover systems composed by separable
+transforms.
 
 \section{Source of the learning set}
 \label{sec:rw_source_of_the_learning_set}
@@ -3389,23 +3403,21 @@ performances as least as possible.
 \subsection{Completely independent sets}
 \label{sub:rw_completely_independent_sets}
 
-A criticism that could be made in
+A criticism that could be made to systems presented in
 Chapters~\ref{cha:mddt},~\ref{cha:mdtc} and~\ref{cha:incomplete_transforms} is
 that the testing set includes the learning set:
 classes B and C have served as the learning set and the resulting transforms
 to build the \ac{MDDT} and \ac{MDTC} systems have been tested against those
 classes.
-That beeing said, peformances on classes not included in the learning set (A,
+That being said, performances on classes not included in the learning set (A,
 D, E and F) have similar levels of performances as described previously on
-different tables.
+their respective system tables.
 
 For this reason, in order to remove all doubts about the effect of the
 learning data set, a completely independent data set has been chosen and
 transforms have been designed using it.
 The resulting transforms have served to build a new \ac{MDTC} system that has
 been compared to the previous one on different sequence sets.
-
-Tears of Steel
 
 Tears of Steel
 \begin{itemize}
@@ -3499,6 +3511,28 @@ Iterations
 \section{Intra prediction mode symmetries}
 \label{sec:intra_prediction_mode_symmetries}
 
+A disadvantage of the \ac{MDTC} system presented in Chapter~\ref{cha:mdtc} was
+the large number of different transforms that needed to be stored, since each
+\ac{IPM} used its own different set.
+
+In order to limit the \acs{ROM} impact of the transforms, one could take
+advantage of geometrical symmetries existing amongst \ac{HEVC} \acp{IPM}:
+within the 35 \acp{IPM} in \ac{HEVC}, symmetries in prediction residuals can
+be observed for directional modes (2--34).
+
+It can be stated that residuals issued from the first half (2--18) are closely
+related to the transposed version of the second half (18--34).
+These symmetries can be taken one step beyond and be applied inside the first
+half.
+These intra prediction residuals are symmetrical with respect to \ac{IPM} 10:
+residuals from \acp{IPM} above 10 can be related to those below 10 by applying
+a horizontal mirroring (top-bottom) or reflection.
+Since the second half is related to the first half transposed, this property
+applies around \ac{IPM} 26 in a similar fashion, through a vertical mirroring
+(left-right).
+Figure~\ref{fig:sym_pred_directions} contains a simplified version of the
+\ac{HEVC} \acp{IPM} which illustrates the proposed symmetrical relations.
+
 \begin{figure}[t]
 	\centering
 	\includegraphics{./figures/sym-pred-directions.pdf}
@@ -3506,11 +3540,17 @@ Iterations
 	\label{fig:sym_pred_directions}
 \end{figure}
 
+When both symmetries are exploited, the number of transforms of an \ac{MDTC}
+system is no longer affected by a factor of 35 (the number of \acp{IPM}), but
+by a factor of 11 (the number of basic \acp{IPM}), as presented in
+table~\ref{tab:relations_ipm_residuals}.
+
 \begin{table}[tb]
 	\centering
-	\def\arraystretch{0.75}
-	\begin{tabular}{c c c c}
+	\small
+	\begin{tabular}{c|ccc}
 	\bf IPM     & ${(\cdot)}^T$ & \bf Mirror & \bf ${(\cdot)}^T$ + mirror\\[1ex]
+	\hline\hline
 	\bf 0       & ---           & ---    & ---    \\
 	\bf 1       & ---           & ---    & ---    \\
 	\bf 2       & 34            & 18     & ---    \\
@@ -3527,6 +3567,11 @@ Iterations
 	\label{tab:relations_ipm_residuals}
 \end{table}
 
+Using these symmetries between \acp{IPM} implies manipulating the residual
+before the transform stage.
+Before transmitting a residual, the encoder will consider the following cases,
+depending on the \ac{IPM}:
+
 \begin{equation}
 	\X =
 	\begin{cases}
@@ -3536,6 +3581,11 @@ Iterations
 		\A \, \x^T & 26 \le \ac{IPM} \le 34 \\
 	\end{cases}
 \end{equation}
+Where $\A$ is a transform from the basic \ac{IPM} set, $\x$ is the current
+residual and $\curvearrowupdown$ represents the horizontal mirroring operator
+(top-bottom).
+Mirroring and transposing operations are only different ways of re-arranging
+the residual pixels in a consistent way, which come at no computational cost.
 
 \subsection{Proposals}
 \label{sub:proposals}
