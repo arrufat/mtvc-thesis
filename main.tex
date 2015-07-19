@@ -1,50 +1,40 @@
 \documentclass[11pt,a4paper,openright,twoside]{book}
 \def\myauthor{Adrià Arrufat}
 \def\mytitle{Multiple transforms for video coding}
-\usepackage[british]{babel}
-\usepackage{geometry}
+
+\usepackage[british]{babel} % locale settings
+\usepackage{geometry} % page configuration
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+% font configuration
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage[scaled]{helvet}
+\usepackage{courier}
+% mathematical symbols
+\usepackage{amsmath, amssymb}
+\usepackage{MnSymbol} % for the \curvearrowupdown symbol
 \usepackage[nottoc]{tocbibind} % see http://www.howtotex.com/packages/how-to-add-bibliography-and-more-to-table-of-contents/
 \usepackage{titlesec,titletoc} % to modify titles and add partial tocs
 \usepackage[printonlyused,withpage]{acronym} % options: printonlyused, withpage
 \usepackage{imakeidx} % allows customizing the index in the makeindex command
 \usepackage{emptypage} % removes headers and footers from empty pages
 \usepackage[thickqspace,amssymb,noams]{SIunits} % consistent units support
-\usepackage{subfig}
-\usepackage{nicefrac}
+\usepackage{subfig} % subfloat environment
+\usepackage{nicefrac} % nicer fractions
 \usepackage{contour} % for inexisting bold symbols
-\usepackage{enumitem} % for custom labels
-\usepackage{algorithm2e}
-\usepackage{multirow}
-\usepackage{tabularx}
 \contourlength{0.01em}
-\usepackage[Lenny]{fncychap}
+\usepackage{enumitem} % for custom labels in enumerate environments
+\usepackage{algorithm2e} % for describing algorithms
+\usepackage{multirow} % for columns that expland among multiple rows in tables
+\usepackage{tabularx} % for fixed width tables
 
-\usepackage{color}
-\definecolor{yellowish}{rgb}{1,1,0.5}
-\definecolor{redish}{rgb}{1,0.25,0.25}
-\providecommand{\todo}[1]{
-	\begin{center}
-		\colorbox{yellowish}{
-			\begin{minipage}{0.95\linewidth}
-				\textbf{\color{redish}{TODO}:} #1
-			\end{minipage}
-		}
-	\end{center}
-}
+\usepackage[Lenny]{fncychap}
 
 % lines and paragraphs
 % \usepackage{setspace}
 % \setstretch{1}
 % \parskip=\smallskipamount
 % \setlength{\parindent}{0pt}
-
-% font configuration
-\usepackage{amsmath, amssymb}
-\usepackage[T1]{fontenc}
-\usepackage{mathptmx}
-\usepackage[scaled]{helvet}
-\usepackage{courier}
 
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{pgfplots,tikz}
@@ -71,6 +61,19 @@
 	},
 }
 % \urlstyle{same} % do not use monospaced fonts in urls
+
+% Define a TODO command
+\definecolor{yellowish}{rgb}{1,1,0.5}
+\definecolor{redish}{rgb}{1,0.25,0.25}
+\providecommand{\todo}[1]{
+	\begin{center}
+		\colorbox{yellowish}{
+			\begin{minipage}{0.95\linewidth}
+				\textbf{\color{redish}{TODO}:} #1
+			\end{minipage}
+		}
+	\end{center}
+}
 
 % Define a partial ToC to use at the beginning of every chapter
 \providecommand{\chaptertoc}{
@@ -3487,6 +3490,51 @@ Iterations
 
 \section{Intra prediction mode symmetries}
 \label{sec:intra_prediction_mode_symmetries}
+
+\begin{figure}[t]
+	\centering
+	\includegraphics{./figures/sym-pred-directions.pdf}
+	\caption{The 35 \acsp{IPM} in \acs{HEVC} and their symmetries}
+	\label{fig:sym_pred_directions}
+\end{figure}
+
+\begin{table}[tb]
+	\centering
+	\def\arraystretch{0.75}
+	\begin{tabular}{c c c c}
+	\bf IPM     & ${(\cdot)}^T$ & \bf Mirror & \bf ${(\cdot)}^T$ + mirror\\[1ex]
+	\bf 0       & ---           & ---    & ---    \\
+	\bf 1       & ---           & ---    & ---    \\
+	\bf 2       & 34            & 18     & ---    \\
+	\bf 3       & 33            & 17     & 19     \\
+	\bf 4       & 32            & 16     & 20     \\
+	\bf 5       & 31            & 15     & 21     \\
+	\bf 6       & 30            & 14     & 22     \\
+	\bf 7       & 29            & 13     & 23     \\
+	\bf 8       & 28            & 12     & 24     \\
+	\bf 9       & 27            & 11     & 25     \\
+	\bf 10      & 26            & ---    & ---    \\
+	\end{tabular}
+	\caption{Symmetrical relations among \ac{IPM} residuals}
+	\label{tab:relations_ipm_residuals}
+\end{table}
+
+\begin{equation}
+	\X =
+	\begin{cases}
+		\A \, \x & \;\;\, 0 \le \ac{IPM} \le 10 \\
+		\A \, \curvearrowupdown\x & 11 \le \ac{IPM} \le 18 \\
+		\A \, \curvearrowupdown\x^T & 19 \le \ac{IPM} \le 25 \\
+		\A \, \x^T & 26 \le \ac{IPM} \le 34 \\
+	\end{cases}
+\end{equation}
+
+\begin{equation}
+	\begin{cases}
+		1 & 2\\
+		3 & 4\\
+	\end{cases}
+\end{equation}
 
 \subsection{Proposals}
 \label{sub:proposals}
