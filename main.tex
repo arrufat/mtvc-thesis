@@ -3299,8 +3299,97 @@ in~\cite{bossen-12-common-test-conditions} for the \ac{HEVC} test set.
 Incomplete transforms have been enabled for $4\times4$ and $8\times8$
 \acp{TU}.
 
-% TODO
-\todo{Add tables and comment them}
+The results of encoding the \ac{HEVC} test set using incomplete transforms are
+detailed in table~\ref{tab:bd_rate_it}.
+Performances are much lower than those presented in the previous Chapter for
+the \ac{MDTC} system.
+However, as explained in \S\ref{sub:it_coding_complexity} and
+\S\ref{sub:it_storage_requirements}, incomplete transforms requirements are
+also much lower than a \ac{MDTC} system.
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabularx}{\textwidth}{c|X|rr|rr|rr}
+		\multicolumn{2}{c}{} &
+		\multicolumn{2}{c|}{$4\times4$} &
+		\multicolumn{2}{c|}{$8\times8$} &
+		\multicolumn{2}{c}{$4\times4$ \& $8\times8$} \\
+		\cline{2-8}
+		\multicolumn{1}{c}{} & {Sequence} &
+		\multicolumn{1}{c}{ \acs{AI}} & \multicolumn{1}{c|}{ \acs{RA}} &
+		\multicolumn{1}{c}{ \acs{AI}} & \multicolumn{1}{c|}{ \acs{RA}} &
+		\multicolumn{1}{c}{ \acs{AI}} & \multicolumn{1}{c}{ \acs{RA}} \\
+		\hline
+		\hline
+		\multirow{5}{2cm}{\centering Class A ($2560\times1600$)}
+		& NebutaFestival         &  0.0 &  0.0 &  0.0 &  0.0 &  0.0 &  0.0 \\
+		& PeopleOnStreet         &  0.0 &  0.0 & -0.6 & -0.3 & -0.9 & -0.4 \\
+		& SteamLocomotiveTrain   &  0.0 & -0.1 &  0.0 & -0.2 & -0.0 &  0.2 \\
+		& Traffic                &  0.0 & -0.2 & -0.7 & -0.6 & -0.9 & -1.0 \\
+		\cline{2-8} &
+		Average                  &  0.0 & -0.1 & -0.3 & -0.2 & -0.4 & -0.3 \\
+		\hline
+		\hline
+		\multirow{6}{2cm}{\centering Class B ($1920\times1080$)}
+		& BasketballDrive        & -0.1 & 0.0  & -1.1 & -0.7 & -1.3 & -0.8 \\
+		& BQTerrace              & -0.4 & -0.4 & -1.1 & -0.8 & -1.4 & -1.1 \\
+		& Cactus                 & -0.2 & -0.3 & -1.4 & -0.9 & -1.7 & -1.3 \\
+		& Kimono1                & 0.1  & 0.0  & -0.3 & -0.2 & -0.3 & -0.2 \\
+		& ParkScene              & 0.1  & 0.1  & -0.1 & -0.2 & -0.2 & -0.2 \\
+		\cline{2-8} &
+		Average                  & -0.1 & -0.1 & -0.8 & -0.5 & -1.0 & -0.7 \\
+		\hline
+		\hline
+		\multirow{5}{2cm}{\centering Class C ($832\times480$)}
+		& BasketballDrill        & -3.2 & -1.9 & -6.2 & -2.9 & -8.2 & -4.4 \\
+		& BQMall                 & -0.1 & -0.2 & -0.7 & -0.4 & -1.0 & -0.8 \\
+		& PartyScene             & -0.1 & -0.3 & -0.2 & -0.1 & -0.4 & -0.5 \\
+		& RaceHorses             & -0.3 & -0.2 & -0.4 & -0.4 & -0.8 & -0.5 \\
+		\cline{2-8} &
+		Average                  & -0.9 & -0.7 & -1.9 & -1.0 & -2.6 & -1.5 \\
+		\hline
+		\hline
+		\multirow{5}{2cm}{\centering Class D ($416\times240$)}
+		& BasketballPass         & -0.2 & -0.1 & -0.5 & -0.3 & -0.9 & -0.5 \\
+		& BlowingBubbles         & -0.2 & -0.4 & -0.2 & -0.1 & -0.5 & -0.5 \\
+		& BQSquare               & -0.3 & -0.4 & -0.3 & -0.2 & -0.6 & -0.5 \\
+		& RaceHorses             & -0.4 & -0.1 & -0.3 & -0.1 & -0.9 & -0.4 \\
+		\cline{2-8} &
+		Average                  & -0.3 & -0.2 & -0.3 & -0.2 & -0.7 & -0.5 \\
+		\hline
+		\hline
+		\multirow{4}{2cm}{\centering Class E ($1280\times720$)}
+		& FourPeople             & 0.0  & -0.5 & -1.1 & -1.0 & -1.4 & -1.6 \\
+		& Johnny                 & -0.1 & -0.7 & -1.3 & -1.2 & -1.6 & -1.8 \\
+		& KristenAndSara         & -0.3 & -0.6 & -1.2 & -0.8 & -1.6 & -1.4 \\
+		\cline{2-8} &
+		Average                  & -0.2 & -0.6 & -1.2 & -1.0 & -1.5 & -1.6 \\
+		\hline
+		\hline
+		\multirow{5}{2cm}{\centering Class F (various resolutions)}
+		& BasketDrillText        & -2.5 & -1.7 & -4.8 & -2.3 & -6.5 & -3.7 \\
+		& ChinaSpeed             & -0.4 & -0.3 & -0.5 & -0.3 & -0.9 & -0.6 \\
+		& SlideEditing           & -0.2 & -0.2 & -0.5 & -0.6 & -0.7 & -0.8 \\
+		& SlideShow              & -0.7 & -0.8 & -0.8 & -0.8 & -1.5 & -1.6 \\
+		\cline{2-8} &
+		Average                  & -1.0 & -0.7 & -1.6 & -1.0 & -2.4 & -1.7 \\
+		\hline
+		\hline
+		All sequences &
+		Overall                  & -0.4 & -0.4 & -1.0 & -0.6 & -1.4 & -1.0 \\
+	\end{tabularx}
+	\caption{Y \acs{BD}-rate (\%) for low complexity and high performance \acs{MDTC} systems}
+	\label{tab:bd_rate_it}
+\end{table}
+
+\begin{figure}[tb]
+	\centering
+	\includegraphics[width=1\linewidth]{./figures/it_perf_4_8.pdf}
+	\caption{\acs{BD}-rate for incomplete transforms enabled for $4\times4$
+	and $8\times8$ \acsp{TU}}
+	\label{fig:it_perf_4_8}
+\end{figure}
 
 \subsection{Coding complexity}
 \label{sub:it_coding_complexity}
