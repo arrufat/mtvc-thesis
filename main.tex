@@ -85,7 +85,7 @@
 	\startcontents[chapters]
 	\hrule
 	\vspace{1em}
-	\printcontents[chapters]{}{1}{{\bf\large Contents}}
+	\printcontents[chapters]{}{1}{{\sf\large\bfseries Contents}}
 	\hrule
 }
 
@@ -3307,6 +3307,19 @@ However, as explained in \S\ref{sub:it_coding_complexity} and
 \S\ref{sub:it_storage_requirements}, incomplete transforms requirements are
 also much lower than a \ac{MDTC} system.
 
+When incomplete transforms are enabled only for $4\times4$ \acp{TU}, the
+system presents modest performances (around 0.4\% of bit-rate savings) for
+both \ac{AI} and \ac{RA} coding configurations.
+The system starts presenting interesting performances when enabling incomplete
+transforms for $8\times8$ \acp{TU}, providing 1\% of average bit-rate
+savings.
+If incomplete transforms are enabled for both \ac{TU} sizes, the average
+bit-rate savings achieve 1.4\% for \ac{AI} configuration and 1\% for \ac{RA}.
+
+Sequences that performed exceptionally well using the \ac{MDTC} system due to
+their non-separable nature, such as \emph{BasketballDrill} present bit-rate
+savings of more that 8\% using this approach.
+
 \begin{table}[tb]
 	\centering
 	\small
@@ -3410,6 +3423,31 @@ transforms with regards to \ac{HEVC}.
 Since all coding choices are made by the encoder and the decoder only has to
 apply the signalled transform, the decoding complexity is a bit lower that
 that of \ac{HEVC}.
+
+The actual results for encoding and decoding complexity are contained in
+table~\ref{tab:it_complexity}.
+As introduced in \S\ref{sub:it_complexity_analysis}, the complexity is much
+lower on the encoder side than for \ac{MDTC} systems.
+The decoder presents complexities a bit lower than \ac{HEVC}.
+The improvements are modest since incomplete transforms are not selected as
+often as the alternative transforms in the \ac{MDTC} system.
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabular}{l|r|r|r}
+		& \multicolumn{1}{c|}{$4\times4$}
+		& \multicolumn{1}{c|}{$8\times8$}
+		& \multicolumn{1}{c}{$4\times4$ \& $8\times8$} \\
+		\hline\hline
+		Encoding & 160\% & 180\% & 230\% \\
+		Decoding &  97\% &  99\% & 100\% \\
+	\end{tabular}
+	\caption{Relative average complexity of incomplete transform systems to
+	\acs{HEVC}}
+	\label{tab:it_complexity}
+\end{table}
+
 
 \subsection{Storage requirements}
 \label{sub:it_storage_requirements}
