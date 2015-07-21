@@ -3483,7 +3483,7 @@ As a result, incomplete transforms provide an example of application for
 non-separable transforms that can lead to bit-rate savings for reasonable
 complexity and storage amount.
 
-\chapter{Real world system}
+\chapter{Real world \acs{MDTC} system}
 \label{cha:real_world_system}
 \chaptertoc
 
@@ -3495,8 +3495,6 @@ Significant bit-rate savings were obtained with regards to \ac{HEVC},
 especially when using the non-separable high-performance system, where many
 non-separable transforms were provided in each \ac{IPM}:
 up to 7\% on average for the \ac{AI} coding configuration.
-
-Motivation: reduce complexity and ROM
 
 This chapter will take a look at different approaches to simplify the
 system presented in Chapter~\ref{cha:mdtc} while trying to degrade its
@@ -3543,36 +3541,136 @@ their respective system tables.
 For this reason, in order to remove all doubts about the effect of the
 learning data set, a completely independent data set has been chosen and
 transforms have been designed using it.
-The resulting transforms have served to build a new \ac{MDTC} system that has
-been compared to the previous one on different sequence sets.
-
-Tears of Steel
+In order to make all results available, the sequence of choice from which
+residuals have been output is \emph{Tears of Steel}, a Creative Commons short
+film~\cite{blender-tearsofsteel}.
+The film features computed generated imagery and a resolution of
+$1920\times800$ at a frame rate of \unit{24}{\hertz} and a length of
+\unit{12}{\minute} and \unit{14}{\second}.
+Although it is composed of more that 130 sub-sequences, all of them share the
+same video filters, frame rate, resolution, making a source of residuals less
+heterogeneous than classes B and C from the \ac{HEVC} test set, but providing
+a larger number of residuals:
 \begin{itemize}
 	\item $4\times4$ residuals: over 142 million
 	\item $8\times8$ residuals: over 343 million
 \end{itemize}
 
-59 sequences
+The resulting transforms have served to build new \ac{MDTC} systems that have
+been compared to the previous ones on different sequence sets.
 
-In order to build the learning set, intra prediction residuals issued from
-\ac{HEVC} encodings at four \acp{QP} (22, 27, 32, 37), coming from 59
-sequences at different resolutions ($1920\times1080$, $1280\times720$,
-$800\times480$) and various frame rates (25, 30, 50, 60, 100, 120, 240
-frames per second).
+Additionally, another independent set of sequences has been used to test the
+performances of both learning sets (classes B and C, and \emph{Tears of
+Steel}).
+This set consists of 59 sequences at different resolutions ($1920\times1080$,
+$1280\times720$, $800\times480$) and various frame rates (25, 30, 50, 60, 100,
+120, 240 frames per second).
+Each sequence has been limited to 5 frames, since all the tests will be
+performed in the \ac{AI} configuration.
+
+From now on, the different sets will be named as:
+\begin{itemize}
+	\item BC: classes B and C from the \ac{HEVC} test set
+	\item ADEF: classes A, D, E and F from the \ac{HEVC} test set
+	\item 59seq: 5 frames of 59 heterogeneous sequences for testing
+	\item ToS: the \emph{Tears of Steel} short film
+\end{itemize}
 
 \subsection{Performances of the new data sets}
 \label{sub:rw_performances_new_data_set}
 
-Table and plots showing the performances of MDTC systems with different data-sets
+This section presents the results of different \ac{MDTC} systems learnt with
+BC and ToS, and then tested against BC, ADEF, 59seq and ToS.
 
-Figures~\ref{fig:residuals_independence_4}
+The resulting systems performances are contained in
+tables~\ref{tab:residuals_independence_4}
+and~\ref{tab:residuals_independence_8} for $4\times4$ and $8\times8$ separable
+transforms, respectively.
+The table headers read as follows: Test set | Learning set.
+Meaning that the value before the pipe corresponds to the set of sequence that
+have been tested and the value after the pipe to the learning set that has
+been used.
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabularx}{\linewidth}{r|cc|cc|cc|cc}
+		\# tr. & BC | BC & BC | ToS & ADEF | BC & ADEF | ToS & 59seq | BC &
+		59seq | ToS & ToS | BC & ToS | ToS \\
+		\hline\hline
+		1  & -0.7 & -0.6 & -0.9 & -1.0 & -0.5 & -0.5 & -0.1 & -0.2 \\
+		2  & -0.9 & -0.9 & -1.2 & -1.2 & -0.7 & -0.7 & -0.2 & -0.3 \\
+		4  & -1.1 & -1.1 & -1.3 & -1.5 & -0.8 & -0.8 & -0.2 & -0.3 \\
+		8  & -1.2 & -1.1 & -1.5 & -1.7 & -0.9 & -0.9 & -0.3 & -0.3 \\
+		16 & -1.3 & -1.2 & -1.6 & -1.9 & -0.9 & -1.0 & -0.3 & -0.3 \\
+		32 & -1.3 & -1.3 & -1.8 & -1.9 & -0.9 & -1.0 & -0.3 & -0.4 \\
+	\end{tabularx}
+	\caption{\acs{BD}-rate for different testing and learning sets for
+	$4\times4$ blocks}
+	\label{tab:residuals_independence_4}
+\end{table}
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabularx}{\linewidth}{r|cc|cc|cc|cc}
+		\# tr. & BC | BC & BC | ToS & ADEF | BC & ADEF | ToS & 59seq | BC &
+		59seq | ToS & ToS | BC & ToS | ToS \\
+		\hline\hline
+		1   & -1.0 & -0.7 & -0.8 & -0.7 & -0.9 & -0.8 & -0.8 & -1.0 \\
+		2   & -1.4 & -1.1 & -1.2 & -1.1 & -1.4 & -1.3 & -1.0 & -1.3 \\
+		4   & -1.9 & -1.4 & -1.6 & -1.5 & -1.8 & -1.7 & -1.3 & -1.6 \\
+		8   & -2.4 & -1.8 & -1.9 & -1.8 & -2.2 & -2.1 & -1.5 & -1.8 \\
+		16  & -2.8 & -2.2 & -2.3 & -2.1 & -2.5 & -2.5 & -1.7 & -2.1 \\
+		32  & -3.3 & -2.5 & -2.6 & -2.4 & -2.8 & -2.8 & -1.8 & -2.2 \\
+		64  & -3.9 & -2.8 & -3.0 & -2.7 & -3.1 & -3.1 & -1.9 & -2.3 \\
+		128 & ---  & -3.1 & ---  & -2.9 & ---  & -3.3 & ---  & -2.4 \\
+	\end{tabularx}
+	\caption{\acs{BD}-rate for different testing and learning sets for
+	$8\times8$ blocks}
+	\label{tab:residuals_independence_8}
+\end{table}
+
+For illustrative purposes, figures~\ref{fig:residuals_independence_4}
 and~\ref{fig:residuals_independence_8} show the results of using transforms
 learnt from different data sets on various sequence sets for $4\times4$ and
 $8\times8$ blocks, respectively.
 For the $4\times4$ case, there are few differences in performances between
-both learning sets (Classes B and C, and Tears of Steel).
-Only classes A, D, E and F (in blue) present some preference for the Tears of
+both learning sets, BC and ToS.
+Only classes ADEF (in blue) present some preference for the Tears of
 Steel data set.
+For the $8\times8$ case, there seems to be some over-learning in the classes
+BC, since it has notable differences in performances with regards the
+transforms issued from ToS.
+The rest of test set present similar performance levels for both learning
+sets.
+This comes as a reassuring fact, since the residuals from ToS have less
+variability in terms of camera filters, frame rate, resolution and have even
+synthetic images, whereas the rest of sequences are composed exclusively of
+natural images.
+
+Finally, as the 59seq will be serving as the new reference system, against
+which new improvements will be measured, the separable high performance
+\ac{MDTC} system (16 additional transforms for $4\times4$ \acp{TU} and 32 for
+$8\times8$ \acp{TU}) has been evaluated on this test set.
+The results are presented in table~\ref{tab:rw_mdtc_59seq}.
+Performances of the high complexity \ac{MDTC} system are almost equivalent on
+the 59seq testing set, independently of the used learning set.
+As a reminder, the separable high performance \ac{MDTC} system had bit-rate
+savings of around 4\% on the \ac{HEVC} test set.
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabular}{c|c}
+	Learning set & Y \acs{BD}-rate \\
+	\hline\hline
+	BC  & -3.5\% \\
+	ToS & -3.4\% \\
+	\end{tabular}
+	\caption{High performance \acs{MDTC} systems on the 59seq using different
+	learning sets}
+	\label{tab:rw_mdtc_59seq}
+\end{table}
 
 \begin{figure}[tb]
 	\centering
@@ -3590,50 +3688,27 @@ Steel data set.
 	\label{fig:residuals_independence_8}
 \end{figure}
 
-\begin{table}[tb]
-	\centering
-	\small
-	\begin{tabularx}{\linewidth}{r|cc|cc|cc|cc}
-		\# tr. & BC | BC & BC | ToS & ADEF | BC & ADEF | ToS & 59seq | BC &
-		59seq | ToS & ToS | BC & ToS | ToS \\
-		\hline\hline
-		1  & -0.69 & -0.61 & -0.85 & -0.95 & -0.48 & -0.48 & -0.13 & -0.17 \\
-		2  & -0.93 & -0.85 & -1.16 & -1.21 & -0.66 & -0.66 & -0.21 & -0.25 \\
-		4  & -1.08 & -1.05 & -1.32 & -1.54 & -0.76 & -0.80 & -0.23 & -0.31 \\
-		8  & -1.23 & -1.14 & -1.48 & -1.68 & -0.86 & -0.91 & -0.27 & -0.34 \\
-		16 & -1.28 & -1.22 & -1.65 & -1.85 & -0.93 & -0.96 & -0.30 & -0.34 \\
-		32 & -1.28 & -1.25 & -1.76 & -1.89 & -0.93 & -0.99 & -0.27 & -0.35 \\
-	\end{tabularx}
-	\caption{\acs{BD}-rate for different testing and learning sets for
-	$4\times4$ blocks}
-	\label{tab:residuals_independence_4}
-\end{table}
+\section{Non-homogeneous \acs{MDTC} systems}
+\label{sec:non_homogeneous_mdtc_systems}
 
-\begin{table}[tb]
-	\centering
-	\small
-	\begin{tabularx}{\linewidth}{r|cc|cc|cc|cc}
-		\# tr. & BC | BC & BC | ToS & ADEF | BC & ADEF | ToS & 59seq | BC &
-		59seq | ToS & ToS | BC & ToS | ToS \\
-		\hline\hline
-		1   & -0.97 & -0.68 & -0.82 & -0.74 & -0.93 & -0.83 & -0.75 & -1.00 \\
-		2   & -1.43 & -1.11 & -1.20 & -1.13 & -1.38 & -1.32 & -1.01 & -1.33 \\
-		4   & -1.91 & -1.44 & -1.55 & -1.47 & -1.84 & -1.70 & -1.30 & -1.59 \\
-		8   & -2.35 & -1.81 & -1.91 & -1.83 & -2.15 & -2.08 & -1.48 & -1.84 \\
-		16  & -2.81 & -2.19 & -2.27 & -2.12 & -2.50 & -2.46 & -1.69 & -2.05 \\
-		32  & -3.32 & -2.51 & -2.63 & -2.43 & -2.84 & -2.76 & -1.84 & -2.17 \\
-		64  & -3.88 & -2.79 & -3.01 & -2.66 & -3.10 & -3.04 & -1.93 & -2.28 \\
-		128 & ---   & -3.07 & ---   & -2.92 & ---   & -3.30 & ---   & -2.38 \\
-	\end{tabularx}
-	\caption{\acs{BD}-rate for different testing and learning sets for
-	$8\times8$ blocks}
-	\label{tab:residuals_independence_8}
-\end{table}
+In Chapter~\ref{cha:mdtc}, the \ac{MDTC} system was introduced.
+The \ac{MDTC} system was presented as an evolved \ac{MDDT} system, in which,
+instead of only one transform, a fixed number of transforms was provided
+inside each \ac{IPM}.
+However, it is a well-known fact that \ac{HEVC} does not use all \acp{IPM}
+equally.
+There exists the \acp{MPM}, explained in~\cite{wien-15-hevc}.
+The main idea is to favour the \acp{IPM} that are most used during the
+encoding of a sequence in terms of signalling.
+For this reason, it might be counter productive to add lots of transforms to
+those modes that are hardly chosen, making them even less cost efficient,
+since the extra transforms need to be signalled, as well.
 
-\section{Non-homogeneous number of transforms per intra prediction mode}
-\label{sec:non_homogeneous_number_of_transforms_per_intra_prediction_mode}
+\subsection{Iterating through non-homogeneous \acs{MDTC} systems}
+\label{sub:iterations_mdtc}
 
-Iterations
+\subsection{Non-homogeneous \acs{MDTC} performances}
+\label{sub:non_homogeneous_mdtc_performances}
 
 \section{Intra prediction mode symmetries}
 \label{sec:intra_prediction_mode_symmetries}
@@ -3698,7 +3773,6 @@ Using these symmetries between \acp{IPM} implies manipulating the residual
 before the transform stage.
 Before transmitting a residual, the encoder will consider the following cases,
 depending on the \ac{IPM}:
-
 \begin{equation}
 	\X =
 	\begin{cases}
@@ -3714,19 +3788,14 @@ residual and $\curvearrowupdown$ represents the horizontal mirroring operator
 Mirroring and transposing operations are only different ways of re-arranging
 the residual pixels in a consistent way, which come at no computational cost.
 
-\subsection{Proposals}
-\label{sub:proposals}
+\subsection{Symmetries performances on video coding}
+\label{sub:symmetries_performances_on_video_coding}
 
-\begin{itemize}
-	\item Usage of separable transforms
-	\item Making use of symmetries in prediction modes
-	\item Non-homogeneous transform repartition amongst prediction modes
-\end{itemize}
+\section{Non-homogeneous symmetrical \acs{MDTC}}
+\label{sec:non_homogeneous_symmetrical_mdtc}
 
-\begin{itemize}
-	\item Force the number of non-zeroes to 1.
-	\item Try to keep good performances from non-separable transforms.
-\end{itemize}
+\section{Conclusions}
+\label{sec:rw_conclusions}
 
 \chapter{Discrete trigonometric transforms}
 \label{cha:discrete_trigonometric_transforms}

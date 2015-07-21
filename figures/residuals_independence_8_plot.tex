@@ -18,7 +18,7 @@
 				/pgf/number format/.cd,
 				fixed,
 				fixed zerofill,
-				precision=2,
+				precision=1,
 			},
 			xtick={0,1,2,4,8,16,32,64,128},
 			ytick={0,-0.5,...,-4},
@@ -92,15 +92,15 @@
 
 		\addplot [mark=*,mark size=1pt, greenish, thick, dashed] table {
 		0	0
-		1	-0.83
-		2	-1.32
-		4	-1.70
-		8	-2.08
-		16	-2.46
-		32  -2.76
-		64	-3.04
+		1	-0.84
+		2	-1.33
+		4	-1.72
+		8	-2.10
+		16	-2.48
+		32  -2.79
+		64	-3.07
 		};
-		% 128	-3.30
+		% 128	-3.34
 		\addlegendentry{59seq | ToS}
 
 		\addplot [mark=*,mark size=1pt, black, thick] table {

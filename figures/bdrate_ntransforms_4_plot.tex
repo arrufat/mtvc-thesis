@@ -15,7 +15,12 @@
 				fixed zerofill,
 				precision=0,
 			},
-			% xticklabels={0, 1, 2, 4, 8, 16, 32},
+			y tick label style={
+				/pgf/number format/.cd,
+				fixed,
+				fixed zerofill,
+				precision=1,
+			},
 			ytick={0,-0.5,...,-4},
 			% yticklabels={0\%, -1\%, -2\%, -3\%, -4\%, -5\%, -6\%},
 			xmin=0, xmax=16,
