@@ -33,7 +33,7 @@
 \usepackage{algorithm2e} % for describing algorithms
 \usepackage{multirow} % for columns that expland among multiple rows in tables
 \usepackage{tabularx} % for fixed width tables
-
+\usepackage{diagbox} % for diagonal separator in tables
 
 % lines and paragraphs
 % \usepackage{setspace}
@@ -3640,40 +3640,6 @@ For the $4\times4$ case, there are few differences in performances between
 both learning sets, BC and ToS.
 Only classes ADEF (in blue) present some preference for the Tears of
 Steel data set.
-For the $8\times8$ case, there seems to be some over-learning in the classes
-BC, since it has notable differences in performances with regards the
-transforms issued from ToS.
-The rest of test set present similar performance levels for both learning
-sets.
-This comes as a reassuring fact, since the residuals from ToS have less
-variability in terms of camera filters, frame rate, resolution and have even
-synthetic images, whereas the rest of sequences are composed exclusively of
-natural images.
-
-Finally, as the 59seq will be serving as the new reference system, against
-which new improvements will be measured, the separable high performance
-\ac{MDTC} system (16 additional transforms for $4\times4$ \acp{TU} and 32 for
-$8\times8$ \acp{TU}) has been evaluated on this test set.
-The results are presented in table~\ref{tab:rw_mdtc_59seq}.
-Performances of the high complexity \ac{MDTC} system are almost equivalent on
-the 59seq testing set, independently of the used learning set.
-As a reminder, the separable high performance \ac{MDTC} system had bit-rate
-savings of around 4\% on the \ac{HEVC} test set.
-\begin{table}[tb]
-	\centering
-	\small
-	\begin{tabular}{c|c}
-	Learning set & Y \acs{BD}-rate \\
-	\hline\hline
-	BC  & -3.5\% \\
-	ToS & -3.4\% \\
-	\end{tabular}
-	\caption{High performance \acs{MDTC} systems on the 59seq using different
-	learning sets}
-	\label{tab:rw_mdtc_59seq}
-\end{table}
-% TODO
-\todo{Add performances of High Performance MDTC learnt on ToS on BC}
 
 \begin{figure}[tb]
 	\centering
@@ -3683,6 +3649,12 @@ savings of around 4\% on the \ac{HEVC} test set.
 	\label{fig:residuals_independence_4}
 \end{figure}
 
+For the $8\times8$ case, there seems to be some over-learning in the classes
+BC, since it has notable differences in performances with regards the
+transforms issued from ToS.
+The rest of test set present similar performance levels for both learning
+sets.
+
 \begin{figure}[tb]
 	\centering
 	\includegraphics{./figures/residuals_independence_8_plot.pdf}
@@ -3690,6 +3662,39 @@ savings of around 4\% on the \ac{HEVC} test set.
 	$8\times8$ blocks}
 	\label{fig:residuals_independence_8}
 \end{figure}
+
+This comes as a reassuring fact, since the residuals from ToS have less
+variability in terms of camera filters, frame rate, resolution and have even
+synthetic images, whereas the rest of sequences are composed exclusively of
+natural images.
+
+Table~\ref{tab:cross_bdrate_learn} illustrates the impact of changing the
+learning set to design the high performance \ac{MDTC} system: losses of 0.4
+and 0.2 are observed for the \ac{AI} and \ac{RA} configurations, respectively.
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabular}{c|cc|c}
+		& \multicolumn{2}{c|}{\acs{HEVC} test set} & 59seq \\
+		\diagbox{Learn}{Test}
+		& \acs{AI} & \acs{RA} & \acs{AI} \\
+		\hline\hline
+		BC  & -4.1\% & -2.8\% & -3.5\% \\
+		ToS & -3.7\% & -2.6\% & -3.4\% \\
+	\end{tabular}
+	\caption{Bit-rate savings for separable high performance \acs{MDTC} using
+	different test sets}
+	\label{tab:cross_bdrate_learn}
+\end{table}
+
+Finally, as the 59seq will be serving as the new reference system, against
+which new improvements will be measured, the separable high performance
+\ac{MDTC} system (16 additional transforms for $4\times4$ \acp{TU} and 32 for
+$8\times8$ \acp{TU}) has been evaluated on this test set.
+The results are also presented in table~\ref{tab:cross_bdrate_learn}.
+Performances of the high complexity \ac{MDTC} system are almost equivalent on
+the 59seq testing set, independently of the used learning set.
 
 \section{Non-homogeneous \acs{MDTC} systems}
 \label{sec:non_homogeneous_mdtc_systems}
@@ -3954,6 +3959,27 @@ the residual pixels in a consistent way, which come at no computational cost.
 
 \subsection{Symmetries performances on video coding}
 \label{sub:symmetries_performances_on_video_coding}
+
+\begin{table}[tb]
+	\centering
+	\begin{tabular}{c|rr|rr}
+		& \multicolumn{2}{c|}{non-symmetrical}
+		& \multicolumn{2}{c}{symmetrical} \\
+		\# tr & \multicolumn{1}{c}{\acs{ROM}} &
+		\multicolumn{1}{c|}{Y \acs{BD}-rate} &
+		\multicolumn{1}{c}{\acs{ROM}} &
+		\multicolumn{1}{c}{Y \acs{BD}-rate} \\
+		\hline \hline
+		1  &  \unit{1.64}{\kilo B} & -0.5\% &  \unit{0.52}{\kilo B} & -0.4\% \\
+		2  &  \unit{3.28}{\kilo B} & -0.7\% &  \unit{1.03}{\kilo B} & -0.5\% \\
+		4  &  \unit{6.56}{\kilo B} & -0.8\% &  \unit{2.06}{\kilo B} & -0.6\% \\
+		8  & \unit{13.13}{\kilo B} & -0.9\% &  \unit{4.13}{\kilo B} & -0.7\% \\
+		16 & \unit{26.25}{\kilo B} & -1.0\% &  \unit{8.25}{\kilo B} & -0.8\% \\
+		32 & \unit{52.50}{\kilo B} & -1.0\% & \unit{16.50}{\kilo B} & -0.8\% \\
+	\end{tabular}
+	\caption{Symmetries impact on $4\times4$ transforms on the 59seq test set}
+	\label{tab:sym4}
+\end{table}
 
 % TODO
 \todo{Add performances of a high performance symmetrical \acs{MDTC} system}
