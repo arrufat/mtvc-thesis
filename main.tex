@@ -26,6 +26,7 @@
 \usepackage[thickqspace,amssymb,noams]{SIunits} % consistent units support
 \usepackage{subfig} % subfloat environment
 \usepackage{flafter} % make sure floats appear after they have been referenced
+\usepackage[section, above, below]{placeins} % prevents float from bein far
 \usepackage{nicefrac} % nicer fractions
 \usepackage{contour} % for inexisting bold symbols
 \contourlength{0.01em}
@@ -541,7 +542,7 @@ book on \ac{HEVC}~\cite{wien-15-hevc}.
 	\subfloat[Diagonal scanning]{\includegraphics{figures/mdcs-diag.pdf}}
 	\subfloat[Horizontal scanning]{\includegraphics{figures/mdcs-horz.pdf}}
 	\subfloat[Vertical scanning]{\includegraphics{figures/mdcs-vert.pdf}}
-	\caption{\acs{HEVC} intra prediction modes related to their average
+	\caption{\acs{HEVC} \aclp{IPM} related to their average
 	residual signals and their appropriate scanning in the transform
 	domain for $4\times4$ \acsp{TU}}
 	\label{fig:mdcs}
@@ -1214,14 +1215,14 @@ resulting in a transform that performs better on them than the \ac{DCT}:
 the \acf{DST}~\cite{han-10-spatial-adaptive-transform}.
 \begin{figure}[tb]
 	\centering
-	\subfloat[Intra prediction modes for the current block (white) from
-	previously reconstructed blocks (grey)]
+	\subfloat[The \aclp{IPM} for the current block (white) from previously
+	reconstructed blocks (grey)]
 	{\includegraphics{./figures/pred-scheme.pdf}}
 	\hspace{0.2\linewidth}
 	\subfloat[Average intra prediction residual]
 	{\includegraphics[width=0.3\linewidth]{./figures/resids-scan-diag.png}}
-	\caption{Prediction scheme showing all intra prediction modes and a
-	prediction residual example}
+	\caption{Prediction scheme showing all \aclp{IPM} and a prediction
+	residual example}
 	\label{fig:pred_scheme}
 \end{figure}
 
@@ -1893,7 +1894,7 @@ In the next chapter, both transform designs will be tested in a real
 scenario to find out their performances in video coding.
 
 
-\chapter{The mode-dependent directional transforms}
+\chapter{The \aclp{MDDT}}
 \label{cha:mddt}
 \chaptertoc
 
@@ -2548,7 +2549,7 @@ coding alternatives to \ac{HEVC}.
 \part{Contributions}
 \label{prt:contributions}
 
-\chapter{The mode-dependent transform competition}
+\chapter{The \acl{MDTC} system}
 \label{cha:mdtc}
 \chaptertoc
 
@@ -2632,6 +2633,7 @@ An example for $N=1\Rightarrow2^N=2$ additional transforms is provided in
 figure~\ref{fig:clustering}.
 
 \begin{algorithm}
+	\small
 	\SetKwData{append}{append}
 	\SetKwInOut{Input}{input}
 	\SetKwInOut{Output}{output}
@@ -2888,7 +2890,7 @@ which already showed high gains using the \ac{MDDT} technique.
 This sequence has de particularity of presenting a large amount of directional
 patterns, which lead to bit-rate savings of over 25\%.
 The \ac{BD}-rate curves for this sequence are presented in
-figure~\ref{fig:mdtc_bdrate_basketball_drill}.
+figure~\ref{fig:mdtc_bdrate_bdrill}.
 For low bit-rates, corresponding to \acp{QP} of 32 and 37, the bitstream size
 is almost kept untouched, but the \ac{PSNR} is substantially improved.
 For higher bit-rates, the improvements are present in both axis.
@@ -2959,12 +2961,12 @@ complexity and high performance \ac{MDTC} systems.
 	\centering
 	\small
 	\begin{tabular}{l|rr|rr}
-		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c}{} &
 		\multicolumn{2}{c|}{\multirow{2}{2cm}{\centering $4\times4$: 1+1 $8\times8$: 1+1}} &
 		\multicolumn{2}{c}{\multirow{2}{2cm}{\centering $4\times4$: 1+16 $8\times8$: 1+32}} \\
-		& & & & \\
+		\multicolumn{1}{c}{} & & & & \\
 		\cline{2-5}
-		& Sep & N-Sep & Sep & N-Sep \\
+		\multicolumn{1}{c}{} & Sep & N-Sep & Sep & N-Sep \\
 		\hline
 		\hline
 		Enc. Time & 150\% & 200\% & 800\% & 2000\% \\
@@ -3464,8 +3466,9 @@ Assuming each transform coefficient is quantised to 1 byte, as in the
 	\item $4\times4$ transforms: \unit{16}{B} per transform
 	\item $8\times8$ transforms: \unit{64}{B} per transform
 \end{itemize}
-For the system using 8 $4\times4$ transforms and 32 $8\times8$, the global
-storage requirements are \unit{74.375}{\kilo B}, as there are 35 \acp{IPM}.
+For the system using 8 $4\times4$ transforms and 32 $8\times8$ transforms, the
+global storage requirements are \unit{74.375}{\kilo B}, as there are 35
+\acp{IPM}.
 
 \section{Conclusions}
 \label{sec:it_conclusions}
@@ -3498,8 +3501,8 @@ non-separable transforms were provided in each \ac{IPM}:
 up to 7\% on average for the \ac{AI} coding configuration.
 
 This chapter will take a look at different approaches to simplify the
-system presented in Chapter~\ref{cha:mdtc} while trying to degrade its
-performances as least as possible.
+system presented in Chapter~\ref{cha:mdtc} while trying to have minimum impact
+on its bit-rate savings.
 
 \subsection{Discarding non-separable transforms}
 \label{sub:discarding_non_separable_transforms}
@@ -3519,9 +3522,12 @@ transforms, even though they provide notably better performances than their
 separable counterparts, as seen in Chapters~\ref{cha:mddt} and~\ref{cha:mdtc}.
 Non-separable transforms can definitively not accommodate a system with
 neither storage restrictions, nor coding complexity limitations.
-
 For this reason, this Chapter will only cover systems composed by separable
 transforms.
+As a consequence of ditching non-separable transforms, the average bit-rate
+savings achievable on the \ac{HEVC} using separable high performance \ac{MDTC}
+systems are around 4.1\%, which will be used as a reference when comparing the
+simplified systems.
 
 \section{Source of the learning set}
 \label{sec:rw_source_of_the_learning_set}
@@ -3537,21 +3543,22 @@ to build the \ac{MDDT} and \ac{MDTC} systems have been tested against those
 classes.
 That being said, performances on classes not included in the learning set (A,
 D, E and F) have similar levels of performances as described previously on
-their respective system tables.
+their respective system tables (see tables~\ref{tab:detailed_mddt_bd_rate},
+\ref{tab:bd_rate_mdtc} and~\ref{tab:bd_rate_it}).
 
-For this reason, in order to remove all doubts about the effect of the
-learning data set, a completely independent data set has been chosen and
-transforms have been designed using it.
-In order to make all results available, the sequence of choice from which
-residuals have been output is \emph{Tears of Steel}, a Creative Commons short
-film~\cite{blender-tearsofsteel}.
+To remove all doubts about the effect of the learning data set, a completely
+independent data set has been chosen and transforms have been designed using
+it.
+In order to make all results available and reproducible, the sequence of
+choice from which residuals have been output is \emph{Tears of Steel}, a
+Creative Commons short film~\cite{blender-tearsofsteel}.
 The film features computed generated imagery and a resolution of
 $1920\times800$ at a frame rate of \unit{24}{\hertz} and a length of
 \unit{12}{\minute} and \unit{14}{\second}.
 Although it is composed of more that 130 sub-sequences, all of them share the
 same video filters, frame rate, resolution, making a source of residuals less
 heterogeneous than classes B and C from the \ac{HEVC} test set, but providing
-a larger number of residuals:
+a larger number of residuals (around as twice as many, in total):
 \begin{itemize}
 	\item $4\times4$ residuals: over 142 million
 	\item $8\times8$ residuals: over 343 million
@@ -3569,7 +3576,7 @@ $1280\times720$, $800\times480$) and various frame rates (25, 30, 50, 60, 100,
 Each sequence has been limited to 5 frames, since all the tests will be
 performed in the \ac{AI} configuration.
 
-From now on, the different sets will be named as:
+From now on, the different sets will be referred to as:
 \begin{itemize}
 	\item BC: classes B and C from the \ac{HEVC} test set
 	\item ADEF: classes A, D, E and F from the \ac{HEVC} test set
@@ -3588,9 +3595,11 @@ tables~\ref{tab:residuals_independence_4}
 and~\ref{tab:residuals_independence_8} for $4\times4$ and $8\times8$ separable
 transforms, respectively.
 The table headers read as follows: Test set | Learning set.
-Meaning that the value before the pipe corresponds to the set of sequence that
+Meaning that the value before the pipe sign corresponds to the set of sequence that
 have been tested and the value after the pipe to the learning set that has
 been used.
+Moreover, since the ToS learning set provides more residuals, more transforms
+have been learnt for the $8\times8$ blocks.
 
 \begin{table}[tb]
 	\centering
@@ -3632,35 +3641,29 @@ been used.
 	\label{tab:residuals_independence_8}
 \end{table}
 
-For illustrative purposes, figures~\ref{fig:residuals_independence_4}
-and~\ref{fig:residuals_independence_8} show the results of using transforms
-learnt from different data sets on various sequence sets for $4\times4$ and
-$8\times8$ blocks, respectively.
+For illustrative purposes, figure~\ref{fig:residuals_independence} shows the
+results from tables~\ref{tab:residuals_independence_4}
+and~\ref{tab:residuals_independence_8}.
 For the $4\times4$ case, there are few differences in performances between
 both learning sets, BC and ToS.
 Only classes ADEF (in blue) present some preference for the Tears of
 Steel data set.
-
-\begin{figure}[tb]
-	\centering
-	\includegraphics{./figures/residuals_independence_4_plot.pdf}
-	\caption{\acs{BD}-rate for different testing and learning sets for
-	$4\times4$ blocks}
-	\label{fig:residuals_independence_4}
-\end{figure}
-
-For the $8\times8$ case, there seems to be some over-learning in the classes
-BC, since it has notable differences in performances with regards the
-transforms issued from ToS.
-The rest of test set present similar performance levels for both learning
+For the $8\times8$ case, there seems to be some over-learning for the
+sequences used during the learning phase (BC and ToS), since they has notable
+differences in performances when using their own learning set.
+The rest of test set presents similar performance levels for both learning
 sets.
 
 \begin{figure}[tb]
 	\centering
-	\includegraphics{./figures/residuals_independence_8_plot.pdf}
-	\caption{\acs{BD}-rate for different testing and learning sets for
-	$8\times8$ blocks}
-	\label{fig:residuals_independence_8}
+	\subfloat[Additional $4\times4$ transforms]
+	{\includegraphics{./figures/residuals_independence_4_plot.pdf}}
+	\\
+	\subfloat[Additional $8\times8$ transforms]
+	{\includegraphics{./figures/residuals_independence_8_plot.pdf}}
+	\\
+	\caption{\acs{BD}-rate for different testing and learning sets}
+	\label{fig:residuals_independence}
 \end{figure}
 
 This comes as a reassuring fact, since the residuals from ToS have less
@@ -3670,7 +3673,10 @@ natural images.
 
 Table~\ref{tab:cross_bdrate_learn} illustrates the impact of changing the
 learning set to design the high performance \ac{MDTC} system: losses of 0.4
-and 0.2 are observed for the \ac{AI} and \ac{RA} configurations, respectively.
+and 0.2 are observed for the \ac{AI} and \ac{RA} configurations, respectively
+for the \ac{HEVC} test set, which means that the new reference \ac{MDTC}
+system has bit-rate savings of 3.7\% on the \ac{HEVC} test set, instead of
+4.1\%.
 
 \begin{table}[tb]
 	\centering
@@ -3688,13 +3694,21 @@ and 0.2 are observed for the \ac{AI} and \ac{RA} configurations, respectively.
 	\label{tab:cross_bdrate_learn}
 \end{table}
 
-Finally, as the 59seq will be serving as the new reference system, against
+Finally, as the 59seq set will be serving as the new reference system, against
 which new improvements will be measured, the separable high performance
 \ac{MDTC} system (16 additional transforms for $4\times4$ \acp{TU} and 32 for
 $8\times8$ \acp{TU}) has been evaluated on this test set.
 The results are also presented in table~\ref{tab:cross_bdrate_learn}.
-Performances of the high complexity \ac{MDTC} system are almost equivalent on
+Performances of the high performance \ac{MDTC} system are almost equivalent on
 the 59seq testing set, independently of the used learning set.
+
+In this section it has been proved that the transforms learnt and tested in
+previous Chapters were subject to some over-learning, leading to slightly
+better performances than when using a learning set completely independent from
+the test set.
+This over-learning reassures the fact that the designed transforms are able to
+adapt to the learning set, while showing that there is little dependence to
+the learning set.
 
 \section{Non-homogeneous \acs{MDTC} systems}
 \label{sec:non_homogeneous_mdtc_systems}
@@ -3705,12 +3719,12 @@ instead of only one transform, a fixed number of transforms was provided
 inside each \ac{IPM}.
 However, it is a well-known fact that \ac{HEVC} does not use all \acp{IPM}
 equally.
-There exists the \acp{MPM}, explained in~\cite{wien-15-hevc}.
-The main idea is to favour the \acp{IPM} that are most used during the
+There exists the \acp{MPM}, explained in detail in~\cite{wien-15-hevc}.
+The main idea is to favour the \acp{IPM} that are most often used during the
 encoding of a sequence in terms of signalling.
-For this reason, it might be counter productive to add lots of transforms to
-those modes that are hardly chosen, making them even less cost efficient,
-since the extra transforms need to be signalled, as well.
+For this reason, it might be counter productive to add a high number of
+transforms to those modes that are hardly chosen, making them even less cost
+efficient, since the extra transforms need to be signalled, as well.
 
 The fact of the number of transforms depending on the \ac{IPM} does not
 affect the signalling of the transform index into the bitstream, since each
@@ -3721,8 +3735,8 @@ Consequently, next Section proposes a systematic way of generating \ac{MDTC}
 systems taking into account the storage requirements.
 Since the \acs{ROM} required to store the transforms is directly related to
 the number of transforms, and the number of transforms to the coding
-complexity, by limiting the amount of \acs{ROM}, the system is also simplified
-in terms of encoding times.
+complexity, by limiting the amount of \acs{ROM}, the system might also
+simplified in terms of encoding time.
 
 \subsection{Iterating through non-homogeneous \acs{MDTC} systems}
 \label{sub:iterations_mdtc}
@@ -3738,9 +3752,8 @@ Systems have been labelled using the following structure: {4tX--8tY}.
 Where 4 and 8 stand for the transform sizes, t for the type, in this case s,
 meaning separable transforms, and X and Y represent the number of additional
 transforms added in each \ac{IPM} for the respective transform size.
-
-Each system contains information about its \acs{ROM} requirements, the
-bit-rate savings and the encoding complexity with regards \ac{HEVC}.
+Each system has information about its \acs{ROM} requirements, the bit-rate
+savings and the encoding complexity with regards \ac{HEVC}.
 
 \begin{table}[tb]
 	\centering
@@ -3789,30 +3802,20 @@ consequently, to the number of transforms.
 For the $4\times4$ only systems, performances stagnate beyond 8 additional
 transforms.
 
-\begin{table}[tb]
+\begin{figure}[tb]
 	\centering
-	\begin{tabular}{r|r|r|r}
-	System & \multicolumn{1}{c|}{\acs{ROM}} & Y \acs{BD}-rate & Complexity \\
-	\hline\hline
-	\unit{1}{\kilo B}   & \unit{0.98}{\kilo B}   & -0.7\% & 120\% \\
-	\unit{2}{\kilo B}   & \unit{1.97}{\kilo B}   & -1.0\% & 130\% \\
-	\unit{4}{\kilo B}   & \unit{3.98}{\kilo B}   & -1.4\% & 160\% \\
-	\unit{8}{\kilo B}   & \unit{7.97}{\kilo B}   & -1.8\% & 200\% \\
-	\unit{12}{\kilo B}  & \unit{12.00}{\kilo B}  & -2.1\% & 220\% \\
-	\unit{16}{\kilo B}  & \unit{15.61}{\kilo B}  & -2.2\% & 240\% \\
-	\unit{24}{\kilo B}  & \unit{23.95}{\kilo B}  & -2.5\% & 350\% \\
-	\unit{32}{\kilo B}  & \unit{31.78}{\kilo B}  & -2.7\% & 390\% \\
-	\unit{48}{\kilo B}  & \unit{47.39}{\kilo B}  & -2.9\% & 520\% \\
-	\unit{64}{\kilo B}  & \unit{63.89}{\kilo B}  & -3.0\% & 660\% \\
-	\unit{96}{\kilo B}  & \unit{95.53}{\kilo B}  & -3.3\% & 850\% \\
-	\unit{128}{\kilo B} & \unit{127.41}{\kilo B} & -3.4\% & 930\% \\
-	\end{tabular}
-	\caption{Heterogeneous \acs{MDTC} systems with \acs{ROM} constraints}
-	\label{tab:heterogeneous_mdtc}
-\end{table}
+	\includegraphics{./figures/vmdtc_iter_plot.pdf}
+	\caption{Different \acs{MDTC} systems on the \acs{ROM} --- Y\acs{BD}-rate
+	plane}
+	\label{fig:vmdtc_iter}
+\end{figure}
 
-Algorithm~\ref{alg:vmdtc_iter} present a systematic way of designing a
-non-homogeneous \ac{MDTC} system, using a gradient approach.
+\subsection{Non-homogeneous \acs{MDTC} performances}
+\label{sub:non_homogeneous_mdtc_performances}
+
+In order to improve current homogeneous \ac{MDTC} systems,
+algorithm~\ref{alg:vmdtc_iter} presents a systematic way of designing an
+heterogeneous \ac{MDTC} system, using a gradient approach.
 The algorithm starts with an unmodified version of \ac{HEVC}.
 Then, it encodes the 59seq test set enabling one transform by \ac{IPM} at a
 time.
@@ -3822,6 +3825,7 @@ That configuration is then used as the new base system and the transforms are
 doubled each time for the \ac{IPM} that gives the best ratio.
 
 \begin{algorithm}
+	\small
 	\SetKwData{encode}{encode}
 	\SetKwData{computeBestRatio}{computeBestRatio}
 	\SetKwInOut{Input}{testSet}
@@ -3865,22 +3869,46 @@ doubled each time for the \ac{IPM} that gives the best ratio.
 	}
 	\caption{Iterative non-homogeneous \acs{MDTC} design}
 	\label{alg:vmdtc_iter}
-
 \end{algorithm}
 
-\begin{figure}[tb]
+The resulting systems for $4\times4$ and $8\times8$ transforms using
+algorithm~\ref{alg:vmdtc_iter} are presented in figure~\ref{fig:vmdtc_iter}.
+The red and blue lines represent the evolution of the $4\times4$ and
+$8\times8$ systems during the learning phase, respectively.
+
+Each one of the points from the learnt systems has two coordinates: \acs{ROM}
+and \ac{BD}-rate.
+This means that, for a given \acs{ROM} constraint, one can find the
+combination of the $4\times4$ and $8\times8$ systems that offers the best
+trade-off in terms of storage requirements and bit-rate savings.
+Combined non-homogeneous systems are represented as green circles.
+It can bee seen that, heterogeneous systems are able to achieve the same
+\ac{BD}-rate as homogeneous systems with half the storage requirements.
+
+\begin{table}[tb]
 	\centering
-	\includegraphics{./figures/vmdtc_iter_plot.pdf}
-	\caption{Different \acs{MDTC} systems on the \acs{ROM} --- Y\acs{BD}-rate
-	plane}
-	\label{fig:vmdtc_iter}
-\end{figure}
+	\begin{tabular}{r|r|r|r}
+	System & \multicolumn{1}{c|}{\acs{ROM}} & Y \acs{BD}-rate & Complexity \\
+	\hline\hline
+	\unit{1}{\kilo B}   & \unit{0.98}{\kilo B}   & -0.7\% & 120\% \\
+	\unit{2}{\kilo B}   & \unit{1.97}{\kilo B}   & -1.0\% & 130\% \\
+	\unit{4}{\kilo B}   & \unit{3.98}{\kilo B}   & -1.4\% & 160\% \\
+	\unit{8}{\kilo B}   & \unit{7.97}{\kilo B}   & -1.8\% & 200\% \\
+	\unit{12}{\kilo B}  & \unit{12.00}{\kilo B}  & -2.1\% & 220\% \\
+	\unit{16}{\kilo B}  & \unit{15.61}{\kilo B}  & -2.2\% & 240\% \\
+	\unit{24}{\kilo B}  & \unit{23.95}{\kilo B}  & -2.5\% & 350\% \\
+	\unit{32}{\kilo B}  & \unit{31.78}{\kilo B}  & -2.7\% & 390\% \\
+	\unit{48}{\kilo B}  & \unit{47.39}{\kilo B}  & -2.9\% & 520\% \\
+	\unit{64}{\kilo B}  & \unit{63.89}{\kilo B}  & -3.0\% & 660\% \\
+	\unit{96}{\kilo B}  & \unit{95.53}{\kilo B}  & -3.3\% & 850\% \\
+	\unit{128}{\kilo B} & \unit{127.41}{\kilo B} & -3.4\% & 930\% \\
+	\end{tabular}
+	\caption{Heterogeneous \acs{MDTC} systems with \acs{ROM} constraints}
+	\label{tab:heterogeneous_mdtc}
+\end{table}
 
-\subsection{Non-homogeneous \acs{MDTC} performances}
-\label{sub:non_homogeneous_mdtc_performances}
-
-\section{Intra prediction mode symmetries}
-\label{sec:intra_prediction_mode_symmetries}
+\section{Symmetrical \acs{MDTC} systems}
+\label{sec:sym_mdtc}
 
 A disadvantage of the \ac{MDTC} system presented in Chapter~\ref{cha:mdtc} was
 the large number of different transforms that needed to be stored, since each
@@ -3960,22 +3988,37 @@ the residual pixels in a consistent way, which come at no computational cost.
 \subsection{Symmetries performances on video coding}
 \label{sub:symmetries_performances_on_video_coding}
 
+Table~\ref{tab:sym4} shows the impact of symmetries on $4\times4$ \ac{MDTC}
+systems, in the three axis: \acs{ROM}, \ac{BD}-rate and complexity.
+As demonstrated before, for the full-symmetrical \ac{MDTC} systems, \acs{ROM}
+is decreased to around one third of its original value.
+Bit-rate savings also experiment some losses since symmetrical system are more
+constraint than non-symmetrical systems.
+The complexity remains constant for all of them, since the number of
+transforms par \ac{IPM} is the same in all systems.
+
 \begin{table}[tb]
 	\centering
-	\begin{tabular}{c|rr|rr}
+	\small
+	\begin{tabular}{c|rr|rr|rr|r}
 		& \multicolumn{2}{c|}{non-symmetrical}
-		& \multicolumn{2}{c}{symmetrical} \\
+		& \multicolumn{2}{c|}{transpose-symmetrical}
+		& \multicolumn{2}{c|}{full-symmetrical}
+		& \multicolumn{1}{c}{Average} \\
 		\# tr & \multicolumn{1}{c}{\acs{ROM}} &
 		\multicolumn{1}{c|}{Y \acs{BD}-rate} &
 		\multicolumn{1}{c}{\acs{ROM}} &
-		\multicolumn{1}{c}{Y \acs{BD}-rate} \\
+		\multicolumn{1}{c|}{Y \acs{BD}-rate} &
+		\multicolumn{1}{c}{\acs{ROM}} &
+		\multicolumn{1}{c|}{Y \acs{BD}-rate} &
+		\multicolumn{1}{c}{Complexity} \\
 		\hline \hline
-		1  &  \unit{1.64}{\kilo B} & -0.5\% &  \unit{0.52}{\kilo B} & -0.4\% \\
-		2  &  \unit{3.28}{\kilo B} & -0.7\% &  \unit{1.03}{\kilo B} & -0.5\% \\
-		4  &  \unit{6.56}{\kilo B} & -0.8\% &  \unit{2.06}{\kilo B} & -0.6\% \\
-		8  & \unit{13.13}{\kilo B} & -0.9\% &  \unit{4.13}{\kilo B} & -0.7\% \\
-		16 & \unit{26.25}{\kilo B} & -1.0\% &  \unit{8.25}{\kilo B} & -0.8\% \\
-		32 & \unit{52.50}{\kilo B} & -1.0\% & \unit{16.50}{\kilo B} & -0.8\% \\
+		1  &  \unit{1.64}{\kilo B} & -0.5\% &  \unit{0.89}{\kilo B} & -0.4\% &  \unit{0.52}{\kilo B} & -0.4\% & 130\% \\
+		2  &  \unit{3.28}{\kilo B} & -0.7\% &  \unit{1.78}{\kilo B} & -0.5\% &  \unit{1.03}{\kilo B} & -0.5\% & 140\% \\
+		4  &  \unit{6.56}{\kilo B} & -0.8\% &  \unit{3.56}{\kilo B} & -0.6\% &  \unit{2.06}{\kilo B} & -0.6\% & 170\% \\
+		8  & \unit{13.13}{\kilo B} & -0.9\% &  \unit{7.13}{\kilo B} & -0.7\% &  \unit{4.13}{\kilo B} & -0.7\% & 220\% \\
+		16 & \unit{26.25}{\kilo B} & -1.0\% & \unit{14.25}{\kilo B} & -0.8\% &  \unit{8.25}{\kilo B} & -0.8\% & 320\% \\
+		32 & \unit{52.50}{\kilo B} & -1.0\% & \unit{28.50}{\kilo B} & \#NA\% & \unit{16.50}{\kilo B} & -0.8\% & 530\% \\
 	\end{tabular}
 	\caption{Symmetries impact on $4\times4$ transforms on the 59seq test set}
 	\label{tab:sym4}
@@ -3984,14 +4027,14 @@ the residual pixels in a consistent way, which come at no computational cost.
 % TODO
 \todo{Add performances of a high performance symmetrical \acs{MDTC} system}
 
-\section{Non-homogeneous symmetrical \acs{MDTC}}
+\section{Non-homogeneous symmetrical \acs{MDTC} systems}
 \label{sec:non_homogeneous_symmetrical_mdtc}
 
 \section{Conclusions}
 \label{sec:rw_conclusions}
 
-\chapter{Discrete trigonometric transforms}
-\label{cha:discrete_trigonometric_transforms}
+\chapter{\acs{MDTC} using \aclp{DTT}}
+\label{cha:dtt}
 \chaptertoc
 
 \section{Introduction}
@@ -4004,23 +4047,85 @@ the residual pixels in a consistent way, which come at no computational cost.
 
 Chapter~\ref{cha:mdtc} has unveiled the potential of gains achievable through
 the \ac{MDTC} technique.
-Nevertheless, the presented system has a level of complexity which is to
+Nevertheless, the presented system has a level of complexity which is too
 high to be used in real life applications.
 As a result, the following Chapters presented two different approaches to
 yield the system less complex.
-Chapter~\ref{cha:realistic_system} proposed several ways of reducing the
-complexity: taking advantage of the symmetries that might exist within
-different \acp{IPM} as well as using a different number of transforms in each
-mode.
+
 Chapter~\ref{cha:incomplete_transforms} tried to simplify the system by
-designing transforms that make use of only basis vector.
+designing transforms that make use of only base vector.
 This makes transforming a block less complex than using a regular transform,
 even if the incomplete transform is non-separable.
 Benefits of this approach are observed on the decoder, being less complex than
-that of \ac{HEVC}.
+that of \ac{HEVC}, while providing limited bit-rate savings with regards to
+the \ac{MDTC} systems presented previously.
 
-Since the systems presented above have flaws in some aspect, a third approach
-is presented in this Chapter to cover them.
+Chapter~\ref{cha:real_world_system} proposed several ways of reducing the
+complexity: taking advantage of the symmetries that might exist within
+different \acp{IPM} as well as using a different number of transforms in each
+mode.
+These two approaches provided notable savings in the \acs{ROM} required to
+store the transforms.
+Consequently, the encoder complexity was slightly decreased using
+heterogeneous systems, since there are less transforms to test in each
+\ac{IPM}.
+
+However, even if the main motivation for the approaches above was to reduce
+the complexity of the high performance \ac{MDTC} system presented in
+Chapter~\ref{cha:mdtc}, the improvements were only significant in the \ac{ROM}
+axis, leaving the encoder and decoder complexities decreases to be a side
+effect of the storage limitation.
+
+This Chapter proposes an approach that takes into account the storage
+requirements, the encoding complexity and the decoding complexity is carried
+out.
+
+\section{The \aclp{DTT}}
+\label{sec:the_dtt}
+
+Chapter~\ref{cha:mddt} highlighted the appropriateness of the \ac{RDOT} design
+method over the \ac{KLT} for video coding.
+However, for the sake of simplicity, an additional family of transforms is
+considered in this Chapter: the \acfp{DTT}.
+
+\acsp{DTT} are orthogonal transforms based on trigonometric functions.
+This family of transforms consists of 8 types (I to VIII) of \acfp{DCT} and
+\acfp{DST}~\cite{rao-01-transform-data-compression-book}.
+
+% TODO
+\todo{Include images of the bases for all \acp{DTT}}
+
+Historically, the \ac{DCT}-II has been the \emph{de facto} standard transform
+for image and video coding applications.
+Recently, other transforms from the \ac{DTT} family are starting to arise the
+interest in video coding applications:
+\begin{itemize}
+	\item The \ac{DST}-VII is used in \ac{HEVC} for $4\times4$ intra
+		prediction luma residuals
+	\item The \ac{DST}-III has been proposed for inter-layer prediction
+		residuals in scalable video
+		coding~\cite{guo-14-transform-inter-layer-scalable}.
+\end{itemize}
+
+The interest of the \acp{DTT} in this Chapter is motivated by the existing
+fast algorithms for transform implementation, which are notably less complex
+than a full matrix multiplication required by generic block transforms.
+The algorithmic complexity for a \ac{DTT} is in the order of $N\log_2(N)$,
+where $N$ stands for the transform
+size~\cite{puschel-08-tukey-algorithms-dct-dst}.
+Nevertheless, these transforms are a restrained subset of the orthogonal
+transform class, as such, their performance in compression is expected to be
+lower than that of \acp{RDOT}.
+
+Since \acp{DTT} coefficients can be computed using and analytical formula,
+their storage requirement is negligible.
+However, a scanning matrix is required to sort the transformed coefficients in
+a globally monotonic order to ease the lossless coding stage.
+As a result, the storage amount necessary per transform is $N^2$ bytes.
+
+For \acp{RDOT}, the memory required is $3N^2$ bytes per transform, as the
+horizontal and vertical transform are stored along with a dedicated scanning
+pattern.
 
 \section{The identity as a transform}
 \label{sec:the_identity_as_a_transform}
@@ -4101,9 +4206,9 @@ However, transforms used in current solutions do not cover the varieties
 of video coding signals.
 This work presents an adaptive transform design method that enables the use of
 multiple transforms in \acs{HEVC}.
-A different transform set is learnt for each intra prediction mode, allowing
-the video encoder to perform better decisions regarding block sizes,
-prediction modes and transforms.
+A different transform set is learnt for each \acl{IPM}, allowing the video
+encoder to perform better decisions regarding block sizes, prediction modes
+and transforms.
 Different systems are proposed to accommodate trade-offs between complexity
 and performance.
 Bit rate reductions in the range of 2\% to 7\% are reported, depending on
