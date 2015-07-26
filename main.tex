@@ -3714,17 +3714,16 @@ instead of only one transform, a fixed number of transforms was provided
 inside each \ac{IPM}.
 However, it is a well-known fact that \ac{HEVC} does not use all \acp{IPM}
 equally.
-There exists the \acp{MPM}, explained in detail in~\cite{wien-15-hevc}.
-The main idea is to favour the \acp{IPM} that are most often used during the
-encoding of a sequence in terms of signalling.
-For this reason, it might be counter productive to add a high number of
-transforms to those modes that are hardly chosen, making them even less cost
-efficient, since the extra transforms need to be signalled, as well.
-
-The fact of the number of transforms depending on the \ac{IPM} does not
-affect the signalling of the transform index into the bitstream, since each
-\ac{IPM} will handle its own transforms, which are completely independent from
-other \acp{IPM}.
+For this reason, \ac{HEVC} favours the signalling of the \acp{IPM} that are
+most often used during the encoding of a sequence in terms of signalling.
+This technique is named \acp{MPM} and it is explained in detail
+in~\cite{wien-15-hevc}.
+As a result, it might be counter productive to add a high number of transforms
+to those modes that are hardly chosen, making them even less cost efficient,
+since the extra transforms need to be signalled, as well.
+Using a different number of transforms inside each \ac{IPM} does not require
+extra signalling, since the encoder will know how many transforms are
+available for each \ac{IPM}.
 
 Consequently, next Section proposes a systematic way of generating \ac{MDTC}
 systems taking into account the storage requirements.
@@ -3733,8 +3732,8 @@ the number of transforms, and the number of transforms to the coding
 complexity, by limiting the amount of \acs{ROM}, the system might also
 simplified in terms of encoding time.
 
-\subsection{Iterating through non-homogeneous \acs{MDTC} systems}
-\label{sub:iterations_mdtc}
+\subsection{Non-homogeneous \acs{MDTC} design and performances}
+\label{sub:non_homogeneous_mdtc_performances}
 
 This section proposes a gradient descent algorithm to generate \ac{MDTC} with
 \acs{ROM} constraints and a non-homogeneous number of transforms in its
@@ -3755,10 +3754,10 @@ savings and the encoding complexity with regards \ac{HEVC}.
 	\begin{tabular}{r|r|r|r}
 	System & \multicolumn{1}{c|}{\acs{ROM}} & Y \acs{BD}-rate & Complexity \\
 	\hline\hline
-	4s1--8s0  &  \unit{1.64}{\kilo B}  & -0.5\% & 130\% \\
-	4s2--8s0  &  \unit{3.28}{\kilo B}  & -0.7\% & 140\% \\
-	4s4--8s0  &  \unit{6.56}{\kilo B}  & -0.8\% & 170\% \\
-	4s8--8s0  & \unit{13.13}{\kilo B}  & -0.9\% & 220\% \\
+	 4s1--8s0 &  \unit{1.64}{\kilo B}  & -0.5\% & 130\% \\
+	 4s2--8s0 &  \unit{3.28}{\kilo B}  & -0.7\% & 140\% \\
+	 4s4--8s0 &  \unit{6.56}{\kilo B}  & -0.8\% & 170\% \\
+	 4s8--8s0 & \unit{13.13}{\kilo B}  & -0.9\% & 220\% \\
 	4s16--8s0 & \unit{26.25}{\kilo B}  & -1.0\% & 320\% \\
 	4s32--8s0 & \unit{52.50}{\kilo B}  & -1.0\% & 530\% \\
 	\end{tabular}
@@ -3772,13 +3771,13 @@ savings and the encoding complexity with regards \ac{HEVC}.
 	\begin{tabular}{r|r|r|r}
 	System & \multicolumn{1}{c|}{\acs{ROM}} & Y \acs{BD}-rate & Complexity \\
 	\hline\hline
-	4s0--8s1   &   \unit{6.56}{\kilo B} & -0.8\% &  130\% \\
-	4s0--8s2   &  \unit{13.13}{\kilo B} & -1.3\% &  140\% \\
-	4s0--8s4   &  \unit{26.25}{\kilo B} & -1.7\% &  170\% \\
-	4s0--8s8   &  \unit{52.50}{\kilo B} & -2.1\% &  230\% \\
-	4s0--8s16  & \unit{105.00}{\kilo B} & -2.5\% &  340\% \\
-	4s0--8s32  & \unit{210.00}{\kilo B} & -2.8\% &  580\% \\
-	4s0--8s64  & \unit{420.00}{\kilo B} & -3.1\% & 1000\% \\
+	  4s0--8s1 &   \unit{6.56}{\kilo B} & -0.8\% &  130\% \\
+	  4s0--8s2 &  \unit{13.13}{\kilo B} & -1.3\% &  140\% \\
+	  4s0--8s4 &  \unit{26.25}{\kilo B} & -1.7\% &  170\% \\
+	  4s0--8s8 &  \unit{52.50}{\kilo B} & -2.1\% &  230\% \\
+	 4s0--8s16 & \unit{105.00}{\kilo B} & -2.5\% &  340\% \\
+	 4s0--8s32 & \unit{210.00}{\kilo B} & -2.8\% &  580\% \\
+	 4s0--8s64 & \unit{420.00}{\kilo B} & -3.1\% & 1000\% \\
 	4s0--8s128 & \unit{840.00}{\kilo B} & -3.3\% & 2000\% \\
 	\end{tabular}
 	\caption{Summary of $8\times8$ homogeneous \acs{MDTC} systems learnt with
@@ -3789,7 +3788,7 @@ savings and the encoding complexity with regards \ac{HEVC}.
 Figure~\ref{fig:vmdtc_iter} displays different \ac{MDTC} systems on the
 \acs{ROM}---Y \ac{BD}-rate plane.
 Red and blue crosses represent the different separable homogeneous \ac{MDTC}
-systems, for $4\times4$ and $8\times8$ only systems, respectively.
+systems, for $4\times4$ and $8\times8$ transforms, respectively.
 Green crosses represent \ac{MDTC} systems that combine both transform sizes.
 It can be noticed that, for the $8\times8$ systems, the bit-rate savings are
 proportional, in a logarithmic sense, to the \acs{ROM} requirements and,
@@ -3804,9 +3803,6 @@ transforms.
 	plane}
 	\label{fig:vmdtc_iter}
 \end{figure}
-
-\subsection{Non-homogeneous \acs{MDTC} performances}
-\label{sub:non_homogeneous_mdtc_performances}
 
 In order to improve current homogeneous \ac{MDTC} systems,
 algorithm~\ref{alg:vmdtc_iter} presents a systematic way of designing an
@@ -4044,42 +4040,41 @@ Chapter~\ref{cha:mdtc} has unveiled the potential of gains achievable through
 the \ac{MDTC} technique.
 Nevertheless, the presented system has a level of complexity which is too
 high to be used in real life applications.
-As a result, the following Chapters presented two different approaches to
-yield the system less complex.
+As a result, the following Chapters propose two different approaches to yield
+the system less complex.
 
-Chapter~\ref{cha:incomplete_transforms} tried to simplify the system by
-designing transforms that make use of only base vector.
+Chapter~\ref{cha:incomplete_transforms} simplifies the system by designing
+transforms that make use of only base vector.
 This makes transforming a block less complex than using a regular transform,
 even if the incomplete transform is non-separable.
 Benefits of this approach are observed on the decoder, being less complex than
 that of \ac{HEVC}, while providing limited bit-rate savings with regards to
 the \ac{MDTC} systems presented previously.
 
-Chapter~\ref{cha:real_world_system} proposed several ways of reducing the
-complexity: taking advantage of the symmetries that might exist within
-different \acp{IPM} as well as using a different number of transforms in each
-mode.
-These two approaches provided notable savings in the \acs{ROM} required to
+Chapter~\ref{cha:real_world_system} proposes several ways of reducing the
+complexity, especially the storage requirements:
+taking advantage of the symmetries that might exist within different \acp{IPM}
+as well as using a different number of transforms in each mode.
+These two approaches provide notable savings in the \acs{ROM} required to
 store the transforms.
 Consequently, the encoder complexity was slightly decreased using
 heterogeneous systems, since there are less transforms to test in each
 \ac{IPM}.
 
-However, even if the main motivation for the approaches above was to reduce
+However, even if the main motivation for the approaches above is to reduce
 the complexity of the high performance \ac{MDTC} system presented in
-Chapter~\ref{cha:mdtc}, the improvements were only significant in the \ac{ROM}
-axis, leaving the encoder and decoder complexities decreases to be a side
-effect of the storage limitation.
+Chapter~\ref{cha:mdtc}, the improvements have only been significant in the
+\ac{ROM} axis, leaving the encoder and decoder complexities decreases to be a
+side effect of the storage limitation.
 
 This Chapter proposes an approach that takes into account the storage
-requirements, the encoding complexity and the decoding complexity is carried
-out.
+requirements, the encoding complexity and the decoding complexity.
 
-\section{The \aclp{DTT}}
-\label{sec:the_dtt}
+\section{The \acl{DTT} family}
+\label{sec:the_dtt_family}
 
-Chapter~\ref{cha:mddt} highlighted the appropriateness of the \ac{RDOT} design
-method over the \ac{KLT} for video coding.
+Chapter~\ref{cha:mddt} has highlighted the appropriateness of the \ac{RDOT}
+design method over the \ac{KLT} for video coding.
 However, for the sake of simplicity, an additional family of transforms is
 considered in this Chapter: the \acfp{DTT}.
 
@@ -4121,6 +4116,31 @@ As a result, the storage amount necessary per transform is $N^2$ bytes.
 For \acp{RDOT}, the memory required is $3N^2$ bytes per transform, as the
 horizontal and vertical transform are stored along with a dedicated scanning
 pattern.
+
+\section{\acs{DTT}-based \acs{MDTC} systems}
+\label{sec:dtt_based_mdtc_systems}
+
+The \ac{RDOT} metric, defined in \S\ref{eqn:rdot_metric} has proved to be a
+good way of designing transforms that offers a balance between the distortion
+introduced by the quantisation and the sparsity of transformed coefficients.
+Nonetheless, the \ac{RDOT} metric has also been used in
+Chapters~\ref{cha:mddt} and~\ref{cha:mdtc} to measure the appropriateness of a
+given transform to compactly represent a residual in the rate-distortion
+plane.
+By using this metric, one is able to evaluate the performance of a transform
+on a residual and define a set of residuals of the transforms which give the
+best rate-distortion.
+In practice, this metric can bee seen as a way of rating transforms.
+
+Provided that \ac{MDTC} systems learnt using this metric lead to significant
+bit-rate savings with respect to \ac{HEVC}, it will be used in this Chapter to
+design an \ac{DTT}-based \ac{MDTC} system.
+The learning method is based on algorithm~\ref{alg:clustering}.
+The main difference is that, when using \acp{DTT}, transforms are already
+learnt, so the learning phase of the algorithm can be skipped.
+Instead, all transforms will be tested against the learning set, and the only
+the set of transforms that provide the lowest \ac{RDOT} metric will be
+retained.
 
 \section{The identity as a transform}
 \label{sec:the_identity_as_a_transform}
