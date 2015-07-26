@@ -542,9 +542,9 @@ book on \ac{HEVC}~\cite{wien-15-hevc}.
 	\subfloat[Diagonal scanning]{\includegraphics{figures/mdcs-diag.pdf}}
 	\subfloat[Horizontal scanning]{\includegraphics{figures/mdcs-horz.pdf}}
 	\subfloat[Vertical scanning]{\includegraphics{figures/mdcs-vert.pdf}}
-	\caption{\acs{HEVC} \aclp{IPM} related to their average
-	residual signals and their appropriate scanning in the transform
-	domain for $4\times4$ \acsp{TU}}
+	\caption[\acs{HEVC} intra prediction modes and scannings for $4\times4$\acsp{TU}]
+	{\acs{HEVC} \aclp{IPM} related to their average residual signals and their
+	appropriate scanning in the transform domain for $4\times4$ \acsp{TU}}
 	\label{fig:mdcs}
 \end{figure}
 
@@ -1221,7 +1221,8 @@ the \acf{DST}~\cite{han-10-spatial-adaptive-transform}.
 	\hspace{0.2\linewidth}
 	\subfloat[Average intra prediction residual]
 	{\includegraphics[width=0.3\linewidth]{./figures/resids-scan-diag.png}}
-	\caption{Prediction scheme showing all \aclp{IPM} and a prediction
+	\caption[Example of \aclp{IPM} on a prediction residual]
+	{Prediction scheme showing all \aclp{IPM} and a prediction
 	residual example}
 	\label{fig:pred_scheme}
 \end{figure}
@@ -1579,7 +1580,9 @@ zero-mean \ac{PDF}.
 \begin{figure}[tb]
 	\centering
 	\includegraphics{./figures/pdfs_plot.pdf}
-	\caption{\acsp{PDF} of the residuals with different transforms
+	\caption[Different residuals \acsp{PDF} compared to Laplace and Normal
+	distributions]
+	{\acsp{PDF} of the residuals with different transforms
 	compared to Laplace and normal distributions}
 	\label{fig:probability_density_functions}
 \end{figure}
@@ -1832,7 +1835,10 @@ leading to possible instabilities.
 \begin{figure}[tp]
 	\centering
 	\includegraphics{./figures/j_qp27_plot.pdf}
-	\caption{$J(\lambda)$ for different \acsp{GGD} modelling the rate with
+	\caption
+	[$J(\lambda)$ for different \acsp{GGD} modelling the rate with
+	the $\ell_0$ norm and the entropy]
+	{$J(\lambda)$ for different \acsp{GGD} modelling the rate with
 	the $\ell_0$ norm and the entropy (H)}
 	\label{fig:j_lambda_qp}
 \end{figure}
@@ -2121,7 +2127,9 @@ non-separable designs.
 	\\	
 	\subfloat[$8\times8$ transforms]
 	{\includegraphics{./figures/rdot_learning_8_plot.pdf}}
-	\caption{Average \acs{RDOT} metric evolution during different transform
+	\caption[\acs{RDOT} metric during separable and non-separable transform
+	learnings]
+	{Average \acs{RDOT} metric evolution during different transform
 	learnings: separable (S) and non-separable (NS)}
 	\label{fig:rdot_metric_learning}
 \end{figure}
@@ -2690,7 +2698,9 @@ The gap is even more important for $8\times8$ blocks.
 	\subfloat[\acs{RDOT} metric evolution with the number of $8\times8$
 	transforms]
 	{\includegraphics{./figures/rdot_ntransforms_8_plot.pdf}}
-	\caption{Average \ac{RDOT} metric evolution for the learning set depending
+	\caption[\acs{RDOT} metric for different separable and non-separable
+	transform learnings]
+	{Average \acs{RDOT} metric evolution for the learning set depending
 	on the number of transforms}
 	\label{fig:mdtc_rdot_metric_ntransforms}
 \end{figure}
@@ -2749,7 +2759,9 @@ whereas 6\% are obtained when using only $8\times8$ transforms on the
 	\subfloat[\acs{BD}-rate evolution with the number additional of $8\times8$
 	transforms]
 	{\includegraphics{./figures/bdrate_ntransforms_8_plot.pdf}}
-	\caption{Average \acs{BD}-rate evolution for the learning set depending
+	\caption[\acs{BD}-rate for different separable and non-separable
+	transform sets]
+	{Average \acs{BD}-rate evolution for the learning set depending
 	on the number of transforms}
 	\label{fig:mdtc_bdrate_ntransforms}
 \end{figure}
@@ -2889,8 +2901,10 @@ For higher bit-rates, the improvements are present in both axis.
 \begin{figure}[tb]
 	\centering
 	\includegraphics{./figures/bdrate_bdrill_wvga_plot.pdf}
-	\caption{\emph{BasketballDrill} \acs{BD}-rate curves for non-separable
-	high performance \acs{MDTC}}
+	\caption[\acs{BD}-rate curves for \acs{MDTC} system on
+	\emph{BasketballDrill}]
+	{\acs{BD}-rate curves of \emph{BasketballDrill} for the non-separable high
+	performance \acs{MDTC} system}
 	\label{fig:mdtc_bdrate_bdrill}
 \end{figure}
 
@@ -2916,9 +2930,10 @@ The lines are cut when coding with \ac{HEVC} but they remain continuous using
 	\hfill
 	\subfloat[\acs{MDTC} at \acs{QP} 37]
 	{\includegraphics[width=0.25\linewidth]{./figures/bdrill_mdtc_qp37_crop.png}}
-	\caption{A $100\times100$ block from \emph{BasketballDrill} encoded at
-	\acs{QP} 37 with \acs{HEVC} and the non-separable high performance
-	\acs{MDTC}}
+	\caption[Example of a $100\times100$ block from \emph{BasketballDrill}
+	coded at \acs{QP} 37]
+	{A $100\times100$ block from \emph{BasketballDrill} encoded at \acs{QP} 37
+	with \acs{HEVC} and the non-separable high performance \acs{MDTC}}
 	\label{fig:mdtc_bdrill_visual}
 \end{figure}
 
@@ -3083,7 +3098,8 @@ By construction, $v_1$ is orthogonal to $v_0$.
 \begin{figure}[tp]
 	\centering
 	\includegraphics{./figures/it_diagram.pdf}
-	\caption{Illustration of the incomplete transform concepts.
+	\caption[Illustration of the incomplete transform concepts]
+	{Illustration of the incomplete transform concepts.
 	An additional basis vector ($w_0$ is added to assist an orthogonal
 	transform ($v_0,v_1$))}
 	\label{fig:it_diagram}
@@ -3225,7 +3241,8 @@ are presented.
 \begin{figure}[tp]
 	\centering
 	\includegraphics[width=0.8\linewidth]{./figures/it_32_transforms.png}
-	\caption{List of 32 incomplete transforms for $8\times8$ blocks}
+	\caption{List of 32 incomplete transforms for $8\times8$ blocks and
+	\acs{IPM} 6}
 	\label{fig:it_32_transforms}
 \end{figure}
 For each one, only the first base vector is displayed, since it is the only
