@@ -1,0 +1,44 @@
+\definecolor{greenish}{RGB}{0,145,0}
+\begin{tikzpicture}
+	\pgfplotsset{/tikz/font={\footnotesize}}
+	\begin{axis}[
+			% title=Bitrate savings: $-8.94\%$. SNR improvement: $0.46$ dB,
+			xlabel={ROM (kB)},
+			ylabel={Y BD-rate (\%)},
+			grid=both,
+			scale only axis,
+			width=0.8\textwidth,
+			height=0.3\textheight,
+			xtick={0.25,0.5,1,2,4,8,16,32,64,128,256,512,1024},
+			xticklabels={0.25,0.5,1,2,4,8,16,32,64,128,256,512,1024},
+			% x tick label style={
+			% 	/pgf/number format/.cd,
+			% 	fixed,
+			% 	fixed zerofill,
+			% 	precision=0,
+			% },
+			% scaled x ticks=false,
+			ytick={0,-0.5,...,-4},
+			y tick label style={
+				/pgf/number format/.cd,
+				fixed,
+				fixed zerofill,
+				precision=1,
+				/tikz/.cd
+			},
+			xmode=log,
+			log basis x=2,
+			xmin=0.25, xmax=256,
+			ymin=-4.0, ymax=0,
+			legend style={nodes=right},
+			legend pos= north east
+		]
+
+		% \addlegendentry{Combinations of $4\times4$ and $8\times8$
+		% heterogeneous systems}
+		\pgfplotstableread{figures/vmdtc_systems_combined.dat}\table
+		\addplot[only marks, mark=*, mark size=0.5pt, red]
+		table[x=rom,y=bdrate,col sep=tab] from \table;
+
+\end{axis}
+\end{tikzpicture}

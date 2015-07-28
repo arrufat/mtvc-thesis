@@ -25,7 +25,7 @@
 \usepackage{emptypage} % removes headers and footers from empty pages
 \usepackage[thickqspace,amssymb,noams]{SIunits} % consistent units support
 \usepackage{subfig} % subfloat environment
-\usepackage{flafter} % make sure floats appear after they have been referenced
+% \usepackage{flafter} % make sure floats appear after they have been referenced
 \usepackage[section, above, below]{placeins} % prevents float from bein far
 \usepackage{nicefrac} % nicer fractions
 \usepackage{contour} % for inexisting bold symbols
@@ -46,6 +46,7 @@
 \usepackage{pgfplots,tikz}
 \usetikzlibrary{shapes,arrows,fit,calc,decorations.markings,intersections}
 \usepgfplotslibrary{fillbetween}
+\usepackage{intcalc, numprint}
 \usepackage{bookmark} % needed for \bookmarksetup{startatroot}
 \usepackage{hyperref}
 \hypersetup{
@@ -2829,10 +2830,10 @@ obtained in the \ac{RA} coding.
 		\hline
 		\hline
 		\multirow{5}{2cm}{\centering Class C \scriptsize($832\times480$)}
-		& BasketballDrill        & -2.1 & -1.3 & 12.8 & -7.1 & -5.9 & -3.5 & -25.1 & -14.8 \\
-		& BQMall                 & -2.0 & -1.2 & -3.3 & -1.9 & -4.8 & -2.8 &  -6.2 &  -3.6 \\
-		& PartyScene             & -2.2 & -1.4 & -3.3 & -2.3 & -4.9 & -3.2 &  -6.2 &  -4.3 \\
-		& RaceHorses             & -1.7 & -0.7 & -4.0 & -2.2 & -4.3 & -1.6 &  -6.8 &  -3.2 \\
+		& BasketballDrill        & -2.1 & -1.3 & -12.8 & -7.1 & -5.9 & -3.5 & -25.1 & -14.8 \\
+		& BQMall                 & -2.0 & -1.2 & -3.3  & -1.9 & -4.8 & -2.8 &  -6.2 &  -3.6 \\
+		& PartyScene             & -2.2 & -1.4 & -3.3  & -2.3 & -4.9 & -3.2 &  -6.2 &  -4.3 \\
+		& RaceHorses             & -1.7 & -0.7 & -4.0  & -2.2 & -4.3 & -1.6 &  -6.8 &  -3.2 \\
 		\cline{2-10} &
 		Average                  & -2.0 & -1.2 & -5.9 & -3.4 & -5.0 & -2.8 & -11.0 &  -6.5 \\
 		\hline
@@ -3785,25 +3786,6 @@ savings and the encoding complexity with regards \ac{HEVC}.
 	\label{tab:homogeneous_mdtc_8}
 \end{table}
 
-Figure~\ref{fig:vmdtc_iter} displays different \ac{MDTC} systems on the
-\acs{ROM}---Y \ac{BD}-rate plane.
-Red and blue crosses represent the different separable homogeneous \ac{MDTC}
-systems, for $4\times4$ and $8\times8$ transforms, respectively.
-Green crosses represent \ac{MDTC} systems that combine both transform sizes.
-It can be noticed that, for the $8\times8$ systems, the bit-rate savings are
-proportional, in a logarithmic sense, to the \acs{ROM} requirements and,
-consequently, to the number of transforms.
-For the $4\times4$ only systems, performances stagnate beyond 8 additional
-transforms.
-
-\begin{figure}[tb]
-	\centering
-	\includegraphics{./figures/vmdtc_iter_plot.pdf}
-	\caption{Different \acs{MDTC} systems on the \acs{ROM} --- Y\acs{BD}-rate
-	plane}
-	\label{fig:vmdtc_iter}
-\end{figure}
-
 In order to improve current homogeneous \ac{MDTC} systems,
 algorithm~\ref{alg:vmdtc_iter} presents a systematic way of designing an
 heterogeneous \ac{MDTC} system, using a gradient approach.
@@ -3862,41 +3844,114 @@ doubled each time for the \ac{IPM} that gives the best ratio.
 	\label{alg:vmdtc_iter}
 \end{algorithm}
 
-The resulting systems for $4\times4$ and $8\times8$ transforms using
-algorithm~\ref{alg:vmdtc_iter} are presented in figure~\ref{fig:vmdtc_iter}.
-The red and blue lines represent the evolution of the $4\times4$ and
-$8\times8$ systems during the learning phase, respectively.
+Figure~\ref{fig:vmdtc_iter} displays different \ac{MDTC} systems on the
+\acs{ROM}---Y \ac{BD}-rate plane.
+The mains systems that are compared are the homogeneous and heterogeneous
+(issued from the iterative algorithm) systems using $4\times4$ and $8\times8$
+transforms.
+Systems that combine both transform sizes are also presented in the figure.
+Iterative heterogeneous \ac{MDTC} systems have more flexibility in terms of
+the number of transforms enabled in each \ac{IPM} and, therefore, in their
+storage requirements.
+For this reason, iterative systems provide a lot more granularity than
+homogeneous systems, allowing for better \acs{ROM}--\ac{BD}-rate trade-offs.
 
+Red lines in figure~\ref{fig:vmdtc_iter} represent the $4\times4$ only
+\ac{MDTC} systems.
+Homogeneous $4\times4$ systems start saturating in terms of bit-rate savings
+after adding 8 additional transform in each \ac{IPM}.
+The heterogeneous $4\times4$ system is able to achieve the same performances
+as the homogeneous system, with less \ac{ROM}.
+
+The interest of the heterogeneous systems is clearer when using $8\times8$
+transforms (blue lines), since the storage requirements are higher.
+In this case, almost a factor of two can be observed in terms of \acs{ROM} for
+the same \ac{BD}-rate in homogeneous and heterogeneous systems.
+Moreover, it can be noticed that, for the $8\times8$ systems, the bit-rate
+savings are proportional, in a logarithmic sense, to the \acs{ROM}
+requirements and, consequently, to the number of transforms.
+
+\begin{figure}[tb]
+	\centering
+	\includegraphics{./figures/vmdtc_iter_plot.pdf}
+	\caption{Different \acs{MDTC} systems on the \acs{ROM} --- Y \acs{BD}-rate
+	plane}
+	\label{fig:vmdtc_iter}
+\end{figure}
+
+Finally, some interesting configurations have been built combining $4\times4$
+and $8\times8$ systems, in both homogeneous and heterogeneous ways,
+represented using green lines.
+Again, for these systems, especially on low \ac{ROM} configurations, a factor
+of two in terms of storage requirements is observed.
 Each one of the points from the learnt systems has two coordinates: \acs{ROM}
 and \ac{BD}-rate.
+
 This means that, for a given \acs{ROM} constraint, one can find the
 combination of the $4\times4$ and $8\times8$ systems that offers the best
 trade-off in terms of storage requirements and bit-rate savings.
-Combined non-homogeneous systems are represented as green circles.
-It can bee seen that, heterogeneous systems are able to achieve the same
-\ac{BD}-rate as homogeneous systems with half the storage requirements.
+Consequently, the optimal combinations of heterogeneous \ac{MDTC} systems have
+been found by setting a \acs{ROM} specification and selecting the combination
+of heterogeneous $4\times4$ and $8\times8$ systems that provide the best
+\ac{BD}-rate without exceeding the specified \acs{ROM}.
+The results of all systems combination can be found in the scatter plot of
+figure~\ref{fig:vmdtc_combined}.
+It can bee seen that the points present a lower boundary, which corresponds to
+the best combinations for a given \acs{ROM}.
+
+\begin{figure}[tb]
+	\centering
+	\includegraphics{./figures/vmdtc_systems_combined_plot.pdf}
+	\caption{All possible combinations of $4\times4$ and $8\times8$
+	heterogeneous systems}
+	\label{fig:vmdtc_combined}
+\end{figure}
+
+The selected \ac{ROM} requirements for the systems presented in
+figure~\ref{fig:vmdtc_iter} are detailed in
+table~\ref{tab:heterogeneous_mdtc}.
+Information about their actual \ac{ROM} requirements, \ac{BD}-rate and
+encoding complexty are provided.
+There are some remarkable points, such as the system at \unit{8}{\kilo B},
+which can achiver bit-rate savings of over 2\% with a complexity slightly
+higher than twice of \ac{HEVC}'s.
+Another interesting point is the \unit{64}{\kilo B} system, being able to
+provide bit-rate savings of 3\% at roughly seven times the complexity of
+\ac{HEVC}.
 
 \begin{table}[tb]
 	\centering
 	\begin{tabular}{r|r|r|r}
 	System & \multicolumn{1}{c|}{\acs{ROM}} & Y \acs{BD}-rate & Complexity \\
 	\hline\hline
-	\unit{1}{\kilo B}   & \unit{0.98}{\kilo B}   & -0.7\% & 120\% \\
-	\unit{2}{\kilo B}   & \unit{1.97}{\kilo B}   & -1.0\% & 130\% \\
-	\unit{4}{\kilo B}   & \unit{3.98}{\kilo B}   & -1.4\% & 160\% \\
-	\unit{8}{\kilo B}   & \unit{7.97}{\kilo B}   & -1.8\% & 200\% \\
-	\unit{12}{\kilo B}  & \unit{12.00}{\kilo B}  & -2.1\% & 220\% \\
-	\unit{16}{\kilo B}  & \unit{15.61}{\kilo B}  & -2.2\% & 240\% \\
-	\unit{24}{\kilo B}  & \unit{23.95}{\kilo B}  & -2.5\% & 350\% \\
-	\unit{32}{\kilo B}  & \unit{31.78}{\kilo B}  & -2.7\% & 390\% \\
-	\unit{48}{\kilo B}  & \unit{47.39}{\kilo B}  & -2.9\% & 520\% \\
-	\unit{64}{\kilo B}  & \unit{63.89}{\kilo B}  & -3.0\% & 660\% \\
-	\unit{96}{\kilo B}  & \unit{95.53}{\kilo B}  & -3.3\% & 850\% \\
+	  \unit{1}{\kilo B} &   \unit{0.98}{\kilo B} & -0.7\% & 120\% \\
+	  \unit{2}{\kilo B} &   \unit{1.97}{\kilo B} & -1.0\% & 130\% \\
+	  \unit{4}{\kilo B} &   \unit{3.98}{\kilo B} & -1.4\% & 160\% \\
+	  \unit{8}{\kilo B} &   \unit{7.97}{\kilo B} & -1.8\% & 200\% \\
+	 \unit{12}{\kilo B} &  \unit{12.00}{\kilo B} & -2.1\% & 220\% \\
+	 \unit{16}{\kilo B} &  \unit{15.61}{\kilo B} & -2.2\% & 240\% \\
+	 \unit{24}{\kilo B} &  \unit{23.95}{\kilo B} & -2.5\% & 350\% \\
+	 \unit{32}{\kilo B} &  \unit{31.78}{\kilo B} & -2.7\% & 390\% \\
+	 \unit{48}{\kilo B} &  \unit{47.39}{\kilo B} & -2.9\% & 520\% \\
+	 \unit{64}{\kilo B} &  \unit{63.89}{\kilo B} & -3.0\% & 660\% \\
+	 \unit{96}{\kilo B} &  \unit{95.53}{\kilo B} & -3.3\% & 850\% \\
 	\unit{128}{\kilo B} & \unit{127.41}{\kilo B} & -3.4\% & 930\% \\
 	\end{tabular}
 	\caption{Heterogeneous \acs{MDTC} systems with \acs{ROM} constraints}
 	\label{tab:heterogeneous_mdtc}
 \end{table}
+
+Nonetheless, learning the $4\times4$ and $8\times8$ heterogeneous \ac{MDTC}
+systems independently and then combining them to design the complete system is
+a suboptimal approach.
+The suboptimality can be spotted by comparing figures~\ref{fig:vmdtc_iter}
+and~\ref{fig:vmdtc_combined}:
+the lower boundary of figure~\ref{fig:vmdtc_combined} is lower than the actual
+measurements from figure~\ref{fig:vmdtc_iter}.
+This is due to the fact that, when combining both transform sizes, there is an
+overlap between them in the coded blocks, making the performances of the
+combined $4\times4$ and $8\times8$ systems to be a bit lower than the sum of
+the corresponding separate systems.
 
 \section{Symmetrical \acs{MDTC} systems}
 \label{sec:sym_mdtc}
@@ -3909,17 +3964,6 @@ In order to limit the \acs{ROM} impact of the transforms, one could take
 advantage of geometrical symmetries existing amongst \ac{HEVC} \acp{IPM}:
 within the 35 \acp{IPM} in \ac{HEVC}, symmetries in prediction residuals can
 be observed for directional modes (2--34).
-
-It can be stated that residuals issued from the first half (2--18) are closely
-related to the transposed version of the second half (18--34).
-These symmetries can be taken one step beyond and be applied inside the first
-half.
-These intra prediction residuals are symmetrical with respect to \ac{IPM} 10:
-residuals from \acp{IPM} above 10 can be related to those below 10 by applying
-a horizontal mirroring (top-bottom) or reflection.
-Since the second half is related to the first half transposed, this property
-applies around \ac{IPM} 26 in a similar fashion, through a vertical mirroring
-(left-right).
 Figure~\ref{fig:sym_pred_directions} contains a simplified version of the
 \ac{HEVC} \acp{IPM} which illustrates the proposed symmetrical relations.
 
@@ -3929,6 +3973,108 @@ Figure~\ref{fig:sym_pred_directions} contains a simplified version of the
 	\caption{The 35 \acsp{IPM} in \acs{HEVC} and their symmetries}
 	\label{fig:sym_pred_directions}
 \end{figure}
+
+It can be stated that residuals issued from the first half (2--17) are closely
+related to the transposed version of the second half (19--34).
+Figure~\ref{fig:symmetry_transposed} illustrates the average $4\times4$
+residuals profile and how the first half of the directional \acp{IPM} relates
+to the second one.
+
+\begin{figure}[tb]
+	\centering
+	\def\size{4}
+	\def\scalefactor{0.10}
+	\small
+	\npdigits{4}{0}
+	\foreach \direction in {2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17}
+	{
+		\numprint{\direction}
+		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\direction.png}
+		%
+		\pgfmathtruncatemacro{\directiont}{36-\direction}
+		\numprint{\directiont}
+		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiont.png}
+		%
+		\numprint{\directiont}$^T$
+		\reflectbox{               % mirror +
+		\rotatebox[origin=c]{-90}{ % rotation = transposition
+		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiont.png}
+		}}
+		\par
+	}
+	\caption{Average $4\times4$ residual profiles showing the symmetries
+	around \acs{IPM} 18}
+	\label{fig:symmetry_transposed}
+\end{figure}
+
+\begin{figure}[tb]
+	\centering
+	\begin{minipage}{0.6\textwidth}
+	\def\size{4}
+	\def\scalefactor{0.10}
+	\small
+	\foreach \direction in {2}
+	{
+	    \numprint{\direction}
+	    \includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\direction.png}
+		%
+		\pgfmathtruncatemacro{\directiont}{36-\direction}
+		$\qquad\directiont^T$
+		\reflectbox{               % mirror +
+		\rotatebox[origin=c]{-90}{ % rotation = transposition
+		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiont.png}
+		}}
+		\pgfmathtruncatemacro{\directionm}{20-\direction}
+		%
+		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
+		$\qquad\curvearrowupdown\directionm$
+		\raisebox{\depth}{\scalebox{1}[-1]{ % vertical mirror
+		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directionm.png}
+		}}
+		\par
+	}
+	\foreach \direction in {3,4,5,6,7,8,9}
+	{
+	    $\direction$
+	    \includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\direction.png}
+		%
+		\pgfmathtruncatemacro{\directiont}{36-\direction}
+		$\qquad\directiont^T$
+		\reflectbox{               % mirror +
+		\rotatebox[origin=c]{-90}{ % rotation = transposition
+		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiont.png}
+		}}
+		%
+		\pgfmathtruncatemacro{\directionm}{20-\direction}
+		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
+		$\qquad\curvearrowupdown\directionm$
+		\raisebox{\depth}{\scalebox{1}[-1]{ % vertical mirror
+		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directionm.png}
+		}}
+		%
+		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
+		$\qquad\curvearrowupdown\directiontm^T$ % rotation 90 = transposition + mirror
+		\includegraphics[scale=\scalefactor,angle=90]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiontm.png}
+		\par
+}
+\end{minipage}
+	\caption[Average $4\times4$ residual profiles showing imposed symmetries]
+	{Average $4\times4$ residual profiles showing imposed symmetries with
+	transposition and vertical mirroring}
+	\label{fig:symmetry_transposed_mirror}
+\end{figure}
+
+These symmetries can be taken one step beyond and be applied inside the first
+half.
+Although it might seem counter-intuitive at first, this decision can be
+justified geometrically:
+around \ac{IPM} 10, which is purely horizontal, it seems natural to think that
+residuals from \ac{IPM} 9 (slightly diagonal up) and \ac{IPM} 11 (slightly
+diagonal down) can be related via a horizontal mirroring operation
+(top-bottom) or reflection.
+Since the second half is related to the first half transposed, this property
+applies around \ac{IPM} 26 in a similar fashion, through a vertical mirroring
+(left-right).
 
 When both symmetries are exploited, the number of transforms of an \ac{MDTC}
 system is no longer affected by a factor of 35 (the number of \acp{IPM}), but
@@ -4009,7 +4155,7 @@ transforms par \ac{IPM} is the same in all systems.
 		4  &  \unit{6.56}{\kilo B} & -0.8\% &  \unit{3.56}{\kilo B} & -0.6\% &  \unit{2.06}{\kilo B} & -0.6\% & 170\% \\
 		8  & \unit{13.13}{\kilo B} & -0.9\% &  \unit{7.13}{\kilo B} & -0.7\% &  \unit{4.13}{\kilo B} & -0.7\% & 220\% \\
 		16 & \unit{26.25}{\kilo B} & -1.0\% & \unit{14.25}{\kilo B} & -0.8\% &  \unit{8.25}{\kilo B} & -0.8\% & 320\% \\
-		32 & \unit{52.50}{\kilo B} & -1.0\% & \unit{28.50}{\kilo B} & \#NA\% & \unit{16.50}{\kilo B} & -0.8\% & 530\% \\
+		32 & \unit{52.50}{\kilo B} & -1.0\% & \unit{28.50}{\kilo B} & -0.9\% & \unit{16.50}{\kilo B} & -0.8\% & 530\% \\
 	\end{tabular}
 	\caption{Symmetries impact on $4\times4$ transforms on the 59seq test set}
 	\label{tab:sym4}

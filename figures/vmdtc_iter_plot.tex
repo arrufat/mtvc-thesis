@@ -34,18 +34,8 @@
 			legend pos= south west
 		]
 
-		\addlegendentry{$4\times4$ iterations}
-		\pgfplotstableread{figures/vmdtc_iter_4.dat}\table
-		\addplot[red, thick, mark=*, mark size=0.5pt, smooth]
-		table[x=rom,y=bdrate,col sep=tab] from \table;
-
-		\addlegendentry{$8\times8$ iterations}
-		\pgfplotstableread{figures/vmdtc_iter_8.dat}\table
-		\addplot[blue, thick, mark=*, mark size=0.5pt, smooth]
-		table[x=rom,y=bdrate,col sep=tab] from \table;
-
 		\addlegendentry{$4\times4$ sep. hom. MDTC}
-		\addplot [only marks, mark=x,mark size=2pt, red, thick, 
+		\addplot [mark=x,mark size=2pt, red, thick,
 		visualization depends on=\thisrow{alignment} \as \alignment,
 		nodes near coords, % Place nodes near each coordinate
 		point meta=explicit symbolic, % The meta data used in the nodes is not explicitly provided and not numeric
@@ -61,7 +51,7 @@
 		};
 
 		\addlegendentry{$8\times8$ sep. hom. MDTC}
-		\addplot [only marks, mark=x,mark size=2pt, blue, thick, 
+		\addplot [mark=x,mark size=2pt, blue, thick, 
 		visualization depends on=\thisrow{alignment} \as \alignment,
 		nodes near coords, % Place nodes near each coordinate
 		point meta=explicit symbolic, % The meta data used in the nodes is not explicitly provided and not numeric
@@ -79,7 +69,7 @@
 		};
 
 		\addlegendentry{Comb. sep. hom. MDTC}
-		\addplot [only marks, mark=x,mark size=2pt, greenish, thick,
+		\addplot [mark=x,mark size=2pt, greenish, thick,
 		visualization depends on=\thisrow{alignment} \as \alignment,
 		nodes near coords, % Place nodes near each coordinate
 		point meta=explicit symbolic, % The meta data used in the nodes is not explicitly provided and not numeric
@@ -98,8 +88,18 @@
 		236.25	-3.44	\tiny{\color{black}4s16--8s32}	90
 		};
 
+		\addlegendentry{$4\times4$ iterations}
+		\pgfplotstableread{figures/vmdtc_iter_4.dat}\table
+		\addplot[red, thick, mark=*, mark size=0.5pt, smooth]
+		table[x=rom,y=bdrate,col sep=tab] from \table;
+
+		\addlegendentry{$8\times8$ iterations}
+		\pgfplotstableread{figures/vmdtc_iter_8.dat}\table
+		\addplot[blue, thick, mark=*, mark size=0.5pt, smooth]
+		table[x=rom,y=bdrate,col sep=tab] from \table;
+
 		\addlegendentry{Comb. sep. het. MDTC}
-		\addplot [only marks, mark=o,mark size=1pt, greenish, thick,
+		\addplot [mark=o,mark size=1pt, greenish, thick,
 		visualization depends on=\thisrow{alignment} \as \alignment,
 		nodes near coords, % Place nodes near each coordinate
 		point meta=explicit symbolic, % The meta data used in the nodes is not explicitly provided and not numeric
