@@ -2581,9 +2581,22 @@ This flag is activated when transforming a residual does not suppose any
 benefit in terms of rate-distortion, which might be due to the fact that the
 residuals contains only noise, amongst others.
 
-Early work on transform competition in \ac{HEVC} is presented
-in~\cite{arrufat-14-transform-competition-rdot}, and~\cite{arrufat-15-mdtc}
-contains closely related work to this Chapter.
+Some work on transform competition has been carried out
+in~\cite{arrufat-14-transform-competition-rdot,fengzou-13-rdot-lloyd-intra}.
+The main difference is that, in this Chapter, each \ac{IPM} has its own
+transforms.
+The approach from~\cite{fengzou-13-rdot-lloyd-intra} uses the same transforms
+for all \acp{IPM} and the block size and \ac{IPM} decision is based on the
+default \ac{HEVC} transforms, then the residual is transformed with the
+transform that provides the best trade-off in terms of rate-distortion.
+
+Further work on different mode-dependent tools for video coding are explored
+in~\cite{ma-13-mode-dependent-tools-video-coding}, notably ways of
+simplifying and improving the \ac{MDDT} system by adding re-orderings in the
+residuals and additional transforms after the main transform.
+
+Early work on \ac{MDTC} systems closely related to this Chapter has been
+presented in~\cite{arrufat-15-mdtc}.
 
 \section{Multiple transform design using the \acs{RDOT} metric}
 \label{sec:multiple_transform_design}
@@ -4226,7 +4239,8 @@ considered in this Chapter: the \acfp{DTT}.
 
 \acsp{DTT} are orthogonal transforms based on trigonometric functions.
 This family of transforms consists of 8 types (I to VIII) of \acfp{DCT} and
-\acfp{DST}~\cite{rao-01-transform-data-compression-book}.
+\acfp{DST}~\cite{rao-01-transform-data-compression-book,
+puschel-08-algorithms-dct-dst}.
 
 % TODO
 \todo{Include images of the bases for all \acp{DTT}}
