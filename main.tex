@@ -2460,20 +2460,25 @@ noticeable.
 \begin{table}[tb]
 	\centering
 	\small
-	\begin{tabular}{c|cc|cc|cc}
+	\begin{tabular}{c|rr|rr|rr}
+		\multicolumn{1}{c}{}
 		& \multicolumn{2}{c|}{$4\times4$}
 		& \multicolumn{2}{c|}{$8\times8$}
 		& \multicolumn{2}{c}{$4\times4$ \& $8\times8$} \\
-		& sep & non-sep & sep & non-sep & sep & non-sep \\
+		\multicolumn{1}{c}{}
+		& \multicolumn{1}{c}{sep} & \multicolumn{1}{c|}{non-sep}
+		& \multicolumn{1}{c}{sep} & \multicolumn{1}{c|}{non-sep}
+		& \multicolumn{1}{c}{sep} & \multicolumn{1}{c}{non-sep} \\
 		\hline\hline
-		Y \acs{BD}-rate & -0.2\% & -0.8\% & -0.4\% & -1.5\% & -0.6\% & -1.9\% \\
+		Y \acs{BD}-rate & -0.31\% & -1.34\% & -0.74\% & -2.55\% & -1.02\% & -3.23\% \\
 		Encoding  & 101\% & 102\% & 107\% & 111\% & 108\% & 112\% \\
-		Decoding  & 101\% & 102\% & 103\% & 105\% & 105\% & 107\% \\
+		Decoding  & 101\% & 102\% & 103\% & 115\% & 105\% & 120\% \\
 		\acs{ROM} & \SI{1.64}{\kilo B} & \SI{8.75}{\kilo B} &
 				\SI{6.56}{\kilo B} & \SI{140.00}{\kilo B} &
 				\SI{8.20}{\kilo B} & \SI{148.75}{\kilo B}\\
 	\end{tabular}
-	\caption{Summary of \acs{RDOT}-based \acs{MDDT} systems compared to \acs{HEVC}}
+	\caption{Summary of \acs{RDOT}-based \acs{MDDT} systems compared to
+	\acs{HEVC} in \acs{AI}}
 	\label{tab:mddt_summary}
 \end{table}
 
@@ -2994,7 +2999,7 @@ complexity and high performance \ac{MDTC} systems.
 		\multicolumn{1}{c}{} & Sep & N-Sep & Sep & N-Sep \\
 		\hline
 		\hline
-		Y \acs{BD}-rate & -1.7\% & -3.8\% & -4.1\% & -7.1\% \\
+		Y \acs{BD}-rate & -1.66\% & -3.78\% & -4.10\% & -7.10\% \\
 		Enc. Time & 150\% & 200\% & 800\% & 2000\% \\
 		Dec. Time & 103\% & 110\% & 105\% & 120\% \\
 		\acs{ROM} & \SI{8.20}{\kilo B} & \SI{148.75}{\kilo B} &
@@ -3783,21 +3788,19 @@ savings and the encoding complexity with regards \ac{HEVC}.
 	\label{tab:homogeneous_mdtc_4}
 \end{table}
 
-% TODO
-\todo{Re-encode $8\times8$ system to increase precision}
 \begin{table}[tb]
 	\centering
 	\begin{tabular}{r|r|r|r}
 	System & \multicolumn{1}{c|}{\acs{ROM}} & Y \acs{BD}-rate & Complexity \\
 	\hline\hline
-	  4s0--8s1 &   \SI{6.56}{\kilo B} & -0.84\% &  130\% \\
-	  4s0--8s2 &  \SI{13.13}{\kilo B} & -1.33\% &  140\% \\
-	  4s0--8s4 &  \SI{26.25}{\kilo B} & -1.72\% &  170\% \\
-	  4s0--8s8 &  \SI{52.50}{\kilo B} & -2.10\% &  230\% \\
-	 4s0--8s16 & \SI{105.00}{\kilo B} & -2.48\% &  340\% \\
-	 4s0--8s32 & \SI{210.00}{\kilo B} & -2.79\% &  580\% \\
-	 4s0--8s64 & \SI{420.00}{\kilo B} & -3.07\% & 1000\% \\
-	4s0--8s128 & \SI{840.00}{\kilo B} & -3.33\% & 2000\% \\
+	  4s0--8s1 &   \SI{6.56}{\kilo B} & -0.84\% &  127\% \\
+	  4s0--8s2 &  \SI{13.13}{\kilo B} & -1.33\% &  142\% \\
+	  4s0--8s4 &  \SI{26.25}{\kilo B} & -1.72\% &  171\% \\
+	  4s0--8s8 &  \SI{52.50}{\kilo B} & -2.10\% &  229\% \\
+	 4s0--8s16 & \SI{105.00}{\kilo B} & -2.48\% &  345\% \\
+	 4s0--8s32 & \SI{210.00}{\kilo B} & -2.79\% &  577\% \\
+	 4s0--8s64 & \SI{420.00}{\kilo B} & -3.07\% & 1041\% \\
+	4s0--8s128 & \SI{840.00}{\kilo B} & -3.33\% & 1970\% \\
 	\end{tabular}
 	\caption{Summary of $8\times8$ homogeneous \acs{MDTC} systems learnt with
 	ToS on 59seq}
@@ -4000,12 +4003,26 @@ to the second one.
 
 \begin{figure}[tb]
 	\centering
-	\def\size{4}
-	\def\scalefactor{0.10}
+	\def\scalefactor{0.125}
 	\small
 	\npdigits{4}{0}
 	\foreach \direction in {2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17}
 	{
+		\def\size{4}
+		\numprint{\direction}
+		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\direction.png}
+		%
+		\pgfmathtruncatemacro{\directiont}{36-\direction}
+		\numprint{\directiont}
+		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiont.png}
+		%
+		\numprint{\directiont}$^T$
+		\reflectbox{               % mirror +
+		\rotatebox[origin=c]{-90}{ % rotation = transposition
+		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiont.png}
+		}}
+		\hfill
+		\def\size{8}
 		\numprint{\direction}
 		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\direction.png}
 		%
@@ -4020,8 +4037,8 @@ to the second one.
 		}}
 		\par
 	}
-	\caption{Average $4\times4$ residual profiles showing the symmetries
-	around \acs{IPM} 18}
+	\caption{Average $4\times4$ and $8\times8$ residual profiles showing the
+	symmetries around \acs{IPM} 18}
 	\label{fig:symmetry_transposed}
 \end{figure}
 
@@ -4029,7 +4046,7 @@ to the second one.
 	\centering
 	\begin{minipage}{0.6\textwidth}
 	\def\size{4}
-	\def\scalefactor{0.10}
+	\def\scalefactor{0.125}
 	\small
 	\foreach \direction in {2}
 	{
@@ -4037,7 +4054,7 @@ to the second one.
 	    \includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\direction.png}
 		%
 		\pgfmathtruncatemacro{\directiont}{36-\direction}
-		$\qquad\directiont^T$
+		$\quad\directiont^T$
 		\reflectbox{               % mirror +
 		\rotatebox[origin=c]{-90}{ % rotation = transposition
 		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiont.png}
@@ -4045,7 +4062,7 @@ to the second one.
 		\pgfmathtruncatemacro{\directionm}{20-\direction}
 		%
 		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
-		$\qquad\curvearrowupdown\directionm$
+		$\quad\curvearrowupdown\directionm$
 		\raisebox{\depth}{\scalebox{1}[-1]{ % vertical mirror
 		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directionm.png}
 		}}
@@ -4057,7 +4074,7 @@ to the second one.
 	    \includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\direction.png}
 		%
 		\pgfmathtruncatemacro{\directiont}{36-\direction}
-		$\qquad\directiont^T$
+		$\quad\directiont^T$
 		\reflectbox{               % mirror +
 		\rotatebox[origin=c]{-90}{ % rotation = transposition
 		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiont.png}
@@ -4065,21 +4082,78 @@ to the second one.
 		%
 		\pgfmathtruncatemacro{\directionm}{20-\direction}
 		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
-		$\qquad\curvearrowupdown\directionm$
+		$\quad\curvearrowupdown\directionm$
 		\raisebox{\depth}{\scalebox{1}[-1]{ % vertical mirror
 		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directionm.png}
 		}}
 		%
 		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
-		$\qquad\curvearrowupdown\directiontm^T$ % rotation 90 = transposition + mirror
+		$\quad\curvearrowupdown\directiontm^T$ % rotation 90 = transposition + mirror
 		\includegraphics[scale=\scalefactor,angle=90]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiontm.png}
 		\par
 }
 \end{minipage}
-	\caption[Average $4\times4$ residual profiles showing imposed symmetries]
-	{Average $4\times4$ residual profiles showing imposed symmetries with
+	\caption[Average $\size\times\size$ residual profiles showing imposed symmetries]
+	{Average $\size\times\size$ residual profiles showing imposed symmetries with
 	transposition and vertical mirroring}
 	\label{fig:symmetry_transposed_mirror}
+\end{figure}
+
+\begin{figure}[tb]
+	\centering
+	\begin{minipage}{0.6\textwidth}
+	\def\size{8}
+	\def\scalefactor{0.125}
+	\small
+	\foreach \direction in {2}
+	{
+	    \numprint{\direction}
+	    \includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\direction.png}
+		%
+		\pgfmathtruncatemacro{\directiont}{36-\direction}
+		$\quad\directiont^T$
+		\reflectbox{               % mirror +
+		\rotatebox[origin=c]{-90}{ % rotation = transposition
+		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiont.png}
+		}}
+		\pgfmathtruncatemacro{\directionm}{20-\direction}
+		%
+		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
+		$\quad\curvearrowupdown\directionm$
+		\raisebox{\depth}{\scalebox{1}[-1]{ % vertical mirror
+		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directionm.png}
+		}}
+		\par
+	}
+	\foreach \direction in {3,4,5,6,7,8,9}
+	{
+	    $\direction$
+	    \includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\direction.png}
+		%
+		\pgfmathtruncatemacro{\directiont}{36-\direction}
+		$\quad\directiont^T$
+		\reflectbox{               % mirror +
+		\rotatebox[origin=c]{-90}{ % rotation = transposition
+		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiont.png}
+		}}
+		%
+		\pgfmathtruncatemacro{\directionm}{20-\direction}
+		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
+		$\quad\curvearrowupdown\directionm$
+		\raisebox{\depth}{\scalebox{1}[-1]{ % vertical mirror
+		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directionm.png}
+		}}
+		%
+		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
+		$\quad\curvearrowupdown\directiontm^T$ % rotation 90 = transposition + mirror
+		\includegraphics[scale=\scalefactor,angle=90]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiontm.png}
+		\par
+}
+\end{minipage}
+	\caption[Average $\size\times\size$ residual profiles showing imposed symmetries]
+	{Average $\size\times\size$ residual profiles showing imposed symmetries with
+	transposition and vertical mirroring}
+	\label{fig:symmetry_transposed_mirror_8}
 \end{figure}
 
 These symmetries can be taken one step beyond and be applied inside the first
@@ -4155,22 +4229,20 @@ transforms par \ac{IPM} is the same in all systems.
 \begin{table}[tb]
 	\centering
 	\small
-	\begin{tabular}{c|rr|rr|rr|r}
+	\begin{tabular}{c|rr|rr}
 		& \multicolumn{2}{c|}{non-symmetrical}
-		& \multicolumn{2}{c|}{full-symmetrical}
-		& \multicolumn{1}{c}{Average} \\
+		& \multicolumn{2}{c}{symmetrical} \\
 		\# tr & \multicolumn{1}{c}{\acs{ROM}} &
 		\multicolumn{1}{c|}{Y \acs{BD}-rate} &
 		\multicolumn{1}{c}{\acs{ROM}} &
-		\multicolumn{1}{c|}{Y \acs{BD}-rate} &
-		\multicolumn{1}{c}{Complexity} \\
+		\multicolumn{1}{c}{Y \acs{BD}-rate} \\
 		\hline \hline
-		 1 &  \SI{1.64}{\kilo B} & -0.49\% &  \SI{0.52}{\kilo B} & -0.50\% & 127\% \\
-		 2 &  \SI{3.28}{\kilo B} & -0.67\% &  \SI{1.03}{\kilo B} & -0.63\% & 141\% \\
-		 4 &  \SI{6.56}{\kilo B} & -0.82\% &  \SI{2.06}{\kilo B} & -0.72\% & 167\% \\
-		 8 & \SI{13.13}{\kilo B} & -0.93\% &  \SI{4.13}{\kilo B} & -0.84\% & 219\% \\
-		16 & \SI{26.25}{\kilo B} & -0.98\% &  \SI{8.25}{\kilo B} & -0.91\% & 322\% \\
-		32 & \SI{52.50}{\kilo B} & -1.01\% & \SI{16.50}{\kilo B} & -0.93\% & 527\% \\
+		 1 &  \SI{1.64}{\kilo B} & -0.49\% &  \SI{0.52}{\kilo B} & -0.50\% \\
+		 2 &  \SI{3.28}{\kilo B} & -0.67\% &  \SI{1.03}{\kilo B} & -0.63\% \\
+		 4 &  \SI{6.56}{\kilo B} & -0.82\% &  \SI{2.06}{\kilo B} & -0.72\% \\
+		 8 & \SI{13.13}{\kilo B} & -0.93\% &  \SI{4.13}{\kilo B} & -0.84\% \\
+		16 & \SI{26.25}{\kilo B} & -0.98\% &  \SI{8.25}{\kilo B} & -0.91\% \\
+		32 & \SI{52.50}{\kilo B} & -1.01\% & \SI{16.50}{\kilo B} & -0.93\% \\
 	\end{tabular}
 	\caption{Symmetries impact on $4\times4$ transforms on the 59seq test set}
 	\label{tab:sym4}
@@ -4179,24 +4251,22 @@ transforms par \ac{IPM} is the same in all systems.
 \begin{table}[tb]
 	\centering
 	\small
-	\begin{tabular}{c|rr|rr|rr|r}
+	\begin{tabular}{c|rr|rr}
 		& \multicolumn{2}{c|}{non-symmetrical}
-		& \multicolumn{2}{c|}{full-symmetrical}
-		& \multicolumn{1}{c}{Average} \\
+		& \multicolumn{2}{c}{symmetrical} \\
 		\# tr & \multicolumn{1}{c}{\acs{ROM}} &
 		\multicolumn{1}{c|}{Y \acs{BD}-rate} &
 		\multicolumn{1}{c}{\acs{ROM}} &
-		\multicolumn{1}{c|}{Y \acs{BD}-rate} &
-		\multicolumn{1}{c}{Complexity} \\
+		\multicolumn{1}{c}{Y \acs{BD}-rate} \\
 		\hline \hline
-		  1 &   \SI{6.56}{\kilo B} & -0.84\% &   \SI{2.06}{\kilo B} & \% & \% \\
-		  2 &  \SI{13.13}{\kilo B} & -1.33\% &   \SI{4.13}{\kilo B} & \% & \% \\
-		  4 &  \SI{26.25}{\kilo B} & -1.72\% &   \SI{8.25}{\kilo B} & \% & \% \\
-		  8 &  \SI{52.50}{\kilo B} & -2.10\% &  \SI{16.50}{\kilo B} & \% & \% \\
-		 16 & \SI{105.00}{\kilo B} & -2.48\% &  \SI{33.00}{\kilo B} & \% & \% \\
-		 32 & \SI{210.00}{\kilo B} & -2.79\% &  \SI{66.00}{\kilo B} & \% & \% \\
-		 64 & \SI{420.00}{\kilo B} & -3.07\% & \SI{132.00}{\kilo B} & \% & \% \\
-		128 & \SI{840.00}{\kilo B} & -3.33\% & \SI{264.00}{\kilo B} & \% & \% \\
+		  1 &   \SI{6.56}{\kilo B} & -0.84\% &   \SI{2.06}{\kilo B} \\
+		  2 &  \SI{13.13}{\kilo B} & -1.33\% &   \SI{4.13}{\kilo B} \\
+		  4 &  \SI{26.25}{\kilo B} & -1.72\% &   \SI{8.25}{\kilo B} \\
+		  8 &  \SI{52.50}{\kilo B} & -2.10\% &  \SI{16.50}{\kilo B} \\
+		 16 & \SI{105.00}{\kilo B} & -2.48\% &  \SI{33.00}{\kilo B} \\
+		 32 & \SI{210.00}{\kilo B} & -2.79\% &  \SI{66.00}{\kilo B} \\
+		 64 & \SI{420.00}{\kilo B} & -3.07\% & \SI{132.00}{\kilo B} \\
+		128 & \SI{840.00}{\kilo B} & -3.33\% & \SI{264.00}{\kilo B} \\
 	\end{tabular}
 	\caption{Symmetries impact on $8\times8$ transforms on the 59seq test set}
 	\label{tab:sym4}
