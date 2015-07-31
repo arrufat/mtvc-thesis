@@ -66,7 +66,8 @@
 	pdfsubject={video coding},
 	pdfkeywords={video, image, transform},
 	pdfinfo={
-		CreationDate={D:20150121111947},
+		% CreationDate={D:20150121111947},
+		CreationDate={D:20150317093606}
 		%ModDate={...}
 	},
 }
@@ -262,6 +263,8 @@ However, other resolutions will also be considered, such as WVGA
 \index{gamma}
 \index{luma}
 \index{chroma}
+\index{RGB}
+\index{Y'CbCr}
 
 A colour space is an abstract mathematical model specified by primary colours
 that is used to describe a representation of a picture, usually as a set of
@@ -317,6 +320,7 @@ in \S\ref{sec:the_hybrid_video_coding_scheme}.
 
 \subsection{Transmission}
 \label{sub:transmission}
+\index{random access}
 
 The transmission stage represents the channel through which the encoded
 bitstream is made available to the decoder.
@@ -363,6 +367,13 @@ space and to the display format.
 
 \section{The hybrid video coding scheme}
 \label{sec:the_hybrid_video_coding_scheme}
+\index{hybrid video coding scheme}
+\index{MPEG}
+\index{H.261}
+\index{AVC}
+\index{H.264}
+\index{HEVC}
+\index{H.265}
 
 State-of-the-art video coding standards such as H.264/\acs{MPEG}-4 \acs{AVC}
 and H.265/\acs{HEVC} use a hybrid video coding scheme.
@@ -397,6 +408,7 @@ the following subsections.
 \subsection{Partitioning}
 \label{sub:partitioning}
 \index{partitioning}
+\index{quad-tree}
 
 In order to process the video frames, they are exhaustively partitioned into
 non-overlapping blocks.
@@ -406,7 +418,8 @@ parallel processing is made possible.
 The partitioning does not necessarily imply same-sized blocks, allowing
 rectangular blocks of different sizes to be used, as illustrated in
 figure~\ref{fig:part_orig_pred_res_image} (a).
-This figure provides a partitioning for a certain level of quantisation using
+This is due to the quad-tree partitioning that is implemented in \ac{HEVC}.
+The figure provides a partitioning for a certain level of quantisation using
 information available in the current image.
 It can be seen that the image has been divided into uniform regions.
 
@@ -416,6 +429,7 @@ allowing a \ac{PU} to be split into four \acp{TU}.
 
 \subsection{Prediction}
 \label{sub:prediction}
+\index{prediction}
 
 Instead of coding the blocks coming from the original source image directly,
 the encoder computes an estimation of the block pixel values, which is then
@@ -579,6 +593,8 @@ the offset that has to be applied in the block from the reference image.
 
 \subsection{Transform}
 \label{sub:transform}
+\index{transform}
+\index{energy compaction}
 
 The transform stage reduces the remaining correlations from the residual
 block, computed as the difference between the original and the predicted
@@ -614,7 +630,10 @@ thoroughly in Chapter~\ref{cha:transform_coding}.
 
 \subsection{Quantisation}
 \label{sub:quantisation}
-\index{QP}\index{lossy}\index{lossless}
+\index{QP}
+\index{quantisation}
+\index{lossy}
+\index{lossless}
 
 The quantisation, applied in the transform domain, it is used as an
 approximation operator, reducing the amount of possible output values.
@@ -632,7 +651,9 @@ quantification in the process.
 
 \subsection{Entropy coding}
 \label{sub:entropy_coding}
+\index{entropy coding}
 \index{CABAC}
+\index{scanning}
 
 The last operation consists in reducing the amount of bits transmitted through
 the use of an entropy code.
@@ -669,6 +690,7 @@ number of bits thanks to the \ac{CABAC}.
 
 \section{Encoder control}
 \label{sec:encoder_control}
+\index{encoder control}
 
 The encoder control is used by essentially all blocks in the diagram
 from figure~\ref{fig:hybrid_video_coding_scheme}.
@@ -850,6 +872,9 @@ namely their design principles and a comparison between two design approaches.
 
 \section{Introduction to transforms}
 \label{sec:introduction_to_transforms}
+\index{transform}
+\index{transform coding}
+\index{rotation}
 
 In the previous chapter, transforms were mentioned as an important part
 in current video coders.
@@ -893,6 +918,10 @@ representation, since the horizontal dimension remains constant.
 
 \subsection{Block transforms}
 \label{sub:block_transforms}
+\index{block transforms}
+\index{JPEG}
+\index{HEVC}
+\index{AVC}
 
 Block-based coding is widely adopted in image/video systems, such as
 \acs{JPEG}, \ac{AVC} and \ac{HEVC}.
@@ -911,6 +940,9 @@ systems, they will be the targeted type of transforms in this thesis.
 
 \subsection{Orthogonal transforms}
 \label{sub:orthogonal_transforms}
+\index{orthogonal transforms}
+\index{orthonormal transforms}
+\index{unitary transforms}
 
 Transforms used in image processing and video coding are orthogonal.
 Orthogonal matrices are square matrices whose rows and columns are orthogonal
@@ -930,6 +962,7 @@ direct and inverse transform applications.
 
 \subsection{Separability}
 \label{sub:separability}
+\index{separable transforms}
 
 Image and video coding deal with image blocks, which are two-dimensional
 signals and, consequently, use transforms able two process those
@@ -957,6 +990,7 @@ $N^4$ multiplications and $N^2(N^2-1)$ additions.
 	\caption{Example of a $4\times4$ block linearisation}
 	\label{fig:block_linearisation}
 \end{figure}
+\index{block linearisation}
 
 On the other hand, any linear correlation can be exploited between any pixel
 within a block:
@@ -1015,9 +1049,11 @@ More explicitly:
 		a_{m1} b_{p1} & a_{m1} b_{p2} & \cdots & a_{m1} b_{pq} & \cdots & \cdots & a_{mn} b_{p1} & a_{mn} b_{p2} & \cdots & a_{mn} b_{pq} 
 	\end{bmatrix}
 \end{equation}
+\index{Kronecker product}
 
 \subsection{Transform design}
 \label{sub:transform_design}
+\index{transform design}
 
 Since the objective of the transforms is to be able to represent the signal
 with as few coefficients as possible while minimising the distortion
@@ -1069,6 +1105,8 @@ can be computed as:
 		\E\left\{x_{N-1}y_0\right\} & \E\left\{x_{N-1}y_1\right\} & \hdots & \E\left\{x_{N-1}y_{N-1}\right\}
 	\end{bmatrix}
 \end{align}
+\index{covariance matrix}
+\index{correlation matrix}
 If $\x=\y$, the covariance matrix is the correlation matrix of $\x$.
 
 It is possible to select an orthogonal matrix $\A$, for a given \ac{PDF}
@@ -1117,13 +1155,14 @@ Where:
 	\item $\a_i$'s are the eigenvectors of $\C_\x$.
 	\item $\lambda_i$'s are the eigenvalues of $\C_\x$.
 \end{itemize}
+\index{eigen values}
+\index{eigen vectors}
 
 \subsection{Particular case on natural images: the \acs{DCT}}
 \label{sub:particular_case_dct}
 \index{DCT}
 \index{Markov}
 \index{AR}
-\index{Toeplitz matrix}
 
 One of the most used transforms in image and video coding is the
 \acf{DCT}.
@@ -1157,6 +1196,7 @@ matrix~\cite{akansu-12-toeplitz-approximation}:
 	\end{pmatrix}
 	\label{eqn:toeplitz_matrix}
 \end{equation}
+\index{Toeplitz matrix}
 The \ac{KLT} for this kind of processes, that is, the eigenvectors of
 $\R_\x$, tends to the \ac{DCT} as $\rho\to1$~\cite{britanak-06-dct-and-dst}.
 The \ac{DCT}-II can be expressed compactly as:
@@ -1196,7 +1236,6 @@ allocation~\cite{sole-12-transform-coefficient-coding}.
 \label{sub:particular_case_dst}
 \index{DST}
 \index{intra prediction}
-\index{tridiagonal matrix}
 \index{Toeplitz matrix}
 
 Although the \ac{DCT} has been proved to be nearly the \ac{KLT} for natural
@@ -1250,6 +1289,7 @@ from~\eqref{eqn:dst_vii}.
 	\end{pmatrix}
 	\label{eqn:tridiagonal_matrix}
 \end{equation}
+\index{tridiagonal matrix}
 
 \begin{equation}
 	{\left[S_{N}^{VII} \right]}_{n,k} =
@@ -1330,6 +1370,7 @@ consequences is detailed below.
 
 \subsection{The \acs{RDOT} metric}
 \label{sub:the_rdot_metric}
+\index{RDOT metric}
 
 The value that \acp{RDOT} minimise is expressed
 in~\eqref{eqn:rdot_metric} for a single signal.
@@ -1461,6 +1502,8 @@ coefficients) with the input signal (the intra prediction residuals).
 
 \subsection{Separable \acs{RDOT} design}
 \label{sub:separable_rdot_design}
+\index{separable RDOT}
+\index{RDOT}
 
 The methods for transform design and learning presented in the previous
 sections are non-separable.
@@ -1510,6 +1553,7 @@ version.
 \subsubsection{Optimal coefficients for a given transform}
 As in the non-separable problem, the optimal coefficients $\c_i$ are found by
 hard-thresholding the components of $\X_i=\A_v\x_i\A_h^T$ with $\sqrt{\lambda}$.
+
 \subsubsection{Optimal vertical transform for given coefficients}
 Now, the vertical transform needs to be updated accordingly:
 \begin{equation}
@@ -1529,11 +1573,13 @@ Then the optimal transform is given by:
 \begin{equation}
   \A_{v_{opt}} = \U\V^T
 \end{equation}
+
 \subsubsection{Optimal coefficients for updated vertical transform}
 As in the non-separable problem, the optimal coefficients $\c_i$ are found by
 hard-thresholding the components of $\X=\A_{v_{opt}}\x_i\A_h^T$ with
 $\sqrt{\lambda}$. However, this time we use the optimal vertical transform from
 the previous step.
+
 \subsubsection{Optimal horizontal transform for given coefficients}
 Now, the horizontal transform needs to be updated accordingly:
 \begin{equation}
@@ -1559,6 +1605,8 @@ Then the optimal transform is given by:
 \index{generalised normal distribution}
 \index{generalised Gaussian distribution}
 \index{exponential power distribution}
+\index{Lagrange muliplier}
+\index{zero norm}
 
 Video coding residuals distribution can be modelled using a \ac{GGD}, also
 known as generalised normal distribution or exponential power
@@ -1590,6 +1638,8 @@ zero-mean \ac{PDF}.
 	compared to Laplace and normal distributions}
 	\label{fig:probability_density_functions}
 \end{figure}
+\index{probablity density function}
+\index{PDF}
 Figure~\ref{fig:probability_density_functions} also includes the
 \ac{PDF} of a Laplace distribution and a normal distribution.
 Those two distributions are particular cases of a \ac{GGD}.
@@ -1752,6 +1802,8 @@ and so does the \ac{PDF} of the training data in the transform domain.
 
 \subsection{Independence from the \acs{PDF}}
 \label{sub:independence_from_the_pdf}
+\index{PDF}
+\index{probablity density function}
 
 In the previous subsection, for a given quantisation step, the value of
 the optimal Lagrange multiplier $\lambda$ has been proved for the
@@ -1924,6 +1976,7 @@ phase, but is was finally discarded in favour of a new transform, the
 
 \subsection{Motivation and principles of the \acs{MDDT}}
 \label{sub:mddt_motivation}
+\index{MDDT}
 
 Depending on the selected prediction mode, transformed coefficients might
 present different patterns, making low and high values to appear at different
@@ -2026,6 +2079,9 @@ lack of fast algorithms for the adapted transforms implementation.
 \index{DST}
 \index{KTA}
 \index{TMuC}
+\index{MDDT}
+\index{HEVC}
+\index{KLT}
 
 The \ac{DST} has been presented as the \ac{KLT} for intra prediction residuals
 in \S\ref{sub:particular_case_dct}.
@@ -2091,12 +2147,15 @@ with regards to the current standard, \ac{HEVC}.
 
 \section{Design and implementation of \acs{MDDT} systems}
 \label{sec:mddt_design_and_implementation}
+\index{MDDT}
 
 Preliminary work carried out for this section has been published in the form
 of an article~\cite{arrufat-14-mddt-rdot}.
 
 \subsection{\acs{MDDT} system learning}
 \label{sub:mddt_system_learning}
+\index{RDOT metric}
+\index{KLT}
 
 The transforms designs presented in the previous Chapter, namely the \ac{KLT}
 and the \ac{RDOT}, will be tested in this Section, using the \ac{MDDT}
@@ -2484,6 +2543,7 @@ noticeable.
 
 \subsubsection{\acs{MDDT} storage requirements}
 \label{ssub:mddt_storage_requirements}
+\index{ROM}
 
 The transforms used in the \ac{MDDT} system are, in general, not describable
 with a mathematical formula in the same way the \ac{DCT} and the \ac{DST} are.
@@ -2561,6 +2621,8 @@ coding alternatives to \ac{HEVC}.
 
 \section{Introduction}
 \label{sec:introduction_mdtc}
+\index{MDDT}
+\index{MDTC}
 
 Chapter~\ref{cha:mddt} revisited the existing \acf{MDDT} technique, its
 origins and motivation, and how it was discarded in the final \ac{HEVC}
@@ -2611,6 +2673,7 @@ presented in~\cite{arrufat-15-mdtc}.
 
 \subsection{\acs{HEVC} compatibility}
 \label{sub:mdtc_hevc_compatibility}
+\index{HEVC}
 
 Since the main purpose of the transforms in \ac{HEVC} is to compact the energy
 of the signal in order to to increase the bit-rate savings, the design process
@@ -3011,6 +3074,7 @@ complexity and high performance \ac{MDTC} systems.
 
 \subsection{Storage requirements}
 \label{sub:mdtc_storage_requirements}
+\index{ROM}
 
 The storage requirements for the \ac{MDTC} systems are computed as explained
 in~\eqref{eqn:rom_nsep} and~\eqref{eqn:rom_sep}, with the exception that, for
@@ -3057,6 +3121,7 @@ requirements) while trying to keep most of the bit-rate savings.
 
 \section{Introduction}
 \label{sec:it_introduction}
+\index{incomplete transforms}
 
 Chapters~\ref{cha:mddt} and~\ref{cha:mdtc} have presented the great potential
 of non-separable transforms in terms of bit-rate savings for video coding.
@@ -3076,6 +3141,7 @@ in~\cite{arrufat-15-inc-transforms}.
 
 \subsection{Forcing sparse data representation}
 \label{sub:it_forcing_sparse_data_representation}
+\index{sparse representation}
 
 Sparse data representation has been an important field of study in the last
 years thanks to its countless applications in many domains, in which,
@@ -3471,6 +3537,7 @@ often as the alternative transforms in the \ac{MDTC} system.
 
 \subsection{Storage requirements}
 \label{sub:it_storage_requirements}
+\index{ROM}
 
 Due to the similarities to the \ac{MDTC} system, the non-separable incomplete
 transforms also need to be stored.
@@ -3510,6 +3577,7 @@ complexity and storage amount.
 
 \section{Introduction}
 \label{sec:rw_introduction}
+\index{ROM}
 
 Chapter~\ref{cha:mdtc} introduced the \acf{MDTC} system for video coding.
 Significant bit-rate savings were obtained with regards to \ac{HEVC},
@@ -3942,6 +4010,7 @@ provide bit-rate savings of 3\% at roughly seven times the complexity of
 
 \begin{table}[tb]
 	\centering
+	\small
 	\begin{tabular}{r|r|r|r}
 	System & \multicolumn{1}{c|}{\acs{ROM}} & Y \acs{BD}-rate & Complexity \\
 	\hline\hline
@@ -3973,6 +4042,19 @@ This is due to the fact that, when combining both transform sizes, there is an
 overlap between them in the coded blocks, making the performances of the
 combined $4\times4$ and $8\times8$ systems to be a bit lower than the sum of
 the corresponding separate systems.
+
+Moreover, presented iterated \ac{MDTC} systems only have the choice to use 1
+to 32 addtional transforms for $4\times4$ \acs{TU} and 1 to 128 for $8\times8$
+\acp{TU}.
+This is another source of suboptimality once the maximum number of transforms
+has been enabled in one \ac{IPM}, since the system lacks the choice to double
+the number of transforms for that \ac{IPM}.
+
+As a final observation, the heterogeneous systems learnt iteratively with
+\acs{ROM} constraints present a pattern in the number of transforms enabled in
+each \ac{IPM}.
+Those \acp{IPM} that are most used in \ac{HEVC} (0, 1, 10 and 26) tend to make
+use of a higher number of transforms than the rest of them.
 
 \section{Symmetrical \acs{MDTC} systems}
 \label{sec:sym_mdtc}
@@ -4042,6 +4124,21 @@ to the second one.
 	\label{fig:symmetry_transposed}
 \end{figure}
 
+These symmetries can be taken one step beyond and be applied inside the first
+half.
+Although it might seem counter-intuitive at first, this decision can be
+justified geometrically:
+around \ac{IPM} 10, which is purely horizontal, it seems natural to think that
+residuals from \ac{IPM} 9 (slightly diagonal up) and \ac{IPM} 11 (slightly
+diagonal down) can be related via a horizontal mirroring operation
+(top-bottom) or reflection.
+Since the second half is related to the first half transposed, this property
+applies around \ac{IPM} 26 in a similar fashion, through a vertical mirroring
+(left-right).
+Figures~\ref{fig:symmetry_transposed_mirror_4}
+and~\ref{fig:symmetry_transposed_mirror_8} contain illustrative examples of
+average profiles and they relations using these imposed symmetries.
+
 \begin{figure}[tb]
 	\centering
 	\begin{minipage}{0.6\textwidth}
@@ -4093,10 +4190,10 @@ to the second one.
 		\par
 }
 \end{minipage}
-	\caption[Average $\size\times\size$ residual profiles showing imposed symmetries]
-	{Average $\size\times\size$ residual profiles showing imposed symmetries with
+	\caption[Average $4\times4$ residual profiles showing imposed symmetries]
+	{Average $4\times4$ residual profiles showing imposed symmetries with
 	transposition and vertical mirroring}
-	\label{fig:symmetry_transposed_mirror}
+	\label{fig:symmetry_transposed_mirror_4}
 \end{figure}
 
 \begin{figure}[tb]
@@ -4150,23 +4247,11 @@ to the second one.
 		\par
 }
 \end{minipage}
-	\caption[Average $\size\times\size$ residual profiles showing imposed symmetries]
-	{Average $\size\times\size$ residual profiles showing imposed symmetries with
+	\caption[Average $8\times8$ residual profiles showing imposed symmetries]
+	{Average $8\times8$ residual profiles showing imposed symmetries with
 	transposition and vertical mirroring}
 	\label{fig:symmetry_transposed_mirror_8}
 \end{figure}
-
-These symmetries can be taken one step beyond and be applied inside the first
-half.
-Although it might seem counter-intuitive at first, this decision can be
-justified geometrically:
-around \ac{IPM} 10, which is purely horizontal, it seems natural to think that
-residuals from \ac{IPM} 9 (slightly diagonal up) and \ac{IPM} 11 (slightly
-diagonal down) can be related via a horizontal mirroring operation
-(top-bottom) or reflection.
-Since the second half is related to the first half transposed, this property
-applies around \ac{IPM} 26 in a similar fashion, through a vertical mirroring
-(left-right).
 
 When both symmetries are exploited, the number of transforms of an \ac{MDTC}
 system is no longer affected by a factor of 35 (the number of \acp{IPM}), but
@@ -4217,8 +4302,9 @@ the residual pixels in a consistent way, which come at no computational cost.
 \subsection{Symmetries performances on video coding}
 \label{sub:symmetries_performances_on_video_coding}
 
-Table~\ref{tab:sym4} shows the impact of symmetries on $4\times4$ \ac{MDTC}
-systems, in the three axis: \acs{ROM}, \ac{BD}-rate and complexity.
+Tables~\ref{tab:sym4} and~\ref{tab:sym8} show the impact of symmetries on
+$4\times4$ and $8\times8$ \ac{MDTC} systems, respectively in the \acs{ROM} and
+\ac{BD}-rate plane.
 As demonstrated before, for the full-symmetrical \ac{MDTC} systems, \acs{ROM}
 is decreased to around one third of its original value.
 Bit-rate savings also experiment some losses since symmetrical system are more
@@ -4259,24 +4345,45 @@ transforms par \ac{IPM} is the same in all systems.
 		\multicolumn{1}{c}{\acs{ROM}} &
 		\multicolumn{1}{c}{Y \acs{BD}-rate} \\
 		\hline \hline
-		  1 &   \SI{6.56}{\kilo B} & -0.84\% &   \SI{2.06}{\kilo B} \\
-		  2 &  \SI{13.13}{\kilo B} & -1.33\% &   \SI{4.13}{\kilo B} \\
-		  4 &  \SI{26.25}{\kilo B} & -1.72\% &   \SI{8.25}{\kilo B} \\
-		  8 &  \SI{52.50}{\kilo B} & -2.10\% &  \SI{16.50}{\kilo B} \\
-		 16 & \SI{105.00}{\kilo B} & -2.48\% &  \SI{33.00}{\kilo B} \\
-		 32 & \SI{210.00}{\kilo B} & -2.79\% &  \SI{66.00}{\kilo B} \\
-		 64 & \SI{420.00}{\kilo B} & -3.07\% & \SI{132.00}{\kilo B} \\
-		128 & \SI{840.00}{\kilo B} & -3.33\% & \SI{264.00}{\kilo B} \\
+		  1 &   \SI{6.56}{\kilo B} & -0.84\% &   \SI{2.06}{\kilo B} & -0.76\% \\
+		  2 &  \SI{13.13}{\kilo B} & -1.33\% &   \SI{4.13}{\kilo B} & -1.24\% \\
+		  4 &  \SI{26.25}{\kilo B} & -1.72\% &   \SI{8.25}{\kilo B} & -1.48\% \\
+		  8 &  \SI{52.50}{\kilo B} & -2.10\% &  \SI{16.50}{\kilo B} & -1.97\% \\
+		 16 & \SI{105.00}{\kilo B} & -2.48\% &  \SI{33.00}{\kilo B} &  \\
+		 32 & \SI{210.00}{\kilo B} & -2.79\% &  \SI{66.00}{\kilo B} &  \\
+		 64 & \SI{420.00}{\kilo B} & -3.07\% & \SI{132.00}{\kilo B} &  \\
+		128 & \SI{840.00}{\kilo B} & -3.33\% & \SI{264.00}{\kilo B} &  \\
 	\end{tabular}
 	\caption{Symmetries impact on $8\times8$ transforms on the 59seq test set}
-	\label{tab:sym4}
+	\label{tab:sym8}
 \end{table}
 
 % TODO
 \todo{Add performances of a high performance symmetrical \acs{MDTC} system}
+Table~\ref{tab:sym_mdtc} unveils impact of symmetries for the high performance
+\ac{MDTC} system on the 59seq test set.
 
 \section{Non-homogeneous symmetrical \acs{MDTC} systems}
 \label{sec:non_homogeneous_symmetrical_mdtc}
+
+The previous two Sections have explored new methods to reduce the storage
+requirements of \ac{MDTC} systems.
+The approaches make use of:
+\begin{itemize}
+	\item Heterogeneous repartitioning of the number of transforms per \ac{IPM}
+	\item Symmetries in prediction residuals
+\end{itemize}
+
+These techniques are not mutually exclusive, as such, this section presents
+\ac{MDTC} systems that combine both of them, resulting in non-homogeneous
+symmetrical \ac{MDTC} systems.
+Such systems use a different number of transforms per \ac{IPM} but assuring
+the symmetrical relations established in \S\ref{sec:sym_mdtc}.
+Building this kind of systems requires the iterative approach presented in
+\S\ref{sec:non_homogeneous_mdtc_systems}, described in
+algorithm~\ref{alg:vmdtc_iter}, except that, instead of enabling transforms
+for one \ac{IPM} at a time, transforms will be enabled for one of the basic
+\acp{IPM} (0--10) and their symmetrical partners.
 
 \section{Conclusions}
 \label{sec:rw_conclusions}
