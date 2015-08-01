@@ -139,15 +139,34 @@
 
 Nowadays, video coding plays a major role in information exchanges around the
 world.
-Despite the progress done in the last years with latest video coding
-standards, improvements are still required as new technologies emerge:
+Despite the progress achieved in the last years with video coding standards,
+improvements are still required as new technologies emerge:
 as \ac{HFR}, \ac{HDR} and \ac{UHD} formats, such as 4K and even 8K, become
-more common, new needs for video compression appear that must exploit
+more and more common, new needs for video compression appear that must exploit
 properties in this domain of which we had never been aware of.
 
 All these above mentioned techniques are made possible thanks to, the
 unwritten rule for video coding: every ten years, the compression rate
 doubles for equivalent quality.
+In 2003, the H.264/\acs{MPEG}-4 \acs{AVC} standard norm was defined, providing
+a compression rate of around 50\% with regards the previous standard, defined
+in 1993.
+In January 2013, the H.265/\acs{HEVC} standard was released, which
+outperformed H.264/\acs{MPEG}-4 by 50\% in terms of bit-rate savings for
+equivalent perceptual quality.
+
+The work carried out in this thesis started in November 2012, with the
+\acs{HEVC} norm almost completely defined.
+Consequently, the focus has been put on improving the \acs{HEVC} standard with
+new techniques that might be adopted in a future standard.
+
+Since new video coding standard appear relatively spaced in time, due to
+marketing constraints, and being in the beginning of the post-\acs{HEVC} era,
+first steps in this thesis will strive achieve important bit-rate savings over
+\acs{HEVC} by relaxing complexity constraints.
+However, since the work is carried out in an industrial research laboratory
+(Orange Labs), following steps are focused on yielding the coding system
+inside reasonable complexity boundaries.
 
 \part{State of the art}
 \label{prt:state_of_the_art}
@@ -4601,6 +4620,9 @@ residuals symmetries to re-use the same transforms amongst symmetrical
 \ac{MDTC} systems that make use of both techniques at the same time present
 the best trade-off in the three axis: \acs{ROM}, \ac{BD}-rate and even
 encoding complexity.
+
+\section{Conclusions}
+\label{sec:dtt_conclusions}
 
 \chapter*{Conclusions and future work}
 \label{cha:conclusions_and_future_work}
