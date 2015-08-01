@@ -1956,7 +1956,7 @@ In the next chapter, both transform designs will be tested in a real
 scenario to find out their performances in video coding.
 
 
-\chapter{The \aclp{MDDT}}
+\chapter{The mode-dependent directional transforms}
 \label{cha:mddt}
 \chaptertoc
 
@@ -2023,7 +2023,7 @@ In \ac{HEVC}, this means having an adapted transform for each one of the 35
 	\hfill
 	\subfloat[$8\times8$ --- \acs{IPM} 26]
 	{\includegraphics[width=0.2\linewidth]{./figures/avg-residual-s8-p26.png}}
-	\caption{Residual profiles for different \acsp{IPM}}
+	\caption{Average residual profiles for different \acsp{IPM}}
 	\label{fig:residual_differences}
 \end{figure}
 
@@ -2400,7 +2400,7 @@ any sequence, which is not the case for the \ac{KLT}.
 		\multirow{5}{0.10\textwidth}{\centering Class A \scriptsize($2560\times1600$)}
 		& NebutaFestival       & -0.55 & -0.37 & -0.72 &  -0.44 & -0.08 & -0.05 & -0.08 & -0.11 \\
 		& PeopleOnStreet       & -1.17 & -1.31 & -2.53 &  -2.50 & -0.45 & -0.52 & -1.14 & -1.11 \\
-		& SteamLocTrain        & -0.50 & -0.41 & -0.60 &  -0.55 &  0.03 & 0.00  & -0.11 & -0.30 \\
+		& SteamLocTrain        & -0.50 & -0.41 & -0.60 &  -0.55 &  0.03 &  0.00 & -0.11 & -0.30 \\
 		& Traffic              & -1.33 & -1.49 & -2.66 &  -2.90 & -0.58 & -0.91 & -1.47 & -1.96 \\
 		\cline{2-10}
 		& Average              & -0.88 & -0.90 & -1.63 &  -1.60 & -0.27 & -0.37 & -0.70 & -0.87 \\
@@ -2615,7 +2615,7 @@ coding alternatives to \ac{HEVC}.
 \part{Contributions}
 \label{prt:contributions}
 
-\chapter{The \acl{MDTC} system}
+\chapter{The mode-dependent transform competition system}
 \label{cha:mdtc}
 \chaptertoc
 
@@ -2713,6 +2713,10 @@ steps are:
 \end{enumerate}
 An example for $N=1\Rightarrow2^N=2$ additional transforms is provided in
 figure~\ref{fig:clustering}.
+This algorithm is subject to improvements, since the initial conditions are
+difficult to define.
+Consequently, in order to increase the confident level of not ending up into a
+local minimum, several runs per learning are done with different initialisations.
 
 \begin{algorithm}
 	\small
@@ -3088,13 +3092,16 @@ table~\ref{tab:mdtc_summary}.
 \section{Conclusions}
 \label{sec:mdtc_conclusions}
 
-This Chapter has unveiled the potential of using multiple non-separable
-transforms in video coding:
+A systematic procedure based on~\cite{sezer-08-sparse-orthonormal-transforms}
+to learn multiple transforms using the \ac{RDOT} metric.
+Despite the learning algorithm being subject to some improvements, this
+Chapter has unveiled the potential of using multiple non-separable transforms
+in video coding:
 average bit-rate savings of more than 7\% can be achieved in \ac{AI}
 configurations, with peaks of up to 25\% for some sequences containing large
 amounts of diagonal patterns.
 The interest of using multiple separable transforms has also been shown, with
-bit-rate savings of around 4\% in average in \ac{AI}.
+bit-rate savings of around 4\% on average in \ac{AI}.
 
 However, in order to achieve those gains, the encoder complexity is affected
 by a factor of 8--20, depending on separability.
@@ -3105,9 +3112,9 @@ transforms.
 
 \ac{MDTC} systems have also proved to be able to provide different trade-offs
 in terms of bit-rate savings, complexity and storage requirements.
-Bit-rate savings of 3.8\% can be achieved with twice the encoding complexity,
+Bit-rate savings of 3.78\% can be achieved with twice the encoding complexity,
 10\% added decoding complexity and around \SI{300}{\kilo B} of \acs{ROM}.
-In the separable version, savings of 1.7\% are obtained at 50\% added
+In the separable version, savings of 1.66\% are obtained at 50\% added
 complexity, 3\% added decoding complexity and around \SI{8}{\kilo B} of
 \acs{ROM}.
 
@@ -4056,6 +4063,14 @@ each \ac{IPM}.
 Those \acp{IPM} that are most used in \ac{HEVC} (0, 1, 10 and 26) tend to make
 use of a higher number of transforms than the rest of them.
 
+% TODO
+\todo{Add performances of the 128 kB system}
+The best performing system, which is labelled as the \SI{128}{\kilo B} has
+been tested agains the \ac{HEVC} test set, in order to compare it to the high
+performance \ac{MDTC} system from Chapter~\ref{cha:mdtc}.
+This system has been learnt using the ToS sequence set, which is completely decorrelated
+from the \ac{HEVC} test set.
+
 \section{Symmetrical \acs{MDTC} systems}
 \label{sec:sym_mdtc}
 
@@ -4249,7 +4264,7 @@ average profiles and they relations using these imposed symmetries.
 \end{minipage}
 	\caption[Average $8\times8$ residual profiles showing imposed symmetries]
 	{Average $8\times8$ residual profiles showing imposed symmetries with
-	transposition and vertical mirroring}
+	transposition and horizontal mirroring}
 	\label{fig:symmetry_transposed_mirror_8}
 \end{figure}
 
@@ -4362,6 +4377,33 @@ transforms par \ac{IPM} is the same in all systems.
 \todo{Add performances of a high performance symmetrical \acs{MDTC} system}
 Table~\ref{tab:sym_mdtc} unveils impact of symmetries for the high performance
 \ac{MDTC} system on the 59seq test set.
+As a reminder, the high performance \ac{MDTC} system uses 16 additional
+transforms for the $4\times4$ \acp{TU} and 32 for the $8\times8$ \acp{TU}.
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabular}{rr|rr}
+		\multicolumn{2}{c|}{non-symmetrical} & \multicolumn{2}{c}{symmetrical} \\
+		\multicolumn{1}{c}{\acs{ROM}} & \multicolumn{1}{c|}{Y \acs{BD}-rate} &
+		\multicolumn{1}{c}{\acs{ROM}} & \multicolumn{1}{c}{Y \acs{BD}-rate} \\
+		\hline \hline
+		\SI{236.25}{\kilo B} & -3.36\% & \SI{74.25}{\kilo B} & \% \\
+	\end{tabular}
+	\caption{Symmetries impact of the high performance \acs{MDTC} system on
+	the 59seq test set}
+	\label{tab:sym_mdtc}
+\end{table}
+
+\begin{figure}[tb]
+	\centering
+	\input{./figures/vmdtc_sym_plot.tex}
+	% \includegraphics{./figures/vmdtc_sym_plot.pdf}
+	\caption{Symmetry impact on the \acs{ROM} --- Y \acs{BD}-rate plane for
+	different \acs{MDTC} systems}
+	\label{fig:vmdtc_sym}
+\end{figure}
+
 
 \section{Non-homogeneous symmetrical \acs{MDTC} systems}
 \label{sec:non_homogeneous_symmetrical_mdtc}
@@ -4388,7 +4430,7 @@ for one \ac{IPM} at a time, transforms will be enabled for one of the basic
 \section{Conclusions}
 \label{sec:rw_conclusions}
 
-\chapter{\acs{MDTC} using \aclp{DTT}}
+\chapter{\acs{MDTC} using discrete trigonometric transforms}
 \label{cha:dtt}
 \chaptertoc
 
@@ -4434,7 +4476,7 @@ side effect of the storage limitation.
 This Chapter proposes an approach that takes into account the storage
 requirements, the encoding complexity and the decoding complexity.
 
-\section{The \acl{DTT} family}
+\section{The discrete trigonometric transform family}
 \label{sec:the_dtt_family}
 
 Chapter~\ref{cha:mddt} has highlighted the appropriateness of the \ac{RDOT}
@@ -4465,19 +4507,25 @@ than a full matrix multiplication required by generic block transforms.
 The algorithmic complexity for a \ac{DTT} is in the order of $N\log_2(N)$,
 where $N$ stands for the transform
 size~\cite{puschel-08-algorithms-dct-dst}.
+
+Since \acp{DTT} coefficients can be computed using and analytical formula,
+their storage requirement is negligible.
+However, a scanning matrix is still required to sort the transformed
+coefficients in a globally monotonic order to ease the lossless coding stage.
+As a result, the storage amount necessary per transform is $N^2$ bytes.
+For \acp{RDOT}, the required memory is $3N^2$ bytes per transform, as the
+horizontal and vertical transform are stored along with a dedicated scanning
+pattern.
+
 Nevertheless, these transforms are a restrained subset of the orthogonal
 transform class, as such, their performance in compression is expected to be
 lower than that of \acp{RDOT}.
 
-Since \acp{DTT} coefficients can be computed using and analytical formula,
-their storage requirement is negligible.
-However, a scanning matrix is required to sort the transformed coefficients in
-a globally monotonic order to ease the lossless coding stage.
-As a result, the storage amount necessary per transform is $N^2$ bytes.
-
-For \acp{RDOT}, the memory required is $3N^2$ bytes per transform, as the
-horizontal and vertical transform are stored along with a dedicated scanning
-pattern.
+To sum up, \acp{DTT} are able to divide the storage requirements of separable
+transforms by a factor of 3 and present a lower computational complexity due
+to fast algorithms.
+This Chapter explores if the \acs{ROM} and complexity reductions balance the
+expected losses in bit-rate savings regarding separable \acp{RDOT}.
 
 \section{\acs{DTT}-based \acs{MDTC} systems}
 \label{sec:dtt_based_mdtc_systems}
@@ -4504,13 +4552,19 @@ Instead, all transforms will be tested against the learning set, and the only
 the set of transforms that provide the lowest \ac{RDOT} metric will be
 retained.
 
-\section{The identity as a transform}
-\label{sec:the_identity_as_a_transform}
+Since \acp{DTT} are low complexity transforms, with regards regular separable
+transforms, the main objective in this Chapter is to build low complexity
+\ac{MDTC} systems, with high emphasis in the decoding time and \acs{ROM}
+requirements.
 
-\begin{itemize}
-	\item Amongst the \ac{DTT} family, add the identity matrix.
-	\item Benefits in terms of computational complexity.
-\end{itemize}
+In the previous Chapter, two approaches were proposed to improve the existing
+separable \ac{MDTC} systems in the \acs{ROM} --- Y \ac{BD}-rate plane:
+using a different number of transforms per \ac{IPM} and exploiting prediction
+residuals symmetries to re-use the same transforms amongst symmetrical
+\acp{IPM}.
+\ac{MDTC} systems that make use of both techniques at the same time present
+the best trade-off in the three axis: \acs{ROM}, \ac{BD}-rate and even
+encoding complexity.
 
 \chapter*{Conclusions and future work}
 \label{cha:conclusions_and_future_work}
@@ -4529,11 +4583,14 @@ retained.
 \addcontentsline{toc}{chapter}{Publications}
 \label{cha:publications}
 
-\section*{Non-separable mode dependent transforms for intra coding in HEVC}
+\section*{Non-separable mode-dependent transforms for intra coding in HEVC}
 \label{sec:non_separable_mode_dependent_transforms_for_intra_coding_in_hevc}
 
-\subsection*{Abstract}
-\label{sub:mddt_abstract}
+\subsection*{IEEE VCIP 2014}
+\label{sub:ieee_vcip_2014}
+
+\subsubsection*{Abstract}
+\label{ssub:mddt_abstract}
 
 Transform coding plays a crucial role in video coders.
 Recently, additional transforms based on the \acs{DST} and the \acs{DCT} have
@@ -4556,8 +4613,11 @@ those proposed transforms.
 HEVC}
 \label{sec:rate_distortion_optimised_transform_competition_for_intra_coding_in_hevc}
 
-\subsection*{Abstract}
-\label{sub:tc_abstract}
+\subsection*{IEEE VCIP 2014}
+\label{sub:ieee_vcip_2014}
+
+\subsubsection*{Abstract}
+\label{ssub:tc_abstract}
 
 State of the art video coders are based on prediction and transform coding.
 The transform decorrelates the signal to achieve high compression levels.
@@ -4574,8 +4634,11 @@ transforms available in \acs{HEVC}.
 \section*{Mode-dependent transform competition in HEVC}
 \label{sec:mode_dependent_transform_competition_in_hevc}
 
-\subsection*{Abstract}
-\label{sub:mdtc_abstract}
+\subsection*{IEEE ICIP 2015}
+\label{sub:ieee_icip_2015}
+
+\subsubsection*{Abstract}
+\label{ssub:mdtc_abstract}
 
 Transform coding plays a key role in state-of-the-art video coders, such as
 \acs{HEVC}.
@@ -4594,8 +4657,11 @@ complexity.
 \section*{Image coding with incomplete transforms for HEVC}
 \label{sec:image_coding_with_incomplete_transforms_for_hevc}
 
-\subsection*{Abstract}
-\label{sub:it_bstract}
+\subsection*{IEEE ICIP 2015}
+\label{sub:ieee_icip_2015}
+
+\subsubsection*{Abstract}
+\label{ssub:it_bstract}
 
 Overcomplete transforms have received considerable attention over the past
 years.
@@ -4611,8 +4677,11 @@ complexity in about 5\%.
 \section*{Low complexity transform competition for HEVC}
 \label{sec:low_complexity_transform_competition_for_hevc}
 
-\subsection*{Abstract}
-\label{sub:dtt_abstract}
+\subsection*{IEEE VCIP 2015}
+\label{sub:ieee_vcip_2015}
+
+\subsubsection*{Abstract}
+\label{ssub:dtt_abstract}
 
 The use of multiple transforms in video coding can lead to substantial
 bit-rate savings.

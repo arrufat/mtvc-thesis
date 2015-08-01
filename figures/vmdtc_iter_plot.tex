@@ -34,8 +34,8 @@
 			legend pos= south west
 		]
 
-		\addlegendentry{$4\times4$ sep. hom. MDTC}
-		\addplot [mark=x,mark size=2pt, red, thick,
+		\addlegendentry{$4\times4$ hom. MDTC}
+		\addplot [mark=* ,mark size=1pt, red, thick, dashed,
 		visualization depends on=\thisrow{alignment} \as \alignment,
 		nodes near coords, % Place nodes near each coordinate
 		point meta=explicit symbolic, % The meta data used in the nodes is not explicitly provided and not numeric
@@ -50,8 +50,8 @@
 		52.2	-1.01	\tiny{\color{black}4s32--8s0}	-90
 		};
 
-		\addlegendentry{$8\times8$ sep. hom. MDTC}
-		\addplot [mark=x,mark size=2pt, blue, thick, 
+		\addlegendentry{$8\times8$ hom. MDTC}
+		\addplot [mark=*, mark size=1pt, blue, thick, dashed,
 		visualization depends on=\thisrow{alignment} \as \alignment,
 		nodes near coords, % Place nodes near each coordinate
 		point meta=explicit symbolic, % The meta data used in the nodes is not explicitly provided and not numeric
@@ -65,11 +65,11 @@
 		105.00	-2.48	\tiny{\color{black}4s0--8s16}	-90
 		210.00	-2.79	\tiny{\color{black}4s0--8s32}	-90
 		420.00	-3.07	\tiny{\color{black}4s0--8s64}	-90
-		840.00	-3.33	\tiny{\color{black}4s0--8s128}	-60
+		840.00	-3.33	\tiny{\color{black}4s0--8s128}	-45
 		};
 
-		\addlegendentry{Comb. sep. hom. MDTC}
-		\addplot [mark=x,mark size=2pt, greenish, thick,
+		\addlegendentry{Comb. hom. MDTC}
+		\addplot [mark=*, mark size=1pt, greenish, thick, dashed,
 		visualization depends on=\thisrow{alignment} \as \alignment,
 		nodes near coords, % Place nodes near each coordinate
 		point meta=explicit symbolic, % The meta data used in the nodes is not explicitly provided and not numeric
@@ -98,26 +98,26 @@
 		\addplot[blue, thick, mark=*, mark size=0.5pt, smooth]
 		table[x=rom,y=bdrate,col sep=tab] from \table;
 
-		\addlegendentry{Comb. sep. het. MDTC}
-		\addplot [mark=o,mark size=1pt, greenish, thick,
+		\addlegendentry{Comb. het. MDTC}
+		\addplot [mark=*, mark size=1pt, greenish, thick,
 		visualization depends on=\thisrow{alignment} \as \alignment,
 		nodes near coords, % Place nodes near each coordinate
 		point meta=explicit symbolic, % The meta data used in the nodes is not explicitly provided and not numeric
 		every node near coord/.style={anchor=\alignment} % Align each coordinate at the anchor 40 degrees clockwise from the right edge
 		] table [meta index=2] {
 		rom	dtt_bdrate	dtt_label	alignment
-		0.98	-0.74 \tiny{\color{black}1 kB}	0
-		1.97	-1.02 \tiny{\color{black}2 kB}	0
-		3.98	-1.39 \tiny{\color{black}4 kB}	0
-		7.97	-1.82 \tiny{\color{black}8 kB}	0
-		12.00	-2.10 \tiny{\color{black}12 kB}	0
-		15.61	-2.22 \tiny{\color{black}16 kB}	0
-		23.95	-2.52 \tiny{\color{black}24 kB}	0
-		31.78	-2.68 \tiny{\color{black}32 kB}	0
-		47.39	-2.85 \tiny{\color{black}48 kB}	0
-		63.89	-3.00 \tiny{\color{black}64 kB}	0
-		95.53	-3.27 \tiny{\color{black}96 kB}	0
-		127.41	-3.41 \tiny{\color{black}128 kB}	0
+		0.98	-0.74	 \tiny{\color{black}1 kB}	0
+		1.97	-1.02	 \tiny{\color{black}2 kB}	0
+		3.98	-1.39	 \tiny{\color{black}4 kB}	0
+		7.97	-1.82	 \tiny{\color{black}8 kB}	0
+		12.00	-2.10	 \tiny{\color{black}12 kB}	0
+		15.61	-2.22	 \tiny{\color{black}16 kB}	0
+		23.95	-2.52	 \tiny{\color{black}24 kB}	0
+		31.78	-2.68	 \tiny{\color{black}32 kB}	0
+		47.39	-2.85	 \tiny{\color{black}48 kB}	0
+		63.89	-3.00	 \tiny{\color{black}64 kB}	0
+		95.53	-3.27	 \tiny{\color{black}96 kB}	0
+		127.41	-3.41	 \tiny{\color{black}128 kB}	0
 		};
 
 \end{axis}
