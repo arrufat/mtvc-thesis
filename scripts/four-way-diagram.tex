@@ -1,0 +1,57 @@
+% \documentclass[11pt,a4paper]{standalone}
+% \usepackage{geometry}
+% \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+% \usepackage{amsmath, amssymb}
+% \usepackage[T1]{fontenc}
+% \usepackage{mathptmx}
+% \usepackage[scaled]{helvet}
+% \usepackage[usenames,dvipsnames]{xcolor}
+% \usepackage{ifthen}
+% \usepackage{pgfplots,tikz}
+% \usetikzlibrary{shapes,arrows,fit,calc,decorations.markings,intersections}
+% \usepgfplotslibrary{fillbetween}
+% \pgfplotsset{compat=1.12}
+% \begin{document}
+
+% parameters to be defined before calling the script
+
+% \def\enc{660}
+% \def\dec{105}
+% \def\bdr{-3}
+% \def\rom{64}
+
+\def\encmax{1000}
+\def\decmax{150}
+\def\bdrmax{-5}
+\def\rommax{128}
+
+\pgfmathsetmacro{\adjenc}{\enc / 100}
+\pgfmathsetmacro{\adjencmax}{\encmax / 100}
+\pgfmathsetmacro{\logrom}{ln (\rom) / ln (2)}
+\pgfmathtruncatemacro{\logrommax}{ln (\rommax) / ln (2) + 0.5}
+\pgfmathsetmacro{\adjdec}{- (\dec-100)/10}
+\pgfmathsetmacro{\adjdecmax}{- (\decmax-100)/10}
+
+\begin{tikzpicture}[scale=0.5]
+
+    \draw[style=help lines, ystep=01, xstep=1, dashed] (\adjdecmax,\bdrmax) grid
+	(\adjencmax,\logrommax);
+
+	\filldraw[black, fill=red, opacity=0.5]
+	(\adjdec,0)--(0,\logrom)--(\adjenc,0)--(0,\bdr)--cycle;
+
+	\node[above left] at (\adjdec,0) {\tiny\dec\%};
+	\node[above right] at (\adjenc,0) {\tiny\enc\%};
+	\node[above right] at (0,\logrom) {\tiny\rom kB};
+	\node[below right] at (0,\bdr) {\tiny\bdr\%};
+	
+	% draw vertical axis
+	\draw[->] (0,0) -- (0,\logrommax) node [above] {ROM \rommax kB};
+	\draw[->] (0,0) -- (0,\bdrmax) node [below] {BD-rate \bdrmax\%};
+	% draw horizontal axis
+	\draw[->] (0,0) -- (\adjencmax,0) node [right] {Enc. \encmax\%};
+	\draw[->] (0,0) -- (\adjdecmax,0) node [left] {Dec. \decmax\%};
+\end{tikzpicture}
+
+% \end{document}
+
