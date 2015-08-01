@@ -3053,6 +3053,10 @@ the only disadvantage being the encoding time.
 
 Table~\ref{tab:mdtc_summary} contains the complexity figures for the low
 complexity and high performance \ac{MDTC} systems.
+A graphical version of the table is presented in
+figure~\ref{fig:four_way_mdtc_comparison}.
+All axis in the four diagrams have the same scaling factor in order to ease
+the comparison among them.
 
 \begin{table}
 	\centering
@@ -3088,6 +3092,38 @@ The low complexity \ac{MDTC} system has exactly the same \acs{ROM}
 requirements as the \ac{MDDT}, since only one transform is used per \ac{IPM}.
 The actual values of required \acs{ROM} are presented in
 table~\ref{tab:mdtc_summary}.
+
+\begin{figure}[tb]
+	\def\scale{0.26}
+	\def\encmax{2000}
+	\def\decmax{130}
+	\def\bdrmax{-8}
+	\def\rommax{8192}
+	\centering
+	\def\bdr{-1.66}
+	\def\enc{150}
+	\def\dec{103}
+	\def\rom{8.20}
+	\subfloat[Separable low complexity \acs{MDTC}]{\input{./scripts/four-way-diagram.tex}}
+	\def\bdr{-3.78}
+	\def\enc{200}
+	\def\dec{110}
+	\def\rom{148.75}
+	\subfloat[Non-separable low complexity \acs{MDTC}]{\input{./scripts/four-way-diagram.tex}}
+
+	\def\bdr{-4.10}
+	\def\enc{800}
+	\def\dec{105}
+	\def\rom{236.25}
+	\subfloat[Separable high performance \acs{MDTC}]{\input{./scripts/four-way-diagram.tex}}
+	\def\bdr{-7.10}
+	\def\enc{2000}
+	\def\dec{120}
+	\def\rom{4618.24}
+	\subfloat[Non-separable high performance \acs{MDTC}]{\input{./scripts/four-way-diagram.tex}}
+	\caption{Graphical comparison of the four proposed \acs{MDTC} systems}
+	\label{fig:four_way_mdtc_comparison}
+\end{figure}
 
 \section{Conclusions}
 \label{sec:mdtc_conclusions}
