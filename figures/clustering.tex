@@ -1,5 +1,5 @@
 \begin{tikzpicture}[scale=0.6]
-	\pgfplotsset{/tikz/font={\scriptsize}}
+	\pgfplotsset{/tikz/font={\small}}
 
 	% add this node to prevent pdfcrop from cropping left circles
 	\draw[black!0] (-2.77,0) node {};
@@ -32,7 +32,7 @@
 
 	\draw (10,0)++(90:2.75) node [above] {1. Initial random classification};
 
-	\draw (5,0) node {\normalsize initialise};
+	\draw (5,0) node {initialise};
 
 	%%%%%%%%%
 	\def\yoffset{-7}
@@ -51,7 +51,7 @@
 	\draw[dashed] (0,\yoffset) --++ (130:2.75);
 	\draw[dashed] (0,\yoffset) --++ (237:2.75);
 
-	\filldraw [red] (0,\yoffset)++(71.25:1.5) circle (0.1) node [above right] (T0) {$T_0$};
+	\filldraw [red] (0,\yoffset)++(71.25:1.5) circle (0.1) node [above] (T0) {$T_0$};
 	\draw[thin] (0,\yoffset)++(71.25:1.5) circle (0.11);
 
 	\filldraw [red] (0,\yoffset)++(183.5:1.5) circle (0.1) node [below left] (T1) {$T_1$};
@@ -91,8 +91,6 @@
 	\draw (10,\yoffset)++(90:2.75) node [above] {3. Reclassify};
 
 	\draw[thick,dashed, ->] (3,\yoffset+1) to[in=135,out=45] ++ (4,0);
-	\draw (5,\yoffset) node {\large iterate};
+	\draw (5,\yoffset) node {iterate};
 	\draw[thick,dashed, <-] (3,\yoffset-1) to[in=-135,out=-45] ++ (4,0);
 \end{tikzpicture}
-
-% vim:set filetype=tex:

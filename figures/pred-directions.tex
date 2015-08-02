@@ -7,8 +7,8 @@
     \def\startangle{45}
     \def\colour{red}
 
-    \draw (-0.38, 0.5) node {\footnotesize 0 : \color{red}{Planar}};
-    \draw (-0.50, 0.5) node[below] {\footnotesize 1 : \color{red}{DC}};
+	\draw (-0.4, 0.6) node {\small 0: \color{\colour}{Planar}};
+	\draw (-0.54, 0.5) node[below] {\small 1: \color{\colour}{DC}};
 
     \foreach \direction in {2,3,...,34}
     {%
@@ -21,7 +21,7 @@
         % draw the prediction direction lines with the appropriate colour
         \draw[-latex,\colour, thin] (\startx,\starty) --++ (\angle:\radius);
         % label each prediction direction
-        \draw(\angle:\radius + 0.1) node {\footnotesize \direction};
+        \draw(\angle:\radius + 0.2) node {\small \direction};
     }
 
 \end{tikzpicture}
