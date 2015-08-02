@@ -2843,16 +2843,26 @@ signal the selected transform by the encoder.
 \label{sub:mdtc_performances}
 
 Different \ac{MDTC} systems have been considered and tested, corresponding to
-different number of additional transforms for $4\times4$ and $8\times8$
+different number of additional transforms used for $4\times4$ and $8\times8$
 \acp{TU}.
 All tests have been carried out following the common test conditions,
 stipulated in~\cite{bossen-12-common-test-conditions}.
 
-Figure~\ref{fig:mdtc_bdrate_ntransforms} illustrates how the \ac{BD}-rate for
-the \ac{AI} configuration on the \ac{HEVC} test set decreases with the number
-of transforms.
+Figure~\ref{fig:mdtc_bdrate_ntransforms} illustrates the relationship between
+the \ac{BD}-rate and the number of transforms on the \ac{HEVC} test set for
+the \ac{AI} configuration.
+The \ac{BD}-rate decreases with a logarithmic law with the number of
+additional transforms.
 The behaviour in the \ac{BD}-rate domain is close to the one observed in the
-\ac{RDOT} metric domain in figure~\ref{fig:mdtc_rdot_metric_ntransforms}.
+\ac{RDOT} metric domain in figure~\ref{fig:mdtc_rdot_metric_ntransforms},
+despite the fact that signalling has not been taken into account during the
+learnings.
+Contrary to transform learnings, additional transforms have been
+signalled during encoding tests
+This fact contributes to the saturation in \ac{BD}-rate when the number of
+transforms is high.
+More details on how transforms are signalled are explained in
+\S\ref{sub:mdtc_signalling}
 
 For $4\times4$ transforms, bit-rate savings of almost 2.5\% can be achieved,
 whereas 6\% are obtained when using only $8\times8$ transforms on the
@@ -2885,16 +2895,21 @@ set in \ac{AI} and \ac{RA} coding configurations, named:
 \end{itemize}
 The performances of the low complexity and high performance systems are
 summarised in table~\ref{tab:bd_rate_mdtc}.
-The first thing to notice is that no losses are observed with regards
-\ac{HEVC} on any sequence.
+The first thing to notice is that almost no losses are observed with regards
+\ac{HEVC} on any sequence: only \emph{SteamLocomotiveTrain} presents small
+losses in the \ac{RA} coding configuration.
 On one hand, the low complexity system is able to achieve average bit-rate
 savings of around 3.8\% with non-separable transforms, and around 2.4\% with
 separable transforms.
 On the other hand, the high complexity system provides average bit-rate
 savings of over 4\% for its separable version, and over 7\% for the
 non-separable one.
-Around two thirds of the gain observed in the \ac{AI} configuration is
+Around two thirds of the gain observed in the \ac{AI} configuration are
 obtained in the \ac{RA} coding.
+
+Graphical representations of table~\ref{tab:bd_rate_mdtc} are shown in
+figures~\ref{fig:mdtc_perf_simple} and~\ref{fig:mdtc_perf_complex} for the
+low complexity and high performance \ac{MDTC} systems, respectively.
 
 \begin{table}[tb]
 	\centering
@@ -3016,7 +3031,8 @@ For higher bit-rates, the improvements are present in both axis.
 	\label{fig:mdtc_bdrate_bdrill}
 \end{figure}
 
-The visual improvements are provided in figure~\ref{fig:mdtc_bdrill_visual}.
+An example of some visual improvements are provided in
+figure~\ref{fig:mdtc_bdrill_visual}.
 The first sub-figure displays the original block, which has not been coded
 yet, and the two other sub-figures the result of coding that block using
 \ac{HEVC} and the non-separable high performance \ac{MDTC}, respectively.
@@ -3027,6 +3043,10 @@ It is easy to see the improvements made by the \ac{MDTC} system along the
 diagonal patterns of the image:
 The lines are cut when coding with \ac{HEVC} but they remain continuous using
 \ac{MDTC} thanks to the non-separability of the used transforms.
+For the rest of the sequences, since the bit-rate savings are much lower, the
+visual improvments are not easy to spot.
+Nevertheless, no additional artifacts have been detected when using the
+\ac{MDTC} technique for either systems.
 
 \begin{figure}[tb]
 	\centering
@@ -4645,7 +4665,7 @@ encoding complexity.
 \label{sec:non_separable_mode_dependent_transforms_for_intra_coding_in_hevc}
 
 \subsection*{IEEE VCIP 2014}
-\label{sub:ieee_vcip_2014}
+\label{sub:ieee_vcip_2014_mddt}
 
 \subsubsection*{Abstract}
 \label{ssub:mddt_abstract}
@@ -4672,7 +4692,7 @@ HEVC}
 \label{sec:rate_distortion_optimised_transform_competition_for_intra_coding_in_hevc}
 
 \subsection*{IEEE VCIP 2014}
-\label{sub:ieee_vcip_2014}
+\label{sub:ieee_vcip_2014_tc}
 
 \subsubsection*{Abstract}
 \label{ssub:tc_abstract}
@@ -4693,7 +4713,7 @@ transforms available in \acs{HEVC}.
 \label{sec:mode_dependent_transform_competition_in_hevc}
 
 \subsection*{IEEE ICIP 2015}
-\label{sub:ieee_icip_2015}
+\label{sub:ieee_icip_2015_mdtc}
 
 \subsubsection*{Abstract}
 \label{ssub:mdtc_abstract}
@@ -4716,7 +4736,7 @@ complexity.
 \label{sec:image_coding_with_incomplete_transforms_for_hevc}
 
 \subsection*{IEEE ICIP 2015}
-\label{sub:ieee_icip_2015}
+\label{sub:ieee_icip_2015_it}
 
 \subsubsection*{Abstract}
 \label{ssub:it_bstract}
