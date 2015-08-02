@@ -2481,10 +2481,18 @@ indicates.
 Almost all the performance is lost when using separable systems.
 For illustrative purposes, figure~\ref{fig:detailed_mddt_bd_rate} represents
 graphically the results from table~\ref{tab:detailed_mddt_bd_rate}.
+The behaviour in the \ac{RA} coding configuration is very similar to the
+\ac{AI}, with the bit-rate savings in \ac{RA} being around two thirds of those
+in \ac{AI}.
 
 \begin{figure}[tp]
 	\centering
-	\includegraphics[width=1\linewidth]{./figures/detailed_mddt_4_8.pdf}
+	\subfloat[\acs{AI} coding configuration]
+	{\includegraphics{./figures/mddt_perf_ai_plot.pdf}}
+
+	\subfloat[\acs{RA} coding configuration]
+	{\includegraphics{./figures/mddt_perf_ra_plot.pdf}}
+
 	\caption{Bit-rate savings for combined $4\times4$ \& $8\times8$ \acs{MDDT}
 	systems}
 	\label{fig:detailed_mddt_bd_rate}
