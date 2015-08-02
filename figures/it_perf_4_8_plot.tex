@@ -1,0 +1,126 @@
+\begin{tikzpicture}
+	\pgfplotsset{/tikz/font={\small}}
+	\begin{axis}[
+		grid=both,
+		width=1.0\textwidth,
+		height=0.3\textheight,
+		x tick label style={
+		/pgf/number format/1000 sep=},
+		ytick={0,-1,...,-9},
+		y tick label style={
+			/pgf/number format/.cd,
+			fixed,
+			fixed zerofill,
+			precision=1,
+		},
+		y dir=reverse,
+		ymax=0.5, ymin=-9,
+		ylabel={Y BD-rate (\%)},
+		% enlargelimits=0.15,
+		enlarge y limits=false,
+		enlarge x limits=0.04,
+		legend style={at={(0.5,-0.40)},
+		anchor=north,legend columns=-1},
+		ybar,
+		bar width=3pt,
+		xtick=data,
+		xtick align=inside,
+		% nodes near coords,
+		% xlabel={Sequences},
+		% xlabel near ticks,
+		symbolic x coords={
+			NebutaFestival,
+			PeopleOnStreet,
+			SteamLocTrain,
+			Traffic,
+			BasketballDrive,
+			BQTerrace,
+			Cactus,
+			Kimono1,
+			ParkScene,
+			BasketballDrill,
+			BQMall,
+			PartyScene,
+			RaceHorses\_480p,
+			BasketballPass,
+			BlowingBubbles,
+			BQSquare,
+			RaceHorses\_240p,
+			FourPeople,
+			Johnny,
+			KristenAndSara,
+			BasketDrillText,
+			ChinaSpeed,
+			SlideEditing,
+			SlideShow,
+			Overall,
+		},
+		x tick label style={rotate=-60,anchor=west},
+		]
+		\addlegendentry{AI}
+		\addplot coordinates {
+		(NebutaFestival,   0.01)
+		(PeopleOnStreet,  -0.86)
+		(SteamLocTrain,    0.03)
+		(Traffic,         -0.88)
+		(BasketballDrive, -1.31)
+		(BQTerrace,       -1.41)
+		(Cactus,          -1.73)
+		(Kimono1,         -0.32)
+		(ParkScene,       -0.19)
+		(BasketballDrill, -8.22)
+		(BQMall,          -1.03)
+		(PartyScene,      -0.40)
+		(RaceHorses\_480p,-0.85)
+		(BasketballPass,  -0.88)
+		(BlowingBubbles,  -0.52)
+		(BQSquare,        -0.59)
+		(RaceHorses\_240p,-0.86)
+		(FourPeople,      -1.36)
+		(Johnny,          -1.56)
+		(KristenAndSara,  -1.56)
+		(BasketDrillText, -6.49)
+		(ChinaSpeed,      -0.90)
+		(SlideEditing,    -0.71)
+		(SlideShow,       -1.51)
+		(Overall,         -1.42)
+		};
+
+		\addlegendentry{RA}
+		\addplot coordinates {
+		(NebutaFestival,  -0.03)
+		(PeopleOnStreet,  -0.37)
+		(SteamLocTrain,    0.19)
+		(Traffic,         -1.04)
+		(BasketballDrive, -0.78)
+		(BQTerrace,       -1.10)
+		(Cactus,          -1.25)
+		(Kimono1,         -0.23)
+		(ParkScene,       -0.24)
+		(BasketballDrill, -4.35)
+		(BQMall,          -0.77)
+		(PartyScene,      -0.54)
+		(RaceHorses\_480p,-0.51)
+		(BasketballPass,  -0.55)
+		(BlowingBubbles,  -0.49)
+		(BQSquare,        -0.51)
+		(RaceHorses\_240p,-0.37)
+		(FourPeople,      -1.58)
+		(Johnny,          -1.84)
+		(KristenAndSara,  -1.44)
+		(BasketDrillText, -3.66)
+		(ChinaSpeed,      -0.61)
+		(SlideEditing,    -0.81)
+		(SlideShow,       -1.64)
+		(Overall,         -1.02)
+		};
+
+% 		\draw [thick] (35,0) --++ (0,900); % node [midway, sloped, above] {class A};
+% 		\draw [thick] (85,0) --++ (0,900);
+% 		\draw [thick] (125,0) --++ (0,900);
+% 		\draw [thick] (165,0) --++ (0,900);
+% 		\draw [thick] (195,0) --++ (0,900);
+% 		\draw [thick] (235,0) --++ (0,900);
+
+	\end{axis}
+\end{tikzpicture}
