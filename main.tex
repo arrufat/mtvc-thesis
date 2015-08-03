@@ -1726,7 +1726,7 @@ The integration intervals have been reduced to where the quantised values
 differ from the original ones, that is, the values that have been affected by
 the hard-thresholding from~\eqref{eqn:hard_threshold}.
 
-Substituting $P_X(x)$ by the residuals \ac{PDF}:
+Substituting $P_X(x)$ with the residuals \ac{PDF}:
 \begin{align}
 	D
 	&=\int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
@@ -1765,7 +1765,7 @@ Consequently, the constraint can be expressed as:
 	= 1-\int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}\P_X(x)\d x
 	\label{eqn:int_rate}
 \end{equation}
-Substituting $P_X(x)$ by the residuals \ac{PDF}:
+Substituting $P_X(x)$ with the residuals \ac{PDF}:
 \begin{align}
 	R
 	&=1-\int_{\nicefrac{-\Delta}{2}}^{\nicefrac{\Delta}{2}}
@@ -2928,10 +2928,10 @@ low complexity and high performance \ac{MDTC} systems, respectively.
 		\multicolumn{4}{c}{$4\times4$: 1+16 --- $8\times8$: 1+32} \\
 		\cline{3-10}
 		\multicolumn{2}{c}{} &
-		\multicolumn{2}{c|}{sep} &
-		\multicolumn{2}{c|}{non-sep} &
-		\multicolumn{2}{c|}{sep} &
-		\multicolumn{2}{c}{non-sep} \\
+		\multicolumn{2}{c|}{sep.} &
+		\multicolumn{2}{c|}{non-sep.} &
+		\multicolumn{2}{c|}{sep.} &
+		\multicolumn{2}{c}{non-sep.} \\
 		\cline{2-10}
 		\multicolumn{1}{c}{} & {Sequence} &
 		\multicolumn{1}{c}{ \acs{AI}} & \multicolumn{1}{c|}{ \acs{RA}} &
@@ -2943,10 +2943,10 @@ low complexity and high performance \ac{MDTC} systems, respectively.
 		\multirow{5}{2cm}{\centering Class A \scriptsize($2560\times1600$)}
 		& NebutaFestival         & -0.34 & -0.05 &  -0.52 & -0.04 & -1.06 & -0.08 & -1.15  &  -0.13 \\
 		& PeopleOnStreet         & -1.40 & -0.48 &  -2.76 & -1.16 & -4.21 & -1.49 & -5.65  &  -2.27 \\
-		& SteamLocTrain          & -0.36 &  0.33 &  -0.46 & -0.10 & -0.60 & 0.23  & -0.68  &   0.03 \\
+		& SteamLocTrain          & -0.36 &  0.33 &  -0.46 & -0.10 & -0.60 &  0.23 & -0.68  &   0.03 \\
 		& Traffic                & -1.68 & -1.25 &  -3.07 & -2.32 & -4.52 & -3.73 & -6.06  &  -5.12 \\
 		\cline{2-10} &
-		Average                  & -0.94 & -0.36 & -1.70 & -0.90 & -2.60 & -1.27 & -3.38  & -1.87 \\
+		Average                  & -0.94 & -0.36 &  -1.70 & -0.90 & -2.60 & -1.27 & -3.38  &  -1.87 \\
 		\hline
 		\hline
 		\multirow{6}{2cm}{\centering Class B \scriptsize($1920\times1080$)}
@@ -2956,7 +2956,7 @@ low complexity and high performance \ac{MDTC} systems, respectively.
 		& Kimono1                & -0.46 & -0.25 &  -1.06 & -0.50 & -1.10 & -0.79 & -1.80  &  -1.18 \\
 		& ParkScene              & -1.68 & -1.09 &  -2.20 & -1.50 & -4.61 & -3.22 & -5.27  &  -3.69 \\
 		\cline{2-10} &
-		Average                  & -1.41 & -0.78 & -3.05 & -1.80 & -3.77 & -2.09 & -6.55  & -3.97 \\
+		Average                  & -1.41 & -0.78 &  -3.05 & -1.80 & -3.77 & -2.09 & -6.55  &  -3.97 \\
 		\hline
 		\hline
 		\multirow{5}{2cm}{\centering Class C \scriptsize($832\times480$)}
@@ -2965,7 +2965,7 @@ low complexity and high performance \ac{MDTC} systems, respectively.
 		& PartyScene             & -2.18 & -1.40 &  -3.31 & -2.29 & -4.88 & -3.21 & -6.19  &  -4.30 \\
 		& RaceHorses             & -1.71 & -0.70 &  -3.99 & -2.16 & -4.25 & -1.59 & -6.75  &  -3.24 \\
 		\cline{2-10} &
-		Average                  & -2.00 & -1.15 & -5.85 & -3.36 & -4.96 & -2.78 & -11.05 & -6.49 \\
+		Average                  & -2.00 & -1.15 &  -5.85 & -3.36 & -4.96 & -2.78 & -11.05 & -6.49 \\
 		\hline
 		\hline
 		\multirow{5}{2cm}{\centering Class D \scriptsize($416\times240$)}
@@ -2974,7 +2974,7 @@ low complexity and high performance \ac{MDTC} systems, respectively.
 		& BQSquare               & -2.26 & -1.21 &  -3.72 & -2.00 & -4.58 & -2.74 & -6.12  &  -3.61 \\
 		& RaceHorses             & -1.57 & -0.58 &  -4.61 & -2.03 & -3.85 & -1.54 & -7.13  &  -3.20 \\
 		\cline{2-10} &
-		Average                  & -1.87 & -0.95 & -4.06 & -2.09 & -4.16 & -2.20 & -6.53  & -3.47 \\
+		Average                  & -1.87 & -0.95 &  -4.06 & -2.09 & -4.16 & -2.20 & -6.53  & -3.47 \\
 		\hline
 		\hline
 		\multirow{4}{2cm}{\centering Class E \scriptsize($1280\times720$)}
@@ -2982,7 +2982,7 @@ low complexity and high performance \ac{MDTC} systems, respectively.
 		& Johnny                 & -1.29 & -1.61 &  -2.96 & -2.86 & -3.34 & -4.16 & -5.21  &  -5.78 \\
 		& KristenAndSara         & -1.34 & -1.75 &  -3.49 & -3.26 & -3.82 & -4.47 & -6.01  &  -6.17 \\
 		\cline{2-10} &
-		Average                  & -1.49 & -1.77 & -3.29 & -3.13 & -3.91 & -4.60 & -5.85  & -6.22 \\
+		Average                  & -1.49 & -1.77 &  -3.29 & -3.13 & -3.91 & -4.60 & -5.85  & -6.22 \\
 		\hline
 		\hline
 		\multirow{5}{2cm}{\centering Class F \scriptsize(various resolutions)}
@@ -2991,7 +2991,7 @@ low complexity and high performance \ac{MDTC} systems, respectively.
 		& SlideEditing           & -2.04 & -2.18 &  -1.82 & -1.97 & -4.80 & -5.05 & -3.67  &  -4.06 \\
 		& SlideShow              & -2.53 & -2.32 &  -3.49 & -2.96 & -5.66 & -5.61 & -6.03  &  -5.91 \\
 		\cline{2-10} &
-		Average                  & -2.24 & -1.81 & -4.80 & -3.21 & -5.24 & -4.27 & -9.05  & -6.54 \\
+		Average                  & -2.24 & -1.81 &  -4.80 & -3.21 & -5.24 & -4.27 & -9.05  & -6.54 \\
 		\hline
 		\hline
 		All sequences &
@@ -3069,7 +3069,7 @@ Nevertheless, no additional artifacts have been detected when using the
 	\caption[Example of a $100\times100$ block from \emph{BasketballDrill}
 	coded at \acs{QP} 37]
 	{A $100\times100$ block from \emph{BasketballDrill} encoded at \acs{QP} 37
-	with \acs{HEVC} and the non-separable high performance \acs{MDTC}}
+	with \acs{HEVC} and the non-separable high performance \acs{MDTC} system}
 	\label{fig:mdtc_bdrill_visual}
 \end{figure}
 
@@ -3114,7 +3114,7 @@ the comparison among them.
 		\multicolumn{2}{c}{\multirow{2}{2cm}{\centering $4\times4$: 1+16 $8\times8$: 1+32}} \\
 		\multicolumn{1}{c}{} & & & & \\
 		\cline{2-5}
-		\multicolumn{1}{c}{} & Sep & N-Sep & Sep & N-Sep \\
+		\multicolumn{1}{c}{} & sep. & non-sep. & sep. & non-sep. \\
 		\hline
 		\hline
 		Y \acs{BD}-rate & -1.66\% & -3.78\% & -4.10\% & -7.10\% \\
@@ -4485,6 +4485,97 @@ transforms for the $4\times4$ \acp{TU} and 32 for the $8\times8$ \acp{TU}.
 	\caption{Symmetry impact on the \acs{ROM} --- Y \acs{BD}-rate plane for
 	different \acs{MDTC} systems}
 	\label{fig:vmdtc_sym}
+\end{figure}
+
+\subsection{Performances on the \acs{HEVC} test set}
+\label{sub:performances_on_the_hevc_test_set}
+
+In order to check the results against a know test set,
+table~\ref{tab:bd_rate_mdtc_128kb} contains the bit-rate savings of the best
+performing system, labelled as \SI{128}{\kilo B}.
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabularx}{0.8\textwidth}{c|X|rr|rr}
+		\multicolumn{2}{c}{} &
+		\multicolumn{2}{c|}{\SI{128}{\kilo B} \acs{MDTC}} &
+		\multicolumn{2}{c}{Sep. High Perf.} \\
+		\cline{2-6}
+		\multicolumn{1}{c}{} & {Sequence} &
+		\multicolumn{1}{c}{ \acs{AI}} & \multicolumn{1}{c|}{ \acs{RA}} &
+		\multicolumn{1}{c}{ \acs{AI}} & \multicolumn{1}{c}{ \acs{RA}} \\
+		\hline
+		\hline
+		\multirow{5}{2cm}{\centering Class A ($2560\times1600$)}
+		& NebutaFestival         & -0.99 & -0.08 & -1.06 & -0.08 \\
+		& PeopleOnStreet         & -4.24 & -1.58 & -4.21 & -1.49 \\
+		& SteamLocomotiveTrain   & -0.51 &  0.29 & -0.60 &  0.23 \\
+		& Traffic                & -4.59 & -3.83 & -4.52 & -3.73 \\
+		\cline{2-6} &
+		Average                  & -2.58 & -1.30 & -2.60 & -1.27 \\
+		\hline
+		\hline
+		\multirow{6}{2cm}{\centering Class B ($1920\times1080$)}
+		& BasketballDrive        & -2.88 & -0.69 & -3.22 & -0.72 \\
+		& BQTerrace              & -3.84 & -2.27 & -4.70 & -2.65 \\
+		& Cactus                 & -4.43 & -2.66 & -5.22 & -3.08 \\
+		& Kimono1                & -1.17 & -0.83 & -1.10 & -0.79 \\
+		& ParkScene              & -4.80 & -3.39 & -4.61 & -3.22 \\
+		\cline{2-6} &
+		Average                  & -3.42 & -2.51 & -3.77 & -2.09 \\
+		\hline
+		\hline
+		\multirow{5}{2cm}{\centering Class C ($832\times480$)}
+		& BasketballDrill        & -3.53 & -2.39 & -5.92 & -3.53 \\
+		& BQMall                 & -4.60 & -2.65 & -4.79 & -2.79 \\
+		& PartyScene             & -4.65 & -3.02 & -4.88 & -3.21 \\
+		& RaceHorses             & -3.54 & -1.44 & -4.25 & -1.59 \\
+		\cline{2-6} &
+		Average                  & -4.08 & -2.37 & -4.96 & -2.78 \\
+		\hline
+		\hline
+		\multirow{5}{2cm}{\centering Class D ($416\times240$)}
+		& BasketballPass         & -3.62 & -1.62 & -3.91 & -1.82 \\
+		& BlowingBubbles         & -3.85 & -2.36 & -4.30 & -2.69 \\
+		& BQSquare               & -4.07 & -2.47 & -4.58 & -2.74 \\
+		& RaceHorses             & -3.25 & -1.43 & -3.85 & -1.54 \\
+		\cline{2-6} &
+		Average                  & -3.70 & -1.97 & -4.16 & -2.20 \\
+		\hline
+		\hline
+		\multirow{4}{2cm}{\centering Class E ($1280\times720$)}
+		& FourPeople             & -4.18 & -4.77 & -4.56 & -5.18 \\
+		& Johnny                 & -3.09 & -3.92 & -3.34 & -4.16 \\
+		& KristenAndSara         & -3.37 & -4.19 & -3.82 & -4.47 \\
+		\cline{2-6} &
+		Average                  & -3.55 & -4.29 & -3.91 & -4.60 \\
+		\hline
+		\hline
+		\multirow{5}{2cm}{\centering Class F (various resolutions)}
+		& BasketDrillText        & -4.19 & -2.68 & -6.24 & -3.71 \\
+		& ChinaSpeed             & -3.86 & -2.39 & -4.25 & -2.71 \\
+		& SlideEditing           & -4.48 & -4.87 & -4.80 & -5.05 \\
+		& SlideShow              & -4.98 & -5.00 & -5.66 & -5.61 \\
+		\cline{2-6} &
+		Average                  & -4.38 & -3.74 & -5.24 & -4.27 \\
+		\hline
+		\hline
+		All sequences &
+		Overall                  & -3.61 & -2.51 & -4.10 & -2.76 \\
+	\end{tabularx}
+	\caption{Y \acs{BD}-rate (\%) for \SI{128}{\kilo B} and separable high
+	performance \acs{MDTC} systems}
+	\label{tab:bd_rate_mdtc_128kb}
+\end{table}
+
+
+\begin{figure}[tb]
+	\centering
+	\includegraphics{./figures/mdtc_128kb_plot.pdf}
+	\caption{\acs{BD}-rate for incomplete transforms enabled for $4\times4$
+	and $8\times8$ \acsp{TU}}
+	\label{fig:mdtc_128kb}
 \end{figure}
 
 

@@ -6,7 +6,7 @@
 		height=0.3\textheight,
 		x tick label style={
 		/pgf/number format/1000 sep=},
-		ytick={0,-2,...,-26},
+		ytick={0,-1,...,-7},
 		y tick label style={
 			/pgf/number format/.cd,
 			fixed,
@@ -14,7 +14,7 @@
 			precision=1,
 		},
 		y dir=reverse,
-		ymax=0.5, ymin=-26,
+		ymax=0.5, ymin=-7,
 		ylabel={Y BD-rate (\%)},
 		% enlargelimits=0.15,
 		enlarge y limits=false,
@@ -58,7 +58,65 @@
 		x tick label style={rotate=-60,anchor=west},
 		]
 
-		\addlegendentry{Sep. AI}
+		\addlegendentry{128 kB AI}
+		\addplot coordinates {
+		(NebutaFestival,   -0.99)
+		(PeopleOnStreet,   -4.24)
+		(SteamLocTrain,    -0.51)
+		(Traffic,          -4.59)
+		(BasketballDrive,  -2.88)
+		(BQTerrace,        -3.84)
+		(Cactus,           -4.43)
+		(Kimono1,          -1.17)
+		(ParkScene,        -4.80)
+		(BasketballDrill,  -3.53)
+		(BQMall,           -4.60)
+		(PartyScene,       -4.65)
+		(RaceHorses\_480p, -3.54)
+		(BasketballPass,   -3.62)
+		(BlowingBubbles,   -3.85)
+		(BQSquare,         -4.07)
+		(RaceHorses\_240p, -3.25)
+		(FourPeople,       -4.18)
+		(Johnny,           -3.09)
+		(KristenAndSara,   -3.37)
+		(BasketDrillText,  -4.19)
+		(ChinaSpeed,       -3.86)
+		(SlideEditing,     -4.48)
+		(SlideShow,        -4.98)
+		(Overall,          -3.61)
+		};
+
+		\addlegendentry{128 kB RA}
+		\addplot coordinates {
+		(NebutaFestival,   -0.08)
+		(PeopleOnStreet,   -1.58)
+		(SteamLocTrain,     0.29)
+		(Traffic,          -3.83)
+		(BasketballDrive,  -0.69)
+		(BQTerrace,        -2.27)
+		(Cactus,           -2.66)
+		(Kimono1,          -0.83)
+		(ParkScene,        -3.39)
+		(BasketballDrill,  -2.39)
+		(BQMall,           -2.65)
+		(PartyScene,       -3.02)
+		(RaceHorses\_480p, -1.44)
+		(BasketballPass,   -1.62)
+		(BlowingBubbles,   -2.36)
+		(BQSquare,         -2.47)
+		(RaceHorses\_240p, -1.43)
+		(FourPeople,       -4.77)
+		(Johnny,           -3.92)
+		(KristenAndSara,   -4.19)
+		(BasketDrillText,  -2.68)
+		(ChinaSpeed,       -2.39)
+		(SlideEditing,     -4.87)
+		(SlideShow,        -5.00)
+		(Overall,          -2.51)
+		};
+
+		\addlegendentry{Sep. High Perf. AI}
 		\addplot coordinates {
 		(NebutaFestival,   -1.06)
 		(PeopleOnStreet,   -4.21)
@@ -87,7 +145,7 @@
 		(Overall,          -4.10)
 		};
 
-		\addlegendentry{Sep. RA}
+		\addlegendentry{Sep. High Perf. RA}
 		\addplot coordinates {
 		(NebutaFestival,   -0.08)
 		(PeopleOnStreet,   -1.49)
@@ -114,64 +172,6 @@
 		(SlideEditing,     -5.05)
 		(SlideShow,        -5.61)
 		(Overall,          -2.76)
-		};
-
-		\addlegendentry{N-sep. AI}
-		\addplot coordinates {
-		(NebutaFestival,   -1.15)
-		(PeopleOnStreet,   -5.65)
-		(SteamLocTrain,    -0.68)
-		(Traffic,          -6.06)
-		(BasketballDrive,  -5.52)
-		(BQTerrace,        -9.22)
-		(Cactus,          -10.92)
-		(Kimono1,          -1.80)
-		(ParkScene,        -5.27)
-		(BasketballDrill, -25.06)
-		(BQMall,           -6.21)
-		(PartyScene,       -6.19)
-		(RaceHorses\_480p, -6.75)
-		(BasketballPass,   -6.15)
-		(BlowingBubbles,   -6.73)
-		(BQSquare,         -6.12)
-		(RaceHorses\_240p, -7.13)
-		(FourPeople,       -6.33)
-		(Johnny,           -5.21)
-		(KristenAndSara,   -6.01)
-		(BasketDrillText, -21.64)
-		(ChinaSpeed,       -4.86)
-		(SlideEditing,     -3.67)
-		(SlideShow,        -6.03)
-		(Overall,          -7.10)
-		};
-
-		\addlegendentry{N-sep. RA}
-		\addplot coordinates {
-		(NebutaFestival,   -0.13)
-		(PeopleOnStreet,   -2.27)
-		(SteamLocTrain,     0.03)
-		(Traffic,          -5.12)
-		(BasketballDrive,  -2.36)
-		(BQTerrace,        -4.93)
-		(Cactus,           -7.68)
-		(Kimono1,          -1.18)
-		(ParkScene,        -3.69)
-		(BasketballDrill, -14.80)
-		(BQMall,           -3.64)
-		(PartyScene,       -4.30)
-		(RaceHorses\_480p, -3.24)
-		(BasketballPass,   -3.14)
-		(BlowingBubbles,   -3.95)
-		(BQSquare,         -3.61)
-		(RaceHorses\_240p, -3.20)
-		(FourPeople,       -6.70)
-		(Johnny,           -5.78)
-		(KristenAndSara,   -6.17)
-		(BasketDrillText, -13.15)
-		(ChinaSpeed,       -3.03)
-		(SlideEditing,     -4.06)
-		(SlideShow,        -5.91)
-		(Overall,          -4.67)
 		};
 
 	\end{axis}
