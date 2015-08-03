@@ -4447,7 +4447,7 @@ transforms par \ac{IPM} is the same in all systems.
 		  2 &  \SI{13.13}{\kilo B} & -1.33\% &   \SI{4.13}{\kilo B} & -1.24\% \\
 		  4 &  \SI{26.25}{\kilo B} & -1.72\% &   \SI{8.25}{\kilo B} & -1.48\% \\
 		  8 &  \SI{52.50}{\kilo B} & -2.10\% &  \SI{16.50}{\kilo B} & -1.97\% \\
-		 16 & \SI{105.00}{\kilo B} & -2.48\% &  \SI{33.00}{\kilo B} &  \\
+		 16 & \SI{105.00}{\kilo B} & -2.48\% &  \SI{33.00}{\kilo B} & -2.22\% \\
 		 32 & \SI{210.00}{\kilo B} & -2.79\% &  \SI{66.00}{\kilo B} &  \\
 		 64 & \SI{420.00}{\kilo B} & -3.07\% & \SI{132.00}{\kilo B} &  \\
 		128 & \SI{840.00}{\kilo B} & -3.33\% & \SI{264.00}{\kilo B} &  \\
@@ -4492,7 +4492,19 @@ transforms for the $4\times4$ \acp{TU} and 32 for the $8\times8$ \acp{TU}.
 
 In order to check the results against a know test set,
 table~\ref{tab:bd_rate_mdtc_128kb} contains the bit-rate savings of the best
-performing system, labelled as \SI{128}{\kilo B}.
+performing system, labelled as \SI{128}{\kilo B}, compared to the separable
+high performance \ac{MDTC} system from Chapter~\ref{cha:mdtc}.
+
+The \SI{128}{\kilo B} \ac{MDTC} system provides lower bit-rate savings for
+almost all sequences, although differences are usually small, especially
+inside the Class A.
+Inside Classes B and C, which were used as the learning set for the separable
+high performance \ac{MDTC} system, sequences seem to be especially subject
+to over-learning, which around difference of one point in some cases.
+
+Other than that, the independently designed \SI{128}{\kilo B} behaves
+correctly, bearing in mind that the learning set used to design the transforms
+features only one resolution, frame rate and come from the same short movie.
 
 \begin{table}[tb]
 	\centering
@@ -4573,8 +4585,8 @@ performing system, labelled as \SI{128}{\kilo B}.
 \begin{figure}[tb]
 	\centering
 	\includegraphics{./figures/mdtc_128kb_plot.pdf}
-	\caption{\acs{BD}-rate for incomplete transforms enabled for $4\times4$
-	and $8\times8$ \acsp{TU}}
+	\caption{Comparison of \SI{128}{\kilo B} and separable high performace
+	\acs{MDTC} systems}
 	\label{fig:mdtc_128kb}
 \end{figure}
 
