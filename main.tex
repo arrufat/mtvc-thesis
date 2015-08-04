@@ -4480,8 +4480,7 @@ transforms for the $4\times4$ \acp{TU} and 32 for the $8\times8$ \acp{TU}.
 
 \begin{figure}[tb]
 	\centering
-	\input{./figures/vmdtc_sym_plot.tex}
-	% \includegraphics{./figures/vmdtc_sym_plot.pdf}
+	\includegraphics{./figures/vmdtc_sym_plot.pdf}
 	\caption{Symmetry impact on the \acs{ROM} --- Y \acs{BD}-rate plane for
 	different \acs{MDTC} systems}
 	\label{fig:vmdtc_sym}
@@ -4611,10 +4610,67 @@ Building this kind of systems requires the iterative approach presented in
 \S\ref{sec:non_homogeneous_mdtc_systems}, described in
 algorithm~\ref{alg:vmdtc_iter}, except that, instead of enabling transforms
 for one \ac{IPM} at a time, transforms will be enabled for one of the basic
-\acp{IPM} (0--10) and their symmetrical partners.
+\acp{IPM} (0--10) and their symmetrical ones.
+
+Results of the iterations of these non-homogeneous symmetrical systems are
+presented in figures~\ref{fig:vmdtc_iter_sym_rom}
+and~\ref{fig:vmdtc_iter_sym_complx}.
+The first figure compares the systems in the \acs{ROM} --- Y \acs{BD}-rate
+plane with the designed systems from previous sections making use of one
+technique only.
+The second figure places the systems in the complexity --- Y \acs{BD}-rate
+plane to ensure that systems remain comparable in terms of encoding times.
+
+\begin{figure}[tb]
+	\centering
+	% \includegraphics{./figures/vmdtc_iter_sym_rom_plot.pdf}
+	\input{./figures/vmdtc_iter_sym_rom_plot.tex}
+	\caption{\acs{MDTC} systems making use of heterogeneous transform
+	repartition and symmetries}
+	\label{fig:vmdtc_iter_sym_rom}
+\end{figure}
+
+\begin{figure}[tb]
+	\centering
+	% \includegraphics{./figures/vmdtc_iter_sym_cmplx_plot.pdf}
+	\input{./figures/vmdtc_iter_sym_cmplx_plot.tex}
+	\caption{Symmetry impact on non-homogeneous \acs{MDTC} systems}
+	\label{fig:vmdtc_iter_sym_complx}
+\end{figure}
+
+
 
 \section{Conclusions}
 \label{sec:rw_conclusions}
+
+\ac{MDTC} systems presented in Chapter~\ref{cha:mdtc} proved the fact that
+using multiple transforms competing against each other inside every \ac{IPM}
+is able to provide bit-rate savings of up to 7\% when using non-separable
+transforms, and up to 4\% when using separable transforms.
+
+Nonetheless, the storage requirements for those transforms is not negligible.
+Therefore, this Chapter has presented two approaches to reduce the needed
+\acs{ROM} for the transforms.
+
+The first technique proposes a non-homogeneous distribution of the number of
+transforms per \ac{IPM}.
+In Chapter~\ref{cha:mdtc} all \acp{IPM} were using the same number of
+transforms, which could be sub-optimal, since not all \acp{IPM} are used
+equally in \ac{HEVC}.
+Around a factor of two in terms of \acs{ROM} has been saved when using
+heterogeneous \ac{MDTC} systems.
+
+The second technique exploited existing symmetries to be able to re-use
+transforms from different \ac{IPM} by pre-processing residuals with
+transposition an mirroring operations.
+This technique allows saving around two thirds of the \ac{ROM} presented for
+the \ac{MDTC} systems from Chapter~\ref{cha:mdtc}.
+
+Finally, the techniques summarised above have been combined to provide better
+\ac{ROM} --- Y \ac{BD}-rate trade-offs.
+
+% TODO
+\todo{Add more conclusions about systems using both techniques}
 
 \chapter{\acs{MDTC} using discrete trigonometric transforms}
 \label{cha:dtt}
@@ -4751,6 +4807,9 @@ residuals symmetries to re-use the same transforms amongst symmetrical
 \ac{MDTC} systems that make use of both techniques at the same time present
 the best trade-off in the three axis: \acs{ROM}, \ac{BD}-rate and even
 encoding complexity.
+
+% TODO
+\todo{add figures for DTT compared to other systems}
 
 \section{Conclusions}
 \label{sec:dtt_conclusions}
