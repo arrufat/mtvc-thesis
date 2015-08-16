@@ -3224,6 +3224,10 @@ A graphical version of the table is presented in
 figure~\ref{fig:four_way_mdtc_comparison}.
 All axis in the four diagrams have the same scaling factor in order to ease
 the comparison among them.
+Using this representation, \acs{HEVC} would be a dot in the center of the
+diagram, and an ideal system would only have one arrow downwards, meaning that
+the \acs{BD}-rate has been improved without any additional coding complexity
+or \acs{ROM} storage requirements.
 
 \begin{table}
 	\centering
@@ -4758,6 +4762,30 @@ plane to ensure that systems remain comparable in terms of encoding times.
 	\label{fig:vmdtc_iter_sym_complx}
 \end{figure}
 
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabular}{r|r|r|r}
+	System & \multicolumn{1}{c|}{\acs{ROM}} & Y \acs{BD}-rate & Complexity \\
+	\hline\hline
+	  \SI{1}{\kilo B} &   \SI{0.98}{\kilo B} & -0.89\% & 126\% \\
+	  \SI{2}{\kilo B} &   \SI{1.92}{\kilo B} & -1.25\% & 150\% \\
+	  \SI{4}{\kilo B} &   \SI{3.98}{\kilo B} & -1.71\% & 175\% \\
+	  \SI{8}{\kilo B} &   \SI{7.88}{\kilo B} & -2.16\% & 226\% \\
+	 \SI{12}{\kilo B} &  \SI{11.62}{\kilo B} & -2.39\% & 262\% \\
+	 \SI{16}{\kilo B} &  \SI{15.84}{\kilo B} & -2.51\% & 379\% \\
+	 \SI{24}{\kilo B} &  \SI{23.67}{\kilo B} & -2.83\% & 425\% \\
+	 \SI{32}{\kilo B} &  \SI{31.92}{\kilo B} & -2.97\% & 492\% \\
+	%  \SI{48}{\kilo B} &  \SI{47.39}{\kilo B} & -2.85\% & 520\% \\
+	%  \SI{64}{\kilo B} &  \SI{63.89}{\kilo B} & -3.00\% & 660\% \\
+	%  \SI{96}{\kilo B} &  \SI{95.53}{\kilo B} & -3.27\% & 851\% \\
+	% \SI{128}{\kilo B} & \SI{127.41}{\kilo B} & -3.41\% & 931\% \\
+	\end{tabular}
+	\caption{Heterogeneous symmetrical \acs{MDTC} systems with \acs{ROM}
+	constraints}
+	\label{tab:heterogeneous_sym_mdtc}
+\end{table}
+
 \section{Conclusions}
 \label{sec:rw_conclusions}
 
@@ -4902,20 +4930,53 @@ on a residual and define a set of residuals of the transforms which give the
 best rate-distortion.
 In practice, this metric can bee seen as a way of rating transforms.
 
-Provided that \ac{MDTC} systems learnt using this metric lead to significant
-bit-rate savings with respect to \ac{HEVC}, it will be used in this Chapter to
-design an \ac{DTT}-based \ac{MDTC} system.
-The learning method is based on algorithm~\ref{alg:clustering}.
+Due to the fact that \ac{MDTC} systems learnt using the \acs{RDOT} metric lead
+to significant bit-rate savings with respect to \ac{HEVC}, it will be used in
+this Chapter to design an \ac{DTT}-based \ac{MDTC} system.
+The learning method is based on algorithm~\ref{alg:clustering} for the
+classification part:
+residuals from the learning set are assigned to the transform that provide the
+lowest \acs{RDOT} metric value.
 The main difference is that, when using \acp{DTT}, transforms are already
 learnt, so the learning phase of the algorithm can be skipped.
 Instead, all transforms will be tested against the learning set, and the only
 the set of transforms that provide the lowest \ac{RDOT} metric will be
 retained.
+There are 8 types of \ac{DCT}, 8 types of \ac{DST}, their inverse
+versions and, in order to expand the transform space, vertical and horizontal
+mirrored versions of the transforms have also been considered.
+This adds up to a total of 4096 possible combinations.
+Due to relationships between transforms, the actual list contains 2048 unique
+transforms.
+These transforms are put into a list and iterated through.
+Then, the first $N$ transforms are used to classify the residuals.
+Afterwards, the transform $N+1$ is replaced in each group and, if it makes the
+global \acs{RDOT} metric lower is kept, otherwise is discarded and the same
+thing is done for the next transform of the list.
+
+The sub-optimality of this approach is known and the classification algorithm
+is subject to be improved, but this simple method will allow to determine the
+validity of the approach.
+In order to find the optimal \acs{DTT}-based system, one would have to compute
+the best combination of $N$ transform from the 2048 available, leading to
+\begin{align}
+	\left(
+	\begin{matrix}
+		2048 \\
+		N+1
+	\end{matrix}
+	\right)
+\end{align}
+possible combinations.
+As an example, for $N=4$ additional transforms, the number of combinations
+that have to be tested is almost \num{3e14}.
 
 Since \acp{DTT} are low complexity transforms, with regards regular separable
 transforms, the main objective in this Chapter is to build low complexity
 \ac{MDTC} systems, with high emphasis in the decoding time and \acs{ROM}
 requirements.
+Furthermore, the classification algorithm becomes even less optimal when the
+number of the additional transforms increases.
 
 In the previous Chapter, two approaches were proposed to improve the existing
 separable \ac{MDTC} systems in the \acs{ROM} --- Y \ac{BD}-rate plane:
@@ -4928,6 +4989,30 @@ encoding complexity.
 
 % TODO
 \todo{add figures for DTT compared to other systems}
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabular}{r|r|r|r}
+	System & \multicolumn{1}{c|}{\acs{ROM}} & Y \acs{BD}-rate & Complexity \\
+	\hline\hline
+	  \SI{1}{\kilo B} &   \SI{0.98}{\kilo B} & -1.28\% & 164\% \\
+	  \SI{2}{\kilo B} &   \SI{1.97}{\kilo B} & -1.54\% & 177\% \\
+	  \SI{4}{\kilo B} &   \SI{3.97}{\kilo B} & -1.83\% & 230\% \\
+	\end{tabular}
+	\caption{Heterogeneous symmetrical \acs{DTT}-based \acs{MDTC} systems with
+	\acs{ROM} constraints}
+	\label{tab:heterogeneous_sym_dtt_mdtc}
+\end{table}
+
+\begin{figure}[tb]
+	\centering
+	% \includegraphics{./figures/vmdtc_dtt_iter_sym_rom_plot.pdf}
+	\input{./figures/vmdtc_dtt_iter_sym_rom_plot.tex}
+	\caption{\acs{DTT}-based \acs{MDDT} systems in the \acs{ROM} --- Y
+	\acs{BD}-rate plane}
+	\label{fig:vmdtc_dtt_iter_sym_rom}
+\end{figure}
 
 \section{Conclusions}
 \label{sec:dtt_conclusions}
