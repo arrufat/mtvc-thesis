@@ -185,11 +185,11 @@ on the decoder side.
 
 Work carried out in this thesis contains several objectives:
 \begin{itemize}
-	\item reconsider the separability on transforms for video coding
-	\item revisit the use of the \acs{KLT} for video coding
-	\item define a metric to be able to rank transforms to allow learning and
-		classification algorithms
-	\item design video coding systems that make use of multiple transforms
+	\item Reconsider the separability on transforms for video coding.
+	\item Revisit the use of the \acs{KLT} for video coding.
+	\item Define a metric to be able to rank transforms to allow learning and
+		classification algorithms.
+	\item Design video coding systems that make use of multiple transforms.
 \end{itemize}
 
 \bigskip
@@ -3761,8 +3761,8 @@ base vector is retained.
 Assuming each transform coefficient is quantised to 1 byte, as in the
 \ac{MDTC} systems, this leads to storage requirements of:
 \begin{itemize}
-	\item $4\times4$ transforms: \SI{16}{B} per transform
-	\item $8\times8$ transforms: \SI{64}{B} per transform
+	\item $4\times4$ transforms: \SI{16}{B} per transform.
+	\item $8\times8$ transforms: \SI{64}{B} per transform.
 \end{itemize}
 For the system using 8 $4\times4$ transforms and 32 $8\times8$ transforms, the
 global storage requirements are \SI{74.375}{\kilo B}, as there are 35
@@ -3811,9 +3811,9 @@ competition, some concessions are required.
 This Chapter proposes simplifications to the areas leading to significant
 complexity increases in \ac{MDTC} systems, especially:
 \begin{itemize}
-	\item storage requirements
-	\item decoding time
-	\item encoding time
+	\item Storage requirements.
+	\item Decoding time.
+	\item Encoding time.
 \end{itemize}
 
 The first approach for simplification is to suppress the use of non-separable
@@ -3859,8 +3859,8 @@ same video filters, frame rate, resolution, making a source of residuals less
 heterogeneous than classes B and C from the \ac{HEVC} test set, but providing
 a larger number of residuals (around as twice as many, in total):
 \begin{itemize}
-	\item $4\times4$ residuals: over 142 million
-	\item $8\times8$ residuals: over 343 million
+	\item $4\times4$ residuals: over 142 million.
+	\item $8\times8$ residuals: over 343 million.
 \end{itemize}
 
 The resulting transforms have served to build new \ac{MDTC} systems that have
@@ -3877,10 +3877,10 @@ performed in the \ac{AI} configuration.
 
 From now on, the different sets will be referred to as:
 \begin{itemize}
-	\item BC: classes B and C from the \ac{HEVC} test set
-	\item ADEF: classes A, D, E and F from the \ac{HEVC} test set
-	\item 59seq: 5 frames of 59 heterogeneous sequences for testing
-	\item ToS: the \emph{Tears of Steel} short film
+	\item BC: classes B and C from the \ac{HEVC} test set.
+	\item ADEF: classes A, D, E and F from the \ac{HEVC} test set.
+	\item 59seq: 5 frames of 59 heterogeneous sequences for testing.
+	\item ToS: the \emph{Tears of Steel} short film.
 \end{itemize}
 
 \subsection{Performances of the new data sets}
@@ -4727,8 +4727,9 @@ The previous two Sections have explored new methods to reduce the storage
 requirements of \ac{MDTC} systems.
 The approaches make use of:
 \begin{itemize}
-	\item Heterogeneous repartitioning of the number of transforms per \ac{IPM}
-	\item Symmetries in prediction residuals
+	\item Heterogeneous repartitioning of the number of transforms per
+		\ac{IPM}.
+	\item Symmetries in prediction residuals.
 \end{itemize}
 
 These techniques are not mutually exclusive, as such, this section presents
@@ -4810,7 +4811,7 @@ In Chapter~\ref{cha:mdtc} all \acp{IPM} were using the same number of
 transforms, which could be sub-optimal, since not all \acp{IPM} are used
 equally in \ac{HEVC}.
 Around a factor of two in terms of \acs{ROM} has been saved when using
-heterogeneous \ac{MDTC} systems.
+heterogeneous \ac{MDTC} systems for the same bit-rate savings.
 
 The second technique exploited existing symmetries to be able to re-use
 transforms from different \ac{IPM} by pre-processing residuals with
@@ -4820,9 +4821,15 @@ the \ac{MDTC} systems from Chapter~\ref{cha:mdtc}.
 
 Finally, the techniques summarised above have been combined to provide better
 \ac{ROM} --- Y \ac{BD}-rate trade-offs.
+When combining both techniques, storage requirements can be reduced up to 75\%
+of the values presented in Chapter~\ref{cha:mdtc} for some systems.
 
-% TODO
-\todo{Add more conclusions about systems using both techniques}
+Regarding complexity, using a non-homogeneous number of transforms per
+\ac{IPM} decreases the decoding time, since less transforms need to be tested.
+On the other hand, symmetries allow to put more transforms without having an
+impact to the \acs{ROM} requirements.
+As a result, the encoding complexity remains comparable to the one presented
+in Chapter~\ref{cha:mdtc}.
 
 \chapter{\acs{MDTC} using discrete trigonometric transforms}
 \label{cha:dtt}
@@ -4830,11 +4837,6 @@ Finally, the techniques summarised above have been combined to provide better
 
 \section{Introduction}
 \label{sec:introduction}
-
-\begin{itemize}
-	\item Decrease coding complexity $\rightarrow$ fast algorithms.
-	\item Reduce the ROM requirements $\rightarrow$ mathematical formula
-\end{itemize}
 
 Chapter~\ref{cha:mdtc} has unveiled the potential of gains achievable through
 the \ac{MDTC} technique.
@@ -4889,7 +4891,7 @@ Recently, other transforms from the \ac{DTT} family are starting to arise the
 interest in video coding applications:
 \begin{itemize}
 	\item The \ac{DST}-VII is used in \ac{HEVC} for $4\times4$ intra
-		prediction luma residuals
+		prediction luma residuals.
 	\item The \ac{DST}-III has been proposed for inter-layer prediction
 		residuals in scalable video
 		coding~\cite{guo-14-transform-inter-layer-scalable}.
