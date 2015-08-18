@@ -3785,7 +3785,7 @@ As a result, incomplete transforms provide an example of application for
 non-separable transforms that can lead to bit-rate savings for reasonable
 complexity and storage amount.
 
-\chapter{Real world \acs{MDTC} system}
+\chapter{Simplifications of \acs{MDTC} system for storage requirements}
 \label{cha:real_world_system}
 \chaptertoc
 
@@ -3800,8 +3800,8 @@ non-separable transforms were provided in each \ac{IPM}:
 up to 7\% on average for the \ac{AI} coding configuration.
 
 This chapter will take a look at different approaches to simplify the
-system presented in Chapter~\ref{cha:mdtc} while trying to have minimum impact
-on its bit-rate savings.
+system presented in Chapter~\ref{cha:mdtc} in terms of storage requirements
+while trying to have minimum impact on its bit-rate savings.
 
 \subsection{Discarding non-separable transforms}
 \label{sub:discarding_non_separable_transforms}
@@ -4572,8 +4572,8 @@ transforms par \ac{IPM} is the same in all systems.
 		  4 &  \SI{26.25}{\kilo B} & -1.72\% &   \SI{8.25}{\kilo B} & -1.48\% \\
 		  8 &  \SI{52.50}{\kilo B} & -2.10\% &  \SI{16.50}{\kilo B} & -1.97\% \\
 		 16 & \SI{105.00}{\kilo B} & -2.48\% &  \SI{33.00}{\kilo B} & -2.22\% \\
-		 32 & \SI{210.00}{\kilo B} & -2.79\% &  \SI{66.00}{\kilo B} &  \\
-		 64 & \SI{420.00}{\kilo B} & -3.07\% & \SI{132.00}{\kilo B} &  \\
+		 32 & \SI{210.00}{\kilo B} & -2.79\% &  \SI{66.00}{\kilo B} & -2.69\% \\
+		 64 & \SI{420.00}{\kilo B} & -3.07\% & \SI{132.00}{\kilo B} & -3.00\% \\
 		128 & \SI{840.00}{\kilo B} & -3.33\% & \SI{264.00}{\kilo B} &  \\
 	\end{tabular}
 	\caption{Symmetries impact on $8\times8$ transforms on the 59seq test set}
@@ -4595,7 +4595,7 @@ transforms for the $4\times4$ \acp{TU} and 32 for the $8\times8$ \acp{TU}.
 		\multicolumn{1}{c}{\acs{ROM}} & \multicolumn{1}{c|}{Y \acs{BD}-rate} &
 		\multicolumn{1}{c}{\acs{ROM}} & \multicolumn{1}{c}{Y \acs{BD}-rate} \\
 		\hline \hline
-		\SI{236.25}{\kilo B} & -3.36\% & \SI{74.25}{\kilo B} & \% \\
+		\SI{236.25}{\kilo B} & -3.36\% & \SI{74.25}{\kilo B} & -3.50\% \\
 	\end{tabular}
 	\caption{Symmetries impact of the high performance \acs{MDTC} system on
 	the 59seq test set}
@@ -4942,34 +4942,57 @@ learnt, so the learning phase of the algorithm can be skipped.
 Instead, all transforms will be tested against the learning set, and the only
 the set of transforms that provide the lowest \ac{RDOT} metric will be
 retained.
-There are 8 types of \ac{DCT}, 8 types of \ac{DST}, their inverse
-versions and, in order to expand the transform space, vertical and horizontal
-mirrored versions of the transforms have also been considered.
-This adds up to a total of 4096 possible combinations.
-Due to relationships between transforms, the actual list contains 2048 unique
-transforms.
-These transforms are put into a list and iterated through.
-Then, the first $N$ transforms are used to classify the residuals.
-Afterwards, the transform $N+1$ is replaced in each group and, if it makes the
-global \acs{RDOT} metric lower is kept, otherwise is discarded and the same
-thing is done for the next transform of the list.
 
-The sub-optimality of this approach is known and the classification algorithm
-is subject to be improved, but this simple method will allow to determine the
-validity of the approach.
-In order to find the optimal \acs{DTT}-based system, one would have to compute
-the best combination of $N$ transform from the 2048 available, leading to
+In order to expand the transform space when using the \ac{DTT} family, which
+consists of 8 types of \ac{DCT}, 8 types of \ac{DST} and their inverse
+versions, 8 spatial pixel permutations have also been considered.
+The chosen permutations are combinations of transposed and mirrored
+(vertically and horizontally) versions of residuals si as not to break pixel
+correlations and relative distances within a block.
+Using \acp{DTT} together with the proposed residual modifications leads to
+total of 2048 possible transform combinations.
+In order to find the optimal \acs{DTT}-based \ac{MDTC}system, one would have
+to compute the best set of $N$ transforms from the 2048 available giving the
+lowest value of the \ac{RDOT} metric.
+This results into
 \begin{align}
 	\left(
 	\begin{matrix}
 		2048 \\
-		N+1
+		N
 	\end{matrix}
 	\right)
 \end{align}
-possible combinations.
+possible transform combinations.
+Fortunately, due to the nature of the \ac{DTT} family, there are many
+redundancies within the transform combinations.
+For instance, for $4\times4$ transforms, the 2048 list reduced to 256
+unique transforms.
 As an example, for $N=4$ additional transforms, the number of combinations
-that have to be tested is almost \num{3e14}.
+that need to be tested is:
+\begin{align}
+	\left(
+	\begin{matrix}
+		256 \\
+		4
+	\end{matrix}
+	\right) =
+	\num{174792640}\approx\num{1.75e8}
+\end{align}
+
+In order to find a good combination of transforms and permutations, all
+combinations are put into a list, which is iterated through.
+Then, the first $N$ transforms are used to classify the residuals into $N$
+groups, that is, each residual is assigned to the transform that gives the
+lowest value of the \ac{RDOT} metric defined in~\eqref{eqn:rdot_metric}.
+Afterwards, the transform $N+1$ is replaced in each group and, if it makes the
+global \acs{RDOT} metric lower, it replaces the outperformed transform,
+otherwise is discarded and the same thing is done for the next transform of
+the list.
+
+The sub-optimality of this approach is well-known and the classification
+algorithm is subject to be improved, but this simple method will allow to
+determine the validity of the approach.
 
 Since \acp{DTT} are low complexity transforms, with regards regular separable
 transforms, the main objective in this Chapter is to build low complexity
@@ -5016,6 +5039,11 @@ encoding complexity.
 
 \section{Conclusions}
 \label{sec:dtt_conclusions}
+
+\chapter{Systems summary}
+\label{cha:systems_summary}
+
+
 
 \chapter*{Conclusions and future work}
 \label{cha:conclusions_and_future_work}
