@@ -4090,8 +4090,8 @@ savings and the encoding complexity with regards \ac{HEVC}.
 \end{table}
 
 In order to improve current homogeneous \ac{MDTC} systems,
-algorithm~\ref{alg:vmdtc_iter} presents a systematic way of designing an
-heterogeneous \ac{MDTC} system, using a gradient approach.
+algorithm~\ref{alg:vmdtc_iter} presents a systematic way of designing a
+non-homogeneous \ac{MDTC} system, using a gradient approach.
 The algorithm starts with an unmodified version of \ac{HEVC}.
 Then, it encodes the 59seq test set enabling one transform by \ac{IPM} at a
 time.
@@ -4149,11 +4149,11 @@ doubled each time for the \ac{IPM} that gives the best ratio.
 
 Figure~\ref{fig:vmdtc_iter} displays different \ac{MDTC} systems on the
 \acs{ROM}---Y \ac{BD}-rate plane.
-The mains systems that are compared are the homogeneous and heterogeneous
+The mains systems that are compared are the homogeneous and non-homogeneous
 (issued from the iterative algorithm) systems using $4\times4$ and $8\times8$
 transforms.
 Systems that combine both transform sizes are also presented in the figure.
-Iterative heterogeneous \ac{MDTC} systems have more flexibility in terms of
+Iterative non-homogeneous \ac{MDTC} systems have more flexibility in terms of
 the number of transforms enabled in each \ac{IPM} and, therefore, in their
 storage requirements.
 For this reason, iterative systems provide a lot more granularity than
@@ -4163,13 +4163,13 @@ Red lines in figure~\ref{fig:vmdtc_iter} represent the $4\times4$ only
 \ac{MDTC} systems.
 Homogeneous $4\times4$ systems start saturating in terms of bit-rate savings
 after adding 8 additional transform in each \ac{IPM}.
-The heterogeneous $4\times4$ system is able to achieve the same performances
+The non-homogeneous $4\times4$ system is able to achieve the same performances
 as the homogeneous system, with less \ac{ROM}.
 
-The interest of the heterogeneous systems is clearer when using $8\times8$
+The interest of the non-homogeneous systems is clearer when using $8\times8$
 transforms (blue lines), since the storage requirements are higher.
 In this case, almost a factor of two can be observed in terms of \acs{ROM} for
-the same \ac{BD}-rate in homogeneous and heterogeneous systems.
+the same \ac{BD}-rate in homogeneous and non-homogeneous systems.
 Moreover, it can be noticed that, for the $8\times8$ systems, the bit-rate
 savings are proportional, in a logarithmic sense, to the \acs{ROM}
 requirements and, consequently, to the number of transforms.
@@ -4183,7 +4183,7 @@ requirements and, consequently, to the number of transforms.
 \end{figure}
 
 Finally, some interesting configurations have been built combining $4\times4$
-and $8\times8$ systems, in both homogeneous and heterogeneous ways,
+and $8\times8$ systems, in both homogeneous and non-homogeneous ways,
 represented using green lines.
 Again, for these systems, especially on low \ac{ROM} configurations, a factor
 of two in terms of storage requirements is observed.
@@ -4193,10 +4193,10 @@ and \ac{BD}-rate.
 This means that, for a given \acs{ROM} constraint, one can find the
 combination of the $4\times4$ and $8\times8$ systems that offers the best
 trade-off in terms of storage requirements and bit-rate savings.
-Consequently, the optimal combinations of heterogeneous \ac{MDTC} systems have
-been found by setting a \acs{ROM} specification and selecting the combination
-of heterogeneous $4\times4$ and $8\times8$ systems that provide the best
-\ac{BD}-rate without exceeding the specified \acs{ROM}.
+Consequently, the optimal combinations of non-homogeneous \ac{MDTC} systems
+have been found by setting a \acs{ROM} specification and selecting the
+combination of heterogeneous $4\times4$ and $8\times8$ systems that provide
+the best \ac{BD}-rate without exceeding the specified \acs{ROM}.
 The results of all systems combination can be found in the scatter plot of
 figure~\ref{fig:vmdtc_combined}.
 It can bee seen that the points present a lower boundary, which corresponds to
@@ -4206,13 +4206,13 @@ the best combinations for a given \acs{ROM}.
 	\centering
 	\includegraphics{./figures/vmdtc_systems_combined_plot.pdf}
 	\caption{All possible combinations of $4\times4$ and $8\times8$
-	heterogeneous systems}
+	non-homogeneous systems}
 	\label{fig:vmdtc_combined}
 \end{figure}
 
 The selected \ac{ROM} requirements for the systems presented in
 figure~\ref{fig:vmdtc_iter} are detailed in
-table~\ref{tab:heterogeneous_mdtc}.
+table~\ref{tab:non_hom_mdtc}.
 Information about their actual \ac{ROM} requirements, \ac{BD}-rate and
 encoding complexty are provided.
 There are some remarkable points, such as the system at \SI{8}{\kilo B},
@@ -4241,11 +4241,11 @@ provide bit-rate savings of 3\% at roughly seven times the complexity of
 	 \SI{96}{\kilo B} &  \SI{95.53}{\kilo B} & -3.27\% & 851\% \\
 	\SI{128}{\kilo B} & \SI{127.41}{\kilo B} & -3.41\% & 931\% \\
 	\end{tabular}
-	\caption{Heterogeneous \acs{MDTC} systems with \acs{ROM} constraints}
-	\label{tab:heterogeneous_mdtc}
+	\caption{Non-homogeneous \acs{MDTC} systems with \acs{ROM} constraints}
+	\label{tab:non_hom_mdtc}
 \end{table}
 
-Nonetheless, learning the $4\times4$ and $8\times8$ heterogeneous \ac{MDTC}
+Nonetheless, learning the $4\times4$ and $8\times8$ non-homogeneous \ac{MDTC}
 systems independently and then combining them to design the complete system is
 a suboptimal approach.
 The suboptimality can be spotted by comparing figures~\ref{fig:vmdtc_iter}
@@ -4264,7 +4264,7 @@ This is another source of suboptimality once the maximum number of transforms
 has been enabled in one \ac{IPM}, since the system lacks the choice to double
 the number of transforms for that \ac{IPM}.
 
-As a final observation, the heterogeneous systems learnt iteratively with
+As a final observation, non-homogeneous systems learnt iteratively with
 \acs{ROM} constraints present a pattern in the number of transforms enabled in
 each \ac{IPM}.
 Those \acp{IPM} that are most used in \ac{HEVC} (0, 1, 10 and 26) tend to make
@@ -4755,7 +4755,7 @@ plane to ensure that systems remain comparable in terms of encoding times.
 \begin{figure}[tb]
 	\centering
 	\includegraphics{./figures/vmdtc_iter_sym_rom_plot.pdf}
-	\caption{\acs{MDTC} systems making use of heterogeneous transform
+	\caption{\acs{MDTC} systems making use of non-homogeneous transform
 	repartition and symmetries}
 	\label{fig:vmdtc_iter_sym_rom}
 \end{figure}
@@ -4788,9 +4788,9 @@ plane to ensure that systems remain comparable in terms of encoding times.
 	 \SI{96}{\kilo B} &  \SI{88.90}{\kilo B} & -3.45\% & 1084\% \\
 	\SI{128}{\kilo B} & \SI{123.40}{\kilo B} & -3.56\% & 1322\% \\
 	\end{tabular}
-	\caption{Heterogeneous symmetrical \acs{MDTC} systems with \acs{ROM}
+	\caption{Non-homogeneous symmetrical \acs{MDTC} systems with \acs{ROM}
 	constraints}
-	\label{tab:heterogeneous_sym_mdtc}
+	\label{tab:non_hom_sym_mdtc}
 \end{table}
 
 \section{Conclusions}
@@ -4811,7 +4811,7 @@ In Chapter~\ref{cha:mdtc} all \acp{IPM} were using the same number of
 transforms, which could be sub-optimal, since not all \acp{IPM} are used
 equally in \ac{HEVC}.
 Around a factor of two in terms of \acs{ROM} has been saved when using
-heterogeneous \ac{MDTC} systems for the same bit-rate savings.
+non-homogeneous \ac{MDTC} systems for the same bit-rate savings.
 
 The second technique exploited existing symmetries to be able to re-use
 transforms from different \ac{IPM} by pre-processing residuals with
@@ -4860,7 +4860,7 @@ as well as using a different number of transforms in each mode.
 These two approaches provide notable savings in the \acs{ROM} required to
 store the transforms.
 Consequently, the encoder complexity was slightly decreased using
-heterogeneous systems, since there are less transforms to test in each
+non-homogeneous systems, since there are less transforms to test in each
 \ac{IPM}.
 
 However, even if the main motivation for the approaches above is to reduce
@@ -5031,17 +5031,29 @@ encoding complexity.
 	  \SI{2}{\kilo B} &   \SI{1.97}{\kilo B} & -1.54\% & 177\% \\
 	  \SI{4}{\kilo B} &   \SI{3.97}{\kilo B} & -1.83\% & 230\% \\
 	\end{tabular}
-	\caption{Heterogeneous symmetrical \acs{DTT}-based \acs{MDTC} systems with
+	\caption{Non-homogeneous symmetrical \acs{DTT}-based \acs{MDTC} systems with
 	\acs{ROM} constraints}
-	\label{tab:heterogeneous_sym_dtt_mdtc}
+	\label{tab:non_hom_sym_dtt_mdtc}
 \end{table}
 
 \begin{figure}[tb]
 	\centering
-	% \includegraphics{./figures/vmdtc_dtt_iter_sym_rom_plot.pdf}
 	\input{./figures/vmdtc_dtt_iter_sym_rom_plot.tex}
-	\caption{\acs{DTT}-based \acs{MDDT} systems in the \acs{ROM} --- Y
-	\acs{BD}-rate plane}
+	\caption[\acs{DTT}-based \acs{MDDT} systems in the \acs{ROM} --- Y
+	\acs{BD}-rate plane]
+	{\acs{DTT}-based \acs{MDDT} systems in the \acs{ROM} --- Y
+	\acs{BD}-rate plane compared to other non-homogeneous \acs{MDTC} systems}
+	\label{fig:vmdtc_dtt_iter_sym_rom}
+\end{figure}
+
+\begin{figure}[tb]
+	\centering
+	% \includegraphics{./figures/vmdtc_dtt_iter_sym_cmplx_plot.pdf}
+	\input{./figures/vmdtc_dtt_iter_sym_cmplx_plot.tex}
+	\caption[\acs{DTT}-based \acs{MDDT} systems in the Complexity --- Y
+	\acs{BD}-rate plane]
+	{\acs{DTT}-based \acs{MDDT} systems in the Complexity --- Y
+	\acs{BD}-rate plane compared to other non-homogeneous \acs{MDTC} systems}
 	\label{fig:vmdtc_dtt_iter_sym_rom}
 \end{figure}
 
