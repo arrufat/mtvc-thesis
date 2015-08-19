@@ -2304,8 +2304,8 @@ particular kind of signals and to fit the video coding demands.
 
 The learning set has been built with intra prediction residuals issued from
 \ac{HEVC} encodings at four \acp{QP} (22, 27, 32, 37), coming from classes B
-and C from the \ac{HEVC} test set, defined by the \ac{JCT-VC} in the common
-test conditions~\cite{bossen-12-common-test-conditions}.
+and C from the \ac{HEVC} test set, defined by the \ac{JCT-VC} in the
+\ac{CTC}~\cite{bossen-12-common-test-conditions}.
 These classes contain sequences of $1920\times1080$ and $800\times480$,
 respectively, and frame rates of 24, 30, 50 and 60 frames per second.
 As a result, the number of the residuals used for the learning set exceeds the
@@ -5059,6 +5059,14 @@ This final Chapter has been created with one goal in mind:
 to ease the choice amongst all explored systems in this thesis responding to
 different trade-offs.
 
+In Chapters~\ref{cha:real_world_system} and~\ref{cha:dtt} several systems have
+been designed with complete independence from the \ac{HEVC} test set proposed
+in the \ac{CTC}~\cite{bossen-12-common-test-conditions}.
+So as to provide results in well specified test conditions with a known set of
+test sequences, this Chapter evaluates the most interesting systems in terms
+of trade-off between complexity (\acs{ROM} and encoding time) and bit-rate
+savings.
+
 \begin{table}[tb]
 	\centering
 	\small
@@ -5096,8 +5104,11 @@ different trade-offs.
         Worst      & -0.57 & -0.58 & -0.64 & -0.64 & -0.61 &  0.21 &  0.20 &  0.27 &  0.26 &  0.23 \\
         Complexity &   229 &   372 &   481 &   761 &  1297 &   106 &  114  &   119 &   133 &   163 \\
 	\end{tabularx}
-	\caption{Average bit-rate savings (\%) for each \acs{HEVC} Class}
-	\label{tab:summary_final_systems_ai}
+	\caption[Summary of the retained \acs{MDTC} systems referred to \ac{HEVC}]
+	{Summary of the retained \acs{MDTC} systems referred to \ac{HEVC} (\%).
+	Y \acs{BD}-rates are presented per Class, as well as their mean, median, best and worst values.
+	Finally, the encoding complexity of each system is also provided.}
+	\label{tab:summary_final_systems}
 \end{table}
 
 \begin{table}[tb]
