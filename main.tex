@@ -5018,8 +5018,22 @@ residuals symmetries to re-use the same transforms amongst symmetrical
 the best trade-off in the three axis: \acs{ROM}, \ac{BD}-rate and even
 encoding complexity.
 
-% TODO
-\todo{add figures for DTT compared to other systems}
+Table~\ref{tab:non_hom_sym_dtt_mdtc} contains the iterated non-homogeneous
+DTT-based \acs{MDTC} systems for 1, 2 and 4 kB.
+A comparison with previouly designed systems (the symmetrical and
+non-symmetrical versions of the iterated non-homogeneous \acs{MDTC} systems)
+are presented in figures~\ref{fig:vmdtc_dtt_iter_sym_rom}
+and~\ref{fig:vmdtc_dtt_iter_sym_cmplx} for \acs{ROM} and encoding complexity,
+respectively.
+The fist figure reveals how the \ac{DTT}-based \acs{MDTC} systems outperform
+the \ac{RDOT}-based \acs{MDTC} systems in the \acs{ROM} --- Y \acs{BD}-rate
+plane.
+However, due to the low storage requirements of the \acp{DTT}, more transforms
+can be fit for a given \acs{ROM} constraint, leading to more coding
+possibilities, and thus to more encoding complexity.
+Moreover, the \acp{DTT} have been implemented as separable transforms inside
+the encoder, therefore, there is room for improvement in terms of encoding
+complexity once they make use of fast algorithms.
 
 \begin{table}[tb]
 	\centering
@@ -5038,7 +5052,7 @@ encoding complexity.
 
 \begin{figure}[tb]
 	\centering
-	\input{./figures/vmdtc_dtt_iter_sym_rom_plot.tex}
+	\includegraphics{./figures/vmdtc_dtt_iter_sym_rom_plot.pdf}
 	\caption[\acs{DTT}-based \acs{MDDT} systems in the \acs{ROM} --- Y
 	\acs{BD}-rate plane]
 	{\acs{DTT}-based \acs{MDDT} systems in the \acs{ROM} --- Y
@@ -5048,13 +5062,12 @@ encoding complexity.
 
 \begin{figure}[tb]
 	\centering
-	% \includegraphics{./figures/vmdtc_dtt_iter_sym_cmplx_plot.pdf}
-	\input{./figures/vmdtc_dtt_iter_sym_cmplx_plot.tex}
+	\includegraphics{./figures/vmdtc_dtt_iter_sym_cmplx_plot.pdf}
 	\caption[\acs{DTT}-based \acs{MDDT} systems in the Complexity --- Y
 	\acs{BD}-rate plane]
 	{\acs{DTT}-based \acs{MDDT} systems in the Complexity --- Y
 	\acs{BD}-rate plane compared to other non-homogeneous \acs{MDTC} systems}
-	\label{fig:vmdtc_dtt_iter_sym_rom}
+	\label{fig:vmdtc_dtt_iter_sym_cmplx}
 \end{figure}
 
 \section{Conclusions}
