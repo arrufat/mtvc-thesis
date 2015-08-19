@@ -5062,6 +5062,47 @@ different trade-offs.
 \begin{table}[tb]
 	\centering
 	\small
+	\begin{tabularx}{0.95\linewidth}{X|r|rrrr||r|rrrr}
+		\multicolumn{1}{c}{} &
+		\multicolumn{5}{c||}{\acs{AI}} &
+		\multicolumn{5}{c}{\acs{RA}} \\
+		\cline{2-11}
+		\multicolumn{1}{c|}{} &
+		\multicolumn{1}{c|} {\acs{DTT}} &
+		\multicolumn{4}{c||} {\acs{MDTC}} &
+		\multicolumn{1}{c|} {\acs{DTT}} &
+		\multicolumn{4}{c} {\acs{MDTC}} \\
+		\multicolumn{1}{c|}{Class} &
+		\SI{4}{\kilo B} &
+		\SI{16}{\kilo B} &
+		\SI{32}{\kilo B} &
+		\SI{64}{\kilo B} &
+		\SI{128}{\kilo B} &
+		\SI{4}{\kilo B} &
+		\SI{16}{\kilo B} &
+		\SI{32}{\kilo B} &
+		\SI{64}{\kilo B} &
+		\SI{128}{\kilo B} \\
+		\hline\hline
+		Class A    & -1.55 & -2.07 & -2.45 & -2.73 & -3.11 & -0.67 & -0.98 & -1.19 & -1.33 & -1.54 \\
+		Class B    & -1.74 & -2.27 & -2.74 & -3.05 & -3.28 & -1.01 & -1.37 & -1.63 & -1.80 & -1.96 \\
+		Class C    & -2.02 & -3.00 & -3.36 & -3.73 & -3.85 & -1.23 & -1.94 & -2.09 & -2.31 & -2.45 \\
+		Class D    & -2.05 & -2.96 & -3.26 & -3.62 & -3.87 & -1.09 & -1.60 & -1.76 & -1.97 & -2.09 \\
+		Class E    & -1.84 & -2.66 & -3.19 & -3.65 & -3.90 & -2.41 & -3.46 & -3.95 & -4.46 & -4.86 \\
+		Class F    & -1.97 & -4.34 & -4.40 & -4.66 & -4.91 & -1.78 & -3.73 & -3.73 & -3.93 & -4.22 \\
+        Mean       & -1.86 & -2.87 & -3.21 & -3.55 & -3.79 & -1.31 & -2.09 & -2.29 & -2.53 & -2.73 \\
+        Median     & -1.98 & -3.03 & -3.40 & -3.75 & -3.95 & -1.28 & -2.09 & -2.24 & -2.44 & -2.62 \\
+        Best       & -2.92 & -5.16 & -5.29 & -5.60 & -5.92 & -2.68 & -5.11 & -5.14 & -5.43 & -5.74 \\
+        Worst      & -0.57 & -0.58 & -0.64 & -0.64 & -0.61 &  0.21 &  0.20 &  0.27 &  0.26 &  0.23 \\
+        Complexity &   229 &   372 &   481 &   761 &  1297 &   106 &  114  &   119 &   133 &   163 \\
+	\end{tabularx}
+	\caption{Average bit-rate savings (\%) for each \acs{HEVC} Class}
+	\label{tab:summary_final_systems_ai}
+\end{table}
+
+\begin{table}[tb]
+	\centering
+	\small
 	\begin{tabularx}{\textwidth}{c|X|r|rrrr}
 		\multicolumn{2}{c}{} &
 		\multicolumn{1}{c|}{\acs{DTT}} &
