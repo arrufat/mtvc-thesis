@@ -2697,8 +2697,12 @@ The transforms used in the \ac{MDDT} system are, in general, not describable
 with a mathematical formula in the same way the \ac{DCT} and the \ac{DST} are.
 As such, additional memory is required to store these transforms and make them
 available to the encoder and the decoder.
-Assuming each transform coefficient is quantised to one byte, the storage
-requirements for a non-separable transform for $N\times N$ \acp{TU} is:
+Each transform coefficient has been quantised to 1 byte by rounding it to the
+nearest integer.
+More clever quantification techniques could have been presented that would
+lead to lower degradations~\cite{britanak-06-dct-and-dst}.
+Taking all this into account, the storage requirements for a non-separable
+transform for $N\times N$ \acp{TU} is:
 \begin{equation}
 	\acs{ROM}_{\text{non-sep}} =
 	N^2 \cdot N^2 \cdot \frac{\SI{1}{\kilo B}}{\SI{1024}{B}} \cdot M
@@ -3260,6 +3264,8 @@ The storage requirements for the \ac{MDTC} systems are computed as explained
 in~\eqref{eqn:rom_nsep} and~\eqref{eqn:rom_sep}, with the exception that, for
 the \ac{MDTC} systems, the total \acs{ROM} is affected by the number of
 transforms in each \ac{TU} size.
+The quantisation of the transform coefficient has remained unchanged:
+each coefficient has been rounded to the closest integer.
 The low complexity \ac{MDTC} system has exactly the same \acs{ROM}
 requirements as the \ac{MDDT}, since only one transform is used per \ac{IPM}.
 The actual values of required \acs{ROM} are presented in
@@ -3759,8 +3765,9 @@ transforms also need to be stored.
 However, in this case, the storage requirements are divided by $N^2$, with $N$
 being the \ac{TU} size for which the transforms are conceived, since only one
 base vector is retained.
-Assuming each transform coefficient is quantised to 1 byte, as in the
-\ac{MDTC} systems, this leads to storage requirements of:
+Assuming each transform coefficient is quantised to 1 byte and rounded to the
+nearest integer, as in the \ac{MDDT} and \ac{MDTC} systems, this leads to
+storage requirements of:
 \begin{itemize}
 	\item $4\times4$ transforms: \SI{16}{B} per transform.
 	\item $8\times8$ transforms: \SI{64}{B} per transform.
