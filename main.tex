@@ -38,6 +38,7 @@
 \usepackage{multirow} % for columns that expland among multiple rows in tables
 \usepackage{tabularx} % for fixed width tables
 \usepackage{diagbox} % for diagonal separator in tables
+\usepackage{fancyhdr} % customise headers and footers
 
 % lines and paragraphs
 % \usepackage{setspace}
@@ -5302,14 +5303,100 @@ and performance trade-offs.
 \label{cha:conclusions_and_future_work}
 \addcontentsline{toc}{chapter}{Conclusions and future work}
 
+% remove chapter title from header from now on (unnumbered chapters)
+\pagestyle{empty}
+
 \section*{Thesis objectives}
 \label{sec:thesis_objectives}
 
-\section*{Summary}
-\label{sec:summary}
+The main objective of this thesis was to provide a set of tools and systematic
+methods of designing multiple transforms to be used in video coders.
+The methodology for learning adapted transforms presented in
+Chapters~\ref{cha:transform_coding},~\ref{cha:mddt} and~\ref{cha:mdtc} goes
+through the following steps:
+\begin{enumerate}
+	\item Select a set of learning sequences.
+	\item Encode the sequences with \ac{HEVC} using an \ac{AI} configuration.
+	\item Extract the residuals (difference between original and predicted
+		blocks) for the desired \ac{TU} sizes, grouped by \ac{IPM}.
+	\item Learn adapted set of transforms for each \ac{TU} size and \ac{IPM}
+		using the \acs{RDOT} metric from~\eqref{eqn:rdot_metric}:
+		\begin{enumerate}
+			\item \acs{MDDT} (Chapter~\ref{cha:mddt}).
+			\item \acs{MDTC} (Chapter~\ref{cha:mdtc}).
+			\item Incomplete transforms
+				(Chapter~\ref{cha:incomplete_transforms}).
+			\item \acp{DTT} (Chapter~\ref{cha:dtt}).
+		\end{enumerate}
+	\item Simplify the system storage requirements with methods proposed in
+		Chapter~\ref{cha:real_world_system}.
+\end{enumerate}
+
+By having a look at the steps described above, one can see that is fairly
+straightforward to extend the usage of multiple transforms for video coding
+the following ways:
+\begin{itemize}
+	\item Learning transforms for \ac{TU} sizes other than $4\times4$ and
+		$8\times8$, such as $16\times16$ and $32\times32$.
+	\item Learning transforms for inter prediction residuals.
+\end{itemize}
+
+\section*{Conclusions}
+\label{sec:conclusions}
 
 \section*{Perspectives for future work}
 \label{sec:perspectives_for_future_work}
+
+Although encouraging results have been proved when using multiple transforms
+for video coding, there is still room for improvement in many areas of the
+techniques proposed that have been carried out in this thesis.
+
+\subsection*{Learning set}
+\label{sub:learning_set}
+
+In Chapters~\ref{cha:mddt},~\ref{cha:mdtc}
+and~\ref{cha:incomplete_transforms}, the learning set that was used was
+included in the test set for historical reasons.
+Due to the promising results obtained in those Chapters, in order to make sure
+there was no over-learning, he learning set was replaced by a completely
+independent set of sequences in Chapter~\ref{cha:real_world_system}.
+The new learning set provides many more residuals from which to learn the
+transforms, but is less heterogeneous, since all frames come from the same
+sequence, which implies same frame rate, resolution, filters, etc.
+
+Chapter~\ref{cha:real_world_system} has shown that there can be a small impact
+due to transform over-learning to the learning set.
+However, choosing a more diversified learning set in terms of resolution,
+frame rate and contents, the over-learning effect impact can be lowered.
+The choice of \emph{Tears of Steel} short film was made to make a point:
+even with a learning set that is nothing like the test set, good results can
+be achieved.
+Moreover, due to the fact that the short film is publicly available in raw
+format, makes the results reproducible.
+
+\subsection*{Signalling}
+\label{sub:signalling}
+
+The current way of indicating the chosen transform to the decoder is via a
+very simplistic approach:
+during the \ac{RDO} loop, the encoder tests all transforms in each \ac{TU} and
+selects the one that provides the best trade-off in terms of rate-distortion.
+This approach has the advantage of being very flexible, allowing a \ac{PU}
+that has been split into four \acp{TU} to have different transforms.
+
+However, if transforms were signalled one level upwards, that is, at a \ac{PU}
+level instead of per \ac{TU}, transform signalling would be reduced by a
+factor of 4, although all transforms in a \ac{PU} would be identical.
+It seems reasonable to think that more bit-rate savings could be achieved by
+using this new signalling scheme.
+
+Additional a different signalling method could be implemented for transforms,
+instead of the simplistic fixed length code word.
+By signalling some transforms using less bits, they would be used more often
+than those with longer code words, leading to possible bit-rate savings.
+Nevertheless, for this approach to work properly, the signalling cost of the
+transform should be taken into account during the learning step in order to
+minimise the mismatch between the learning and the testing phases.
 
 \chapter*{Publications}
 \addcontentsline{toc}{chapter}{Publications}
