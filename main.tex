@@ -5026,7 +5026,7 @@ encoding complexity.
 
 Table~\ref{tab:non_hom_sym_dtt_mdtc} contains the iterated non-homogeneous
 DTT-based \acs{MDTC} systems for 1, 2 and 4 kB.
-A comparison with previouly designed systems (the symmetrical and
+A comparison with previously designed systems (the symmetrical and
 non-symmetrical versions of the iterated non-homogeneous \acs{MDTC} systems)
 are presented in figures~\ref{fig:vmdtc_dtt_iter_sym_rom}
 and~\ref{fig:vmdtc_dtt_iter_sym_cmplx} for \acs{ROM} and encoding complexity,
@@ -5149,6 +5149,14 @@ and performance trade-offs.
 	Finally, the encoding complexity of each system is also provided.}
 	\label{tab:summary_final_systems}
 \end{table}
+
+\begin{figure}[tb]
+	\centering
+	\input{./figures/summary_retained_systems_plot.tex}
+	% \includegraphics{./figures/summary_retained_systems_plot.pdf}
+	\caption{Bar chart graphically summarising the retained systems in \acs{AI}}
+	\label{fig:summary_retained_systems}
+\end{figure}
 
 \begin{table}[tb]
 	\centering
@@ -5316,11 +5324,16 @@ and performance trade-offs.
 
 The main objective of this thesis was to provide a set of tools and systematic
 methods of designing multiple transforms to be used in video coders.
-The methodology for learning adapted transforms presented in
-Chapters~\ref{cha:transform_coding},~\ref{cha:mddt} and~\ref{cha:mdtc} goes
-through the following steps:
+In order to design perfoming learning algorithms, the \ac{RDOT} metric, based
+on the $\ell_0$ norm was chosen.
+The appropriateness of this design method is justified in
+Chapter~\ref{cha:transform_coding}.
+
+The methodology for learning adapted transforms based on the \ac{RDOT} metric
+and presented in Chapters~\ref{cha:transform_coding},~\ref{cha:mddt}
+and~\ref{cha:mdtc} consists of the following steps:
 \begin{enumerate}
-	\item Select a set of learning sequences.
+	\item Select a representative set of learning sequences.
 	\item Encode the sequences with \ac{HEVC} using an \ac{AI} configuration.
 	\item Extract the residuals (difference between original and predicted
 		blocks) for the desired \ac{TU} sizes, grouped by \ac{IPM}.
@@ -5348,6 +5361,25 @@ the following ways:
 
 \section*{Conclusions}
 \label{sec:conclusions}
+
+Before presenting the conclusions of the work carried out in this thesis, in
+order to place the obtained results into context, the following points should
+be kept in mind:
+\begin{itemize}
+	\item Every 10 years, a new video codec is standardised halving the
+		bit-rate required for an equivalent perceived quality.
+	\item \acs{HEVC} provided 22\% of bit-rate savings with regards \acs{AVC}
+		in \acs{AI} coding configuration with about twice the complexity
+		[citation needed]
+	\item A video standard is the result of hard-work and negotations between
+		many engineers and companies during years.
+\end{itemize}
+
+With those points stated, the results in this thesis have proved the interest
+in using multiple transforms for video coding.
+Depending on the desired complexity and bit-rate savings trade-off, this
+technique alone is able to obtain bit-rate savings of 7\%, for non-separable
+transforms, and around 4\% for separable transforms.
 
 \section*{Perspectives for future work}
 \label{sec:perspectives_for_future_work}
@@ -5402,6 +5434,45 @@ than those with longer code words, leading to possible bit-rate savings.
 Nevertheless, for this approach to work properly, the signalling cost of the
 transform should be taken into account during the learning step in order to
 minimise the mismatch between the learning and the testing phases.
+
+\subsection*{Transform coefficients quantisation}
+\label{sub:transform_coefficients_quantisation}
+
+All the transforms implemented in this thesis are integer versions of
+orthogonal transforms, whose coefficients are floating point numbers.
+As previously explained, each transform coefficient has been scaled and
+rounded to the nearest integer fitting into 1 byte range.
+This method is far from being optimal, and thus a thorough study on how
+transform coefficients should be quantised could lead to some improvements in
+terms of rate-distortion.
+
+\subsection*{Coding complexity}
+\label{sub:coding_complexity}
+
+Throughout this work, all results have been obtained almost neglecting the
+encoding complexity.
+
+The presented solutions to reduce the storage requirements for \ac{MDTC}
+systems in Chapter~\ref{cha:real_world_system} have reduced the encoding
+complexity as a side effect:
+smartly reducing the number of transforms to test on the encoder side leads to
+modest decreases in the encoding time, since less coding alternatives are
+explored.
+
+However, no specific attention or effort has been put to reduce the encoding
+time of the proposed solutions.
+This is due to, in part, the fact that the encoder is not standardised, only
+the decoder, and focusing on the decoder time seemed more sensible to prove
+the viability of a new technique, such as the use of multiple transforms.
+
+Currently, the proposed \ac{MDTC} systems perform an exhaustive search to find
+the best combination of block size (\ac{PU} and \ac{TU}), \ac{IPM} and
+transform.
+A possible way of simplifying the approach would be not to test the complete
+set of transforms by implementing a fast decision mode.
+Another way would be to remove the transform selection from the \ac{RDOQ}
+and select it by computing directly the \ac{RDOT} metric value for all
+available transforms.
 
 \chapter*{Publications}
 \addcontentsline{toc}{chapter}{Publications}
