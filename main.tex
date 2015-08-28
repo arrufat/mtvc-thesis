@@ -5079,6 +5079,21 @@ complexity once they make use of fast algorithms.
 \section{Conclusions}
 \label{sec:dtt_conclusions}
 
+Chapter~\ref{cha:real_world_system} presented some ways of reducing the
+storage requirements by using a different number of transforms in each
+\ac{IPM} and by exploiting intra prediction residuals symmetries.
+
+This Chapter goes one step further on simplifying \ac{MDTC} systems:
+instead of using \ac{RDOT}-based \ac{MDTC} systems, \acp{RDOT} are replaced by
+\acp{DTT}.
+The coefficients of these trigonometric transforms can be deduced
+analytically, hence the only storage requirement is the scanning pattern.
+Although fast algorithms exist for \acp{DTT}, this Chapter has implemented
+them as regular separable transforms, since it was intended to be just a proof
+of concept.
+As a result, the encoding and decoding times presented in this Chapter do not
+represent the values that an actual implementation would have.
+
 \chapter{Systems summary}
 \label{cha:systems_summary}
 \chaptertoc
