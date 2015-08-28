@@ -5381,16 +5381,34 @@ the following ways:
 \section*{Conclusions}
 \label{sec:conclusions}
 
-Before presenting the conclusions of the work carried out in this thesis, in
-order to place the obtained results into context, the following points should
-be kept in mind:
+This thesis has proved that state-of-the-art video coding standards, such as
+\ac{HEVC}, can still be improved by designing multiple transforms adapted to
+video coding.
+
+The design of the transforms is carried out off-line through a learning.
+Despite the fact that off-line learning techniques might have known issues
+such as over learning, if the learning set is chosen wisely, the resulting
+transforms can be used of all sequences.
+This way, implementing hardware implementations of the transforms are
+possible, since transforms coefficients are known.
+
+Moreover, off-line learning has been possible thanks to the \ac{RDOT} design
+introduced in~\cite{sezer-08-sparse-orthonormal-transforms}.
+The \ac{RDOT} metric, based on the $\ell_0$ norm, has served as a good
+approximation of the one implemented in \ac{RDO} loop  from \ac{HEVC}.
+As a result, well performing transforms have been learnt without the need of
+encoding a single sequence.
+
+Before presenting the concluding on the results of the work carried out in
+this thesis, in order to place the obtained results into context, the
+following points should be kept in mind:
 \begin{itemize}
 	\item Every 10 years, a new video codec is standardised halving the
 		bit-rate required for an equivalent perceived quality.
 	\item \acs{HEVC} provided 23\% of bit-rate savings with regards \acs{AVC}
 		in \acs{AI} coding configuration with about twice the
 		complexity~\cite{JCTVC-M0329}.
-	\item A video standard is the result of hard-work and negotations between
+	\item A video standard is the result of hard-work and negotiations between
 		many engineers and companies during years.
 \end{itemize}
 
@@ -5399,6 +5417,13 @@ in using multiple transforms for video coding.
 Depending on the desired complexity and bit-rate savings trade-off, this
 technique alone is able to obtain bit-rate savings of 7\%, for non-separable
 transforms, and around 4\% for separable transforms.
+
+However, to obtain those levels of performance, first obtained in
+Chapter~\ref{cha:mdtc}, the encoding complexity and the storage requirements
+are too high for a commercial system.
+For this reason, Chapter~\ref{cha:real_world_system} provides different
+systematic ways to reduce the storage requirements for the \ac{MDTC} systems.
+As a side effect, the encoding complexity is also reduced.
 
 \section*{Perspectives for future work}
 \label{sec:perspectives_for_future_work}
