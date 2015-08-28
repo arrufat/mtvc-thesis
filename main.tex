@@ -5104,7 +5104,27 @@ savings.
 Some interesting systems in terms of bit-rate savings, encoding time, decoding
 time and storage requirements have been selected to cover different complexity
 and performance trade-offs.
+The retained systems have been designed using a non-homogeneous number of
+transforms per \ac{IPM} (\S\ref{sec:non_homogeneous_mdtc_systems}) and
+exploiting existing residual symmetries (\S\ref{sec:sym_mdtc}).
+Depending on the desired performance and complexity trade-off, the proposed
+systems are:
+\begin{itemize}
+	\item \SI{4}{\kilo B} \acs{DTT}-based \acs{MDTC}
+	\item \SI{16}{\kilo B} \acs{RDOT}-based \acs{MDTC}
+	\item \SI{32}{\kilo B} \acs{RDOT}-based \acs{MDTC}
+	\item \SI{64}{\kilo B} \acs{RDOT}-based \acs{MDTC}
+	\item \SI{128}{\kilo B} \acs{RDOT}-based \acs{MDTC}
+\end{itemize}
 
+Table~\ref{tab:summary_final_systems} contains a detailed summary of the
+bit-rate savings obtained with each system in both \acs{AI} and \acs{RA}
+coding configurations, as well as the encoding complexity.
+The actual results per sequence of the \ac{HEVC} test set for \acs{AI} and
+\acs{RA} are provided in tables~\ref{tab:final_systems_ai}
+and~\ref{tab:final_systems_ra}, respectively.
+Moreover, a graphical representation of the \acs{AI} bit-rate savings is shown
+in figure~\ref{fig:final_systems_ai}.
 
 \begin{table}[tb]
 	\centering
@@ -5116,9 +5136,9 @@ and performance trade-offs.
 		\cline{2-11}
 		\multicolumn{1}{c}{} &
 		\multicolumn{1}{c|} {\acs{DTT}} &
-		\multicolumn{4}{c||} {\acs{MDTC}} &
+		\multicolumn{4}{c||} {\acs{RDOT}} &
 		\multicolumn{1}{c|} {\acs{DTT}} &
-		\multicolumn{4}{c} {\acs{MDTC}} \\
+		\multicolumn{4}{c} {\acs{RDOT}} \\
 		\multicolumn{1}{c}{} &
 		\SI{4}{\kilo B} &
 		\SI{16}{\kilo B} &
@@ -5153,8 +5173,8 @@ and performance trade-offs.
 \begin{figure}[tb]
 	\centering
 	\includegraphics{./figures/summary_retained_systems_plot.pdf}
-	\caption{Bar chart graphically summarising the retained systems in \acs{AI}}
-	\label{fig:summary_retained_systems}
+	\caption{Bar chart graphically summarising the retained \acs{MDTC} systems in \acs{AI}}
+	\label{fig:final_systems_ai}
 \end{figure}
 
 \begin{table}[tb]
