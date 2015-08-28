@@ -4266,8 +4266,8 @@ combined $4\times4$ and $8\times8$ systems to be a bit lower than the sum of
 the corresponding separate systems.
 
 Moreover, presented iterated \ac{MDTC} systems only have the choice to use 1
-to 32 addtional transforms for $4\times4$ \acs{TU} and 1 to 128 for $8\times8$
-\acp{TU}.
+to 32 additional transforms for $4\times4$ \acs{TU} and 1 to 128 for
+$8\times8$ \acp{TU}.
 This is another source of suboptimality once the maximum number of transforms
 has been enabled in one \ac{IPM}, since the system lacks the choice to double
 the number of transforms for that \ac{IPM}.
@@ -4278,13 +4278,11 @@ each \ac{IPM}.
 Those \acp{IPM} that are most used in \ac{HEVC} (0, 1, 10 and 26) tend to make
 use of a higher number of transforms than the rest of them.
 
-% TODO
-\todo{Add performances of the 128 kB system}
 The best performing system, which is labelled as the \SI{128}{\kilo B} has
-been tested agains the \ac{HEVC} test set, in order to compare it to the high
+been tested against the \ac{HEVC} test set, in order to compare it to the high
 performance \ac{MDTC} system from Chapter~\ref{cha:mdtc}.
-This system has been learnt using the ToS sequence set, which is completely decorrelated
-from the \ac{HEVC} test set.
+This system has been learnt using the ToS sequence set, which is completely
+decorrelated from the \ac{HEVC} test set.
 
 \section{Symmetrical \acs{MDTC} systems}
 \label{sec:sym_mdtc}
@@ -4539,8 +4537,10 @@ As demonstrated before, for the full-symmetrical \ac{MDTC} systems, \acs{ROM}
 is decreased to around one third of its original value.
 Bit-rate savings also experiment some losses since symmetrical system are more
 constraint than non-symmetrical systems.
-The complexity remains constant for all of them, since the number of
-transforms par \ac{IPM} is the same in all systems.
+The encoding complexity for symmetrical system is equivalent to the one for
+non-symmetrical ones, detailed in tables~\ref{tab:homogeneous_mdtc_4}
+and~\ref{tab:homogeneous_mdtc_8}, since the number of transforms par \ac{IPM}
+remains unchanged.
 
 \begin{table}[tb]
 	\centering
@@ -4582,20 +4582,21 @@ transforms par \ac{IPM} is the same in all systems.
 		 16 & \SI{105.00}{\kilo B} & -2.48\% &  \SI{33.00}{\kilo B} & -2.22\% \\
 		 32 & \SI{210.00}{\kilo B} & -2.79\% &  \SI{66.00}{\kilo B} & -2.69\% \\
 		 64 & \SI{420.00}{\kilo B} & -3.07\% & \SI{132.00}{\kilo B} & -2.99\% \\
-		128 & \SI{840.00}{\kilo B} & -3.33\% & \SI{264.00}{\kilo B} &  \\
+		128 & \SI{840.00}{\kilo B} & -3.33\% & \SI{264.00}{\kilo B} & -3.25\% \\
 	\end{tabular}
 	\caption{Symmetries impact on $8\times8$ transforms on the 59seq test set}
 	\label{tab:sym8}
 \end{table}
 
 Table~\ref{tab:sym_mdtc} unveils impact of symmetries for the high performance
-\ac{MDTC} system on the 59seq test set.
+\ac{MDTC} system, defined in \S\ref{sub:mdtc_performances}, on the 59seq test
+set.
 As a reminder, the high performance \ac{MDTC} system uses 16 additional
 transforms for the $4\times4$ \acp{TU} and 32 for the $8\times8$ \acp{TU}.
-% TODO
-\todo{Understand what happens}
-For some reason, performances of the symmetrical system are higher than those
-of the non-symmetrical system.
+The symmetrical \acs{MDTC} system presents slightly better performances for
+the 59seq test set than the non-symmetrical one.
+Consequently, exploiting intra prediction residual symmetries can be
+considered to have no impact on bit-rate savings, either.
 
 \begin{table}[tb]
 	\centering
@@ -4639,9 +4640,13 @@ Inside Classes B and C, which were used as the learning set for the separable
 high performance \ac{MDTC} system, sequences seem to be especially subject
 to over-learning, which around difference of one point in some cases.
 
-Other than that, the independently designed \SI{128}{\kilo B} behaves
-correctly, bearing in mind that the learning set used to design the transforms
-features only one resolution, frame rate and come from the same short movie.
+Other than that, the independently designed \SI{128}{\kilo B} \ac{MDTC} system
+behaves correctly, bearing in mind that the learning set used to design the
+transforms features only one resolution, frame rate and coming from the same
+short film.
+
+Moreover, the \SI{128}{\kilo B} \ac{MDTC} system needs around half the
+\acs{ROM} requirements than the high performance \ac{MDTC} system.
 
 \begin{table}[tb]
 	\centering
