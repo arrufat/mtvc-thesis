@@ -131,8 +131,6 @@
 \cleardoublepage
 
 \mainmatter
-\part{General introduction}
-\label{prt:general_introduction}
 
 \addcontentsline{toc}{section}{\protect\numberline{}Context}
 \chapter*{Context}
@@ -182,7 +180,9 @@ transforms admissible in a standardisation context, which implies having
 reasonable impact on standardisation aspects, such as complexity, especially
 on the decoder side.
 
-\bigskip
+\section*{Thesis contributions}
+\addcontentsline{toc}{section}{\protect\numberline{}Thesis contributions}
+\label{sec:thesis_contributions}
 
 Work carried out in this thesis contains several objectives:
 \begin{itemize}
@@ -288,8 +288,6 @@ complexity.
 For realistic systems, tangible gains can be obtained at reasonable encoder
 complexity.
 
-\part{State of the art}
-\label{prt:state_of_the_art}
 \acresetall % reset all acronym expansions
 
 \chapter{Video coding fundamentals}
@@ -2103,8 +2101,8 @@ scenario to find out their performances in video coding.
 \section{Introduction}
 \label{sec:mddt_introduction}
 
-Previous Chapter has introduced two different approaches on designing adapted
-transforms.
+The previous Chapter has introduced two different approaches on designing
+adapted transforms.
 In order to test their performances for video coding, a technique called
 \ac{MDDT} will be used in this section.
 The principle of the \ac{MDDT} lies on using an adapted transform learnt
@@ -2764,9 +2762,6 @@ The following chapter presents an improvement on \ac{MDDT}, which will allow
 transforms to be more adapted to intra prediction residuals and provide new
 coding alternatives to \ac{HEVC}.
 
-\part{Contributions}
-\label{prt:contributions}
-
 \chapter{The mode-dependent transform competition system}
 \label{cha:mdtc}
 \chaptertoc
@@ -3265,11 +3260,14 @@ in~\eqref{eqn:rom_nsep} and~\eqref{eqn:rom_sep}, with the exception that, for
 the \ac{MDTC} systems, the total \acs{ROM} is affected by the number of
 transforms in each \ac{TU} size.
 The quantisation of the transform coefficient has remained unchanged:
-each coefficient has been rounded to the closest integer.
+each coefficient has been rounded to the closest integer, quantised to 1 byte.
 The low complexity \ac{MDTC} system has exactly the same \acs{ROM}
 requirements as the \ac{MDDT}, since only one transform is used per \ac{IPM}.
+On the other hand, the high performance \ac{MDTC} system has storage
+requirements largely superior: more than \SI{4.5}{\mega B} are required for the
+non-separable version.
 The actual values of required \acs{ROM} are presented in
-table~\ref{tab:mdtc_summary}.
+table~\ref{tab:mdtc_summary} and in figure~\ref{fig:four_way_mdtc_comparison}.
 
 \begin{figure}[tb]
 	\def\scale{0.26}
@@ -3817,23 +3815,19 @@ while trying to have minimum impact on its bit-rate savings.
 In order to conceive a low complexity system that makes use of transform
 competition, some concessions are required.
 This Chapter proposes simplifications to the areas leading to significant
-complexity increases in \ac{MDTC} systems, especially:
-\begin{itemize}
-	\item Storage requirements.
-	\item Decoding time.
-	\item Encoding time.
-\end{itemize}
+complexity increases in \ac{MDTC} systems, especially, to the storage
+requirements.
 
 The first approach for simplification is to suppress the use of non-separable
 transforms, even though they provide notably better performances than their
 separable counterparts, as seen in Chapters~\ref{cha:mddt} and~\ref{cha:mdtc}.
 Non-separable transforms can definitively not accommodate a system with
 neither storage restrictions, nor coding complexity limitations.
-For this reason, this Chapter will only cover systems composed by separable
+For this reason, this Chapter will only consider systems composed by separable
 transforms.
 As a consequence of ditching non-separable transforms, the average bit-rate
 savings achievable on the \ac{HEVC} using separable high performance \ac{MDTC}
-systems are around 4.1\%, which will be used as a reference when comparing the
+systems are around 4\%, which will be used as a reference when comparing the
 simplified systems.
 
 \section{Source of the learning set}
@@ -3885,13 +3879,14 @@ performed in the \ac{AI} configuration.
 
 From now on, the different sets will be referred to as:
 \begin{itemize}
-	\item BC: classes B and C from the \ac{HEVC} test set.
+	\item BC: classes B and C from the \ac{HEVC} test set, used as the
+		learning set in previous Chapters.
 	\item ADEF: classes A, D, E and F from the \ac{HEVC} test set.
 	\item 59seq: 5 frames of 59 heterogeneous sequences for testing.
 	\item ToS: the \emph{Tears of Steel} short film.
 \end{itemize}
 
-\subsection{Performances of the new data sets}
+\subsection{Impact on the coding performances over the learning sets}
 \label{sub:rw_performances_new_data_set}
 
 This section presents the results of different \ac{MDTC} systems learnt with
@@ -3907,6 +3902,9 @@ have been tested and the value after the pipe to the learning set that has
 been used.
 Moreover, since the ToS learning set provides more residuals, more transforms
 have been learnt for the $8\times8$ blocks.
+Bit-rate savings are present for all transform configurations from both
+residuals sources on all test sets, and they increase coherently with the
+number of transforms.
 
 \begin{table}[tb]
 	\centering
@@ -3948,17 +3946,18 @@ have been learnt for the $8\times8$ blocks.
 	\label{tab:residuals_independence_8}
 \end{table}
 
-For illustrative purposes, figure~\ref{fig:residuals_independence} shows the
-results from tables~\ref{tab:residuals_independence_4}
+To better understand the impact of the learning set on the different test set,
+figure~\ref{fig:residuals_independence} shows the results from
+tables~\ref{tab:residuals_independence_4}
 and~\ref{tab:residuals_independence_8}.
 For the $4\times4$ case, there are few differences in performances between
 both learning sets, BC and ToS.
 Only classes ADEF (in blue) present some preference for the Tears of
 Steel data set.
 For the $8\times8$ case, there seems to be some over-learning for the
-sequences used during the learning phase (BC and ToS), since they has notable
-differences in performances when using their own learning set.
-The rest of test set presents similar performance levels for both learning
+sequences used during the learning phase (BC and ToS), since they present
+notable differences in performances when using their own learning set.
+The rest of test set present similar performance levels for both learning
 sets.
 
 \begin{figure}[tb]
@@ -3976,14 +3975,15 @@ sets.
 This comes as a reassuring fact, since the residuals from ToS have less
 variability in terms of camera filters, frame rate, resolution and have even
 synthetic images, whereas the rest of sequences are composed exclusively of
-natural images.
+natural images coming from different sources at different frame rates and
+resolutions.
 
 Table~\ref{tab:cross_bdrate_learn} illustrates the impact of changing the
 learning set to design the high performance \ac{MDTC} system: losses of 0.4
 and 0.2 are observed for the \ac{AI} and \ac{RA} configurations, respectively
 for the \ac{HEVC} test set, which means that the new reference \ac{MDTC}
 system has bit-rate savings of 3.65\% on the \ac{HEVC} test set, instead of
-4.1\%.
+4.10\%.
 
 \begin{table}[tb]
 	\centering
@@ -4025,17 +4025,17 @@ The \ac{MDTC} system was presented as an evolved \ac{MDDT} system, in which,
 instead of only one transform, a fixed number of transforms was provided
 inside each \ac{IPM}.
 However, it is a well-known fact that \ac{HEVC} does not use all \acp{IPM}
-equally.
-For this reason, \ac{HEVC} favours the signalling of the \acp{IPM} that are
-most often used during the encoding of a sequence in terms of signalling.
+equally:
+\ac{HEVC} favours the signalling of the \acp{IPM} that are most often used
+during the encoding of a sequence in terms of signalling.
 This technique is named \acp{MPM} and it is explained in detail
 in~\cite{wien-15-hevc}.
 As a result, it might be counter productive to add a high number of transforms
 to those modes that are hardly chosen, making them even less cost efficient,
 since the extra transforms need to be signalled, as well.
 Using a different number of transforms inside each \ac{IPM} does not require
-extra signalling, since the encoder will know how many transforms are
-available for each \ac{IPM}.
+any additional signalling to the transform index, since the encoder will know
+how many transforms are available for each \ac{IPM}.
 
 Consequently, next Section proposes a systematic way of generating \ac{MDTC}
 systems taking into account the storage requirements.
@@ -4044,12 +4044,18 @@ the number of transforms, and the number of transforms to the coding
 complexity, by limiting the amount of \acs{ROM}, the system might also
 simplified in terms of encoding time.
 
-\subsection{Non-homogeneous \acs{MDTC} design and performances}
-\label{sub:non_homogeneous_mdtc_performances}
-
 This section proposes a gradient descent algorithm to generate \ac{MDTC} with
 \acs{ROM} constraints and a non-homogeneous number of transforms in its
 \acp{IPM}.
+
+\subsection{Preparation phase}
+\label{sub:rw_preparation_phase}
+
+In order to build a system with a different number of transforms in each
+\ac{IPM}, additional transforms for $4\times4$ and $8\times8$ \acp{TU} have
+been learnt.
+For the $4\times4$ \ac{TU}, up to 32 additional transforms are available, and
+up to 128 for $8\times8$ \ac{TU}.
 
 As a reference point, tables~\ref{tab:homogeneous_mdtc_4}
 and~\ref{tab:homogeneous_mdtc_8} contain different separable homogeneous
@@ -4060,6 +4066,9 @@ meaning separable transforms, and X and Y represent the number of additional
 transforms added in each \ac{IPM} for the respective transform size.
 Each system has information about its \acs{ROM} requirements, the bit-rate
 savings and the encoding complexity with regards \ac{HEVC}.
+Consistent bit-rate savings are observed when increasing the number of
+transforms for both \ac{TU} sizes, even if the $4\times4$ transform
+performances seem to saturate with 16 and 32 additional transforms.
 
 \begin{table}[tb]
 	\centering
@@ -4096,6 +4105,9 @@ savings and the encoding complexity with regards \ac{HEVC}.
 	ToS on 59seq}
 	\label{tab:homogeneous_mdtc_8}
 \end{table}
+
+\subsection{Determination of number of transforms per \acs{IPM}}
+\label{sub:rw_determination_number_transforms_ipm}
 
 In order to improve current homogeneous \ac{MDTC} systems,
 algorithm~\ref{alg:vmdtc_iter} presents a systematic way of designing a
@@ -4160,6 +4172,9 @@ Figure~\ref{fig:vmdtc_iter} displays different \ac{MDTC} systems on the
 The mains systems that are compared are the homogeneous and non-homogeneous
 (issued from the iterative algorithm) systems using $4\times4$ and $8\times8$
 transforms.
+Each point in this figure requires encoding 59 sequences at 4 \acp{QP}
+per \ac{IPM}, leading to a total of \num{8260} encodings.
+
 Systems that combine both transform sizes are also presented in the figure.
 Iterative non-homogeneous \ac{MDTC} systems have more flexibility in terms of
 the number of transforms enabled in each \ac{IPM} and, therefore, in their
@@ -4172,7 +4187,7 @@ Red lines in figure~\ref{fig:vmdtc_iter} represent the $4\times4$ only
 Homogeneous $4\times4$ systems start saturating in terms of bit-rate savings
 after adding 8 additional transform in each \ac{IPM}.
 The non-homogeneous $4\times4$ system is able to achieve the same performances
-as the homogeneous system, with less \ac{ROM}.
+as the homogeneous system, with less \acs{ROM}.
 
 The interest of the non-homogeneous systems is clearer when using $8\times8$
 transforms (blue lines), since the storage requirements are higher.
@@ -4193,7 +4208,7 @@ requirements and, consequently, to the number of transforms.
 Finally, some interesting configurations have been built combining $4\times4$
 and $8\times8$ systems, in both homogeneous and non-homogeneous ways,
 represented using green lines.
-Again, for these systems, especially on low \ac{ROM} configurations, a factor
+Again, for these systems, especially on low \acs{ROM} configurations, a factor
 of two in terms of storage requirements is observed.
 Each one of the points from the learnt systems has two coordinates: \acs{ROM}
 and \ac{BD}-rate.
@@ -4213,15 +4228,20 @@ the best combinations for a given \acs{ROM}.
 \begin{figure}[tb]
 	\centering
 	\includegraphics{./figures/vmdtc_systems_combined_plot.pdf}
-	\caption{All possible combinations of $4\times4$ and $8\times8$
-	non-homogeneous systems}
+	\caption[All possible combinations of $4\times4$ and $8\times8$
+	non-homogeneous systems]
+	{All possible combinations of $4\times4$ and $8\times8$
+	non-homogeneous systems.
+	The lower boundary shows the hypothetical bit-rate savings that could be
+	obtained if there were no penalty when combining independently designed
+	$4\times4$ and $8\times8$ transforms.}
 	\label{fig:vmdtc_combined}
 \end{figure}
 
-The selected \ac{ROM} requirements for the systems presented in
+The selected \acs{ROM} requirements for the systems presented in
 figure~\ref{fig:vmdtc_iter} are detailed in
 table~\ref{tab:non_hom_mdtc}.
-Information about their actual \ac{ROM} requirements, \ac{BD}-rate and
+Information about their actual \acs{ROM} requirements, \ac{BD}-rate and
 encoding complexty are provided.
 There are some remarkable points, such as the system at \SI{8}{\kilo B},
 which can achiver bit-rate savings of over 2\% with a complexity slightly
@@ -4278,18 +4298,15 @@ each \ac{IPM}.
 Those \acp{IPM} that are most used in \ac{HEVC} (0, 1, 10 and 26) tend to make
 use of a higher number of transforms than the rest of them.
 
-The best performing system, which is labelled as the \SI{128}{\kilo B} has
-been tested against the \ac{HEVC} test set, in order to compare it to the high
-performance \ac{MDTC} system from Chapter~\ref{cha:mdtc}.
-This system has been learnt using the ToS sequence set, which is completely
-decorrelated from the \ac{HEVC} test set.
-
 \section{Symmetrical \acs{MDTC} systems}
 \label{sec:sym_mdtc}
 
-A disadvantage of the \ac{MDTC} system presented in Chapter~\ref{cha:mdtc} was
+A drawback of the \ac{MDTC} system presented in Chapter~\ref{cha:mdtc} was
 the large number of different transforms that needed to be stored, since each
 \ac{IPM} used its own different set.
+
+\subsection{Further simplifications taking advantage of \acs{IPM} symmetries}
+\label{sub:further_simplifications_taking_advantage_of_ipm_symmetries}
 
 In order to limit the \acs{ROM} impact of the transforms, one could take
 advantage of geometrical symmetries existing amongst \ac{HEVC} \acp{IPM}:
@@ -4490,7 +4507,10 @@ table~\ref{tab:relations_ipm_residuals}.
 	\centering
 	\small
 	\begin{tabular}{c|ccc}
-	\bf IPM     & ${(\cdot)}^T$ & \bf Mirror & \bf ${(\cdot)}^T$ + mirror\\[1ex]
+	\bf IPM &
+	${(\cdot)}^T$ &
+	\bf $\curvearrowupdown(\cdot)$ &
+	\bf $\curvearrowupdown{(\cdot)}^T$ \\[1ex]
 	\hline\hline
 	\bf 0       & ---           & ---    & ---    \\
 	\bf 1       & ---           & ---    & ---    \\
@@ -4521,11 +4541,13 @@ depending on the \ac{IPM}:
 		\A \, \x^T & 26 \le \ac{IPM} \le 34 \\
 	\end{cases}
 \end{equation}
-Where $\A$ is a transform from the basic \ac{IPM} set, $\x$ is the current
+Where $\A$ is a transform designed for the basic IPM set, $\x$ is the current
 residual and $\curvearrowupdown$ represents the horizontal mirroring operator
 (top-bottom).
-Mirroring and transposing operations are only different ways of re-arranging
-the residual pixels in a consistent way, which come at no computational cost.
+Mirroring and transposing operations are used to make residuals compatible
+with the transforms learnt for the basic IPM set.
+These operations are only different ways of re-arranging the residual pixels
+in a consistent way, which come at no computational cost.
 
 \subsection{Symmetries performances on video coding}
 \label{sub:symmetries_performances_on_video_coding}
@@ -4625,116 +4647,8 @@ considered to have no impact on bit-rate savings, either.
 	\label{fig:vmdtc_sym}
 \end{figure}
 
-\subsection{Performances on the \acs{HEVC} test set}
-\label{sub:performances_on_the_hevc_test_set}
-
-In order to check the results against a know test set,
-table~\ref{tab:bd_rate_mdtc_128kb} contains the bit-rate savings of the best
-performing system, labelled as \SI{128}{\kilo B}, compared to the separable
-high performance \ac{MDTC} system from Chapter~\ref{cha:mdtc}.
-
-The \SI{128}{\kilo B} \ac{MDTC} system provides lower bit-rate savings for
-almost all sequences, although differences are usually small, especially
-inside the Class A.
-Inside Classes B and C, which were used as the learning set for the separable
-high performance \ac{MDTC} system, sequences seem to be especially subject
-to over-learning, which around difference of one point in some cases.
-
-Other than that, the independently designed \SI{128}{\kilo B} \ac{MDTC} system
-behaves correctly, bearing in mind that the learning set used to design the
-transforms features only one resolution, frame rate and coming from the same
-short film.
-
-Moreover, the \SI{128}{\kilo B} \ac{MDTC} system needs around half the
-\acs{ROM} requirements than the high performance \ac{MDTC} system.
-
-\begin{table}[tb]
-	\centering
-	\small
-	\begin{tabularx}{0.8\textwidth}{c|X|rr|rr}
-		\multicolumn{2}{c}{} &
-		\multicolumn{2}{c|}{\SI{128}{\kilo B} \acs{MDTC}} &
-		\multicolumn{2}{c}{Sep. High Perf.} \\
-		\cline{2-6}
-		\multicolumn{1}{c}{} & {Sequence} &
-		\multicolumn{1}{c}{\acs{AI}} & \multicolumn{1}{c|}{\acs{RA}} &
-		\multicolumn{1}{c}{\acs{AI}} & \multicolumn{1}{c}{\acs{RA}} \\
-		\hline
-		\hline
-		\multirow{5}{2cm}{\centering Class A ($2560\times1600$)}
-		& NebutaFestival         & -0.99 & -0.08 & -1.06 & -0.08 \\
-		& PeopleOnStreet         & -4.24 & -1.58 & -4.21 & -1.49 \\
-		& SteamLocomotiveTrain   & -0.51 &  0.29 & -0.60 &  0.23 \\
-		& Traffic                & -4.59 & -3.83 & -4.52 & -3.73 \\
-		\cline{2-6} &
-		Average                  & -2.58 & -1.30 & -2.60 & -1.27 \\
-		\hline
-		\hline
-		\multirow{6}{2cm}{\centering Class B ($1920\times1080$)}
-		& BasketballDrive        & -2.88 & -0.69 & -3.22 & -0.72 \\
-		& BQTerrace              & -3.84 & -2.27 & -4.70 & -2.65 \\
-		& Cactus                 & -4.43 & -2.66 & -5.22 & -3.08 \\
-		& Kimono1                & -1.17 & -0.83 & -1.10 & -0.79 \\
-		& ParkScene              & -4.80 & -3.39 & -4.61 & -3.22 \\
-		\cline{2-6} &
-		Average                  & -3.42 & -2.51 & -3.77 & -2.09 \\
-		\hline
-		\hline
-		\multirow{5}{2cm}{\centering Class C ($832\times480$)}
-		& BasketballDrill        & -3.53 & -2.39 & -5.92 & -3.53 \\
-		& BQMall                 & -4.60 & -2.65 & -4.79 & -2.79 \\
-		& PartyScene             & -4.65 & -3.02 & -4.88 & -3.21 \\
-		& RaceHorses             & -3.54 & -1.44 & -4.25 & -1.59 \\
-		\cline{2-6} &
-		Average                  & -4.08 & -2.37 & -4.96 & -2.78 \\
-		\hline
-		\hline
-		\multirow{5}{2cm}{\centering Class D ($416\times240$)}
-		& BasketballPass         & -3.62 & -1.62 & -3.91 & -1.82 \\
-		& BlowingBubbles         & -3.85 & -2.36 & -4.30 & -2.69 \\
-		& BQSquare               & -4.07 & -2.47 & -4.58 & -2.74 \\
-		& RaceHorses             & -3.25 & -1.43 & -3.85 & -1.54 \\
-		\cline{2-6} &
-		Average                  & -3.70 & -1.97 & -4.16 & -2.20 \\
-		\hline
-		\hline
-		\multirow{4}{2cm}{\centering Class E ($1280\times720$)}
-		& FourPeople             & -4.18 & -4.77 & -4.56 & -5.18 \\
-		& Johnny                 & -3.09 & -3.92 & -3.34 & -4.16 \\
-		& KristenAndSara         & -3.37 & -4.19 & -3.82 & -4.47 \\
-		\cline{2-6} &
-		Average                  & -3.55 & -4.29 & -3.91 & -4.60 \\
-		\hline
-		\hline
-		\multirow{5}{2cm}{\centering Class F (various resolutions)}
-		& BasketDrillText        & -4.19 & -2.68 & -6.24 & -3.71 \\
-		& ChinaSpeed             & -3.86 & -2.39 & -4.25 & -2.71 \\
-		& SlideEditing           & -4.48 & -4.87 & -4.80 & -5.05 \\
-		& SlideShow              & -4.98 & -5.00 & -5.66 & -5.61 \\
-		\cline{2-6} &
-		Average                  & -4.38 & -3.74 & -5.24 & -4.27 \\
-		\hline
-		\hline
-		All sequences &
-		Overall                  & -3.61 & -2.51 & -4.10 & -2.76 \\
-	\end{tabularx}
-	\caption{Y \acs{BD}-rate (\%) for \SI{128}{\kilo B} and separable high
-	performance \acs{MDTC} systems}
-	\label{tab:bd_rate_mdtc_128kb}
-\end{table}
-
-
-\begin{figure}[tb]
-	\centering
-	\includegraphics{./figures/mdtc_128kb_plot.pdf}
-	\caption{Comparison of \SI{128}{\kilo B} and separable high performace
-	\acs{MDTC} systems}
-	\label{fig:mdtc_128kb}
-\end{figure}
-
-
-\section{Non-homogeneous symmetrical \acs{MDTC} systems}
-\label{sec:non_homogeneous_symmetrical_mdtc}
+\section{Performances of non-homogeneous symmetrical \acs{MDTC} systems}
+\label{sec:performances_non_homogeneous_symmetrical_mdtc}
 
 The previous two Sections have explored new methods to reduce the storage
 requirements of \ac{MDTC} systems.
@@ -4776,7 +4690,11 @@ plane to ensure that systems remain comparable in terms of encoding times.
 \begin{figure}[tb]
 	\centering
 	\includegraphics{./figures/vmdtc_iter_sym_cmplx_plot.pdf}
-	\caption{Symmetry impact on non-homogeneous \acs{MDTC} systems}
+	\caption[Symmetry impact on the coding complexity and \acs{BD}-rate of
+	non-homogeneous \acs{MDTC} systems]
+	{Symmetry impact on the coding complexity and \acs{BD}-rate of
+	non-homogeneous \acs{MDTC} systems.
+	For systems below 1000\%, symmetrical systems offer better trade-offs}
 	\label{fig:vmdtc_iter_sym_complx}
 \end{figure}
 
@@ -4827,11 +4745,11 @@ non-homogeneous \ac{MDTC} systems for the same bit-rate savings.
 The second technique exploited existing symmetries to be able to re-use
 transforms from different \ac{IPM} by pre-processing residuals with
 transposition an mirroring operations.
-This technique allows saving around two thirds of the \ac{ROM} presented for
+This technique allows saving around two thirds of the \acs{ROM} presented for
 the \ac{MDTC} systems from Chapter~\ref{cha:mdtc}.
 
 Finally, the techniques summarised above have been combined to provide better
-\ac{ROM} --- Y \ac{BD}-rate trade-offs.
+\acs{ROM} --- Y \ac{BD}-rate trade-offs.
 When combining both techniques, storage requirements can be reduced up to 75\%
 of the values presented in Chapter~\ref{cha:mdtc} for some systems.
 
@@ -4877,13 +4795,13 @@ non-homogeneous systems, since there are less transforms to test in each
 However, even if the main motivation for the approaches above is to reduce
 the complexity of the high performance \ac{MDTC} system presented in
 Chapter~\ref{cha:mdtc}, the improvements have only been significant in the
-\ac{ROM} axis, leaving the encoder and decoder complexities decreases to be a
+\acs{ROM} axis, leaving the encoder and decoder complexities decreases to be a
 side effect of the storage limitation.
 
 This Chapter proposes an approach that takes into account the storage
 requirements, the encoding complexity and the decoding complexity.
 
-\section{The discrete trigonometric transform family}
+\section{The discrete trigonometric transform family (\acsp{DCT} \& \acsp{DST})}
 \label{sec:the_dtt_family}
 
 Chapter~\ref{cha:mddt} has highlighted the appropriateness of the \ac{RDOT}
@@ -4924,6 +4842,9 @@ For \acp{RDOT}, the required memory is $3N^2$ bytes per transform, as the
 horizontal and vertical transform are stored along with a dedicated scanning
 pattern.
 
+% TODO
+\todo{table with ROM and complexity compared to regular separable transforms}
+
 Nevertheless, these transforms are a restrained subset of the orthogonal
 transform class, as such, their performance in compression is expected to be
 lower than that of \acp{RDOT}.
@@ -4934,8 +4855,8 @@ to fast algorithms.
 This Chapter explores if the \acs{ROM} and complexity reductions balance the
 expected losses in bit-rate savings regarding separable \acp{RDOT}.
 
-\section{\acs{DTT}-based \acs{MDTC} systems}
-\label{sec:dtt_based_mdtc_systems}
+\section{Design of \acs{DTT}-based \acs{MDTC} systems}
+\label{sec:design_dtt_based_mdtc_systems}
 
 The \ac{RDOT} metric, defined in \S\ref{eqn:rdot_metric} has proved to be a
 good way of designing transforms that offers a balance between the distortion
@@ -5020,6 +4941,9 @@ requirements.
 Furthermore, the classification algorithm becomes even less optimal when the
 number of the additional transforms increases.
 
+\section{Performances of \acs{DTT}-based \acs{MDTC} systems}
+\label{sec:performances_dtt_based_mdtc_systems}
+
 In the previous Chapter, two approaches were proposed to improve the existing
 separable \ac{MDTC} systems in the \acs{ROM} --- Y \ac{BD}-rate plane:
 using a different number of transforms per \ac{IPM} and exploiting prediction
@@ -5099,13 +5023,16 @@ of concept.
 As a result, the encoding and decoding times presented in this Chapter do not
 represent the values that an actual implementation would have.
 
-\chapter{Systems summary}
-\label{cha:systems_summary}
+\chapter{Proposed \acs{MDTC} configurations}
+\label{cha:proposed_mdtc_configurations}
 \chaptertoc
 
 \section{Motivation}
 \label{sec:summary_motivation}
 
+Numerous alternative \acs{MDTC} systems have been designed and presented
+throughout this thesis.
+As a result, this chapter presents...
 This final Chapter has been created with one goal in mind:
 to ease the choice amongst all explored systems in this thesis responding to
 different trade-offs.
@@ -5177,16 +5104,19 @@ in figure~\ref{fig:final_systems_ai}.
 		Class D    & -2.05 & -2.96 & -3.26 & -3.62 & -3.87 & -1.09 & -1.60 & -1.76 & -1.97 & -2.09 \\
 		Class E    & -1.84 & -2.66 & -3.19 & -3.65 & -3.90 & -2.41 & -3.46 & -3.95 & -4.46 & -4.86 \\
 		Class F    & -1.97 & -4.34 & -4.40 & -4.66 & -4.91 & -1.78 & -3.73 & -3.73 & -3.93 & -4.22 \\
-        Mean       & -1.86 & -2.87 & -3.21 & -3.55 & -3.79 & -1.31 & -2.09 & -2.29 & -2.53 & -2.73 \\
-        Median     & -1.98 & -3.03 & -3.40 & -3.75 & -3.95 & -1.28 & -2.09 & -2.24 & -2.44 & -2.62 \\
-        Best       & -2.92 & -5.16 & -5.29 & -5.60 & -5.92 & -2.68 & -5.11 & -5.14 & -5.43 & -5.74 \\
+		\hline
         Worst      & -0.57 & -0.58 & -0.64 & -0.64 & -0.61 &  0.21 &  0.20 &  0.27 &  0.26 &  0.23 \\
+        Best       & -2.92 & -5.16 & -5.29 & -5.60 & -5.92 & -2.68 & -5.11 & -5.14 & -5.43 & -5.74 \\
+        Median     & -1.98 & -3.03 & -3.40 & -3.75 & -3.95 & -1.28 & -2.09 & -2.24 & -2.44 & -2.62 \\
+		\hline
         Complexity &   229 &   372 &   481 &   761 &  1297 &   106 &  114  &   119 &   133 &   163 \\
+		\hline
+        Mean       & -1.86 & -2.87 & -3.21 & -3.55 & -3.79 & -1.31 & -2.09 & -2.29 & -2.53 & -2.73 \\
 	\end{tabularx}
 	\caption[Summary of the retained \acs{MDTC} systems referred to \ac{HEVC}]
 	{Summary of the retained \acs{MDTC} systems referred to \ac{HEVC} (\%).
 	Y \acs{BD}-rates are presented per Class, as well as their mean, median, best and worst values.
-	Finally, the encoding complexity of each system is also provided.}
+	The encoding complexity of each system is also provided.}
 	\label{tab:summary_final_systems}
 \end{table}
 
