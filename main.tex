@@ -1106,7 +1106,7 @@ Image and video coding deal with image blocks, which are two-dimensional
 signals and, consequently, use transforms able two process those
 signals.
 
-The naive approach to work with those signals is to use non-separable
+The naïve approach to work with those signals is to use non-separable
 transforms.
 These transforms take the residual pixels from a block and reshape it to a
 single-dimensional signal. For instance, a $4\times4$ block of pixels becomes a
@@ -1469,7 +1469,7 @@ signal in the transform domain.
 The \ac{KLT}, under certain assumptions, provides optimal bit allocation and
 signal decorrelation.
 
-Sezer proposes an alternative kind of transforms to minimise the trade-off
+Sezer proposes an alternative kind of transform to minimise the trade-off
 between the distortion and the rate from~\eqref{eqn:lagrangian_rdo} by taking
 into account the sparsity of the output signal in their
 design~\cite{sezer-11-phd,sezer-08-sparse-orthonormal-transforms}.
@@ -4829,8 +4829,8 @@ interest in video coding applications:
 The interest of the \acp{DTT} in this Chapter is motivated by the existing
 fast algorithms for transform implementation, which are notably less complex
 than a full matrix multiplication required by generic block transforms.
-The algorithmic complexity for a \ac{DTT} is in the order of $N\log_2(N)$,
-where $N$ stands for the transform
+The algorithmic complexity for a mono-dimensional \ac{DTT} is in the order of
+$N\log_2(N)$ instead of the naïve $N^2$, where $N$ stands for the transform
 size~\cite{puschel-08-algorithms-dct-dst}.
 
 Since \acp{DTT} coefficients can be computed using and analytical formula,
@@ -4842,12 +4842,26 @@ For \acp{RDOT}, the required memory is $3N^2$ bytes per transform, as the
 horizontal and vertical transform are stored along with a dedicated scanning
 pattern.
 
-% TODO
-\todo{table with ROM and complexity compared to regular separable transforms}
-
 Nevertheless, these transforms are a restrained subset of the orthogonal
 transform class, as such, their performance in compression is expected to be
 lower than that of \acp{RDOT}.
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabular}{c|cc|cc}
+		\multirow{2}{2cm}{\diagbox{Size}{Type}} &
+		\multicolumn{2}{c|}{Reg.\ sep.\ transf.} &
+		\multicolumn{2}{c}{\acs{DTT}} \\
+		& Operations & \acs{ROM} & Operations & \acs{ROM} \\
+		\hline
+		$4\times4$ &  16 &  48 B &  8 & 16 B \\
+		$8\times8$ & 128 & 192 B & 24 & 64 B \\
+	\end{tabular}
+	\caption{Comparison of \acs{ROM} and complexity between \acsp{DTT} and
+	regular separable transforms}
+	\label{tab:compariston_dtt_separable}
+\end{table}
 
 To sum up, \acp{DTT} are able to divide the storage requirements of separable
 transforms by a factor of 3 and present a lower computational complexity due
@@ -5005,6 +5019,90 @@ complexity once they make use of fast algorithms.
 	\label{fig:vmdtc_dtt_iter_sym_cmplx}
 \end{figure}
 
+The system that offers the best performances in terms of \acs{BD}-rate,
+labelled as 4 kB, presents a particular usage of transforms from the \ac{DTT}
+family.
+Tables~\ref{tab:dtt_combinations_4} and~\ref{tab:dtt_combinations_8} detail
+the different transform combinations used for $4\times4$ and $8\times8$
+\ac{TU} sizes, respectively, as well as the number of occurrences.
+
+For $4\times4$ blocks, the 4 kB system uses a total of 38 additional
+transforms (including all \acp{IPM}), which are combinations of different
+\acp{DTT}.
+Despite having 256 \acp{DTT} from where to choose, only 15 different
+transforms are used with different levels of repetition.
+The most used transforms are the \acs{DCT}\_IV-\acs{DCT}\_IV,
+\acs{DCT}\_III-\acs{DCT}\_IV, the \acs{DST}\_VII-\acs{DCT}\_IV and the
+\acs{DCT}\_V-\acs{DCT}\_IV.
+% TODO
+\todo{Add bases for these transforms and try to justify the choice}
+
+For $8\times8$ blocks, the system uses 55 additional transforms, of which only
+20 are unique.
+From these unique transforms, there are two combinations that stand out: the
+DST\_VII-\acs{DST}-VII and the \acs{DST}\_VII-DCT\_V.
+Moreover, the \acs{DST}\_VII and the \acs{DCT}\_V appear frequently in the
+other combinations.
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabular}{cc|c}
+		Horizontal transform & Vertical transform & Number \\
+		\hline\hline
+		DCT\_I   & DCT\_III & 1 \\
+		DCT\_II  & DCT\_IV  & 1 \\
+		DCT\_III & DCT\_III & 1 \\
+		DCT\_III & DCT\_IV  & 6 \\
+		DCT\_IV  & DCT\_IV  & 8 \\
+		DCT\_V   & DCT\_III & 1 \\
+		DCT\_V   & DCT\_IV  & 5 \\
+		DCT\_V   & DST\_II  & 1 \\
+		DST\_I   & DCT\_IV  & 1 \\
+		DST\_V   & DST\_V   & 1 \\
+		DST\_VII & DCT\_III & 1 \\
+		DST\_VII & DCT\_IV  & 6 \\
+		DST\_VII & DCT\_V   & 2 \\
+		DST\_VII & DST\_II  & 2 \\
+		DST\_VII & DST\_V   & 1 \\
+	\end{tabular}
+	\caption{The different $4\times4$ transform combinations for the 4
+	kB \acs{DTT}-based \acs{MDTC} system}
+	\label{tab:dtt_combinations_4}
+\end{table}
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabular}{cc|c}
+		Horizontal transform & Vertical transform & Number \\
+		\hline\hline
+		DCT\_II  & DCT\_IV  & 1  \\
+		DCT\_II  & DST\_V   & 1  \\
+		DCT\_III & DCT\_IV  & 2  \\
+		DCT\_III & DST\_VII & 1  \\
+		DCT\_IV  & DCT\_IV  & 2  \\
+		DCT\_V   & DCT\_III & 2  \\
+		DCT\_V   & DCT\_VII & 1  \\
+		DCT\_V   & DST\_II  & 1  \\
+		DCT\_V   & DST\_III & 1  \\
+		DCT\_V   & DST\_IV  & 2  \\
+		DCT\_V   & DST\_V   & 1  \\
+		DCT\_V   & DST\_VI  & 1  \\
+		DST\_I   & DCT\_IV  & 1  \\
+		DST\_VII & DCT\_III & 3  \\
+		DST\_VII & DCT\_IV  & 4  \\
+		DST\_VII & DCT\_V   & 10 \\
+		DST\_VII & DST\_I   & 4  \\
+		DST\_VII & DST\_III & 1  \\
+		DST\_VII & DST\_IV  & 3  \\
+		DST\_VII & DST\_VII & 12 \\
+	\end{tabular}
+	\caption{The different $8\times8$ transform combinations for the 4
+	kB \acs{DTT}-based \acs{MDTC} system}
+	\label{tab:dtt_combinations_8}
+\end{table}
+
 \section{Conclusions}
 \label{sec:dtt_conclusions}
 
@@ -5032,12 +5130,11 @@ represent the values that an actual implementation would have.
 
 Numerous alternative \acs{MDTC} systems have been designed and presented
 throughout this thesis.
-As a result, this chapter presents...
-This final Chapter has been created with one goal in mind:
-to ease the choice amongst all explored systems in this thesis responding to
-different trade-offs.
+As a result, this chapter presents several interesting alternatives that offer
+different levels of trade-offs between the provided \acs{BD}-rate and the
+added complexity.
 
-In Chapters~\ref{cha:real_world_system} and~\ref{cha:dtt} several systems have
+In Chapters~\ref{cha:real_world_system} and~\ref{cha:dtt} various systems have
 been designed with complete independence from the \ac{HEVC} test set proposed
 in the \ac{CTC}~\cite{bossen-12-common-test-conditions}.
 So as to provide results in well specified test conditions with a known set of
