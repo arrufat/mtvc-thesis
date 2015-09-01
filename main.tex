@@ -4829,8 +4829,8 @@ interest in video coding applications:
 The interest of the \acp{DTT} in this Chapter is motivated by the existing
 fast algorithms for transform implementation, which are notably less complex
 than a full matrix multiplication required by generic block transforms.
-The algorithmic complexity for a mono-dimensional \ac{DTT} is in the order of
-$N\log_2(N)$ instead of the naïve $N^2$, where $N$ stands for the transform
+The algorithmic complexity for a \ac{DTT} is in the order of $N^2\log_2(N)$
+instead of the naïve $N^3$, where $N$ stands for the transform
 size~\cite{puschel-08-algorithms-dct-dst}.
 
 Since \acp{DTT} coefficients can be computed using and analytical formula,
@@ -4855,8 +4855,8 @@ lower than that of \acp{RDOT}.
 		\multicolumn{2}{c}{\acs{DTT}} \\
 		& Operations & \acs{ROM} & Operations & \acs{ROM} \\
 		\hline
-		$4\times4$ &  16 &  48 B &  8 & 16 B \\
-		$8\times8$ & 128 & 192 B & 24 & 64 B \\
+		$4\times4$ &  128 &  48 B &  64 & 16 B \\
+		$8\times8$ & 1024 & 192 B & 192 & 64 B \\
 	\end{tabular}
 	\caption{Comparison of \acs{ROM} and complexity between \acsp{DTT} and
 	regular separable transforms}
