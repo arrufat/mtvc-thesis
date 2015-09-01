@@ -4939,6 +4939,18 @@ that need to be tested is:
 	\right) =
 	\num{174792640}\approx\num{1.75e8}
 \end{align}
+instead of:
+\begin{align}
+	\left(
+	\begin{matrix}
+		2048 \\
+		4
+	\end{matrix}
+	\right) =
+	\num{730862190080}\approx\num{7.31e11}
+\end{align}
+Meaning that the number of possible combinations has been reduced more than a
+factor of 4000.
 
 In order to find a good combination of transforms and permutations, all
 combinations are put into a list, which is iterated through.
