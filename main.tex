@@ -2266,8 +2266,9 @@ in~\cite{JCTVC-C108, JCTVC-D033}.
 It was used together with the \ac{DCT} as combinations of horizontal and
 vertical transforms, depending on the \ac{IPM}.
 However, it was not adopted in the \ac{TMuC} until the design of a fast
-algorithm of the \ac{DST}, which introduced almost no increase in the
-decoding time with regards to the \ac{DCT}.
+algorithm of the \ac{DST}~\cite{saxena-13-fast-transforms-intra-coding}, which
+introduced almost no increase in the decoding time with regards to the
+\ac{DCT}.
 It was only then when it fully replaced the \ac{MDDT}~\cite{JCTVC-D048,
 JCTVC-E125, JCTVC-F283, JCTVC-G108}.
 Finally, after many \acp{CE}, cross-checks between companies and
@@ -4875,6 +4876,162 @@ to fast algorithms.
 This Chapter explores if the \acs{ROM} and complexity reductions balance the
 expected losses in bit-rate savings regarding separable \acp{RDOT}.
 
+Transforms in the \ac{DTT} family present strong relations amongst them and
+their inverse transforms~\cite{reznik-13-relationship-dct-dst,
+saxena-13-fast-transforms-intra-coding}, detailed in
+table~\ref{tab:dtt_relationships}.
+These relations will be taken into account when designing
+\acs{DTT}-based \acs{MDTC} systems in the next Section.
+
+\begin{align}
+	% DCT-I
+	{\left[C_{N}^{I} \right]}_{n,k} & =
+	\sqrt{\frac{2}{N-1}}\epsilon_n\epsilon_k\cos\left(\frac{\pi\,n\,k}{N-1}\right)
+	\quad
+	\epsilon_n,\epsilon_k =
+	\begin{cases}
+		\frac{1}{2} & n, k = 0 \\
+		\frac{1}{\sqrt{2}} & n, k = N-1 \\
+		1 & \text{otherwise}
+	\end{cases}
+	\\ % DCT-II
+	{\left[C_{N}^{II} \right]}_{n,k} & =
+	\sqrt{\frac{2}{N}}\epsilon_k\cos\left(\frac{\pi(2n+1)k}{2N}\right)
+	\quad
+	\epsilon_k =
+	\begin{cases}
+		\frac{1}{\sqrt{2}} & k = 0 \\
+		1 & \text{otherwise}
+	\end{cases}
+	\\ % DCT-III
+	{\left[C_{N}^{III} \right]}_{n,k} & =
+	\sqrt{\frac{2}{N}}\epsilon_n\cos\left(\frac{\pi(2k+1)n}{2N}\right)
+	\quad
+	\epsilon_n =
+	\begin{cases}
+		\frac{1}{\sqrt{2}} & n = 0 \\
+		1 & \text{otherwise}
+	\end{cases}
+	\\ % DCT-IV
+	{\left[C_{N}^{IV} \right]}_{n,k} & =
+	\sqrt{\frac{2}{N}}\cos\left(\frac{\pi(n+1)(k+1)}{4N}\right)
+	\\ % DCT-V
+	{\left[C_{N}^{V} \right]}_{n,k} & =
+	\frac{2}{\sqrt{2(N-1)+1}}\epsilon_n\epsilon_k\cos\left(\frac{\pi(2n+1)k}{2N}\right)
+	\quad
+	\epsilon_n,\epsilon_k =
+	\begin{cases}
+		\frac{1}{\sqrt{2}} & n, k = 0 \\
+		1 & \text{otherwise}
+	\end{cases}
+	\\ % DCT-VI
+	{\left[C_{N}^{VI} \right]}_{n,k} & =
+	\frac{2}{\sqrt{2(N-1)}}\epsilon_n\epsilon_k\cos\left(\frac{\pi(2n+1)k}{2N-1}\right)
+	\quad
+	\epsilon_n =
+	\begin{cases}
+		\frac{1}{\sqrt{2}} & n = N-1 \\
+		1 & \text{otherwise}
+	\end{cases}
+	\quad
+	\epsilon_k =
+	\begin{cases}
+		\frac{1}{\sqrt{2}} & k = 0 \\
+		1 & \text{otherwise}
+	\end{cases}
+	\\ % DCT-VII
+	{\left[C_{N}^{VII} \right]}_{n,k} & =
+	\frac{2}{\sqrt{2(N-1)}}\epsilon_n\epsilon_k\cos\left(\frac{\pi(2k+1)n}{2N-1}\right)
+	\quad
+	\epsilon_k =
+	\begin{cases}
+		\frac{1}{\sqrt{2}} & k = N-1 \\
+		1 & \text{otherwise}
+	\end{cases}
+	\quad
+	\epsilon_n =
+	\begin{cases}
+		\frac{1}{\sqrt{2}} & n = 0 \\
+		1 & \text{otherwise}
+	\end{cases}
+	\\ % DCT-VIII
+	{\left[C_{N}^{VIII} \right]}_{n,k} & =
+	\frac{2}{\sqrt{2(N-1)}}\cos\left(\frac{\pi(n+1)n}{4N-2}\right)
+	\\ % DST-I
+	{\left[S_{N}^{I} \right]}_{n,k} & =
+	\sqrt{\frac{2}{2N+1}}\sin\left(\frac{\pi(n+1)(k+1)}{N+1}\right)
+	\\ % DST-II
+	{\left[S_{N}^{II} \right]}_{n,k} & =
+	\sqrt{\frac{2}{2N}}\epsilon_k\sin\left(\frac{\pi(2n+1)(k+1)}{2N}\right)
+	\quad
+	\epsilon_k =
+	\begin{cases}
+		\frac{1}{\sqrt{2}} & k = N-1 \\
+		1 & \text{otherwise}
+	\end{cases}
+	\\ % DST-III
+	{\left[S_{N}^{III} \right]}_{n,k} & =
+	\sqrt{\frac{2}{2N}}\epsilon_n\sin\left(\frac{\pi(2n+1)(k+1)}{2N}\right)
+	\quad
+	\epsilon_n =
+	\begin{cases}
+		\frac{1}{\sqrt{2}} & n = N-1 \\
+		1 & \text{otherwise}
+	\end{cases}
+	\\ % DST-IV
+	{\left[S_{N}^{IV} \right]}_{n,k} & =
+	\frac{2}{\sqrt{2N}}\sin\left(\frac{\pi(2n+1)(2k+1)}{4N}\right)
+	\\ % DST-V
+	{\left[S_{N}^{V} \right]}_{n,k} & =
+	\frac{2}{\sqrt{2N+1}}\sin\left(\frac{2\pi(n+1)(k+1)}{2N+1}\right)
+	\\ % DST-VI
+	{\left[S_{N}^{VI} \right]}_{n,k} & =
+	\frac{2}{\sqrt{2N+1}}\sin\left(\frac{\pi(2n+1)(k+1)}{2N+1}\right)
+	\\ % DST-VII
+	{\left[S_{N}^{VII} \right]}_{n,k} & =
+	\frac{2}{\sqrt{2N+1}}\sin\left(\frac{\pi(2k+1)(n+1)}{2N+1}\right)
+	\\ % DST-VIII
+	{\left[S_{N}^{VIII} \right]}_{n,k} & =
+	\frac{2}{\sqrt{2(N-1)+1}}\epsilon_n\epsilon_k\sin\left(\frac{\pi(2n+1)(k+1)}{2((2N-1)+1)}\right)
+	\quad
+	\epsilon_n,\epsilon_k =
+	\begin{cases}
+		\frac{1}{\sqrt{2}} & n, k = M-1 \\
+		1 & \text{otherwise}
+	\end{cases}
+\end{align}
+Where $n,k=0,\dots,N-1$.
+
+
+
+\begin{table}[tb]
+	\centering
+	\caption{Relationships between the different members of the \acs{DTT}
+	family}
+	\label{tab:dtt_relationships}
+	\begin{tabular}{l|l}
+		Direct transform & Inverse transform \\
+		\hline\hline
+		DCT-I    & DCT-I    \\
+		DCT-II   & DCT-III  \\
+		DCT-III  & DCT-II   \\
+		DCT-IV   & DCT-IV   \\
+		DCT-V    & DCT-V    \\
+		DCT-VI   & DCT-VII  \\
+		DCT-VII  & DCT-VI   \\
+		DCT-VIII & DCT-VIII \\
+		\hline
+		DST-I    & DST-I    \\
+		DST-II   & DST-III  \\
+		DST-III  & DST-II   \\
+		DST-IV   & DST-IV   \\
+		DST-V    & IDST-V   \\
+		DST-VI   & DST-VII  \\
+		DST-VII  & DST-VI   \\
+		DST-VIII & DST-VIII \\
+	\end{tabular}
+\end{table}
+
 \section{Design of \acs{DTT}-based \acs{MDTC} systems}
 \label{sec:design_dtt_based_mdtc_systems}
 
@@ -5049,9 +5206,9 @@ transforms (including all \acp{IPM}), which are combinations of different
 \acp{DTT}.
 Despite having 256 \acp{DTT} from where to choose, only 15 different
 transforms are used with different levels of repetition.
-The most used transforms are the \acs{DCT}\_IV-\acs{DCT}\_IV,
-\acs{DCT}\_III-\acs{DCT}\_IV, the \acs{DST}\_VII-\acs{DCT}\_IV and the
-\acs{DCT}\_V-\acs{DCT}\_IV.
+The most used transforms are the \acs{DCT}-IV--\acs{DCT}-IV,
+\acs{DCT}-III--\acs{DCT}-IV, the \acs{DST}-VII--\acs{DCT}-IV and the
+\acs{DCT}-V--\acs{DCT}-IV.
 % TODO
 \todo{Add bases for these transforms and try to justify the choice}
 
@@ -5068,21 +5225,21 @@ other combinations.
 	\begin{tabular}{cc|c}
 		Horizontal transform & Vertical transform & Number \\
 		\hline\hline
-		DCT\_I   & DCT\_III & 1 \\
-		DCT\_II  & DCT\_IV  & 1 \\
-		DCT\_III & DCT\_III & 1 \\
-		DCT\_III & DCT\_IV  & 6 \\
-		DCT\_IV  & DCT\_IV  & 8 \\
-		DCT\_V   & DCT\_III & 1 \\
-		DCT\_V   & DCT\_IV  & 5 \\
-		DCT\_V   & DST\_II  & 1 \\
-		DST\_I   & DCT\_IV  & 1 \\
-		DST\_V   & DST\_V   & 1 \\
-		DST\_VII & DCT\_III & 1 \\
-		DST\_VII & DCT\_IV  & 6 \\
-		DST\_VII & DCT\_V   & 2 \\
-		DST\_VII & DST\_II  & 2 \\
-		DST\_VII & DST\_V   & 1 \\
+		DCT-I   & DCT-III & 1 \\
+		DCT-II  & DCT-IV  & 1 \\
+		DCT-III & DCT-III & 1 \\
+		DCT-III & DCT-IV  & 6 \\
+		DCT-IV  & DCT-IV  & 8 \\
+		DCT-V   & DCT-III & 1 \\
+		DCT-V   & DCT-IV  & 5 \\
+		DCT-V   & DST-II  & 1 \\
+		DST-I   & DCT-IV  & 1 \\
+		DST-V   & DST-V   & 1 \\
+		DST-VII & DCT-III & 1 \\
+		DST-VII & DCT-IV  & 6 \\
+		DST-VII & DCT-V   & 2 \\
+		DST-VII & DST-II  & 2 \\
+		DST-VII & DST-V   & 1 \\
 	\end{tabular}
 	\caption{The different $4\times4$ transform combinations for the 4
 	kB \acs{DTT}-based \acs{MDTC} system}
@@ -5095,26 +5252,26 @@ other combinations.
 	\begin{tabular}{cc|c}
 		Horizontal transform & Vertical transform & Number \\
 		\hline\hline
-		DCT\_II  & DCT\_IV  & 1  \\
-		DCT\_II  & DST\_V   & 1  \\
-		DCT\_III & DCT\_IV  & 2  \\
-		DCT\_III & DST\_VII & 1  \\
-		DCT\_IV  & DCT\_IV  & 2  \\
-		DCT\_V   & DCT\_III & 2  \\
-		DCT\_V   & DCT\_VII & 1  \\
-		DCT\_V   & DST\_II  & 1  \\
-		DCT\_V   & DST\_III & 1  \\
-		DCT\_V   & DST\_IV  & 2  \\
-		DCT\_V   & DST\_V   & 1  \\
-		DCT\_V   & DST\_VI  & 1  \\
-		DST\_I   & DCT\_IV  & 1  \\
-		DST\_VII & DCT\_III & 3  \\
-		DST\_VII & DCT\_IV  & 4  \\
-		DST\_VII & DCT\_V   & 10 \\
-		DST\_VII & DST\_I   & 4  \\
-		DST\_VII & DST\_III & 1  \\
-		DST\_VII & DST\_IV  & 3  \\
-		DST\_VII & DST\_VII & 12 \\
+		DCT-II  & DCT-IV  & 1  \\
+		DCT-II  & DST-V   & 1  \\
+		DCT-III & DCT-IV  & 2  \\
+		DCT-III & DST-VII & 1  \\
+		DCT-IV  & DCT-IV  & 2  \\
+		DCT-V   & DCT-III & 2  \\
+		DCT-V   & DCT-VII & 1  \\
+		DCT-V   & DST-II  & 1  \\
+		DCT-V   & DST-III & 1  \\
+		DCT-V   & DST-IV  & 2  \\
+		DCT-V   & DST-V   & 1  \\
+		DCT-V   & DST-VI  & 1  \\
+		DST-I   & DCT-IV  & 1  \\
+		DST-VII & DCT-III & 3  \\
+		DST-VII & DCT-IV  & 4  \\
+		DST-VII & DCT-V   & 10 \\
+		DST-VII & DST-I   & 4  \\
+		DST-VII & DST-III & 1  \\
+		DST-VII & DST-IV  & 3  \\
+		DST-VII & DST-VII & 12 \\
 	\end{tabular}
 	\caption{The different $8\times8$ transform combinations for the 4
 	kB \acs{DTT}-based \acs{MDTC} system}
