@@ -14,6 +14,7 @@ default: build
 
 build: $(SOURCE)
 	$(TEXC) $(TEXFLAGS) $(SOURCE)
+	@echo
 
 figures: $(figures)
 	$(foreach fig,$(FIGURES), $(MKFIGURES) $(fig);)
