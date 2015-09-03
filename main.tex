@@ -230,9 +230,9 @@ Accordingly, this thesis has been organised into the following Chapters:
 		Therefore, the following Chapters of the thesis contain approaches on
 		how the \ac{MDTC} system can be simplified whilst keeping bit-rate
 		improvements.
-	\item explores a way of simplifying non-separable \ac{MDTC} systems, which
-		provided the most promising results in the previous Chapter, by using
-		incomplete transforms.
+	\item explores a new way of simplifying non-separable \ac{MDTC} systems,
+		which provided the most promising results in the previous Chapter, by
+		using incomplete transforms.
 
 		Incomplete transforms are low complexity transforms where, instead of
 		using all the basis vectors for the non-separable transforms, only the
@@ -296,17 +296,16 @@ transforms for video coding.
 \section{Introduction to video coding}
 \label{sec:introduction_to_video_coding}
 
-\subsection{The need of video coding}
-\label{sub:the_need_of_video_coding}
+\subsection{The need for video coding}
+\label{sub:the_need_for_video_coding}
 
-The purpose of video coding is to compress video files, which consist of
-a sequence of images that, at some point, will be either transmitted or
-stored.
+The purpose of video coding is to compress video streams, which consist of a
+sequence of images that, at some point, will be either transmitted or stored.
 Compressing means reducing the quantity of information so that the amount of
-bits required to store that information is low enough to enable the use of
-applications requiring the transmission of the video.
+bits required to represent that information is low enough to enable the use of
+video-based applications.
 
-For instance, a film in \ac{HD} format ($1920 \times 1080$)
+For instance, a video in \ac{HD} format ($1920 \times 1080$)
 at a frame rate of 25 images per second and 8 bits to represent each one
 of the \ac{RGB} channels, requires:
 \[
@@ -319,44 +318,44 @@ of the \ac{RGB} channels, requires:
 Through this simple example, it is obvious that video coding is compulsory
 to stream or even store video files:
 the amount of bit-rate reported is this example is beyond the limit of current
-computing architectures.
+computing and service architectures and networks.
 
 Depending on the target quality, it is common to have compression rates
 ranging from 10 to 1000.
 For content providers, being able to reduce the size of the content they
-broadcast implies increasing the number of contents they can store, as
-well as the number of subscribers they can reach using the same
-resources for storage and network capacity.
+deliver the opportunity to increase the number of contents they can store, as
+well as the number of subscribers they can reach using the same resources for
+storage and network capacity.
 
 In 2013, two thirds of the \ac{IP} traffic was due to video
-streaming, and this trend is only going to increase, reaching up to 84\%
-of the \acs{IP} traffic by 2018~\cite{cisco-13-vni-forecast}.
-Such statistics highlight the need of continuing the research on
-new video coding techniques.
+streaming, and this trend is foreseen to continuously increase, reaching up to
+84\% of the \acs{IP} traffic by 2018~\cite{cisco-13-vni-forecast}.
+Such forecasts highlight the need to continue the research on new video
+compression techniques.
 
 As a network operator, being also an \ac{ISP} that delivers video services
-such as live video streaming or video on demand services, Orange is,
-therefore, particularly motivated by compression schemes allowing better
-trade-offs between the quantity of videos served and the amount of clients
+such as live TV streaming or video on demand services, Orange is, therefore,
+particularly motivated by compression schemes allowing better trade-offs
+between the quantity and quality of videos served and the amount of clients
 reachable.
 
 \section{The video coding system}
 \label{sec:the_video_coding_system}
 
-The video coding system describes a work flow to work with video
+The video coding system describes a work-flow to work with video
 sequences.
-It is composed of several stages, starting with the video acquisition at
+It is composed of several stages, starting from the video acquisition at
 the source and ending at the video display.
-A good understanding of each part is crucial to be able to take the
+A good understanding of each part is crucial in order to be able to take the
 proper decisions when delivering a video coding solution.
 
 This section presents a scheme containing the most important concepts
-used in state-of-the-art video coders.
+used in state-of-the-art video codecs.
 
 Figure~\ref{fig:video_coding_system} describes how a complete video coding
 system can be organised as a block diagram.
-The composing blocks of the video system are explained more in details in the
-following subsections.
+The composing blocks are explained more in details in the following
+subsections.
 
 \begin{figure}[tb]
 	\centering
@@ -370,23 +369,16 @@ following subsections.
 
 After the digital video has been captured at the source, which may be of many
 different sorts such as natural scenes or synthetic computer-generated
-content, it has to be processed in order to be encoded.
+content, it may need to be processed in order to be encoded.
 Usually, the pre-processing stage can include some filtering, scaling and
-colour space conversions on the raw video sequence.
+colour space conversions on the raw (uncompressed) video sequence.
 
 \subsubsection{Up-sampling and down-sampling}
 \label{ssub:up-sampling_and_down-sampling}
 
-The video captured at source might not have the desired resolution.
+The video captured at the source might not have the desired resolution.
 Consequently, scaling operations should be applied at source so as to assure
 the minimum impact to quality.
-
-Since the scaling is usually performed by linear filters, the input data must
-be also linear.
-For example, in order to rescale a R'G'B' file, it must be first converted to
-the linear domain using the gamma transfer function of the capture device to
-RGB.
-Then, the filter can be applied and converted back to R'G'B'.
 
 The sequences used in this thesis are centred around the \ac{HD} formats (720p
 and 1080p).
@@ -407,46 +399,27 @@ A colour space is an abstract mathematical model specified by primary colours
 that is used to describe a representation of a picture, usually as a set of
 tristimulus values.
 
-To understand why there are many of them, a new concept must be introduced:
-the gamut.
-Each colour space and device can be characterised by their gamut, that is, the
-subset of colours they can represent.
-Depending on the colour space or device used, the gamut will cover different
-portions of the colours the \ac{HVS} can perceive.
-
 Colour space conversions are used to change the colour representation of the
-content to better fit the \ac{HVS}.
-The raw video data captured at source is usually in \ac{RGB} format, corrected
-by the transfer function of the camera ($\gamma$), hence denoted R'G'B'.
+content to better fit the \ac{HVS} and to decorrelate the components for
+better coding efficiency.
 
-For historical reasons, in order to be backwards compatible with black
-and white displays, the raw video file is converted to another colour
-space that separates the light information (luma) from the colour
-information (chroma), typically referred to as the YUV colour space
-family~\cite{poynton-95-color-space}.
-Moreover, due to the fact that the \ac{HVS} is more sensible to light
-variations than to colour, this family of colour spaces supports down-sampling
-the chroma channels without any major perceptual degradation.
+Since the \ac{HVS} is more sensible to light variations than to colour
+variations, the grey scale version of the image, which contains the light
+information (luma) is separated from the colour information
+(chroma).\cite{poynton-95-color-space}.
+This way the colour information can be sub-sampled without any visual
+degradation.
 
-A typical colour space is the Y'CbCr, used in most MPEG coding standards.
-The Y' component is the luma, computed with a weighted sum of gamma corrected
-RGB components.
-Cb and Cr are the difference between gamma-corrected red or blue and the luma,
-respectively.
-In a more intuitive way, Y' can be seen as a grey scale picture, where no
-information of colour is present.
-The other components represent what needs to be added to the grey scale
-picture to obtain the colour picture.
-
-In this thesis, the improvements on video coding quality will focus the luma
-component, since it plays a more important role in perceptual quality and
-represents an important part in the final bitstream.
+As a result, in this thesis, the improvements on video coding quality will
+focus the luma component, since it plays a more important role in perceptual
+quality and represents an important part in the final bitstream.
 
 \subsection{Encoding}
 \label{sub:encoding}
 
 This stage converts the pre-processed raw video sequence into a coded video
-stream to ease the storage and transmission.
+stream (called bitstream) to ease the storage and transmission.
+It is, at this point, where the bit-rate reduction takes place.
 The amount of bits required to represent the video stream is reduced by
 limiting the number of redundancies in the video and by introducing some
 approximations such as the quantisation step, while limiting the impact of
@@ -461,9 +434,9 @@ in \S\ref{sec:the_hybrid_video_coding_scheme}.
 
 The transmission stage represents the channel through which the encoded
 bitstream is made available to the decoder.
-The channel can be physical storage, such as optical discs, or any other
+The channel can be a physical storage, such as optical discs, or any other
 transmission channel: wired/wireless connections with 1 to 1 (unicast) or 1 to
-many (multicast) transmissions.
+many (multicast/broadcast) transmissions.
 
 Depending on the application and the channel, the behaviour of the encoder may
 vary:
@@ -473,6 +446,7 @@ For example, the \ac{RA} technique, i.e.\ the ability to access to a
 particular piece of a video sequence, needs to be guaranteed for some
 applications like TV, while the latency needs to be kept as low as possible to
 enable services like surveillance or video conferencing systems.
+This latency limitations need to be taken into account at the encoding stage.
 
 \subsection{Decoding}
 \label{sub:decoding}
@@ -480,18 +454,18 @@ enable services like surveillance or video conferencing systems.
 As the stream is received by the decoder, it is buffered and used to
 reconstruct the encoded data into the appropriate format, as signalled
 by the encoder.
-Video coding standards define two things: the bitstream conveying the
+\acs{MPEG} and \acs{ITU} video coding standards define two key points:
+the bitstream conveying the
 compressed video data and the bit-exact decoding process, aiming at recovering
 the sequence of images.
-The \acs{MPEG} (the \acs{JCT} 1/SC 29/WG 11 of the
-\acs{ISO}/\acs{IEC} organisation) and \acs{VCEG} (the question 6 of
-\acs{ITU-T} Study Group 16) are the main organisation specifying video
-compression algorithms.
+\acs{MPEG} (the \acs{JCT} 1/SC 29/WG 11 of the \acs{ISO}/\acs{IEC}
+organisation) and \acs{VCEG} (the question 6 of ITU-T SG 16) are the main
+organisations specifying video compression algorithms.
 The most recent video coding specifications include the \acs{MPEG}-4 part 10
 standard / \acs{ITU} H.264 recommendation, known as \ac{AVC}~\cite{itu-03-avc}
 or \acs{MPEG}-H Part 2 / \acs{ITU} H.265, called
 \acf{HEVC}~\cite{itu-13-hevc}.
-The encoder must comply to this specification by generating a decodable
+The encoder must comply with this specification by generating a decodable
 stream, there is no other normative behaviour defined by a video compression
 standard.
 
@@ -512,11 +486,11 @@ space and to the display format.
 \index{HEVC}
 \index{H.265}
 
-State-of-the-art video coding standards such as H.264/\acs{MPEG}-4 \acs{AVC}
-and H.265/\acs{HEVC} use a hybrid video coding scheme.
+State-of-the-art video coding standards such as \acs{AVC} and \acs{HEVC} use a
+hybrid video coding scheme.
 The overall coding structure appeared in H.261, in 1988.
-Since then, all video coding standards and recommendations issued by the
-\ac{ITU-T} and the \ac{MPEG} groups use this coding structure.
+Since then, all video coding standards and recommendations issued by
+\acs{VCEG} and the \acs{MPEG} use this coding structure.
 
 The hybrid video coding scheme is named after its use of both temporal
 prediction and transform coding techniques for the prediction error.
@@ -531,9 +505,10 @@ figure~\ref{fig:hybrid_video_coding_scheme}.
 \end{figure}
 
 The hybrid video coding scheme provides an efficient way of compressing
-a video signal into a bitstream of the smallest possible size.
+a video signal into a bitstream of the smallest possible size for a given
+level of fidelity.
 The key features to achieve such a small bitstream are the signal
-prediction and the transformation of the prediction error.
+prediction and the transformation and quantisation of the prediction error.
 
 The encoder includes a decoder, represented inside a blue box, to be
 able to perform its coding decisions based on what the decoder would do
@@ -549,18 +524,20 @@ the following subsections.
 
 In order to process the video frames, they are exhaustively partitioned into
 non-overlapping blocks.
-The subdivision blocks ease the succeeding stages of prediction and transform:
+Sub-partitioning an image allows for a better matching with the spatial
+distribution of energy.
+The subdivision blocks ease, as well,  the succeeding stages of prediction and
+transform:
 the blocks can be processed, under some constraints, independently so that a
 parallel processing is made possible.
 The partitioning does not necessarily imply same-sized blocks, allowing
 rectangular blocks of different sizes to be used, as illustrated in
 figure~\ref{fig:part_orig_pred_res_image} (a).
 This is due to the quad-tree partitioning that is implemented in \ac{HEVC}.
-The figure provides a partitioning for a certain level of quantisation using
-information available in the current image.
+The figure provides a partitioning for a certain level of quantisation.
 It can be seen that the image has been divided into uniform regions.
 
-The optimal choice for the block size is left to the encoder.
+The optimal choice of the block size is left to the encoder.
 In \ac{HEVC}, the \ac{PU} size does not always match the \ac{TU} size,
 allowing a \ac{PU} to be split into four \acp{TU}.
 
@@ -580,21 +557,18 @@ and the energy of the resulting signal is lowered so that it requires less
 bits for a given distortion.
 This is a result of the source coding
 theory~\cite{jayant-84-digital-coding-waveforms}.
-In other terms, the prediction mechanism aims at removing redundancies in the
-video signal.
+In other terms, the prediction mechanism aims at removing inter-block
+redundancies in the video signal.
 
 Predictions must be performed the same way at both encoder and decoder side,
 and thus computed inside the blue box in
 figure~\ref{fig:hybrid_video_coding_scheme}, referring to the decoder.
 For this reason, the encoder uses reconstructed blocks (blocks that have
-already been encoded and will make it to the bitstream) as the input
-data to compute the predictions, as these blocks are equivalent to those the
-decoder will handle.
+already been encoded) as the input data to compute the predictions, as these
+blocks are equivalent to those the decoder will handle.
 
-Consequently, the encoder embeds a decoding path to ensure that the prediction
-mechanism will be reproduced exactly by the decoder.
 Commonly, predictions are of two types, depending on the origin of
-the prediction source, listed below.
+the prediction source:
 \begin{itemize}
 	\item Intra prediction, also called spatial prediction, for those blocks
 		predicted using information within the same frame.
@@ -642,9 +616,131 @@ These models include directional projections, gradient projections (called
 planar) and the projection of the mean value (called DC).
 These \acp{IPM} are used to derive the predictions of the current block from
 its the available boundaries, formed by reconstructed blocks.
-The top-right part of figure~\ref{fig:mdcs} presents the average
-\ac{HEVC} $4\times4$ residuals by scanning mode, together with their
-representation in the transform domain.
+
+\subsubsection{Inter prediction}
+\label{ssub:inter_prediction}
+\index{inter prediction}
+
+Inter prediction, or temporal prediction, takes advantage of the fact that
+consecutive images share many similarities, and that some of their component
+regions will move as a whole.
+Since the encoding order is not necessarily the same as the viewing one, inter
+predictions can have their origins in either past or future frames, and also
+combine the two origins.
+This feature facilitates movement tracking across frames.
+Images that are predicted using only one image either from the past or from
+the future are called predicted images or P-frames.
+Bi-predicted images or B-frames have prediction origins in two different
+images.
+
+At the encoder side, an extra operation, called motion estimation, is
+carried out.
+This stage searches for the best matching area in the reference picture
+for the current prediction block.
+It is one of the most complex parts of video coders in terms of computational
+requirements.
+Once a good prediction has been found, a motion vector is created, indicating
+the offset that has to be applied in the block from the reference image.
+
+\subsection{Transform}
+\label{sub:transform}
+\index{transform}
+\index{energy compaction}
+
+The transform stage reduces the remaining correlations from the residual
+block, computed as the difference between the original and the predicted
+blocks.
+The goal of the transform is to concentrate the residual signal into as few
+coefficients as possible in the transform domain.
+The residual signal is transformed from the spatial domain using the
+transform to the transform or frequency domain.
+In the spatial domain, the residual signal is spread among the pixels of the
+blocks, while the objective of transform domains is to concentrate as much as
+possible the residual signal into a few transform domain coefficients
+exhibiting a large amplitude and the rest might be considered negligible.
+
+This idea of the energy compaction is the main property of the transform
+stage.
+
+Most of the transforms used in standardised video coding schemes belong to the
+\ac{DTT} family.
+Amongst those, the \ac{DCT} of type II has received a considerable amount of
+attention in the past and is the \emph{de facto} standard transform used in
+\acs{ITU} and \acs{MPEG} codecs since \acs{MPEG}-1/H.261.
+
+Additional choices were introduced recently, especially in \ac{HEVC}, where
+the \ac{DST} of type VII was adopted.
+
+Provided that the subject of this thesis is centred around the
+transforms for video coding, the transform stage will be explained
+thoroughly in Chapter~\ref{cha:transform_coding}.
+
+\subsection{Quantisation}
+\label{sub:quantisation}
+\index{QP}
+\index{quantisation}
+\index{lossy}
+\index{lossless}
+
+The quantisation, applied in the transform domain, it is used as an
+approximation operator, reducing the amount of possible output values.
+In standards like \ac{HEVC}, the quantisation is scalar:
+each coefficient is approximated independently from its neighbouring values.
+In these coding schemes, the quantisation step is controlled by a \ac{QP} that
+discards any coefficient whose energy level is below a certain threshold.
+High energy coefficients are also affected by the quantisation.
+In standards like \acs{HEVC}, the quantisation step is controlled by a
+\ac{QP} that regulates the level of approximations carried out.
+It is worth noticing that it is the only non-reversible step in the whole
+hybrid video coding scheme, which induces lossy video coding.
+Lossless (or near-lossless) video coding can be attained by not using
+quantisation in the process.
+
+\subsection{Entropy coding}
+\label{sub:entropy_coding}
+\index{entropy coding}
+\index{CABAC}
+\index{scanning}
+
+The last operation consists in reducing the amount of bits transmitted through
+the use of an entropy code.
+This is a lossless operation, as such the bit reduction performed during this
+stage is completely reversible: no approximation operation is performed at
+this stage.
+
+Once the transform coefficients have been quantised, they are scanned to make
+sure they are sorted in a way that will make the entropy coder work more
+efficiently.
+
+The scanning operation is a conversion from a 2D array, containing the
+quantised transformed coefficients, towards a 1D vector containing the same
+values sorted in a way that facilitates a compact transmission.
+An appropriate scanning is crucial for the entropy
+coding~\cite{ye-08-intra-directional-scanning-mddt}.
+
+Signalling is also conveyed into the bitstream at this point, and the
+entropy coder ensures a correct binarisation while using the adequate
+number of bits thanks to the \ac{CABAC}.
+
+\subsection{Intra coding in \acs{HEVC}}
+\label{sub:intra_coding_in_hevc}
+
+This subsection explains some particularities of the intra coding inside
+\ac{HEVC}.
+
+With regards to previous standards, such as \ac{AVC}, which has 9 different
+prediction modes for intra coding, \ac{HEVC} has an improved prediction
+system, with 35 different prediction modes.
+The upper-left part of figure~\ref{fig:mdcs} illustrates them.
+A detailed explanation on how predictions are derived from the block
+boundaries using those prediction modes can be found in Chapter 6
+of~\cite{wien-15-hevc}.
+
+The top-right part of figure~\ref{fig:mdcs} presents the average \ac{HEVC}
+$4\times4$ residuals by scanning mode, together with their average
+representation in transform domain though the \acs{DST}-VII.
+Depending on the selected \ac{IPM}, residuals present different patterns, and
+so do their transforms.
 The average residual profiles have lower (dark) values near the
 available borders, which increase with the distance from the
 boundaries: residuals issued from horizontal and vertical \acp{IPM} only
@@ -654,13 +750,14 @@ It can also be observed that the scanning patterns match reasonably well
 the transform coefficients in each case, sorting them in an increasing
 order.
 
-With regards to previous standards, such as H.264/\ac{MPEG}-4 \ac{AVC}, which
-has 9 different prediction modes for intra coding, \ac{HEVC} has an improved
-prediction system, with 35 different prediction modes.
-The upper-left part of figure~\ref{fig:mdcs} illustrates them.
-A detailed explanation on how predictions are derived from the block
-boundaries using those prediction modes can be found in Chapter 6 from Wien's
-book on \ac{HEVC}~\cite{wien-15-hevc}.
+These patterns in the transform domain will determine different scanning
+orders (in different colours), as presented in the lower part of
+figure~\ref{fig:mdcs}.
+An adapted mode to different patterns ensures, in average, a correct order of
+the coefficients that will group all the null values together.
+The patterns are described for $4\times4$ blocks, and the same pattern is used
+on higher block sizes, which are recursively split into 4 sub-blocks until
+size $4\times4$ is reached~\cite{sole-12-transform-coefficient-coding}.
 
 \begin{figure}[tb]
 	\centering
@@ -702,128 +799,6 @@ book on \ac{HEVC}~\cite{wien-15-hevc}.
 	appropriate scanning in the transform domain for $4\times4$ \acsp{TU}}
 	\label{fig:mdcs}
 \end{figure}
-
-
-\subsubsection{Inter prediction}
-\label{ssub:inter_prediction}
-\index{inter prediction}
-
-Inter prediction, or temporal prediction, takes advantage of the fact that
-images close in time share many similarities, and that some of their component
-regions will move as a whole.
-Since the encoding order is not necessarily the same as the viewing one, inter
-predictions can have their origins in either past or future frames, and also
-combine the two origins.
-Images that are predicted using only one image either from the past or from
-the future are called predicted images or P-frames.
-Bi-predicted images or B-frames have prediction origins in two different
-images.
-
-At the encoder side, an extra operation, called motion estimation, is
-carried out.
-This stage searches for the best matching area in the reference picture
-for the current prediction block.
-It is one of the most complex parts of video coders in terms of computational
-requirements.
-Once a good prediction has been found, a motion vector is created, indicating
-the offset that has to be applied in the block from the reference image.
-
-\subsection{Transform}
-\label{sub:transform}
-\index{transform}
-\index{energy compaction}
-
-The transform stage reduces the remaining correlations from the residual
-block, computed as the difference between the original and the predicted
-blocks.
-The goal of the transform is to concentrate the residual signal into as few
-coefficients as possible in the transform domain.
-The residual signal is transformed from the spatial domain into the
-transformed one using the transform.
-In the spatial domain, the residual signal is spread among the pixels of the
-blocks, while the objective of transform domains is to concentrate as much as
-possible the residual signal into a few transform domain coefficients
-exhibiting a large amplitude and the rest might be considered negligible.
-
-This idea of the energy compaction is the main property of the transform
-stage.
-
-Most of the transforms used in standardised video coding schemes belong to the
-\ac{DTT} family.
-Amongst those, the \ac{DCT} of type II has received a considerable amount of
-attention in the past and is the \emph{de facto} standard transform used in
-\acs{ITU} and \acs{MPEG} codecs since \acs{MPEG}-1/H.261.
-
-Additional choices were introduced recently, especially in \ac{HEVC}, where
-the \ac{DST} of type VII was adopted.
-
-The average profiles for some $4\times4$ intra residuals in \ac{HEVC} are
-displayed in the upper-right part of figure~\ref{fig:mdcs}, along with their
-corresponding representations in the transform domain.
-
-Provided that the subject of this thesis is centred around the
-transforms for video coding, the transform stage will be explained
-thoroughly in Chapter~\ref{cha:transform_coding}.
-
-\subsection{Quantisation}
-\label{sub:quantisation}
-\index{QP}
-\index{quantisation}
-\index{lossy}
-\index{lossless}
-
-The quantisation, applied in the transform domain, it is used as an
-approximation operator, reducing the amount of possible output values.
-In standards like \ac{HEVC}, the quantisation is scalar:
-each coefficient is approximated independently from its neighbouring values.
-In these coding schemes, the quantisation step is controlled by a \ac{QP} that
-discards any coefficient whose energy level is below a certain threshold.
-High energy coefficients are also be affected by the quantisation.
-In standards like \acs{HEVC}, the quantisation step is controlled by a
-\ac{QP} that regulates the amount of approximations carried out.
-It is worth noticing that it is the only non-reversible step in the whole
-hybrid video coding scheme, which induces lossy video coding.
-Lossless (or near-lossless) video coding can be attained by not using
-quantification in the process.
-
-\subsection{Entropy coding}
-\label{sub:entropy_coding}
-\index{entropy coding}
-\index{CABAC}
-\index{scanning}
-
-The last operation consists in reducing the amount of bits transmitted through
-the use of an entropy code.
-This is a lossless operation, as such the bit reduction performed during this
-stage is completely reversible: no approximation operation is performed at
-this stage.
-
-Once the transform coefficients have been quantised, they are processed to
-conform the bitstream.
-That is, the transform coefficients are scanned to make sure they are
-sorted in a way that will make the entropy coder work more efficiently.
-
-The scanning operation is a conversion from a 2D array, containing the
-quantised transformed coefficients, towards 1D vector containing the same
-values sorted in a way that facilitates a compact transmission.
-For instance, in \ac{HEVC}, depending on the selected \ac{IPM}, residuals
-present different patterns, and so do their transforms, as illustrated in
-figure~\ref{fig:mdcs}.
-These patterns in the transform domain will determine different scanning
-orders (in different colours), as presented in the lower part of
-figure~\ref{fig:mdcs}.
-An adapted mode to different patterns ensures, in average, a correct order of
-the coefficients that will group all the zeroes
-together.
-The patterns are described for $4\times4$ blocks, and the same pattern is used
-on higher block sizes, which are recursively split into 4 sub-blocks until
-size $4\times4$ is reached~\cite{sole-12-transform-coefficient-coding}.
-An appropriate scanning is crucial for the entropy
-coding~\cite{ye-08-intra-directional-scanning-mddt}.
-
-Signalling is also conveyed into the bitstream at this point, and the
-entropy coder ensures a correct binarisation while using the adequate
-number of bits thanks to the \ac{CABAC}.
 
 \section{Encoder control}
 \label{sec:encoder_control}
@@ -905,7 +880,7 @@ Each time the encoder has to make a decision about choosing a
 particular block size for the partitioning or a prediction mode, it
 checks the distortion that decision might cause as well as an estimation
 of the bit rate needed.
-The encoder performs this computation iteratively the same block,
+The encoder performs this computation iteratively on the same block,
 exploring many different coding possibilities and finally selects the
 one that provides the best score in terms of rate and distortion.
 This is called the \ac{RDO} loop.
@@ -925,7 +900,7 @@ As seen in the previous subsections, computing the distortion is
 reasonably straightforward.
 However, estimating the bit rate is a bit more delicate, since the whole
 entropy coder cannot be run each time the encoder explores the different
-possibilities for a block.
+possibilities for a block, since it has a huge impact on complexity.
 As a consequence, an estimation of the bit rate is often used in the \ac{RDO}
 loop.
 
@@ -938,7 +913,8 @@ performing transforms based on different rate models.
 \index{BD-PSNR}
 
 Comparing two video coding techniques objectively might be complicated,
-as both distortion and bit rate savings have to be taken into account jointly.
+as both the distortion and the bit-rate savings have to be taken into account
+jointly.
 
 Metrics introduced by Gisle Bjøntegaard, know as \ac{BD} measurements have
 become the current \emph{de facto} standard to objectively compare the result
@@ -964,43 +940,42 @@ figure~\ref{fig:bdsnr_bdrate}:
 	\label{fig:bdsnr_bdrate}
 \end{figure}
 
-The \ac{BD}-rate measurement will be used extensively in this thesis to
+The \ac{BD}-rate measurement is extensively used in this thesis to
 appreciate the performance of the proposed systems, as is the metric used by
-\ac{MPEG} in standardisation.
+\acs{MPEG} in standardisation.
 
 \section{Conclusions}
 \label{sec:conclusions_video_coding}
 
-This chapter has presented the motivation for video coding as well as some
+This chapter presented the motivation for video coding as well as some
 general concepts concerning an overview of the video coding system.
 
 Current video coders exploit redundancies existing within images of the video
 sequence via predictions.
-These predictions can be either spatial or temporal, depending on
-whether the prediction source is the same image or another image,
-respectively.
+These predictions can be either spatial or temporal, depending respectively on
+whether the prediction source is the same image or another image.
 Unpredictable parts of the image, called residuals, are then passed through a
-transformation in order to concentrate the transformed residual in as few
-coefficients as possible.
+transformation step in order to concentrate the transformed residual into as
+few coefficients as possible.
 
 The appropriate block size is selected for the prediction and the transform
 sizes, named \acp{PU} and \acp{TU}, respectively.
-A lot of flexibility is allowed in the syntax for the prediction and sizes
-while the set of choices for a given codec is rather limited for the
-transform.
+A lot of flexibility is allowed for the prediction and sizes while the set of
+choices for a given codec is rather limited for the transform.
 
 This thesis will focus on the extension of the choices for the transform
 stage.
-Currently, the decision of the coding mode (\ac{AI}, \ac{RA}), the block sizes
-and \acp{IPM} are is based on a single transform, usually the \ac{DCT}-II.
-However, a single transform cannot provide optimal signal compaction for all
-kinds of possible signals.
+Currently, the decision of the coding configuration (\ac{AI}, \ac{RA}), the
+block sizes and \acp{IPM} are is based on a single transform, usually the
+\ac{DCT}-II.
+However, a single transform is unlikely provide optimal signal compaction for
+all kinds of possible signals.
 
-This thesis will focus on the extension of the choices for the transform
+This thesis focuses on the extension of the choices for the transform
 stage, as set of transforms will be provided such that the encoder is able to
 better adapt the transform to the varying nature of the prediction residuals.
 
-Next chapter will explore the details of the transforms used in video coding,
+Next chapter explores the details of the transforms used in video coding,
 namely their design principles and a comparison between two design approaches.
 
 \chapter{Transform coding}
