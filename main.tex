@@ -684,17 +684,15 @@ thoroughly in Chapter~\ref{cha:transform_coding}.
 \index{lossy}
 \index{lossless}
 
-The quantisation, applied in the transform domain, it is used as an
-approximation operator, reducing the amount of possible output values.
+The quantisation, applied in the transform domain, is used as an approximation
+operator, reducing the amount of possible output values.
 In standards like \ac{HEVC}, the quantisation is scalar:
 each coefficient is approximated independently from its neighbouring values.
 In these coding schemes, the quantisation step is controlled by a \ac{QP} that
 discards any coefficient whose energy level is below a certain threshold.
 High energy coefficients are also affected by the quantisation.
-In standards like \acs{HEVC}, the quantisation step is controlled by a
-\ac{QP} that regulates the level of approximations carried out.
-It is worth noticing that it is the only non-reversible step in the whole
-hybrid video coding scheme, which induces lossy video coding.
+It is worth noticing that the quantisation is the only non-reversible step in
+the whole hybrid video coding scheme, which induces lossy video coding.
 Lossless (or near-lossless) video coding can be attained by not using
 quantisation in the process.
 
@@ -707,17 +705,16 @@ quantisation in the process.
 The last operation consists in reducing the amount of bits transmitted through
 the use of an entropy code.
 This is a lossless operation, as such the bit reduction performed during this
-stage is completely reversible: no approximation operation is performed at
-this stage.
+stage is reversible: no approximation operation is performed at this stage.
 
 Once the transform coefficients have been quantised, they are scanned to make
-sure they are sorted in a way that will make the entropy coder work more
+sure they are sorted in a way that will make the entropy coder work
 efficiently.
 
 The scanning operation is a conversion from a 2D array, containing the
 quantised transformed coefficients, towards a 1D vector containing the same
 values sorted in a way that facilitates a compact transmission.
-An appropriate scanning is crucial for the entropy
+An appropriate scanning is crucial for efficient entropy
 coding~\cite{ye-08-intra-directional-scanning-mddt}.
 
 Signalling is also conveyed into the bitstream at this point, and the
@@ -842,14 +839,13 @@ organised into \acp{GOP}, formed by an I-frame, and several P and B-frames.
 The \ac{MSE} is the average of the square difference between two
 signals.
 For two-dimensional signals, such as images, the \ac{MSE} can be computed as:
-
 \begin{equation}
 	MSE_{I,K} = \frac{1}{m\,n} \sum\limits_{i=0}^{m-1} \sum\limits_{j=0}^{n-1}
 	{\left[ I(i,j) - K(i,j) \right]} ^2
 	\label{eqn:mse}
 \end{equation}
-
 Where $I$ and $K$ are two images of $m \times n$ pixels.
+Usually, $I$ is the reference image and $K$ the coded image.
 
 \subsubsection{Peak signal-to-noise ratio}
 \label{ssub:peak_signal_to_noise_ratio}
@@ -858,10 +854,10 @@ Where $I$ and $K$ are two images of $m \times n$ pixels.
 The \ac{PSNR} is also an objective measure of quality that computes the ratio
 between the maximum possible value of a signal and the power of the noise that
 affects the fidelity of its approximation.
-It is usually defined in terms of the logarithmic decibel scale to cope
-with the wide range that signals might have.
-Defining the \ac{PSNR} in terms of the \ac{MSE} from
-\eqref{eqn:mse}, it can be expressed as:
+It is usually defined in a logarithmic scale to cope with the wide range that
+signals might have.
+Defining the \ac{PSNR} in terms of the \ac{MSE} from~\eqref{eqn:mse}, it can
+be expressed as:
 \begin{equation}
 	PSNR = 10 \log_{10} \left(\frac{MAX_I^2}{MSE_{I,K}}\right)
 	= 20 \log_{10} (MAX_I) - 10 \log_{10} (MSE_{I,K})
@@ -874,8 +870,8 @@ the maximum pixel values writes: $MAX = 2^{8} - 1 = 255$.
 \label{sub:rate_distortion_optimisation}
 \index{RDO}
 
-In order to carry out the most sensible decision at each time, the
-encoder uses a \ac{RDO} criterion
+In order to carry out the most sensible decision at each time, the encoder
+uses a \ac{RDO} criterion
 \cite{sullivan-98-rdo-video-compression}.
 
 Each time the encoder has to make a decision about choosing a
@@ -906,9 +902,6 @@ possibilities for a block, since it has a huge impact on complexity.
 As a consequence, an estimation of the bit rate is often used in the \ac{RDO}
 loop.
 
-Next chapter will present a way of using~\eqref{eqn:lagrangian_rdo} to design
-performing transforms based on different rate models.
-
 \section{Bj{\o}ntegaard Delta measurements}
 \label{sub:bjontegaard_delta_measurements}
 \index{BD-rate}
@@ -919,7 +912,7 @@ as both the distortion and the bit-rate savings have to be taken into account
 jointly.
 
 Metrics introduced by Gisle Bjøntegaard, know as \ac{BD} measurements have
-become the current \emph{de facto} standard to objectively compare the result
+become the current \emph{de facto} procedure to objectively compare the result
 of two encodings~\cite{VCEG-M33,VCEG-AI11}.
 Two different metrics are defined and displayed in
 figure~\ref{fig:bdsnr_bdrate}:
@@ -944,12 +937,12 @@ figure~\ref{fig:bdsnr_bdrate}:
 
 The \ac{BD}-rate measurement is extensively used in this thesis to
 appreciate the performance of the proposed systems, as is the metric used by
-\acs{MPEG} in standardisation.
+\acs{JCT-VC} in standardisation.
 
 \section{Conclusions}
 \label{sec:conclusions_video_coding}
 
-This chapter presented the motivation for video coding as well as some
+This chapter presented the motivation for video compression as well as some
 general concepts concerning an overview of the video coding system.
 
 Current video coders exploit redundancies existing within images of the video
@@ -990,22 +983,22 @@ namely their design principles and a comparison between two design approaches.
 \index{transform coding}
 \index{rotation}
 
-In the previous chapter, transforms were mentioned as an important part
-in current video coders.
-This chapter will study their design and properties that lead transforms
-to be useful in video coding.
+In the previous chapter, transforms were identified as an important part in
+current video coding standards.
+This chapter studies the design and properties that make transforms useful in
+video coding.
 
-A transform is a mathematical operation that takes an input signal and
-represents the same input signal in a different domain.
+A transform is a mathematical transfer function of a signal from a
+representation domain to another.
 
-High energy compaction provided by transform coding has led this
-technique to be present in all the international video coding standards.
+The high energy compaction offered by transform process has led this technique
+to be part of all the international video coding standards.
 
-Transform coding allows reducing existing signal correlations in the
-spatial domain, leading to a more decorrelated signal in the transform
-domain and ensuring a more compact representation.
-This is of great importance for the upcoming stages of scanning and
-entropy coding.
+Transforms allow reducing existing signal correlations in the spatial domain,
+leading to a more decorrelated signal in the transform domain and ensuring a
+more compact representation.
+This is of great importance for the upcoming stages of scanning and entropy
+coding.
 
 Transforms can be very abstract since they tend to work in $N$-dimensional
 spaces, where $N$ represents the number of pixel residuals processed by the
@@ -1013,8 +1006,8 @@ transform.
 Typical values vary from $N=4\times4$ to $N=32\times32$ using powers of two in
 modern video codecs, such as \ac{HEVC}.
 
-However, restraining ourselves to two dimensions, one of the most visual
-and representative example of transforms are rotations.
+However, restraining ourselves to the two-dimensional case, one of the most
+visual and representative example of transforms are rotations.
 The example in figure~\ref{fig:transform_rotation} helps visualising the
 transform role in signal compression.
 
@@ -1038,19 +1031,17 @@ representation, since the horizontal dimension remains constant.
 \index{AVC}
 
 Block-based coding is widely adopted in image/video systems, such as
-\acs{JPEG}, \ac{AVC} and \ac{HEVC}.
-In these systems, an image is divided into non-overlapping blocks and for each
+\acs{JPEG}~\cite{jpeg}, \ac{AVC} and \ac{HEVC}.
 
 In these systems, the image to be transformed is split into non-overlapping
-blocks, and each one will be transformed independently.
-Although this has the disadvantage of not being able to exploit correlations
-of different blocks, contrary to wavelet transforms used in \acs{JPEG}
-2000~\cite{jpeg2000}, the block-based scheme leads to a reduced complexity and
-allows treating each block differently according to its
-content~\cite{xu-09-intra-predictive-transforms}.
+blocks, and each one is treated and transformed
+independently~\cite{xu-09-intra-predictive-transforms}.
+This provides an advantage of being less expensive in terms of computing that
+other kinds of transforms, such as wavelet transforms used in
+\acs{JPEG}-2000~\cite{jpeg2000}.
 
-Since block transforms are used exclusively in state-of-the-art video coding
-systems, they will be the targeted type of transforms in this thesis.
+Since \ac{HEVC} uses block transforms only, they will be used in this thesis
+to build up new systems.
 
 \subsection{Orthogonal transforms}
 \label{sub:orthogonal_transforms}
@@ -1058,7 +1049,7 @@ systems, they will be the targeted type of transforms in this thesis.
 \index{orthonormal transforms}
 \index{unitary transforms}
 
-Transforms used in image processing and video coding are orthogonal.
+Transforms used in image processing and video coding systems are orthogonal.
 Orthogonal matrices are square matrices whose rows and columns are orthogonal
 unit vectors, also known as orthonormal vectors, with:
 \begin{equation}
@@ -1070,23 +1061,28 @@ transposed version:
 	\A^T = \A^{-1}
 \end{equation}
 
-This property has benefits in two areas: fast computation of inverse transform
-with no need to store it separately and re-use of fast algorithms for both
-direct and inverse transform applications.
+This property offers some benefits:
+\begin{itemize}
+	\item Fast computation of inverse transform with no need to store it
+		separately.
+	\item Re-use of fast algorithms for both direct and inverse transform
+		applications.
+	\item Energy preservation.
+\end{itemize}
 
 \subsection{Separability}
 \label{sub:separability}
 \index{separable transforms}
 
 Image and video coding deal with image blocks, which are two-dimensional
-signals and, consequently, use transforms able two process those
-signals.
+signals and, consequently, use transforms able to process those signals.
 
-The naïve approach to work with those signals is to use non-separable
-transforms.
-These transforms take the residual pixels from a block and reshape it to a
-single-dimensional signal. For instance, a $4\times4$ block of pixels becomes a
-$16\times1$ vector.
+The straightforward approach to work with those signals is to use
+non-separable transforms.
+These transforms take the residual pixels from a block previously reshaped
+into a single-dimensional signal.
+For instance, a $4\times4$ block of pixels becomes a $16\times1$ vector, as
+illustrated in figure~\ref{fig:block_linearisation}.
 Afterwards the transform is applied normally:
 \begin{equation}
 	\X = \A \, \x
@@ -1115,22 +1111,22 @@ Due to the high amount of operations needed to transform a block, using
 non-separable transforms, separable transforms are widely used in video
 coding.
 A block is transformed using horizontal and vertical separable transforms
-$\A_h, \A_v$ for rows and columns, respectively, as:
+$\A_h, \A_v$ for its rows and columns, respectively, as:
 \begin{equation}
 	\X = \A_v {\left(\A_h \, \x^T\right)}^T = \A_v \, \x \, \A_h^T
 	\label{eqn:sep_transform}
 \end{equation}
-The operation inside the parenthesis transforms the rows of $\x$, and
-the outer part, the columns of $\x$.
-By performing the horizontal and vertical transforms separately, the
-number of operations required has been reduced to $2N^3$ multiplications
-and $2N^2(N-1)$ additions.
+The operation inside the parenthesis transforms the rows of $\x$, and the
+outer part, the columns of the result.
+By performing the horizontal and vertical transforms separately, the number of
+operations required is reduced to $2N^3$ multiplications and $2N^2(N-1)$
+additions.
 
-However, this reduction in complexity comes at a price: non-separable
-transforms were able to exploit any correlation amongst pixels within a
-block, whether separable transforms can only decorrelate pixels that
+However, this reduction in complexity comes at a price:
+non-separable transforms are able to exploit any correlation amongst pixels
+within a block, whereas separable transforms can only decorrelate pixels that
 share the same row or column.
-In other words, separable transforms might be less performing than their
+In other words, separable transforms might be less efficient than their
 non-separable counterparts.
 The impact in performance due to separability will be studied in detail
 in Chapter~\ref{cha:mddt}.
@@ -1138,7 +1134,7 @@ in Chapter~\ref{cha:mddt}.
 A non-separable transform can be expressed from a set of two separable
 transforms via the Kronecker product, denoted as $\otimes$.
 \begin{equation}
-	\mathbf{A}\otimes\mathbf{B} = 
+	\mathbf{A}\otimes\mathbf{B} =
 	\begin{bmatrix}
 		a_{11} \mathbf{B} & \cdots & a_{1n}\mathbf{B} \\
 		\vdots & \ddots & \vdots \\
@@ -1176,8 +1172,9 @@ trade-offs between the distortion and the number of bits needed to represent
 those signals in the transform domain, as shown previously in
 \S\ref{sub:rate_distortion_optimisation}.
 
-Transform design methods agree on how the distortion is evaluated, namely
-using the \ac{MSE} from~\eqref{eqn:mse}.
+Most transform design methods use the \ac{MSE} from~\eqref{eqn:mse} to
+evaluate the distortion introduced by a quantiser applied in the transform
+domain.
 However, different transform designs exist depending on how the bit-rate is
 estimated and modelled.
 
@@ -1186,8 +1183,8 @@ different modellings of the rate constraint.
 \section{The Karhunen-Loève transform}
 \label{sec:the_karhunen_loeve_transform}
 \index{KLT}
-The components of source signals within a residual block are correlated with
-one another.
+The components of source signals within a residual block tend to be correlated
+between them.
 This correlation is expressed in terms of a correlation matrix containing the
 linear inter pixel correlations.
 For two $N$-dimensional signals $\x,\y$, the covariance signal between them
@@ -1223,21 +1220,21 @@ can be computed as:
 \index{correlation matrix}
 If $\x=\y$, the covariance matrix is the correlation matrix of $\x$.
 
-It is possible to select an orthogonal matrix $\A$, for a given \ac{PDF}
-describing the source that will make $\X=\A\x$ have pairwise uncorrelated
-components in the transform domain~\cite{gersho-92-vector-quantization}.
+It is possible to select an orthogonal matrix $\A$ that will make $\X=\A\x$
+have pairwise uncorrelated components in the transform
+domain~\cite{gersho-92-vector-quantization}.
 The \ac{KLT} is defined as the linear orthogonal transform that reduces the
 redundancy by a maximum decorrelation of the data, so that the signal can be
-stored more efficiency~\cite{rao-01-transform-data-compression-book}.
+stored more efficiently~\cite{rao-01-transform-data-compression-book}.
 
 In this section, the \ac{KLT} is presented under its well-known optimal
-conditions: Gaussian sources with high resolution quantisation
-assumptions~\cite{goyal-00-high-resolution}.
-The high resolution assumption states that the number of quantisation levels
+condition:
+the high-resolution quantisation assumption~\cite{goyal-00-high-resolution}.
+The high-resolution assumption states that the number of quantisation levels
 is high and the quantisation step size is small enough to consider the
 \ac{PDF} constant for each quantisation interval.
 
-Under those conditions, the \ac{KLT} is the transform that achieves optimal
+Under this condition, the \ac{KLT} is the transform that achieves optimal
 bit allocation for the quantisation of transform coefficients by distributing
 their variances in such a way as to minimise their geometric
 mean~\cite{jayant-84-digital-coding-waveforms}, while minimising the overall
@@ -1271,6 +1268,9 @@ Where:
 \end{itemize}
 \index{eigen values}
 \index{eigen vectors}
+
+As a result, the \ac{KLT} is a transform whose base vectors are the
+eigenvalues of the correlation matrix of the input signal.
 
 \subsection{Particular case on natural images: the \acs{DCT}}
 \label{sub:particular_case_dct}
@@ -1415,7 +1415,7 @@ from~\eqref{eqn:dst_vii}.
 
 Figure~\ref{fig:dct_dst}.b presents the \ac{DST}-VII bases for
 $4\times4$ blocks.
-The resemblance between an average residual block from
+The similarity between an average residual block from
 figure~\ref{fig:pred_scheme}.b can be spotted by comparing it to the first
 base vector from the \ac{DST}.
 
@@ -1449,8 +1449,8 @@ Sezer proposes an alternative kind of transform to minimise the trade-off
 between the distortion and the rate from~\eqref{eqn:lagrangian_rdo} by taking
 into account the sparsity of the output signal in their
 design~\cite{sezer-11-phd,sezer-08-sparse-orthonormal-transforms}.
-This transform, named \ac{RDOT}, contrary to the \ac{KLT}, does not make use
-of the high resolution assumption.
+This transform, named \ac{RDOT}, unlike the \ac{KLT}, does not make use
+of the high-resolution assumption.
 Instead, the bit-rate constraint is modelled via the sparsity of the
 transformed coefficients, by the introduction of the $\ell_0$ norm, which
 counts the number of non-zero coefficients in a vector.
@@ -1499,7 +1499,7 @@ detailed in \S\ref{sub:the_lagrange_multiplier}.
 \end{equation}
 The first part of the equation represents the distortion introduced by
 the quantisation.
-The second term serves as rate-like constraint, by ensuring that the
+The second term serves as a rate-like constraint, by ensuring that the
 number of significant values in the transform domain is minimised together
 with the distortion.
 
@@ -1612,7 +1612,7 @@ $\Pb=\I$:
 
 Summing up, the optimal transform is obtained using the SVD decomposition of
 the covariance matrix between the output signal (the transformed and quantised
-coefficients) with the input signal (the intra prediction residuals).
+coefficients) and the input signal (the intra prediction residuals).
 
 \subsection{Separable \acs{RDOT} design}
 \label{sub:separable_rdot_design}
@@ -1623,15 +1623,15 @@ The methods for transform design and learning presented in the previous
 sections are non-separable.
 This means that the input block is linearised and then transformed in
 one step.
-Due to complexity issues, non-separable transforms are hardly used in
-performing solutions.
+Due to computational complexity issues, non-separable transforms are hardly
+used in performing solutions.
 A lower complexity approach involves separable transforms, which may not be
 able to concentrate the energy in the transform domain as well as their
-non-separable counterparts.
+non-separable counterparts, as explained in \S{sub:separability}.
 In order to design and learn separable transforms, the design and learning
 methods have to be adapted.
-In the case of the \ac{KLT} is straightforward to see that one can learn
-a horizontal \ac{KLT} to transform the rows of the signal and a vertical
+In the case of the \ac{KLT}, it is straightforward to see that one can learn a
+horizontal \ac{KLT} to transform the rows of the signal and a vertical
 \ac{KLT} for the columns.
 However, the \ac{RDOT} algorithm needs further tuning in order to obtain
 separable transforms.
@@ -1651,7 +1651,7 @@ Where $\x$ is the two-dimensional block to transform, $\A_h$ is the horizontal
 transform, used to transform the rows of $\x$ and $A_v$ is the vertical
 transform, used to transform the columns of $\x$.
 
-The equation to optimise using separable transforms reads as follows:
+The equation to be optimised using separable transforms reads as follows:
 \begin{equation}
 	\A_{v_{opt}}, \A_{h_{opt}} = \arg\min\limits_{\A_v,\A_h}
 	\left(
@@ -1669,7 +1669,7 @@ As in the non-separable problem, the optimal coefficients $\c_i$ are found by
 hard-thresholding the components of $\X_i=\A_v\x_i\A_h^T$ with $\sqrt{\lambda}$.
 
 \subsubsection{Optimal vertical transform for given coefficients}
-Now, the vertical transform needs to be updated accordingly:
+The vertical transform needs to be updated accordingly:
 \begin{equation}
 	\A_{v_{opt}} = \text{arg}\min\limits_{\A_v}
 	\left(
@@ -1689,13 +1689,13 @@ Then the optimal transform is given by:
 \end{equation}
 
 \subsubsection{Optimal coefficients for updated vertical transform}
-As in the non-separable problem, the optimal coefficients $\c_i$ are found by
-hard-thresholding the components of $\X=\A_{v_{opt}}\x_i\A_h^T$ with
-$\sqrt{\lambda}$. However, this time we use the optimal vertical transform from
-the previous step.
+As in the non-separable problem, the optimal coefficients $\c_i$ are
+determined by hard-thresholding the components of $\X=\A_{v_{opt}}\x_i\A_h^T$
+with $\sqrt{\lambda}$. However, this time the optimal vertical
+transform from the previous step is used.
 
 \subsubsection{Optimal horizontal transform for given coefficients}
-Now, the horizontal transform needs to be updated accordingly:
+Similarly, the horizontal transform needs to be updated accordingly:
 \begin{equation}
 	\A_{h_{opt}} = \text{arg}\min\limits_{\A_h}
 	\left(
@@ -1709,7 +1709,7 @@ the covariance matrix $\Y$ can be defined as:
 	\Y = \sum_{\forall i} \c_i^T\A_{v_{opt}}\x_i =
 \U\Lambdab^{1/2}\V^T
 \end{equation}
-Then the optimal transform is given by:
+The optimal transform is given by:
 \begin{equation}
 	\A_{h_{opt}} = \U\V^T
 \end{equation}
@@ -1732,16 +1732,16 @@ residuals \ac{PDF}.
 
 Figure~\ref{fig:probability_density_functions} illustrates the \acp{PDF}
 of a set of residuals transformed with the \ac{DCT} and the same residuals
-transformed with an adapted \ac{RDOT}.
-As expected, the red curve, representing the \ac{RDOT} presents higher
-sparsity than the generic \ac{DCT}:
+transformed with an adapted \ac{RDOT}.  As expected, the \ac{RDOT},
+represented by the red curve, presents higher sparsity than the generic
+\ac{DCT}, in black:
 its value is above the \ac{DCT} on zero, meaning that the resulting
 coefficients have more zeros when using the \ac{RDOT}.
-Using different the transforms, modifies the resulting \ac{PDF}, but since the
+Using different transforms, modifies the resulting \ac{PDF}, but since the
 used transforms are orthogonal, the variance remains unaltered.
 Residuals are computed as the difference between predicted and original
 blocks, meaning they are prediction errors.
-These errors are made by excess or defect evenly, evidenced by their
+These errors are generated by excess or defect evenly, evidenced by their
 zero-mean \ac{PDF}.
 \begin{figure}[tb]
 	\centering
@@ -1782,14 +1782,14 @@ and $\Gamma(z)$ is the gamma function, defined as:
 \index{uniform distribution}
 The Laplace and normal or Gaussian \acp{PDF} are achieved with
 $\gamma=1$ and $\gamma=2$, respectively.
-Even the uniform distribution can be reached by making $\gamma\to\infty$.
+The uniform distribution can even be reached by making $\gamma\to\infty$.
 However, from figure~\ref{fig:probability_density_functions} one can see
 that $1\le\gamma\le2$ for video residuals.
 
 In Sezer's work~\cite{sezer-11-phd,sezer-08-sparse-orthonormal-transforms},
 the optimal value of the Lagrange multiplier $\lambda$ has been claimed
 to be straightforward to obtain.
-However, no analytical way of proving its optimality has been found in
+Nevertheless, no analytical way of proving its optimality has been found in
 literature.
 Hence, a detailed study has been carried out below.
 
@@ -1909,10 +1909,12 @@ Lagrange multiplier is independent from the data's \ac{PDF} (it does
 not depend on $\sigma$ neither on $\gamma$), meaning that the optimal
 Lagrange multiplier remains the same, no matter which transform has been
 used.
+
 In fact, these results can be generalised to any \ac{PDF}, making the
-$\ell_0$ norm a robust approximation of the rate, suitable for this
-iterative learning method, where the transform changes at each iteration
-and so does the \ac{PDF} of the training data in the transform domain.
+$\ell_0$ norm a robust approximation of the rate.
+This property makes the $\ell_0$ norm suitable for iterative learning methods
+where the transform changes at each iteration and so does the \ac{PDF} of the
+training data in the transform domain.
 
 \subsection{Independence from the \acs{PDF}}
 \label{sub:independence_from_the_pdf}
@@ -1920,9 +1922,9 @@ and so does the \ac{PDF} of the training data in the transform domain.
 \index{probablity density function}
 
 In the previous subsection, for a given quantisation step, the value of
-the optimal Lagrange multiplier $\lambda$ has been proved for the
-particular case of the residuals displaying \ac{PDF} that can be
-modelled after a \ac{GGD}.
+the optimal Lagrange multiplier $\lambda$ has been found for the particular
+case of the residuals displaying \ac{PDF} that can be modelled after a
+\ac{GGD}.
 By using the fundamental theorem of calculus, which relates integrals
 and derivatives of a function, one can generalise that conclusion for
 any continuous \ac{PDF}.
@@ -1952,7 +1954,7 @@ Again, deriving with respect to $\Delta$:
 	f\left(-\frac{\Delta}{2}\right)\right]
 \end{equation}
 Combining previous equations using~\eqref{eqn:diff_lagrange_multiplier},
-one can see that the optimal Lagrange multiplier $\lambda$ does not
+is made clear that the optimal Lagrange multiplier $\lambda$ does not
 depend on the residuals \ac{PDF}:
 \begin{equation}
 	\frac{\Delta^2}{8}\left[
@@ -1968,7 +1970,7 @@ depend on the residuals \ac{PDF}:
 
 This fact makes the $\ell_0$ norm suitable even for distributions
 that cannot be modelled after a \ac{GGD}.
-The independence from the \ac{PDF} reassures the choice of the $\ell_0$
+The independence from the \ac{PDF} comforts the choice of the $\ell_0$
 norm over other models that might provide a more realistic and accurate
 approximation of the rate, such as the H.
 
@@ -1978,8 +1980,8 @@ Consider the following scenario: some residuals \acp{PDF} that follow
 \ac{GGD} with different exponents $\gamma$.
 Consider, as well, a quantisation step $\Delta=14.256$, issued from a
 \ac{QP} 27 in \ac{HEVC}.
-It has been proved previously, that $J(\lambda)$
-from~\eqref{eqn:rdot_metric} has achieves its minimum value at
+It has been demonstrated previously, that $J(\lambda)$
+from~\eqref{eqn:rdot_metric} achieves its minimum value at
 $\lambda=\frac{\Delta^2}{4}\approx50.81$, independently from the
 residuals \ac{PDF} when modelling the rate with the $\ell_0$ norm.
 
@@ -1990,9 +1992,9 @@ residuals \ac{PDF}.
 Due to the complexity of the calculations involved then using the
 entropy together with a uniform quantiser, the dependence to the
 \ac{PDF} will be evidenced through the example from
-figure~\ref{fig:j_lambda_qp}, where the value $J(\lambda)$ is plotted
-for various \acp{GGD} at different \ac{QP} values, which served as the
-hard-threshold value.
+figure~\ref{fig:j_lambda_qp}.
+It shows that the value $J(\lambda)$ is plotted for various \acp{GGD} at
+different \ac{QP} values, which served as the hard-threshold value.
 When using the $\ell_0$ norm, $J(\lambda)$ reaches its minimum value at
 QP 27, as expected.
 On the other hand, using the entropy leads to a minimum value of
@@ -2000,7 +2002,7 @@ $J(\lambda)$ that is \ac{PDF}-dependent.
 An unwanted consequence of this dependence is that, for an iterative
 learning algorithm, after updating the transform at each iteration, the
 new \ac{PDF} has to be estimated to find the new optimal Lagrange
-multiplier $\lambda$, complicating the whole learning process and
+multiplier $\lambda$, thus complicating the whole learning process and
 leading to possible instabilities.
 \begin{figure}[tp]
 	\centering
@@ -2021,10 +2023,10 @@ given variance $\sigma^2$ and exponent $\gamma$, the impact of the
 learning in terms of the $J(\lambda)$ from~\eqref{eqn:rdot_metric} can
 be illustrated with the following example.
 By learning an adapted transform over a set of residuals, the amount of
-transformed coefficients mapped to zero increases, augmenting its
+transformed coefficients mapped to zero increases, increasing its
 kurtosis (the distribution ``looks more sharp''), hence reducing the
 exponent $\gamma$.
-Figure~\ref{fig:lambda_zero_norm_dist} illustrates how the relationship
+Figure~\ref{fig:lambda_zero_norm_dist} illustrates the relationship
 between the distortion and the rate model, at different \acp{QP}.
 \acp{QP} 27 and 32 are highlighted, corresponding to quantisation steps
 $\Delta = 14.256$ and $\Delta = 25.504$ in \ac{HEVC}, respectively.
@@ -2057,17 +2059,17 @@ complexity.
 Two completely different approaches of transform design have been
 studied: the \ac{KLT} and the \ac{RDOT}.
 The \ac{KLT} defines the optimal transform for Gaussian sources with a
-high resolution hypothesis.
-The \ac{DCT} and \ac{DST} used in \ac{HEVC} have been obtained as the
+high-resolution hypothesis.
+The \ac{DCT} and \ac{DST} used in \ac{HEVC} have been obtained from the
 \ac{KLT} for particular kinds of signals.
 
 The \ac{RDOT} finds the optimal balance between the distortion
 introduced and a rate constraint, expressed in terms of signal sparseness.
-A thorough study on its design based on the $\ell_0$ norm has been carried out
+A detailed study on its design based on the $\ell_0$ norm has been carried out
 to justify the appropriateness of the approach, lacking in current literature.
 
 In the next chapter, both transform designs will be tested in a real
-scenario to find out their performances in video coding.
+scenario to evaluate their performances in video coding.
 
 
 \chapter{The mode-dependent directional transforms}
