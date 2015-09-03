@@ -4884,13 +4884,14 @@ These relations will be taken into account when designing
 \acs{DTT}-based \acs{MDTC} systems in the next Section.
 
 \begin{align}
+	\small
 	% DCT-I
 	{\left[C_{N}^{I} \right]}_{n,k} & =
 	\sqrt{\frac{2}{N-1}}\epsilon_n\epsilon_k\cos\left(\frac{\pi\,n\,k}{N-1}\right)
 	\quad
 	\epsilon_n,\epsilon_k =
 	\begin{cases}
-		\frac{1}{2} & n, k = 0 \\
+		\frac{1}{\sqrt{2}} & n, k = 0 \\
 		\frac{1}{\sqrt{2}} & n, k = N-1 \\
 		1 & \text{otherwise}
 	\end{cases}
@@ -4914,10 +4915,10 @@ These relations will be taken into account when designing
 	\end{cases}
 	\\ % DCT-IV
 	{\left[C_{N}^{IV} \right]}_{n,k} & =
-	\sqrt{\frac{2}{N}}\cos\left(\frac{\pi(n+1)(k+1)}{4N}\right)
+	\sqrt{\frac{2}{N}}\cos\left(\frac{\pi(2n+1)(2k+1)}{4N}\right)
 	\\ % DCT-V
 	{\left[C_{N}^{V} \right]}_{n,k} & =
-	\frac{2}{\sqrt{2(N-1)+1}}\epsilon_n\epsilon_k\cos\left(\frac{\pi(2n+1)k}{2N}\right)
+	\frac{2}{\sqrt{2(N-1)+1}}\epsilon_n\epsilon_k\cos\left(\frac{2\pi\,n\,k}{2N-1}\right)
 	\quad
 	\epsilon_n,\epsilon_k =
 	\begin{cases}
@@ -4956,7 +4957,7 @@ These relations will be taken into account when designing
 	\end{cases}
 	\\ % DCT-VIII
 	{\left[C_{N}^{VIII} \right]}_{n,k} & =
-	\frac{2}{\sqrt{2(N-1)}}\cos\left(\frac{\pi(n+1)n}{4N-2}\right)
+	\frac{2}{\sqrt{2(N-1)}}\cos\left(\frac{\pi(2n+1)(2k+1)}{4N-2}\right)
 	\\ % DST-I
 	{\left[S_{N}^{I} \right]}_{n,k} & =
 	\sqrt{\frac{2}{2N+1}}\sin\left(\frac{\pi(n+1)(k+1)}{N+1}\right)
@@ -4992,17 +4993,15 @@ These relations will be taken into account when designing
 	\frac{2}{\sqrt{2N+1}}\sin\left(\frac{\pi(2k+1)(n+1)}{2N+1}\right)
 	\\ % DST-VIII
 	{\left[S_{N}^{VIII} \right]}_{n,k} & =
-	\frac{2}{\sqrt{2(N-1)+1}}\epsilon_n\epsilon_k\sin\left(\frac{\pi(2n+1)(k+1)}{2((2N-1)+1)}\right)
+	\frac{2}{\sqrt{2(N-1)+1}}\epsilon_n\epsilon_k\sin\left(\frac{\pi(2n+1)(2k+1)}{2((2N-1)+1)}\right)
 	\quad
 	\epsilon_n,\epsilon_k =
 	\begin{cases}
-		\frac{1}{\sqrt{2}} & n, k = M-1 \\
+		\frac{1}{\sqrt{2}} & n, k = N-1 \\
 		1 & \text{otherwise}
 	\end{cases}
 \end{align}
 Where $n,k=0,\dots,N-1$.
-
-
 
 \begin{table}[tb]
 	\centering
