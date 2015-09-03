@@ -389,7 +389,6 @@ However, other resolutions will also be considered, such as WVGA
 \label{ssub:colour_space_conversions}
 \index{HVS}
 \index{YUV}
-\index{gamma}
 \index{luma}
 \index{chroma}
 \index{RGB}
@@ -403,10 +402,13 @@ Colour space conversions are used to change the colour representation of the
 content to better fit the \ac{HVS} and to decorrelate the components for
 better coding efficiency.
 
-Since the \ac{HVS} is more sensible to light variations than to colour
+Usually, the colour space at the source is in the \ac{RGB} format, but
+since the \ac{HVS} is more sensible to light variations than to colour
 variations, the grey scale version of the image, which contains the light
 information (luma) is separated from the colour information
-(chroma).\cite{poynton-95-color-space}.
+(chroma)~\cite{poynton-95-color-space}.
+The family colour spaces where the luma is separated from chroma are usually
+referred to as YUV colour spaces.
 This way the colour information can be sub-sampled without any visual
 degradation.
 
