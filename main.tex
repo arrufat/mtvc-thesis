@@ -813,7 +813,7 @@ distortion, using its own decoder, and estimates the rate as illustrated in
 figure~\ref{fig:rate_distortion_scheme}.
 
 The appropriate set of choices, mainly among the prediction modes and block
-sizes, is performed by comparing the Lagrangian values, which balance the
+sizes, is performed by comparing the Lagrange values, which balance the
 distortion and rates obtained for each coding choice.
 
 Depending on the coding configuration, the encoder may also decide whether to
@@ -887,7 +887,7 @@ For instance, in \ac{HEVC}, it allows choosing the best \ac{PU} size
 source (intra, inter), amongst others.
 
 The trade-off between the distortion and the rate is commonly expressed
-using a Lagrangian measure.
+using a Lagrange measure.
 
 \begin{equation}
 	J(\lambda) = \text{Distortion} + \lambda \text{Rate}
@@ -1442,8 +1442,8 @@ leads to optimal transforms under different conditions.
 
 As discussed before, transforms try to find a compact representation of the
 signal in the transform domain.
-The \ac{KLT}, under certain assumptions, provides optimal bit allocation and
-signal decorrelation.
+The \ac{KLT}, under certain assumptions, provides optimal bit allocation for
+transformed coefficients and signal decorrelation.
 
 Sezer proposes an alternative kind of transform to minimise the trade-off
 between the distortion and the rate from~\eqref{eqn:lagrangian_rdo} by taking
@@ -1469,15 +1469,20 @@ $\A$.
 $\A^T$ is its transposed matrix, as $\A$ is chosen orthogonal.
 The constraint in the cost function is the average $\ell_0$ norm of the
 coefficients, i.e.\ the number of non-zero coefficients.
-Finally, $\lambda$ is the Lagrange multiplier of the constraint.
+Finally, $\lambda$ is the Lagrange multiplier that tunes the constraint.
 
 The fact that this transform design strives to obtain sparse signals in the
-transform domain fits the state-of-the-art video coding standard, \ac{HEVC}.
-There are even syntax elements in \ac{HEVC} that deal with sparsity:
+transform domain seems to be adapted to the state-of-the-art video coding
+standard, \ac{HEVC}.
+There are numerous syntax elements in \ac{HEVC} that deal with sparsity:
 for a given transformed residual, the position of the last non-zero value is
 signalled, meaning that, instead of explicitly transmitting all the following
 zeroes, it is indicated that from that point onwards, all the following values
 are zero.
+More generally, flags indicating whether the individual coefficients are
+significant or not are also part of the standard syntax.
+Increasing the number of zeros of the quantised coefficients in the transform
+domain seems therefore a good objective.
 
 A thorough study of~\eqref{eqn:rdot-nsep} analysing its properties and
 consequences is detailed below.
@@ -1489,9 +1494,9 @@ consequences is detailed below.
 The value that \acp{RDOT} minimise is expressed
 in~\eqref{eqn:rdot_metric} for a single signal.
 This metric depends exclusively on the quantisation step $\Delta$ and the
-initial transform used $\A$.
-The relation between the Lagrange multiplier $\lambda$ and $\Delta$ is
-detailed in \S\ref{sub:the_lagrange_multiplier}.
+used transform $\A$.
+It is shown in \S\ref{sub:the_lagrange_multiplier} that the Lagrange
+multiplier $\lambda$ is tied to the quantisation step $\Delta$.
 \begin{equation}
 	J (\lambda) =
 	{\Vert \x - \A^T \c \Vert}_2^2 + \lambda{\Vert \c \Vert}_0
@@ -1499,17 +1504,18 @@ detailed in \S\ref{sub:the_lagrange_multiplier}.
 \end{equation}
 The first part of the equation represents the distortion introduced by
 the quantisation.
-The second term serves as a rate-like constraint, by ensuring that the
-number of significant values in the transform domain is minimised together
-with the distortion.
+The second term serves as a rate constraint, by ensuring that the number of
+significant values in the transform domain is minimised together with the
+distortion.
 
-The minimisation of the metric happens in two steps, carried out iteratively
+The minimisation of the metric is done in two steps, carried out iteratively
 until convergence:
 \begin{enumerate}
 	\item Finding the optimal coefficients for a given transform.
 	\item Updating the transform for the optimal coefficients.
 \end{enumerate}
 
+These two steps are detailed in the subsections below.
 \subsubsection{Optimal coefficients for a given transform}
 \label{ssub:optimal_coefficients_for_a_given_transform}
 
@@ -1533,9 +1539,9 @@ as demonstrated in \S\ref{sub:the_lagrange_multiplier}:
 \subsubsection{Optimal transform for given coefficients}
 \label{ssub:optimal_transform_for_given_coefficients}
 
-Once the optimal coefficients have been found, the transform $\A$ must
-be updated to provide the mapping between $\x$ and $\c$ while minimising
-the reconstruction error.
+Once the optimal coefficients have been found, the transform $\A$, chose
+orthogonal, is be updated to provide the mapping between $\x$ and $\c$ while
+minimising the reconstruction error.
 \begin{equation}
 	\A_{opt} = \arg\min\limits_{\A}
 	\left(
@@ -1621,8 +1627,8 @@ coefficients) and the input signal (the intra prediction residuals).
 
 The methods for transform design and learning presented in the previous
 sections are non-separable.
-This means that the input block is linearised and then transformed in
-one step.
+This means that the input block is linearised and the transform is applied in
+one single step.
 Due to computational complexity issues, non-separable transforms are hardly
 used in performing solutions.
 A lower complexity approach involves separable transforms, which may not be
@@ -1639,7 +1645,7 @@ A possible way of learning a separable \ac{RDOT} was also proposed by
 Sezer~\cite{sezer-11-phd} and validated by independent
 researches~\cite{sole-09-sparsity-optimisation-separable-transforms}.
 The proposed method consists in updating each one of the horizontal and
-vertical transforms separately.
+vertical transforms separately, also chosen to be orthogonal transforms.
 
 The separable transformation of a block $\x$ has been previously defined as a
 two step transformation in~\eqref{eqn:sep_transform}:
@@ -1714,6 +1720,8 @@ The optimal transform is given by:
 	\A_{h_{opt}} = \U\V^T
 \end{equation}
 
+Hence, the vertical transform are obtained in two alternated steps.
+
 \subsection{The Lagrange multiplier and the zero norm}
 \label{sub:the_lagrange_multiplier}
 \index{generalised normal distribution}
@@ -1727,22 +1735,22 @@ known as generalised normal distribution or exponential power
 distribution~\cite{lam-00-dct-coefficient-distribution,
 yovanof-96-analysis-dct-coefficients}.
 For this reason, in order to obtain the optimal Lagrange multiplier in a
-reasonably general case, a \ac{GGD} will be used to represent the
-residuals \ac{PDF}.
+reasonably general case, a \ac{GGD} is used to represent the residuals
+\ac{PDF}.
 
 Figure~\ref{fig:probability_density_functions} illustrates the \acp{PDF}
 of a set of residuals transformed with the \ac{DCT} and the same residuals
 transformed with an adapted \ac{RDOT}.  As expected, the \ac{RDOT},
 represented by the red curve, presents higher sparsity than the generic
 \ac{DCT}, in black:
-its value is above the \ac{DCT} on zero, meaning that the resulting
-coefficients have more zeros when using the \ac{RDOT}.
+its value is above the \ac{DCT} on zero, meaning that the coefficients have
+more zeros when using the \ac{RDOT}.
 Using different transforms, modifies the resulting \ac{PDF}, but since the
 used transforms are orthogonal, the variance remains unaltered.
-Residuals are computed as the difference between predicted and original
-blocks, meaning they are prediction errors.
+Additionally, since residuals are computed as the difference between predicted
+and original blocks, they are prediction errors.
 These errors are generated by excess or defect evenly, evidenced by their
-zero-mean \ac{PDF}.
+zero-mean \ac{PDF}, which is symmetrical and centred around zero.
 \begin{figure}[tb]
 	\centering
 	\includegraphics{./figures/pdfs_plot.pdf}
@@ -1783,14 +1791,15 @@ and $\Gamma(z)$ is the gamma function, defined as:
 The Laplace and normal or Gaussian \acp{PDF} are achieved with
 $\gamma=1$ and $\gamma=2$, respectively.
 The uniform distribution can even be reached by making $\gamma\to\infty$.
-However, from figure~\ref{fig:probability_density_functions} one can see
-that $1\le\gamma\le2$ for video residuals.
+However, from figure~\ref{fig:probability_density_functions} one can see that
+$1\le\gamma\le2$ for video
+residuals~\cite{li-08-laplacian-modeling-dct-coefficients}.
 
 In Sezer's work~\cite{sezer-11-phd,sezer-08-sparse-orthonormal-transforms},
 the optimal value of the Lagrange multiplier $\lambda$ has been claimed
 to be straightforward to obtain.
 Nevertheless, no analytical way of proving its optimality has been found in
-literature.
+the literature.
 Hence, a detailed study has been carried out below.
 
 In order to find the optimal $\lambda$ from~\eqref{eqn:rdot_metric},
@@ -1901,7 +1910,7 @@ Substituting both derivatives:
 
 This proves how the Lagrange multiplier is only related to the quantisation
 step.
-In other words, once this level is fixed, so is the optimal balance between
+In other words, once this value is fixed, so is the optimal balance between
 the distortion and the rate constraint.
 
 An important consequence of using the $\ell_0$ norm is that the optimal
@@ -2001,9 +2010,9 @@ On the other hand, using the entropy leads to a minimum value of
 $J(\lambda)$ that is \ac{PDF}-dependent.
 An unwanted consequence of this dependence is that, for an iterative
 learning algorithm, after updating the transform at each iteration, the
-new \ac{PDF} has to be estimated to find the new optimal Lagrange
+new \ac{PDF} would have to be estimated to find the new optimal Lagrange
 multiplier $\lambda$, thus complicating the whole learning process and
-leading to possible instabilities.
+leading to probable instabilities.
 \begin{figure}[tp]
 	\centering
 	\includegraphics{./figures/j_qp27_plot.pdf}
@@ -2056,8 +2065,8 @@ This chapter has introduced different types of transforms and some
 basic concepts, such as separability and its relation to computational
 complexity.
 
-Two completely different approaches of transform design have been
-studied: the \ac{KLT} and the \ac{RDOT}.
+Two different approaches of transform design have been studied:
+the \ac{KLT} and the \ac{RDOT}.
 The \ac{KLT} defines the optimal transform for Gaussian sources with a
 high-resolution hypothesis.
 The \ac{DCT} and \ac{DST} used in \ac{HEVC} have been obtained from the
