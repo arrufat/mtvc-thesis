@@ -3344,13 +3344,13 @@ requirements to keep most part of the bit-rate savings.
 \label{sec:it_introduction}
 \index{incomplete transforms}
 
-Chapters~\ref{cha:mddt} and~\ref{cha:mdtc} have presented the great potential
-of non-separable transforms in terms of bit-rate savings for video coding.
+Chapters~\ref{cha:mddt} and~\ref{cha:mdtc} have presented the potential of
+non-separable transforms in terms of bit-rate savings for video coding.
 However, they come at a cost:
-the amount of operations needed to transform a block is highly increased with
-respect to a transform having a fast implementation.
+the amount of algorithmic operations needed to transform a block is highly
+increased with respect to a transform having a fast implementation.
 Besides, the amount of \acs{ROM} needed to store the transforms themselves is
-non-negligible, sometimes in the order of several MB.
+important, sometimes in the order of several MB.
 
 This Chapter presents an attempt at making non-separable transforms usable for
 video coding applications.
@@ -3372,6 +3372,19 @@ given signal~\cite{huang-06-sparse-representation}.
 Amongst them, the K-\acs{SVD} is one way of designing overcomplete
 dictionaries to achieve sparse data
 representation~\cite{aharon-06-overcomplete-sparse-dict}.
+Also, the \ac{RDOT} systems presented in this thesis are part of this
+ensemble.
+\begin{itemize}
+	\item The \ac{RDOT} metric contains a rate constraint turned into a
+		measure of the signal sparsity in the transform domain (the number of
+		coefficients set to zero).
+	\item The \ac{MDTC} system provides an overcomplete representation, as
+		\ac{HEVC} core transforms are completed with $2^N$ transforms.
+		As such, $1+2^N$ sets of coefficients are computed on the encoding
+		side.
+		A selection amongst those is made through the transform signalling and
+		the coefficient coding.
+\end{itemize}
 
 The usage of multiple complementary transforms to provide sparse
 representations has been addressed in Chapter~\ref{cha:mdtc}, with the
@@ -3435,6 +3448,8 @@ been placed somewhere in between $v_0$ and $w_0$.
 \subsection{Complexity analysis}
 \label{sub:it_complexity_analysis}
 
+Incomplete transforms are proposed in this work to provide a low complexity
+approach to the non-separable \ac{MDTC} systems.
 A remarkable consequence of using incomplete transforms is a decrease in
 complexity when decoding a signal, since there will be one coefficient
 different from zero, decoding implies multiplying the base vector by the
@@ -3445,8 +3460,9 @@ in~\eqref{eqn:sep_transform}.
 Assuming the image is composed of $8\times8$ blocks, $\x$ stands for the
 $8\times8$ pixels, and $\X$ their frequency representation.
 $\A$ is the $8\times8$ 1D transform.
-The usual transform used in image coding is the \ac{DCT}, whose fast algorithm
-requires 12 multiplications and 29 additions per $8\times1$ vector.
+The usual transform used in image coding is the \ac{DCT}-II, whose fast
+algorithm requires in the order of 12 multiplications and 29 additions per
+$8\times1$ vector.
 As $8$ vectors per block need to be processed both for the vertical and
 horizontal transform, processing an $8\times8$ block requires a total of 192
 multiplications and 464 additions.
@@ -3455,19 +3471,20 @@ This number of operations is identical for the inverse transform.
 For an incomplete transform, only one axis needs to be processed:
 each axis being formed by 64 values in this example.
 Consequently, only 64 multiplications and 63 additions are need to transform
-the input block $\x$ into the transform domain.
-For the inverse transformation, only 64 multiplications are needed.
+the input block $\x$ into the transform domain, that is, a simple correlation
+of the first base vector with the block $\x$.
+For the inverse transformation, only 64 multiplications are needed, since the
+first and only transform coefficient multiplies the first basis vector to
+recover the spatial domain samples.
 
 As a result, in this case, the incomplete transforms can be applied with an
-number of operations of approximately one third of the cost of regular
+number of operations of approximately one third of the cost of the fastest
 separable transforms.
 This complexity reduction benefits both the encoder and the decoder.
 
-It is also worth noticing, that those incomplete transforms are non-separable
-and, therefore, able to exploit any linear correlation amongst pixels
-within a block.
-Separable transforms, on the other hand, are only able to exploit correlation
-of pixels sharing the same row or column.
+It is also worth noticing, that those incomplete transforms are chosen
+non-separable and, therefore, able to exploit any linear correlation amongst
+pixels within a block.
 
 \section{Design of incomplete transforms}
 \label{sec:it_design_of_incomplete_transforms}
@@ -3493,8 +3510,8 @@ Consequently, the $\ell_0$ norm of the transform coefficients is always equal
 to one for any incomplete transform.
 Therefore, for a given set of training signals, one obtains a transform
 consisting of one meaningful base vector.
-The remaining vectors, albeit constituting a complete transform, are useless
-for the aim of the application.
+The remaining vectors, albeit constituting a complete transform with the fist
+base vector, are useless for the aim of the application.
 
 For consistency with previous Chapters, the learning set consists of
 prediction residuals issued from an \ac{HEVC} \ac{AI} coding for $8\times8$
@@ -3509,7 +3526,8 @@ A decision was made to keep the default \ac{HEVC} transform in each \ac{TU}
 size for compatibility reasons.
 However, since incomplete transforms are designed with a strong sparsity
 constraint on the quantised coefficients, a complete transform is needed to
-guarantee that all signals can be expressed in the transform domain.
+guarantee that all signals can be expressed in the transform domain at a
+chosen level of fidelity.
 By using the same design as in the previous Chapter (one main transform plus
 $2^N$ incomplete transforms), signals would be able to have a fall-back
 transform in case the incomplete transforms do not provide the desired level
@@ -3524,7 +3542,7 @@ to a particular transform.
 
 To illustrate the effectiveness of the learning process,
 figure~\ref{fig:it_num_zero} presents how an increase on the number of
-incomplete transforms is able to to provide a more sparse representation of
+incomplete transforms is able to provide a more sparse representation of
 the signal in the transform domain.
 
 \begin{figure}[tp]
