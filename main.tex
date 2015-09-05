@@ -4918,6 +4918,12 @@ to fast algorithms.
 This Chapter explores if the \acs{ROM} and complexity reductions balance the
 expected losses in bit-rate savings regarding separable \acp{RDOT}.
 
+The formal definition of the 8 types of \ac{DCT} and \ac{DST} can be found in
+tables~\ref{tab:dcts_def} and~\ref{tab:dsts_def}, respectively.
+Some of them have scaling factors, namely $\epsilon_n, \epsilon_n$, that vary
+depending on the position in the matrix to ensure the energy preservation
+property.
+
 Transforms in the \ac{DTT} family present strong relations amongst them and
 their inverse transforms~\cite{reznik-13-relationship-dct-dst,
 saxena-13-fast-transforms-intra-coding}, detailed in
@@ -5003,7 +5009,7 @@ These relations will be taken into account when designing
 		\frac{2}{\sqrt{2(N-1)}}\cos\left(\frac{\pi(2n+1)(2k+1)}{4N-2}\right)$
 	\end{tabular}
 	\caption{\acs{DCT} definitions of size $N$, where $n,k=0,\dots,N-1$}
-	\label{tab:dcts}
+	\label{tab:dcts_def}
 \end{table}
 
 \begin{table}[tb]
@@ -5053,7 +5059,7 @@ These relations will be taken into account when designing
 		\end{cases}$
 	\end{tabular}
 	\caption{\acs{DST} definitions of size $N$, where $n,k=0,\dots,N-1$}
-	\label{tab:dsts}
+	\label{tab:dsts_def}
 \end{table}
 
 \begin{table}[tb]
@@ -5113,11 +5119,15 @@ Instead, all transforms will be tested against the learning set, and the only
 the set of transforms that provide the lowest \ac{RDOT} metric will be
 retained.
 
+Figure~\ref{fig:comb_dct_dst} shows all possible combinations of using one of
+the 16 \acp{DTT} as the horizontal matrix and another as the vertical matrix.
+This leads to a total of 256 possible transforms.
+
 In order to expand the transform space when using the \ac{DTT} family, which
 consists of 8 types of \ac{DCT}, 8 types of \ac{DST} and their inverse
 versions, 8 spatial pixel permutations have also been considered.
 The chosen permutations are combinations of transposed and mirrored
-(vertically and horizontally) versions of residuals si as not to break pixel
+(vertically and horizontally) versions of residuals so as not to break pixel
 correlations and relative distances within a block.
 Using \acp{DTT} together with the proposed residual modifications leads to
 total of 2048 possible transform combinations.
