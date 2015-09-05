@@ -3477,7 +3477,7 @@ For the inverse transformation, only 64 multiplications are needed, since the
 first and only transform coefficient multiplies the first basis vector to
 recover the spatial domain samples.
 
-As a result, in this case, the incomplete transforms can be applied with an
+As a result, in this case, the incomplete transforms can be applied with a
 number of operations of approximately one third of the cost of the fastest
 separable transforms.
 This complexity reduction benefits both the encoder and the decoder.
@@ -3510,7 +3510,7 @@ Consequently, the $\ell_0$ norm of the transform coefficients is always equal
 to one for any incomplete transform.
 Therefore, for a given set of training signals, one obtains a transform
 consisting of one meaningful base vector.
-The remaining vectors, albeit constituting a complete transform with the fist
+The remaining vectors, albeit constituting a complete transform with the first
 base vector, are useless for the aim of the application.
 
 For consistency with previous Chapters, the learning set consists of
@@ -3544,6 +3544,7 @@ To illustrate the effectiveness of the learning process,
 figure~\ref{fig:it_num_zero} presents how an increase on the number of
 incomplete transforms is able to provide a more sparse representation of
 the signal in the transform domain.
+This Illustration is based on the \ac{IPM} 6 for $8\times8$ blocks.
 
 \begin{figure}[tp]
 	\centering
@@ -3558,7 +3559,8 @@ in conjunction with the \ac{DCT}).
 The results are presented relative to the reference system, which consists of
 a coding system using the \ac{DCT} alone, such as the \ac{HEVC}.
 As the number of incomplete transforms is increased, the proportion of
-significant coefficients is decreased to 66\% of its original value:
+significant coefficients is decreased to 66\% of its original value for a
+similar distortion:
 this validates the fact that more sparse representations can be achieved with
 the adjunction of incomplete transforms to the traditional \ac{DCT}.
 
@@ -3586,15 +3588,15 @@ directional pattern following that prediction.
 It can be observed how the incomplete transforms have patterns containing that
 particular direction, each exhibiting a particular band-shaped pattern.
 Note that the \ac{DCT} requires a significant number of coefficients to
-represent such directional, and inherently non-separable, patterns.
+represent such directional, and inherently non-separable, patterns because
+none of the \ac{DCT} bases expresses that direction.
 
 \section{Incomplete transforms in video coding}
 \label{sec:it_video_coding}
 
-The usefulness of incomplete transforms has also been applied to a practical
-real world scenario: \ac{HEVC}.
-To evaluate the performance of the approach, a set of $8\times8$ incomplete
-transforms is designed for each \ac{HEVC} \ac{IPM}.
+The usefulness of incomplete transforms has also been applied to \ac{HEVC}.
+To evaluate the performance of the approach, a set of $4\times4$ and
+$8\times8$ incomplete transforms is designed for each \ac{HEVC} \ac{IPM}.
 At the encoder, for each block, the best \ac{IPM}/transform pair is selected,
 exactly in the same way as the \ac{MDTC} system from Chapter~\ref{cha:mdtc}.
 
@@ -3610,11 +3612,13 @@ transform has been chosen by the encoder for that \ac{IPM}.
 Incomplete transforms have a special feature that generic \acp{RDOT} used in
 the \ac{MDTC} system do not have:
 they always output a signal that has only one coefficient different from zero.
+Consequently, the residual signal bitstream syntax can be reduced:
+the significance map (i.e.\ the location of the significant coefficients) does
+not need to be transmitted, since the position of the last element different
+from zero is known when using incomplete transforms.
 This fact can be taken advantage of by removing the
 \texttt{last\_sig\_coeff\_x} and \texttt{last\_sig\_coeff\_y} prefix and
-suffix syntax elements from the conveyed bitstream~\cite{JCTVC-G704}, since
-the position of the last element different from zero is known when using
-incomplete transforms.
+suffix syntax elements from the conveyed bitstream~\cite{JCTVC-G704}.
 
 \subsection{Performances of different coding configurations}
 \label{sub:it_performances}
@@ -3635,11 +3639,12 @@ also much lower than a \ac{MDTC} system.
 When incomplete transforms are enabled only for $4\times4$ \acp{TU}, the
 system presents modest performances (around 0.4\% of bit-rate savings) for
 both \ac{AI} and \ac{RA} coding configurations.
-The system starts presenting interesting performances when enabling incomplete
-transforms for $8\times8$ \acp{TU}, providing 1\% of average bit-rate
-savings.
+The system starts presenting more substantial performances when enabling
+incomplete transforms for $8\times8$ \acp{TU}, providing 1\% of average
+bit-rate savings.
 If incomplete transforms are enabled for both \ac{TU} sizes, the average
-bit-rate savings achieve 1.4\% for \ac{AI} configuration and 1\% for \ac{RA}.
+bit-rate savings achieve 1.4\% for the \ac{AI} coding configuration and 1\%
+for \ac{RA}.
 
 Sequences that performed exceptionally well using the \ac{MDTC} system due to
 their non-separable nature, such as \emph{BasketballDrill} present bit-rate
@@ -3737,8 +3742,8 @@ complex than regular non-separable and even separable transforms, the encoding
 complexity is increased.
 This is due to the fact that incomplete transforms are used as a simplified
 \ac{MDTC} system, where many transforms are tested for a same block size.
-This make the encoder explore many coding possibilities that were unavailable
-in \ac{HEVC}.
+This fact makes the encoder explore many coding possibilities that are
+unavailable to \ac{HEVC}.
 That being said, the increase in encoding complexity is lower than for a
 full-fledged \ac{MDTC} system, since testing incomplete transforms is much
 faster.
@@ -3746,16 +3751,13 @@ faster.
 On the decoder side, the situation changes in favour of the incomplete
 transforms with regards to \ac{HEVC}.
 Since all coding choices are made by the encoder and the decoder only has to
-apply the signalled transform, the decoding complexity is a bit lower that
-that of \ac{HEVC}.
+apply the signalled transform, which as equal (if the \ac{DCT}/\ac{DST} is
+chosen) or lower complexity, the decoding complexity is a bit lower that that
+of \ac{HEVC}.
 
 The actual results for encoding and decoding complexity are contained in
 table~\ref{tab:it_complexity}.
-As introduced in \S\ref{sub:it_complexity_analysis}, the complexity is much
-lower on the encoder side than for \ac{MDTC} systems.
 The decoder presents complexities a bit lower than \ac{HEVC}.
-The improvements are modest since incomplete transforms are not selected as
-often as the alternative transforms in the \ac{MDTC} system.
 
 \begin{table}[tb]
 	\centering
@@ -3782,7 +3784,7 @@ Due to the similarities to the \ac{MDTC} system, the non-separable incomplete
 transforms also need to be stored.
 However, in this case, the storage requirements are divided by $N^2$, with $N$
 being the \ac{TU} size for which the transforms are conceived, since only one
-base vector is retained.
+base vector is stored.
 Assuming each transform coefficient is quantised to 1 byte and rounded to the
 nearest integer, as in the \ac{MDDT} and \ac{MDTC} systems, this leads to
 storage requirements of:
@@ -3801,21 +3803,24 @@ Incomplete transforms provide a simplified version of the \ac{MDTC} system,
 presented in Chapter~\ref{cha:mdtc}.
 These complementary transforms are able to increment the sparsity of the
 signal in the transform domain:
-the number of non-zero coefficients has been reduced to around two thirds of
+the number of non-zero coefficients can been reduced to around two thirds of
 its original value.
 
 Experimental results on \ac{HEVC} prove that the sparsity improvements can
-lead to bit-rate savings of around 1\% with peaks of up to 6\%, while keeping
+lead to bit-rate savings of around 1\% with peaks of up to 8\%, while keeping
 the decoding complexity lower than that of \ac{HEVC}.
 As a result, incomplete transforms provide an example of application for
 non-separable transforms that can lead to bit-rate savings for reasonable
-complexity and storage amount.
+complexity and storage amounts.
 
 Due to the nature of incomplete transforms, they constitute an interesting
 solution for low bit-rate video applications, since the signal tends to be
 sparser than for high-quality video applications.
 As a result, incomplete transforms can improve the quality of low bit-rate
 video while reducing the decoding complexity.
+
+% TODO
+\todo{maybe add PSNR curve of BasketballDrill to illustrate lower bit-rates.}
 
 \chapter{Simplifications of \acs{MDTC} system for storage requirements}
 \label{cha:real_world_system}
@@ -3856,6 +3861,9 @@ savings achievable on the \ac{HEVC} using separable high performance \ac{MDTC}
 systems are around 4\%, which will be used as a reference when comparing the
 simplified systems.
 
+Furthermore, separable transform present increases of around 5\% in decoding
+complexity, instead of the 20\% added by non-separable transforms.
+
 \section{Source of the learning set}
 \label{sec:rw_source_of_the_learning_set}
 
@@ -3873,19 +3881,20 @@ D, E and F) have similar levels of performances as described previously on
 their respective system tables (see tables~\ref{tab:detailed_mddt_bd_rate},
 \ref{tab:bd_rate_mdtc} and~\ref{tab:bd_rate_it}).
 
-To remove all doubts about the effect of the learning data set, a completely
+To remove any doubt about the effect of the learning data set, a completely
 independent data set has been chosen and transforms have been designed using
 it.
 In order to make all results available and reproducible, the sequence of
 choice from which residuals have been output is \emph{Tears of Steel}, a
 Creative Commons short film~\cite{blender-tearsofsteel}.
-The film features computed generated imagery and a resolution of
+The film features computed generated imagery and unique a resolution of
 $1920\times800$ at a frame rate of \SI{24}{\hertz} and a length of
 \SI{12}{\minute} and \SI{14}{\second}.
 Although it is composed of more that 130 sub-sequences, all of them share the
-same video filters, frame rate, resolution, making a source of residuals less
-heterogeneous than classes B and C from the \ac{HEVC} test set, but providing
-a larger number of residuals (around as twice as many, in total):
+same video post-processing, frame rate, resolution, making a source of
+residuals less heterogeneous than classes B and C from the \ac{HEVC} test set,
+but providing a larger number of residuals (around as twice as many, in
+total):
 \begin{itemize}
 	\item $4\times4$ residuals: over 142 million.
 	\item $8\times8$ residuals: over 343 million.
@@ -3898,18 +3907,18 @@ Additionally, another independent set of sequences has been used to test the
 performances of both learning sets (classes B and C, and \emph{Tears of
 Steel}).
 This set consists of 59 sequences at different resolutions ($1920\times1080$,
-$1280\times720$, $800\times480$) and various frame rates (25, 30, 50, 60, 100,
+$1280\times720$, $832\times480$) and various frame rates (25, 30, 50, 60, 100,
 120, 240 frames per second).
-Each sequence has been limited to 5 frames, since all the tests will be
-performed in the \ac{AI} configuration.
+Each sequence has been limited to 5 frames, since all the tests are performed
+in the \ac{AI} configuration.
 
 From now on, the different sets will be referred to as:
 \begin{itemize}
 	\item BC: classes B and C from the \ac{HEVC} test set, used as the
 		learning set in previous Chapters.
 	\item ADEF: classes A, D, E and F from the \ac{HEVC} test set.
-	\item 59seq: 5 frames of 59 heterogeneous sequences for testing.
-	\item ToS: the \emph{Tears of Steel} short film.
+	\item 59seq: 5 frames of 59 heterogeneous (private) sequences for testing.
+	\item ToS: the \emph{Tears of Steel} publicly available short film.
 \end{itemize}
 
 \subsection{Impact on the coding performances over the learning sets}
@@ -3946,7 +3955,7 @@ number of transforms.
 		16 & -1.28 & -1.22 & -1.65 & -1.85 & -0.93 & -0.96 & -0.30 & -0.34 \\
 		32 & -1.28 & -1.25 & -1.76 & -1.89 & -0.93 & -0.99 & -0.27 & -0.35 \\
 	\end{tabularx}
-	\caption{\acs{BD}-rate for different testing and learning sets for
+	\caption{\acs{BD}-rate (\%) for different testing and learning sets for
 	$4\times4$ blocks}
 	\label{tab:residuals_independence_4}
 \end{table}
@@ -3967,7 +3976,7 @@ number of transforms.
 		64  & -3.88 & -2.79 & -3.01 & -2.66 & -3.10 & -3.04 & -1.93 & -2.28 \\
 		128 & ---   & -3.07 & ---   & -2.92 & ---   & -3.30 & ---   & -2.38 \\
 	\end{tabularx}
-	\caption{\acs{BD}-rate for different testing and learning sets for
+	\caption{\acs{BD}-rate (\%) for different testing and learning sets for
 	$8\times8$ blocks}
 	\label{tab:residuals_independence_8}
 \end{table}
@@ -4042,6 +4051,10 @@ the test set.
 This over-learning reassures the fact that the designed transforms are able to
 adapt to the learning set, while showing that there is little dependence to
 the learning set.
+It can be concluded that changing the learning set does not affect
+the overall performance:
+the order of improvement is learning set independent although some small local
+differences appear.
 
 \section{Non-homogeneous \acs{MDTC} systems}
 \label{sec:non_homogeneous_mdtc_systems}
@@ -4050,8 +4063,8 @@ In Chapter~\ref{cha:mdtc}, the \ac{MDTC} system was introduced.
 The \ac{MDTC} system was presented as an evolved \ac{MDDT} system, in which,
 instead of only one transform, a fixed number of transforms was provided
 inside each \ac{IPM}.
-However, it is a well-known fact that \ac{HEVC} does not use all \acp{IPM}
-equally:
+However, as shown in figure~\ref{fig:hevc_ipm_usage}, \ac{HEVC} does not use
+all \acp{IPM} equally:
 \ac{HEVC} favours the signalling of the \acp{IPM} that are most often used
 during the encoding of a sequence in terms of signalling.
 This technique is named \acp{MPM} and it is explained in detail
@@ -4066,7 +4079,7 @@ how many transforms are available for each \ac{IPM}.
 Consequently, next Section proposes a systematic way of generating \ac{MDTC}
 systems taking into account the storage requirements.
 Since the \acs{ROM} required to store the transforms is directly related to
-the number of transforms, and the number of transforms to the coding
+the number of transforms, and the number of transforms to the encoding
 complexity, by limiting the amount of \acs{ROM}, the system might also
 simplified in terms of encoding time.
 
@@ -4086,9 +4099,9 @@ up to 128 for $8\times8$ \ac{TU}.
 As a reference point, tables~\ref{tab:homogeneous_mdtc_4}
 and~\ref{tab:homogeneous_mdtc_8} contain different separable homogeneous
 \ac{MDTC} systems using $4\times4$ and $8\times8$ transforms, respectively.
-Systems have been labelled using the following structure: {4tX--8tY}.
+Systems have been labelled using the following convention: {4tN--8tM}.
 Where 4 and 8 stand for the transform sizes, t for the type, in this case s,
-meaning separable transforms, and X and Y represent the number of additional
+meaning separable transforms, and N and M represent the number of additional
 transforms added in each \ac{IPM} for the respective transform size.
 Each system has information about its \acs{ROM} requirements, the bit-rate
 savings and the encoding complexity with regards \ac{HEVC}.
@@ -4135,9 +4148,10 @@ performances seem to saturate with 16 and 32 additional transforms.
 \subsection{Determination of number of transforms per \acs{IPM}}
 \label{sub:rw_determination_number_transforms_ipm}
 
-In order to improve current homogeneous \ac{MDTC} systems,
-algorithm~\ref{alg:vmdtc_iter} presents a systematic way of designing a
-non-homogeneous \ac{MDTC} system, using a gradient approach.
+In order to improve current homogeneous \ac{MDTC} systems in the \acs{ROM} ---
+Y \acs{BD}-rate plane plane, algorithm~\ref{alg:vmdtc_iter} presents a
+systematic way of designing a non-homogeneous \ac{MDTC} system, using a
+gradient approach.
 The algorithm starts with an unmodified version of \ac{HEVC}.
 Then, it encodes the 59seq test set enabling one transform by \ac{IPM} at a
 time.
@@ -4194,19 +4208,20 @@ doubled each time for the \ac{IPM} that gives the best ratio.
 \end{algorithm}
 
 Figure~\ref{fig:vmdtc_iter} displays different \ac{MDTC} systems on the
-\acs{ROM}---Y \ac{BD}-rate plane.
+\acs{ROM} --- Y \ac{BD}-rate plane.
 The mains systems that are compared are the homogeneous and non-homogeneous
 (issued from the iterative algorithm) systems using $4\times4$ and $8\times8$
 transforms.
-Each point in this figure requires encoding 59 sequences at 4 \acp{QP}
-per \ac{IPM}, leading to a total of \num{8260} encodings.
+Each point in this figure requires encoding 59 sequences at 4 \acp{QP} for
+each one of the 35 \acp{IPM}, leading to a total of \num{8260} encodings.
 
 Systems that combine both transform sizes are also presented in the figure.
 Iterative non-homogeneous \ac{MDTC} systems have more flexibility in terms of
 the number of transforms enabled in each \ac{IPM} and, therefore, in their
 storage requirements.
 For this reason, iterative systems provide a lot more granularity than
-homogeneous systems, allowing for better \acs{ROM}--\ac{BD}-rate trade-offs.
+homogeneous systems, allowing for better \acs{ROM}--\ac{BD}-rate trade-offs
+and more selectable \acs{ROM} operating points.
 
 Red lines in figure~\ref{fig:vmdtc_iter} represent the $4\times4$ only
 \ac{MDTC} systems.
@@ -4220,7 +4235,7 @@ transforms (blue lines), since the storage requirements are higher.
 In this case, almost a factor of two can be observed in terms of \acs{ROM} for
 the same \ac{BD}-rate in homogeneous and non-homogeneous systems.
 Moreover, it can be noticed that, for the $8\times8$ systems, the bit-rate
-savings are proportional, in a logarithmic sense, to the \acs{ROM}
+savings are proportional, in a logarithmic scale, to the \acs{ROM}
 requirements and, consequently, to the number of transforms.
 
 \begin{figure}[tb]
@@ -4257,7 +4272,8 @@ the best combinations for a given \acs{ROM}.
 	\caption[All possible combinations of $4\times4$ and $8\times8$
 	non-homogeneous systems]
 	{All possible combinations of $4\times4$ and $8\times8$
-	non-homogeneous systems.
+	non-homogeneous systems based on independent selection of the appropriate
+	number of $4\times4$ and $8\times8$ transforms.
 	The lower boundary shows the hypothetical bit-rate savings that could be
 	obtained if there were no penalty when combining independently designed
 	$4\times4$ and $8\times8$ transforms.}
@@ -4268,10 +4284,10 @@ The selected \acs{ROM} requirements for the systems presented in
 figure~\ref{fig:vmdtc_iter} are detailed in
 table~\ref{tab:non_hom_mdtc}.
 Information about their actual \acs{ROM} requirements, \ac{BD}-rate and
-encoding complexty are provided.
+encoding complexity are provided.
 There are some remarkable points, such as the system at \SI{8}{\kilo B},
-which can achiver bit-rate savings of over 2\% with a complexity slightly
-higher than twice of \ac{HEVC}'s.
+which can achieve bit-rate savings of 1.8\% with an encoding complexity
+slightly higher than twice of \ac{HEVC}'s.
 Another interesting point is the \SI{64}{\kilo B} system, being able to
 provide bit-rate savings of 3\% at roughly seven times the complexity of
 \ac{HEVC}.
@@ -4324,20 +4340,20 @@ each \ac{IPM}.
 Those \acp{IPM} that are most used in \ac{HEVC} (0, 1, 10 and 26) tend to make
 use of a higher number of transforms than the rest of them.
 
+% TODO
+\todo{Maybe add annex with a table containing the number of transforms per
+\ac{IPM}}
+
 \section{Symmetrical \acs{MDTC} systems}
 \label{sec:sym_mdtc}
-
-A drawback of the \ac{MDTC} system presented in Chapter~\ref{cha:mdtc} was
-the large number of different transforms that needed to be stored, since each
-\ac{IPM} used its own different set.
 
 \subsection{Further simplifications taking advantage of \acs{IPM} symmetries}
 \label{sub:further_simplifications_taking_advantage_of_ipm_symmetries}
 
-In order to limit the \acs{ROM} impact of the transforms, one could take
+In order to reduce the \acs{ROM} impact of the transforms, one can take
 advantage of geometrical symmetries existing amongst \ac{HEVC} \acp{IPM}:
 within the 35 \acp{IPM} in \ac{HEVC}, symmetries in prediction residuals can
-be observed for directional modes (2--34).
+be observed for directional modes (\acp{IPM} from 2 to 34).
 Figure~\ref{fig:sym_pred_directions} contains a simplified version of the
 \ac{HEVC} \acp{IPM} which illustrates the proposed symmetrical relations.
 
@@ -4556,6 +4572,8 @@ table~\ref{tab:relations_ipm_residuals}.
 
 Using these symmetries between \acp{IPM} implies manipulating the residual
 before the transform stage.
+This residual manipulation comes at no cost in terms of mathematical
+operations, since it consists in pixel reordering.
 Before transmitting a residual, the encoder will consider the following cases,
 depending on the \ac{IPM}:
 \begin{equation}
@@ -4583,8 +4601,9 @@ $4\times4$ and $8\times8$ \ac{MDTC} systems, respectively in the \acs{ROM} and
 \ac{BD}-rate plane.
 As demonstrated before, for the full-symmetrical \ac{MDTC} systems, \acs{ROM}
 is decreased to around one third of its original value.
-Bit-rate savings also experiment some losses since symmetrical system are more
-constraint than non-symmetrical systems.
+Bit-rate savings also experiment some losses, tending to decrease as the
+number of transforms increases, since symmetrical system are more constrained
+than non-symmetrical systems.
 The encoding complexity for symmetrical system is equivalent to the one for
 non-symmetrical ones, detailed in tables~\ref{tab:homogeneous_mdtc_4}
 and~\ref{tab:homogeneous_mdtc_8}, since the number of transforms par \ac{IPM}
@@ -4644,7 +4663,7 @@ transforms for the $4\times4$ \acp{TU} and 32 for the $8\times8$ \acp{TU}.
 The symmetrical \acs{MDTC} system presents slightly better performances for
 the 59seq test set than the non-symmetrical one.
 Consequently, exploiting intra prediction residual symmetries can be
-considered to have no impact on bit-rate savings, either.
+considered to have no global impact on bit-rate savings, either.
 
 \begin{table}[tb]
 	\centering
