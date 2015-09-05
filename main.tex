@@ -2965,6 +2965,9 @@ The flag is conveyed though a \ac{CABAC} encoder and uses a context for each
 negligible impact on performances in case it is never enabled.
 If the flag is enabled, a code word of fixed length ($N$ bits) is used to
 signal the selected transform by the encoder among the $2^N$ remaining.
+This signalling strategy, apart from keeping backward compatibility with
+\ac{HEVC}, favours a simple approach that matches with the fact that, during
+the learning phase, all additional transforms were used almost uniformly.
 
 \subsection{Performances of different configurations}
 \label{sub:mdtc_performances}
@@ -3022,7 +3025,7 @@ set in \ac{AI} and \ac{RA} coding configurations, named:
 The performances of the low complexity and high performance systems are
 summarised in table~\ref{tab:bd_rate_mdtc}.
 The first thing to notice is that almost no losses are observed with regards
-\ac{HEVC} on any sequence: only \emph{SteamLocomotiveTrain} presents small
+to \ac{HEVC} on any sequence: only \emph{SteamLocomotiveTrain} presents small
 losses in the \ac{RA} coding configuration.
 On the one hand, the low complexity system is able to achieve average bit-rate
 savings of around 3.8\% with non-separable transforms, and around 2.4\% with
@@ -3030,8 +3033,8 @@ separable transforms.
 On the other hand, the high complexity system provides average bit-rate
 savings of over 4\% for its separable version, and over 7\% for the
 non-separable one.
-Around two thirds of the gain observed in the \ac{AI} configuration are
-obtained in the \ac{RA} coding.
+Around two thirds of the gain observed in the \ac{AI} coding configuration are
+obtained in the \ac{RA}.
 
 Graphical representations of table~\ref{tab:bd_rate_mdtc} are shown in
 figures~\ref{fig:mdtc_low_comp} and~\ref{fig:mdtc_high_perf} for the
@@ -3354,7 +3357,7 @@ important, sometimes in the order of several MB.
 
 This Chapter presents an attempt at making non-separable transforms usable for
 video coding applications.
-The work presented in this here is based on the one published
+The work presented in this here is mainly based on the one published
 in~\cite{arrufat-15-inc-transforms}.
 
 \section{Motivations of incomplete transforms}
@@ -3433,17 +3436,17 @@ both axis are required to describe the coordinates of those points.
 Just by adding an extra axis, $w_0$, adapted to this secondary direction, an
 effective and sparser representation of those dots can be achieved.
 
-Therefore, the dots plotted in this space can be represented efficiently thanks
+Therefore, the dots plotted in this space can be efficiently represented thanks
 to the union of two transforms.
 One transform is complete, the second one, which can be conceived as a
 complete transform, is restricted to only one base vector, the principal
 component:
-this way, the compactness is guaranteed, as only one transform coefficient is
+this way, the compactness is guaranteed, as only one transform coefficient
 needs to be transmitted.
 
 If only one adapted transform had been used in figure~\ref{fig:it_diagram}
 to adapt to all those points, such as the \acl{KLT}, the main axis would have
-been placed somewhere in between $v_0$ and $w_0$.
+been placed somewhere between $v_0$ and $w_0$.
 
 \subsection{Complexity analysis}
 \label{sub:it_complexity_analysis}
@@ -3470,9 +3473,9 @@ This number of operations is identical for the inverse transform.
 
 For an incomplete transform, only one axis needs to be processed:
 each axis being formed by 64 values in this example.
-Consequently, only 64 multiplications and 63 additions are need to transform
-the input block $\x$ into the transform domain, that is, a simple correlation
-of the first base vector with the block $\x$.
+Consequently, only 64 multiplications and 63 additions are also needed to
+transform the input block $\x$ into the transform domain, that is, a simple
+correlation of the first base vector with the block $\x$.
 For the inverse transformation, only 64 multiplications are needed, since the
 first and only transform coefficient multiplies the first basis vector to
 recover the spatial domain samples.
@@ -3482,7 +3485,7 @@ number of operations of approximately one third of the cost of the fastest
 separable transforms.
 This complexity reduction benefits both the encoder and the decoder.
 
-It is also worth noticing, that those incomplete transforms are chosen
+It is also worth noticing that those incomplete transforms are chosen
 non-separable and, therefore, able to exploit any linear correlation amongst
 pixels within a block.
 
@@ -3492,8 +3495,8 @@ pixels within a block.
 The incomplete transform design is based upon the \ac{RDOT} model proposed
 in~\cite{sezer-08-sparse-orthonormal-transforms} and detailed in
 \S\ref{sec:rdot}.
-The original method describes a way of deriving one optimal transform
-iteratively for some given training data and an initial transform by using a
+The original method describes a way of iteratively deriving one optimal
+transform for some given training data and an initial transform by using a
 metric that includes a sparsity constraint.
 This section adapts the learning method for incomplete transforms.
 
@@ -3530,8 +3533,8 @@ guarantee that all signals can be expressed in the transform domain at a
 chosen level of fidelity.
 By using the same design as in the previous Chapter (one main transform plus
 $2^N$ incomplete transforms), signals would be able to have a fall-back
-transform in case the incomplete transforms do not provide the desired level
-of fidelity in terms of distortion.
+transform when incomplete transforms do not provide the desired level of
+fidelity in terms of distortion.
 
 As a result, the learning algorithm for non-separable transforms has remained
 almost untouched from algorithm~\ref{alg:clustering}, described in
@@ -3576,7 +3579,7 @@ are presented.
 \end{figure}
 For each one, only the first base vector is displayed, since it is the only
 one delivering significant transformed coefficients.
-In the case of two-dimensional signals, like images, incomplete transforms can
+In the case of two-dimensional signals, such as images, incomplete transforms can
 be directly interpreted as texture patterns against whom the input signal is
 matched.
 The learning set in this experiment is made of prediction residuals extracted
@@ -3626,7 +3629,8 @@ suffix syntax elements from the conveyed bitstream~\cite{JCTVC-G704}.
 Experiments have been performed following the common test conditions described
 in~\cite{bossen-12-common-test-conditions} for the \ac{HEVC} test set.
 Incomplete transforms have been enabled for $4\times4$ and $8\times8$
-\acp{TU}.
+\acp{TU} in order to make the system comparable to the \ac{MDTC} systems from
+the previous section.
 
 The results of encoding the \ac{HEVC} test set using incomplete transforms are
 detailed in table~\ref{tab:bd_rate_it}.
@@ -3882,8 +3886,7 @@ their respective system tables (see tables~\ref{tab:detailed_mddt_bd_rate},
 \ref{tab:bd_rate_mdtc} and~\ref{tab:bd_rate_it}).
 
 To remove any doubt about the effect of the learning data set, a completely
-independent data set has been chosen and transforms have been designed using
-it.
+independent data set has been chosen and used to learn transforms.
 In order to make all results available and reproducible, the sequence of
 choice from which residuals have been output is \emph{Tears of Steel}, a
 Creative Commons short film~\cite{blender-tearsofsteel}.
@@ -3932,13 +3935,13 @@ tables~\ref{tab:residuals_independence_4}
 and~\ref{tab:residuals_independence_8} for $4\times4$ and $8\times8$ separable
 transforms, respectively.
 The table headers read as follows: Test set | Learning set.
-Meaning that the value before the pipe sign corresponds to the set of sequence that
-have been tested and the value after the pipe to the learning set that has
-been used.
+The value before the pipe sign corresponds to the set of sequences that have
+been tested and the value after the pipe to the learning set that has been
+used.
 Moreover, since the ToS learning set provides more residuals, more transforms
 have been learnt for the $8\times8$ blocks.
 Bit-rate savings are present for all transform configurations from both
-residuals sources on all test sets, and they increase coherently with the
+residuals sources on all test sets, and they coherently increase with the
 number of transforms.
 
 \begin{table}[tb]
@@ -3981,8 +3984,8 @@ number of transforms.
 	\label{tab:residuals_independence_8}
 \end{table}
 
-To better understand the impact of the learning set on the different test set,
-figure~\ref{fig:residuals_independence} shows the results from
+To better understand the impact of the learning set on the different test
+sets, figure~\ref{fig:residuals_independence} shows the results from
 tables~\ref{tab:residuals_independence_4}
 and~\ref{tab:residuals_independence_8}.
 For the $4\times4$ case, there are few differences in performances between
@@ -3992,7 +3995,7 @@ Steel data set.
 For the $8\times8$ case, there seems to be some over-learning for the
 sequences used during the learning phase (BC and ToS), since they present
 notable differences in performances when using their own learning set.
-The rest of test set present similar performance levels for both learning
+The rest of test sets present similar performance levels for both learning
 sets.
 
 \begin{figure}[tb]
@@ -4009,7 +4012,7 @@ sets.
 
 This comes as a reassuring fact, since the residuals from ToS have less
 variability in terms of camera filters, frame rate, resolution and have even
-synthetic images, whereas the rest of sequences are composed exclusively of
+synthetic images, whereas the rest of sequences are exclusively composed of
 natural images coming from different sources at different frame rates and
 resolutions.
 
@@ -4044,7 +4047,7 @@ The results are also presented in table~\ref{tab:cross_bdrate_learn}.
 Performances of the high performance \ac{MDTC} system are almost equivalent on
 the 59seq testing set, independently of the used learning set.
 
-In this section it has been proved that the transforms learnt and tested in
+In this section, it has been proved that the transforms learnt and tested in
 previous Chapters were subject to some over-learning, leading to slightly
 better performances than when using a learning set completely independent from
 the test set.
@@ -4209,7 +4212,7 @@ doubled each time for the \ac{IPM} that gives the best ratio.
 
 Figure~\ref{fig:vmdtc_iter} displays different \ac{MDTC} systems on the
 \acs{ROM} --- Y \ac{BD}-rate plane.
-The mains systems that are compared are the homogeneous and non-homogeneous
+The main systems that are compared are the homogeneous and non-homogeneous
 (issued from the iterative algorithm) systems using $4\times4$ and $8\times8$
 transforms.
 Each point in this figure requires encoding 59 sequences at 4 \acp{QP} for
@@ -4220,7 +4223,7 @@ Iterative non-homogeneous \ac{MDTC} systems have more flexibility in terms of
 the number of transforms enabled in each \ac{IPM} and, therefore, in their
 storage requirements.
 For this reason, iterative systems provide a lot more granularity than
-homogeneous systems, allowing for better \acs{ROM}--\ac{BD}-rate trade-offs
+homogeneous ones, allowing for better \acs{ROM}--\ac{BD}-rate trade-offs
 and more selectable \acs{ROM} operating points.
 
 Red lines in figure~\ref{fig:vmdtc_iter} represent the $4\times4$ only
@@ -4327,7 +4330,7 @@ overlap between them in the coded blocks, making the performances of the
 combined $4\times4$ and $8\times8$ systems to be a bit lower than the sum of
 the corresponding separate systems.
 
-Moreover, presented iterated \ac{MDTC} systems only have the choice to use 1
+Moreover, presented iterated \ac{MDTC} systems have only the choice to use 1
 to 32 additional transforms for $4\times4$ \acs{TU} and 1 to 128 for
 $8\times8$ \acp{TU}.
 This is another source of suboptimality once the maximum number of transforms
@@ -4413,7 +4416,7 @@ to the second one.
 
 These symmetries can be taken one step beyond and be applied inside the first
 half.
-Although it might seem counter-intuitive at first, this decision can be
+Although it might seem at first counter-intuitive, this decision can be
 justified geometrically:
 around \ac{IPM} 10, which is purely horizontal, it seems natural to think that
 residuals from \ac{IPM} 9 (slightly diagonal up) and \ac{IPM} 11 (slightly
@@ -4663,7 +4666,7 @@ transforms for the $4\times4$ \acp{TU} and 32 for the $8\times8$ \acp{TU}.
 The symmetrical \acs{MDTC} system presents slightly better performances for
 the 59seq test set than the non-symmetrical one.
 Consequently, exploiting intra prediction residual symmetries can be
-considered to have no global impact on bit-rate savings, either.
+considered to have no global impact on bit-rate savings.
 
 \begin{table}[tb]
 	\centering
