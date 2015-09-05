@@ -4658,16 +4658,6 @@ remains unchanged.
 	\label{tab:sym8}
 \end{table}
 
-Table~\ref{tab:sym_mdtc} unveils impact of symmetries for the high performance
-\ac{MDTC} system, defined in \S\ref{sub:mdtc_performances}, on the 59seq test
-set.
-As a reminder, the high performance \ac{MDTC} system uses 16 additional
-transforms for the $4\times4$ \acp{TU} and 32 for the $8\times8$ \acp{TU}.
-The symmetrical \acs{MDTC} system presents slightly better performances for
-the 59seq test set than the non-symmetrical one.
-Consequently, exploiting intra prediction residual symmetries can be
-considered to have no global impact on bit-rate savings.
-
 \begin{table}[tb]
 	\centering
 	\small
@@ -4686,6 +4676,16 @@ considered to have no global impact on bit-rate savings.
 	for $8\times8$ \acp{TU}}
 	\label{tab:sym_mdtc}
 \end{table}
+
+Table~\ref{tab:sym_mdtc} unveils impact of symmetries for the high performance
+\ac{MDTC} system, defined in \S\ref{sub:mdtc_performances}, on the 59seq test
+set.
+As a reminder, the high performance \ac{MDTC} system uses 16 additional
+transforms for the $4\times4$ \acp{TU} and 32 for the $8\times8$ \acp{TU}.
+The symmetrical \acs{MDTC} system presents slightly better performances for
+the 59seq test set than the non-symmetrical one.
+Consequently, exploiting intra prediction residual symmetries can be
+considered to have no global impact on bit-rate savings.
 
 \begin{figure}[tb]
 	\centering
@@ -4818,9 +4818,10 @@ in Chapter~\ref{cha:mdtc}.
 Chapter~\ref{cha:mdtc} has unveiled the potential of gains achievable through
 the \ac{MDTC} technique.
 Nevertheless, the presented system has a level of complexity which is too
-high to be used in real life applications.
-As a result, the following Chapters propose two different approaches to yield
-the system less complex.
+high to be used in commercial applications.
+As a result, the Chapters~\ref{cha:incomplete_transforms}
+and~\ref{cha:real_world_system} propose two different approaches to yield the
+system less complex:
 
 Chapter~\ref{cha:incomplete_transforms} simplifies the system by designing
 transforms that make use of only base vector.
@@ -4842,7 +4843,7 @@ non-homogeneous systems, since there are less transforms to test in each
 
 However, even if the main motivation for the approaches above is to reduce
 the complexity of the high performance \ac{MDTC} system presented in
-Chapter~\ref{cha:mdtc}, the improvements have only been significant in the
+Chapter~\ref{cha:mdtc}, the improvements have only been focused in the
 \acs{ROM} axis, leaving the encoder and decoder complexities decreases to be a
 side effect of the storage limitation.
 
@@ -4878,13 +4879,13 @@ The interest of the \acp{DTT} in this Chapter is motivated by the existing
 fast algorithms for transform implementation, which are notably less complex
 than a full matrix multiplication required by generic block transforms.
 The algorithmic complexity for a \ac{DTT} is in the order of $N^2\log_2(N)$
-instead of the naïve $N^3$, where $N$ stands for the transform
+instead of the $N^3$, where $N$ stands for the transform
 size~\cite{puschel-08-algorithms-dct-dst}.
 
 Since \acp{DTT} coefficients can be computed using and analytical formula,
 their storage requirement is negligible.
 However, a scanning matrix is still required to sort the transformed
-coefficients in a globally monotonic order to ease the lossless coding stage.
+coefficients in a globally decreasing order to ease the entropy coding stage.
 As a result, the storage amount necessary per transform is $N^2$ bytes.
 For \acp{RDOT}, the required memory is $3N^2$ bytes per transform, as the
 horizontal and vertical transform are stored along with a dedicated scanning
@@ -4924,125 +4925,136 @@ table~\ref{tab:dtt_relationships}.
 These relations will be taken into account when designing
 \acs{DTT}-based \acs{MDTC} systems in the next Section.
 
-\begin{align}
-	\small
-	% DCT-I
-	{\left[C_{N}^{I} \right]}_{n,k} & =
-	\sqrt{\frac{2}{N-1}}\epsilon_n\epsilon_k\cos\left(\frac{\pi\,n\,k}{N-1}\right)
-	\quad
-	\epsilon_n,\epsilon_k =
-	\begin{cases}
-		\frac{1}{\sqrt{2}} & n, k = 0 \\
-		\frac{1}{\sqrt{2}} & n, k = N-1 \\
-		1 & \text{otherwise}
-	\end{cases}
-	\\ % DCT-II
-	{\left[C_{N}^{II} \right]}_{n,k} & =
-	\sqrt{\frac{2}{N}}\epsilon_k\cos\left(\frac{\pi(2n+1)k}{2N}\right)
-	\quad
-	\epsilon_k =
-	\begin{cases}
-		\frac{1}{\sqrt{2}} & k = 0 \\
-		1 & \text{otherwise}
-	\end{cases}
-	\\ % DCT-III
-	{\left[C_{N}^{III} \right]}_{n,k} & =
-	\sqrt{\frac{2}{N}}\epsilon_n\cos\left(\frac{\pi(2k+1)n}{2N}\right)
-	\quad
-	\epsilon_n =
-	\begin{cases}
-		\frac{1}{\sqrt{2}} & n = 0 \\
-		1 & \text{otherwise}
-	\end{cases}
-	\\ % DCT-IV
-	{\left[C_{N}^{IV} \right]}_{n,k} & =
-	\sqrt{\frac{2}{N}}\cos\left(\frac{\pi(2n+1)(2k+1)}{4N}\right)
-	\\ % DCT-V
-	{\left[C_{N}^{V} \right]}_{n,k} & =
-	\frac{2}{\sqrt{2(N-1)+1}}\epsilon_n\epsilon_k\cos\left(\frac{2\pi\,n\,k}{2N-1}\right)
-	\quad
-	\epsilon_n,\epsilon_k =
-	\begin{cases}
-		\frac{1}{\sqrt{2}} & n, k = 0 \\
-		1 & \text{otherwise}
-	\end{cases}
-	\\ % DCT-VI
-	{\left[C_{N}^{VI} \right]}_{n,k} & =
-	\frac{2}{\sqrt{2(N-1)}}\epsilon_n\epsilon_k\cos\left(\frac{\pi(2n+1)k}{2N-1}\right)
-	\quad
-	\epsilon_n =
-	\begin{cases}
-		\frac{1}{\sqrt{2}} & n = N-1 \\
-		1 & \text{otherwise}
-	\end{cases}
-	\quad
-	\epsilon_k =
-	\begin{cases}
-		\frac{1}{\sqrt{2}} & k = 0 \\
-		1 & \text{otherwise}
-	\end{cases}
-	\\ % DCT-VII
-	{\left[C_{N}^{VII} \right]}_{n,k} & =
-	\frac{2}{\sqrt{2(N-1)}}\epsilon_n\epsilon_k\cos\left(\frac{\pi(2k+1)n}{2N-1}\right)
-	\quad
-	\epsilon_k =
-	\begin{cases}
-		\frac{1}{\sqrt{2}} & k = N-1 \\
-		1 & \text{otherwise}
-	\end{cases}
-	\quad
-	\epsilon_n =
-	\begin{cases}
-		\frac{1}{\sqrt{2}} & n = 0 \\
-		1 & \text{otherwise}
-	\end{cases}
-	\\ % DCT-VIII
-	{\left[C_{N}^{VIII} \right]}_{n,k} & =
-	\frac{2}{\sqrt{2(N-1)}}\cos\left(\frac{\pi(2n+1)(2k+1)}{4N-2}\right)
-	\\ % DST-I
-	{\left[S_{N}^{I} \right]}_{n,k} & =
-	\sqrt{\frac{2}{2N+1}}\sin\left(\frac{\pi(n+1)(k+1)}{N+1}\right)
-	\\ % DST-II
-	{\left[S_{N}^{II} \right]}_{n,k} & =
-	\sqrt{\frac{2}{2N}}\epsilon_k\sin\left(\frac{\pi(2n+1)(k+1)}{2N}\right)
-	\quad
-	\epsilon_k =
-	\begin{cases}
-		\frac{1}{\sqrt{2}} & k = N-1 \\
-		1 & \text{otherwise}
-	\end{cases}
-	\\ % DST-III
-	{\left[S_{N}^{III} \right]}_{n,k} & =
-	\sqrt{\frac{2}{2N}}\epsilon_n\sin\left(\frac{\pi(2n+1)(k+1)}{2N}\right)
-	\quad
-	\epsilon_n =
-	\begin{cases}
-		\frac{1}{\sqrt{2}} & n = N-1 \\
-		1 & \text{otherwise}
-	\end{cases}
-	\\ % DST-IV
-	{\left[S_{N}^{IV} \right]}_{n,k} & =
-	\frac{2}{\sqrt{2N}}\sin\left(\frac{\pi(2n+1)(2k+1)}{4N}\right)
-	\\ % DST-V
-	{\left[S_{N}^{V} \right]}_{n,k} & =
-	\frac{2}{\sqrt{2N+1}}\sin\left(\frac{2\pi(n+1)(k+1)}{2N+1}\right)
-	\\ % DST-VI
-	{\left[S_{N}^{VI} \right]}_{n,k} & =
-	\frac{2}{\sqrt{2N+1}}\sin\left(\frac{\pi(2n+1)(k+1)}{2N+1}\right)
-	\\ % DST-VII
-	{\left[S_{N}^{VII} \right]}_{n,k} & =
-	\frac{2}{\sqrt{2N+1}}\sin\left(\frac{\pi(2k+1)(n+1)}{2N+1}\right)
-	\\ % DST-VIII
-	{\left[S_{N}^{VIII} \right]}_{n,k} & =
-	\frac{2}{\sqrt{2(N-1)+1}}\epsilon_n\epsilon_k\sin\left(\frac{\pi(2n+1)(2k+1)}{2((2N-1)+1)}\right)
-	\quad
-	\epsilon_n,\epsilon_k =
-	\begin{cases}
-		\frac{1}{\sqrt{2}} & n, k = N-1 \\
-		1 & \text{otherwise}
-	\end{cases}
-\end{align}
-Where $n,k=0,\dots,N-1$.
+\begin{table}[tb]
+	\centering
+	\begin{tabular}{rll}
+		\acs{DCT}-I: &
+		$\displaystyle{\left[C_{N}^{I} \right]}_{n,k} =
+		\sqrt{\frac{2}{N-1}}\epsilon_n\epsilon_k\cos\left(\frac{\pi\,n\,k}{N-1}\right)$
+		&
+		$\displaystyle\epsilon_n,\epsilon_k =
+		\begin{cases}
+			\frac{1}{\sqrt{2}} & n, k = 0 \\
+			\frac{1}{\sqrt{2}} & n, k = N-1 \\
+			1 & \text{otherwise}
+		\end{cases}$ \\
+		\acs{DCT}-II: &
+		$\displaystyle{\left[C_{N}^{II} \right]}_{n,k} =
+		\sqrt{\frac{2}{N}}\epsilon_k\cos\left(\frac{\pi(2n+1)k}{2N}\right)$
+		&
+		$\displaystyle\epsilon_k =
+		\begin{cases}
+			\frac{1}{\sqrt{2}} & k = 0 \\
+			1 & \text{otherwise}
+		\end{cases}$ \\
+		\acs{DCT}-III: &
+		$\displaystyle{\left[C_{N}^{III} \right]}_{n,k} =
+		\sqrt{\frac{2}{N}}\epsilon_n\cos\left(\frac{\pi(2k+1)n}{2N}\right)$
+		&
+		$\displaystyle\epsilon_n =
+		\begin{cases}
+			\frac{1}{\sqrt{2}} & n = 0 \\
+			1 & \text{otherwise}
+		\end{cases}$\\
+		\acs{DCT}-IV: &
+		$\displaystyle{\left[C_{N}^{IV} \right]}_{n,k} =
+		\sqrt{\frac{2}{N}}\cos\left(\frac{\pi(2n+1)(2k+1)}{4N}\right)$ \\
+		\acs{DCT}-V: &
+		$\displaystyle{\left[C_{N}^{V} \right]}_{n,k} =
+		\frac{2}{\sqrt{2(N-1)+1}}\epsilon_n\epsilon_k\cos\left(\frac{2\pi\,n\,k}{2N-1}\right)$
+		&
+		$\displaystyle\epsilon_n,\epsilon_k =
+		\begin{cases}
+			\frac{1}{\sqrt{2}} & n, k = 0 \\
+			1 & \text{otherwise}
+		\end{cases}$ \\
+		\acs{DCT}-VI: &
+		$\displaystyle{\left[C_{N}^{VI} \right]}_{n,k} =
+		\frac{2}{\sqrt{2(N-1)}}\epsilon_n\epsilon_k\cos\left(\frac{\pi(2n+1)k}{2N-1}\right)$
+		&
+		$\displaystyle\epsilon_n =
+		\begin{cases}
+			\frac{1}{\sqrt{2}} & n = N-1 \\
+			1 & \text{otherwise}
+		\end{cases}
+		\quad
+		\epsilon_k =
+		\begin{cases}
+			\frac{1}{\sqrt{2}} & k = 0 \\
+			1 & \text{otherwise}
+		\end{cases}$ \\
+		\acs{DCT}-VII: &
+		$\displaystyle{\left[C_{N}^{VII} \right]}_{n,k} =
+		\frac{2}{\sqrt{2(N-1)}}\epsilon_n\epsilon_k\cos\left(\frac{\pi(2k+1)n}{2N-1}\right)$
+		&
+		$\displaystyle\epsilon_k =
+		\begin{cases}
+			\frac{1}{\sqrt{2}} & k = N-1 \\
+			1 & \text{otherwise}
+		\end{cases}
+		\quad
+		\epsilon_n =
+		\begin{cases}
+			\frac{1}{\sqrt{2}} & n = 0 \\
+			1 & \text{otherwise}
+		\end{cases}$ \\
+		\acs{DCT}-VIII: &
+		$\displaystyle{\left[C_{N}^{VIII} \right]}_{n,k} =
+		\frac{2}{\sqrt{2(N-1)}}\cos\left(\frac{\pi(2n+1)(2k+1)}{4N-2}\right)$
+	\end{tabular}
+	\caption{\acsp{DCT}, where $n,k=0,\dots,N-1$}
+	\label{tab:dcts}
+\end{table}
+
+\begin{table}[tb]
+	\centering
+	\begin{tabular}{rll}
+		\acs{DST}-I: &
+		$\displaystyle{\left[S_{N}^{I} \right]}_{n,k} =
+		\sqrt{\frac{2}{2N+1}}\sin\left(\frac{\pi(n+1)(k+1)}{N+1}\right)$ \\
+		\acs{DST}-II: &
+		$\displaystyle{\left[S_{N}^{II} \right]}_{n,k} =
+		\sqrt{\frac{2}{2N}}\epsilon_k\sin\left(\frac{\pi(2n+1)(k+1)}{2N}\right)$
+		&
+		$\displaystyle\epsilon_k =
+		\begin{cases}
+			\frac{1}{\sqrt{2}} & k = N-1 \\
+			1 & \text{otherwise}
+		\end{cases}$ \\
+		\acs{DST}-III: &
+		${\left[S_{N}^{III} \right]}_{n,k} =
+		\sqrt{\frac{2}{2N}}\epsilon_n\sin\left(\frac{\pi(2n+1)(k+1)}{2N}\right)$
+		&
+		$\displaystyle\epsilon_n =
+		\begin{cases}
+			\frac{1}{\sqrt{2}} & n = N-1 \\
+			1 & \text{otherwise}
+		\end{cases}$ \\
+		\acs{DST}-IV: &
+		$\displaystyle{\left[S_{N}^{IV} \right]}_{n,k} =
+		\frac{2}{\sqrt{2N}}\sin\left(\frac{\pi(2n+1)(2k+1)}{4N}\right)$ \\
+		\acs{DST}-V: &
+		$\displaystyle{\left[S_{N}^{V} \right]}_{n,k} =
+		\frac{2}{\sqrt{2N+1}}\sin\left(\frac{2\pi(n+1)(k+1)}{2N+1}\right)$ \\
+		\acs{DST}-VI: &
+		$\displaystyle{\left[S_{N}^{VI} \right]}_{n,k} =
+		\frac{2}{\sqrt{2N+1}}\sin\left(\frac{\pi(2n+1)(k+1)}{2N+1}\right)$ \\
+		\acs{DST}-VII: &
+		$\displaystyle{\left[S_{N}^{VII} \right]}_{n,k} =
+		\frac{2}{\sqrt{2N+1}}\sin\left(\frac{\pi(2k+1)(n+1)}{2N+1}\right)$ \\
+		\acs{DST}-VIII: &
+		$\displaystyle{\left[S_{N}^{VIII} \right]}_{n,k} =
+		\frac{2}{\sqrt{2(N-1)+1}}\epsilon_n\epsilon_k\sin\left(\frac{\pi(2n+1)(2k+1)}{2((2N-1)+1)}\right)$
+		&
+		$\displaystyle\epsilon_n,\epsilon_k =
+		\begin{cases}
+			\frac{1}{\sqrt{2}} & n, k = N-1 \\
+			1 & \text{otherwise}
+		\end{cases}$
+	\end{tabular}
+	\caption{\acsp{DST}, where $n,k=0,\dots,N-1$}
+	\label{tab:dsts}
+\end{table}
 
 \begin{table}[tb]
 	\centering
