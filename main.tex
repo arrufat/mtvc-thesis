@@ -39,6 +39,7 @@
 \usepackage{tabularx} % for fixed width tables
 \usepackage{diagbox} % for diagonal separator in tables
 \usepackage{fancyhdr} % customise headers and footers
+\usepackage{pdfpages}
 
 % lines and paragraphs
 % \usepackage{setspace}
@@ -111,6 +112,10 @@
 \begin{document}
 \frontmatter
 \maketitle
+% front cover
+% \includepdf[pages={2}]{./cover-mtvc-thesis-INSA-UEB.pdf}
+% \cleardoublepage
+% \includepdf[pages={4}]{./cover-mtvc-thesis-INSA-UEB.pdf}
 
 \chapter*{Acknowledgements}
 \label{cha:acknowledgements}
@@ -5979,5 +5984,11 @@ extra ROM and no added decoding complexity.
 \printindex
 \addcontentsline{toc}{chapter}{Index}
 \thispagestyle{empty}
+
+% back cover
+% \newpage
+% \thispagestyle{empty}
+% \mbox{}
+% \includepdf[pages={3}]{./cover-mtvc-thesis-INSA-UEB.pdf}
 
 \end{document}
