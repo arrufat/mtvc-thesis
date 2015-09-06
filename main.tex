@@ -3611,7 +3611,7 @@ $8\times8$ incomplete transforms is designed for each \ac{HEVC} \ac{IPM}.
 At the encoder, for each block, the best \ac{IPM}/transform pair is selected,
 exactly in the same way as the \ac{MDTC} system from Chapter~\ref{cha:mdtc}.
 
-\subsection{Signalling of incomplete transforms}
+\subsection{Signalling of incomplete transforms in the bitstream}
 \label{sub:it_signalling}
 
 The signalling scheme for incomplete transforms is inherited from the
@@ -3631,7 +3631,7 @@ This fact can be taken advantage of by removing the
 \texttt{last\_sig\_coeff\_x} and \texttt{last\_sig\_coeff\_y} prefix and
 suffix syntax elements from the conveyed bitstream~\cite{JCTVC-G704}.
 
-\subsection{Performances of different coding configurations}
+\subsection{Performances of different configurations}
 \label{sub:it_performances}
 
 Experiments have been performed following the common test conditions described
@@ -4936,7 +4936,28 @@ Transforms in the \ac{DTT} family present strong relations amongst them and
 their inverse transforms~\cite{reznik-13-relationship-dct-dst,
 saxena-13-fast-transforms-intra-coding}, detailed in
 table~\ref{tab:dtt_relationships}.
-These relations will be taken into account when designing
+Moreover, using an orthogonal transform $\A$ for the rows of a block and
+another orthogonal transform $\B$ for the resulting columns does not result in
+the same signal in the transform domain as if the operations are carried out
+the other way around if $\A\neq\B$.
+Nonetheless, both resulting signals can be expressed in terms of the other:
+\begin{align}
+	\X = \B{\left(\A\x^T\right)}^T = \B \x \A^T \\
+	\X = \A{\left(\B\x^T\right)}^T = \A \x \B^T
+\end{align}
+If instead of transforming $\x$ directly, a transposition is applied before:
+\begin{align}
+	\X = \B{\left(\A{\left(\x^T\right)}^T\right)}^T = \B \x^T \A^T =
+	{\left(\A\x\B^T\right)}^T\\
+	\X = \A{\left(\B{\left(\x^T\right)}^T\right)}^T = \A \x^T \B^T =
+	{\left(\B\x\A^T\right)}^T
+\end{align}
+Meaning that a transposition in the spatial domain is equivalent to invert the
+order of the row and column transforms and then transpose the result.
+Moreover if both transforms are related between each other as $\A^T=\B$,
+equations above can all be written in terms of $\A$ and $\A^T$.
+
+These and other relations will be taken into account when designing
 \acs{DTT}-based \acs{MDTC} systems in the next Section.
 
 \begin{table}[tb]
@@ -5155,7 +5176,7 @@ possible transform combinations.
 Fortunately, due to the nature of the \ac{DTT} family, there are many
 redundancies within the transform combinations.
 For instance, for $4\times4$ transforms, the 2048 list reduced to 256
-unique transforms.
+unique transforms, with the exception of a shuffling in the transform domain.
 As an example, for $N=4$ additional transforms, the number of combinations
 that need to be tested is:
 \begin{align}
@@ -5177,8 +5198,8 @@ instead of:
 	\right) =
 	\num{730862190080}\approx\num{7.31e11}
 \end{align}
-Meaning that the number of possible combinations has been reduced more than a
-factor of 4000.
+Meaning that the number of possible combinations has been reduced by more than
+a factor of 4000.
 
 In order to find a good combination of transforms and permutations, all
 combinations are put into a list, which is iterated through.
