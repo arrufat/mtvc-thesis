@@ -3820,9 +3820,9 @@ savings of more that 8\% using this approach.
 Figure~\ref{fig:mdtc_bdrate_bdrill_inc_tr} shows the \ac{BD}-rate curves of
 standard \ac{HEVC} and the \ac{MDTC} system using incomplete transforms on
 $4\times4$ and $8\times8$ on the \emph{BasketballDrill} sequence.
-The bit-rate savings are over 8\% and it can be seen that the quality of the
-sequence improves at low bit-rates (\acs{QP} 37), while effects are less
-important as the \acs{QP} increases.
+The bit-rate savings are over 8\% and it can be seen that the system behaves
+virtually in the same way as the \ac{MDTC} systems presented in the previous
+Chapter for all bit-rate ranges.
 
 \begin{figure}[tb]
 	\centering
@@ -3914,13 +3914,14 @@ lead to bit-rate savings of around 1\% with peaks of up to 8\%, while keeping
 the decoding complexity lower than that of \ac{HEVC}.
 As a result, incomplete transforms provide an example of application for
 non-separable transforms that can lead to bit-rate savings for reasonable
-complexity and storage amounts.
+encoding complexity and storage amounts.
+On the decoder side, incomplete transforms require less operations per block
+than \ac{HEVC} transforms, leading to a decrease on the decoding complexity.
 
-Due to the nature of incomplete transforms, they constitute an interesting
-solution for low bit-rate video applications, since the signal tends to be
-sparser than for high-quality video applications.
-As a result, incomplete transforms can improve the quality of low bit-rate
-video while reducing the decoding complexity.
+Summing up, \ac{MDTC} systems using incomplete transforms constitute a more
+lightweight alternative to \ac{RDOT}-based \ac{MDTC} systems presented in
+Chapter~\ref{cha:mdtc} that are able to provide improvements over \ac{HEVC}
+across a wide range of bit-rate with low decoding complexity.
 
 \chapter{Simplifications of \acs{MDTC} system for storage requirements}
 \label{cha:real_world_system}
