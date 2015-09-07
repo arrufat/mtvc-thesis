@@ -5040,10 +5040,17 @@ Transforms in the \ac{DTT} family present strong relations amongst them and
 their inverse transforms~\cite{reznik-13-relationship-dct-dst,
 saxena-13-fast-transforms-intra-coding}, detailed in
 table~\ref{tab:dtt_relationships}.
-Moreover, using an orthogonal transform $\A$ for the rows of a block and
-another orthogonal transform $\B$ for the resulting columns does not result in
-the same signal in the transform domain as if the operations are carried out
-the other way around if $\A\neq\B$.
+Since all inverse \acsp{DCT} and \acsp{DST} can be expressed in terms of a
+direct transform, there are 16 different transforms in total.
+Combining them as a horizontal and vertical transforms leads to a total of 256
+unique transforms, which are able to capture different kinds of residual
+patterns.
+Some of these transforms are displayed in figure~\ref{fig:some_dtts}.
+
+As an observation, using an orthogonal transform $\A$ for the rows of a block
+and another orthogonal transform $\B$ for the resulting columns does not
+result in the same signal in the transform domain as if the operations are
+carried out the other way around if $\A\neq\B$.
 Nonetheless, both resulting signals can be expressed in terms of the other:
 \begin{align}
 	\X = \B{\left(\A\x^T\right)}^T = \B \x \A^T \\
@@ -5058,11 +5065,98 @@ If instead of transforming $\x$ directly, a transposition is applied before:
 \end{align}
 Meaning that a transposition in the spatial domain is equivalent to invert the
 order of the row and column transforms and then transpose the result.
-Moreover if both transforms are related between each other as $\A^T=\B$,
+
+In order to expand the number of transforms available, three geometrical
+operations have been considered:
+\begin{itemize}
+	\item Residual transposition: $\x^T$
+	\item Horizontal mirroring: $\curvearrowupdown\x$
+	% \item Vertical mirroring $\displaystyle\x\limits^\curvearrowleftright$.
+	\item Vertical mirroring $\x\limits^
+		{\rotatebox[origin=c]{-90}{\curvearrowupdown}}$
+\end{itemize}
+These operators can be combined, resulting into $2^3=8$ different operations.
+By applying these pixel permutations to the residual before the transform
+stage, the number of transforms can be increased from 256 to 2048.
+Finally, if both transforms are related between each other as $\A^T=\B$,
 equations above can all be written in terms of $\A$ and $\A^T$.
 
+Finally, if a different scanning is allowed per transform, both ensembles of
+operations are equivalent, since the only difference is the order in which the
+transform coefficients are output, but their values remain the same, resulting
+in fewer combinations than 256.
 These and other relations will be taken into account when designing
 \acs{DTT}-based \acs{MDTC} systems in the next Section.
+
+\begin{figure}[tb]
+	\centering
+	\subfloat[\acs{DCT}-II --- \acs{DCT}-II]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_017_DCT_IIxDCT_II.png}}
+	\hfill
+	\subfloat[\acs{DST}-VII --- \acs{DST}-VII]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_238_DST_VIIxDST_VII.png}}
+	\hfill
+	\subfloat[\acs{DCT}-IV --- \acs{DCT}-IV]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_051_DCT_IVxDCT_IV.png}}
+	\hfill
+	\subfloat[\acs{DCT}-III --- \acs{DCT}-IV]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_035_DCT_IIIxDCT_IV.png}}
+
+	\subfloat[\acs{DST}-VII --- \acs{DCT}-IV]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_227_DST_VIIxDCT_IV.png}}
+	\hfill
+	\subfloat[\acs{DST}-V --- \acs{DCT}-IV]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_067_DCT_VxDCT_IV.png}}
+	\hfill
+	\subfloat[\acs{DST}-VII --- \acs{DCT}-V]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_228_DST_VIIxDCT_V.png}}
+	\hfill
+	\subfloat[\acs{DST}-VII --- \acs{DST}-II]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_105_DCT_VIIxDST_II.png}}
+
+	\subfloat[\acs{DST}-VII --- \acs{DCT}-V]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_228_DST_VIIxDCT_V.png}}
+	\hfill
+	\subfloat[\acs{DST}-VII --- \acs{DCT}-IV]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_227_DST_VIIxDCT_IV.png}}
+	\hfill
+	\subfloat[\acs{DST}-VII --- \acs{DST}-I]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_232_DST_VIIxDST_I.png}}
+	\hfill
+	\subfloat[\acs{DST}-VII --- \acs{DST}-IV]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_235_DST_VIIxDST_IV.png}}
+
+	\subfloat[\acs{DCT}-III --- \acs{DCT}-IV]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_035_DCT_IIIxDCT_IV.png}}
+	\hfill
+	\subfloat[\acs{DCT}-V --- \acs{DCT}-III]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_066_DCT_VxDCT_III.png}}
+	\hfill
+	\subfloat[\acs{DCT}-V --- \acs{DCT}-IV]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_067_DCT_VxDCT_IV.png}}
+	\hfill
+	\subfloat[\acs{DCT}-II --- \acs{DCT}-III]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_018_DCT_IIxDCT_III.png}}
+
+	\caption{$4\times4$ \acsp{DTT} combination examples}
+	\label{fig:some_dtts}
+\end{figure}
 
 \begin{table}[tb]
 	\centering
@@ -5252,13 +5346,10 @@ Instead, all transforms will be tested against the learning set, and the only
 the set of transforms that provide the lowest \ac{RDOT} metric will be
 retained.
 
-Figure~\ref{fig:comb_dct_dst} shows all possible combinations of using one of
-the 16 \acp{DTT} as the horizontal matrix and another as the vertical matrix.
-This leads to a total of 256 possible transforms.
-
-In order to expand the transform space when using the \ac{DTT} family, which
-consists of 8 types of \ac{DCT}, 8 types of \ac{DST} and their inverse
-versions, 8 spatial pixel permutations have also been considered.
+As explained in the previous Section, in order to expand the transform space
+when using the \ac{DTT} family, which consists of 8 types of \ac{DCT}, 8 types
+of \ac{DST} and their inverse versions, 8 spatial pixel permutations have also
+been considered.
 The chosen permutations are combinations of transposed and mirrored
 (vertically and horizontally) versions of residuals so as not to break pixel
 correlations and relative distances within a block.
