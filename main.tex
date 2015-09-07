@@ -4166,8 +4166,8 @@ In Chapter~\ref{cha:mdtc}, the \ac{MDTC} system was introduced.
 The \ac{MDTC} system was presented as an evolved \ac{MDDT} system, in which,
 instead of only one transform, a fixed number of transforms was provided
 inside each \ac{IPM}.
-However, as shown in figure~\ref{fig:hevc_ipm_usage}, \ac{HEVC} does not use
-all \acp{IPM} equally:
+However, as exemplified in figure~\ref{fig:hevc_ipm_usage}, \ac{HEVC} does not
+use all \acp{IPM} equally:
 \ac{HEVC} favours the signalling of the \acp{IPM} that are most often used
 during the encoding of a sequence in terms of signalling.
 This technique is named \acp{MPM} and it is explained in detail
@@ -4178,6 +4178,16 @@ since the extra transforms need to be signalled, as well.
 Using a different number of transforms inside each \ac{IPM} does not require
 any additional signalling to the transform index, since the encoder will know
 how many transforms are available for each \ac{IPM}.
+
+\begin{figure}[tb]
+	\centering
+	\ifthenelse{\usepdfs = 0}
+	{\input{./figures/ipm_hist_bdrill_qp22_4_8_plot.tex}}
+	{\includegraphics{./figures/ipm_hist_bdrill_qp22_4_8_plot.pdf}}
+	\caption[\acs{IPM} usage in \acs{HEVC}]
+	{\acs{IPM} usage in \acs{HEVC} on \emph{BasketballDrive} for \acs{QP} 22}
+	\label{fig:hevc_ipm_usage}
+\end{figure}
 
 Consequently, next Section proposes a systematic way of generating \ac{MDTC}
 systems taking into account the storage requirements.
