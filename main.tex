@@ -95,6 +95,7 @@
 	\hrule
 	\vspace{1em}
 	\printcontents[chapters]{}{1}{{\sf\large\bfseries Contents}}
+	\vspace{1em}
 	\hrule
 }
 
@@ -4456,11 +4457,15 @@ As a final observation, non-homogeneous systems learnt iteratively with
 \acs{ROM} constraints present a pattern in the number of transforms enabled in
 each \ac{IPM}.
 Those \acp{IPM} that are most used in \ac{HEVC} (0, 1, 10 and 26) tend to make
-use of a higher number of transforms than the rest of them.
-
-% TODO
-\todo{Maybe add annex with a table containing the number of transforms per
-\ac{IPM}}
+use of a higher number of transforms than the rest of them, which matches
+closely the \ac{IPM} use in \ac{HEVC} from figure~\ref{fig:hevc_ipm_usage}:
+systems tend to use more transforms on \acsp{IPM} 0, 1, 10, 26 and around
+them.
+A detailed table breaking down each \ac{MDTC} system listed in
+table~\ref{tab:non_hom_mdtc} is presented in
+appendix~\ref{cha:transform_usage_in_mdtc_systems}, particularly
+tables~\ref{tab:config_nonsym_mdtc_4} and~\ref{tab:config_nonsym_mdtc_8}, for
+$4\times4$ and $8\times8$ \acp{TU}, respectively.
 
 \section{Symmetrical \acs{MDTC} systems}
 \label{sec:sym_mdtc}
@@ -4892,6 +4897,14 @@ plane to ensure that systems remain comparable in terms of encoding times.
 	constraints}
 	\label{tab:non_hom_sym_mdtc}
 \end{table}
+
+As in the non-symmetrical \ac{MDTC} systems,
+appendix~\ref{cha:transform_usage_in_mdtc_systems} details all the symmetrical
+\ac{MDTC} systems from table~\ref{tab:non_hom_sym_mdtc} in
+tables~\ref{tab:config_sym_mdtc_4} and~\ref{tab:config_sym_mdtc_8} for
+$4\times4$ and $8\times8$ \acp{TU}, respectively.
+The same pattern is observed:
+more transforms are used in Planar, DC, horizontal and vertical modes.
 
 \section{Conclusions}
 \label{sec:rw_conclusions}
@@ -5472,6 +5485,10 @@ complexity once they make use of fast algorithms.
 	\label{tab:non_hom_sym_dtt_mdtc}
 \end{table}
 
+Appendix~\ref{cha:transform_usage_in_mdtc_systems} contains the transform
+configuration for the systems shown in table~\ref{tab:non_hom_sym_mdtc} for
+both $4\times4$ and $8\times8$ \acp{TU} in table~\ref{tab:config_sym_dtt}.
+
 \begin{figure}[tb]
 	\centering
 	\ifthenelse{\usepdfs = 0}
@@ -5894,9 +5911,8 @@ in figure~\ref{fig:final_systems_ai}.
 	\label{tab:final_systems_ra}
 \end{table}
 
-\chapter*{Conclusions and future work}
+\chapter{Conclusions and future work}
 \label{cha:conclusions_and_future_work}
-\addcontentsline{toc}{chapter}{Conclusions and future work}
 
 % remove chapter title from header from now on (unnumbered chapters)
 \pagestyle{empty}
@@ -6081,8 +6097,15 @@ Another way would be to remove the transform selection from the \ac{RDOQ}
 and select it by computing directly the \ac{RDOT} metric value for all
 available transforms.
 
-\chapter*{Publications}
-\addcontentsline{toc}{chapter}{Publications}
+\bibliographystyle{abbrv} % numbers
+%\bibliographystyle{apalike} % Surname et al. 2014
+%\bibliographystyle{alpha} % ABC14
+\bibliography{refs}
+
+\appendix
+
+\chapter{Publications}
+% \addcontentsline{toc}{chapter}{Publications}
 \label{cha:publications}
 
 \section*{Non-separable mode-dependent transforms for intra coding in HEVC}
@@ -6090,6 +6113,9 @@ available transforms.
 
 \subsection*{IEEE VCIP 2014}
 \label{sub:ieee_vcip_2014_mddt}
+
+\paragraph{\textsf{Authors:}}
+	Adrià Arrufat, Pierrick Philippe and Olivier Déforges
 
 \subsubsection*{Abstract}
 \label{ssub:mddt_abstract}
@@ -6120,6 +6146,9 @@ has held in Valletta, Malta in December 2014.
 HEVC}
 \label{sec:rate_distortion_optimised_transform_competition_for_intra_coding_in_hevc}
 
+\paragraph{\textsf{Authors:}}
+	Adrià Arrufat, Pierrick Philippe and Olivier Déforges
+
 \subsection*{IEEE VCIP 2014}
 \label{sub:ieee_vcip_2014_tc}
 
@@ -6144,6 +6173,9 @@ transforms available in \acs{HEVC}.
 \subsection*{IEEE ICIP 2015}
 \label{sub:ieee_icip_2015_mdtc}
 
+\paragraph{\textsf{Authors:}}
+	Adrià Arrufat, Pierrick Philippe and Olivier Déforges
+
 \subsubsection*{Abstract}
 \label{ssub:mdtc_abstract}
 
@@ -6167,6 +6199,9 @@ complexity.
 \subsection*{IEEE ICIP 2015}
 \label{sub:ieee_icip_2015_it}
 
+\paragraph{\textsf{Authors:}}
+	Adrià Arrufat, Pierrick Philippe and Anne-Flore Perrin
+
 \subsubsection*{Abstract}
 \label{ssub:it_bstract}
 
@@ -6181,17 +6216,202 @@ The solution has been implemented in the \acs{HEVC}  standard and compression
 gains of around 1\% on average are reported while reducing the decoder
 complexity in about 5\%.
 
-\bookmarksetup{startatroot}% to remove Bibliography from the last part
-\addtocontents{toc}{\bigskip}% add a separation to the ToC
+\chapter{Transform usage in \acs{MDTC} systems}
+\label{cha:transform_usage_in_mdtc_systems}
+
+This appendix contains tables describing used \ac{MDTC} systems from
+Chapters~\ref{cha:real_world_system} and~\ref{cha:dtt}.
+The \emph{System} top row represents the system label and upper \acs{ROM}
+boundary in kB.
+
+\section{Non-symmetrical \acs{MDTC} systems}
+\label{sec:non_symmetrical_mdtc_systems}
+
+\begin{table}[h]
+	\centering
+	\small
+	\def\arraystretch{0.85}
+	\begin{tabular}{c|rrrrrrrrrrrr}
+		\diagbox{\acs{IPM}}{System} &
+		1 & 2 & 4 & 8  & 12 & 16 & 24 & 32 & 48 & 64 & 96 & 128 \\
+		\hline
+		0 & 2 & 2 & 8 & 16 & 16 & 16 & 32 & 32 & 32 & 32 & 32 & 32 \\
+		1 & 2 & 2 & 2 & 8  & 8  & 8  & 8  & 8  & 8  & 8  & 8  & 8 \\
+		2 & 0 & 0 & 1 & 1  & 1  & 1  & 1  & 2  & 2  & 1  & 4  & 4 \\
+		3 & 0 & 0 & 0 & 1  & 1  & 1  & 2  & 2  & 4  & 2  & 8  & 8 \\
+		4 & 0 & 0 & 0 & 0  & 0  & 0  & 1  & 1  & 4  & 1  & 4  & 8 \\
+		5 & 0 & 0 & 1 & 1  & 1  & 1  & 1  & 4  & 4  & 1  & 4  & 4 \\
+		6 & 0 & 0 & 0 & 1  & 1  & 2  & 2  & 4  & 4  & 2  & 8  & 8 \\
+		7 & 0 & 0 & 0 & 2  & 2  & 2  & 2  & 2  & 4  & 2  & 8  & 8 \\
+		8 & 0 & 0 & 2 & 2  & 2  & 2  & 2  & 2  & 2  & 2  & 2  & 4 \\
+		9 & 1 & 1 & 1 & 1  & 1  & 1  & 1  & 1  & 1  & 1  & 4  & 4 \\
+		10 & 1 & 1 & 2 & 4  & 4  & 4  & 8  & 8  & 8  & 8  & 8  & 16 \\
+		11 & 0 & 0 & 1 & 1  & 2  & 2  & 2  & 2  & 2  & 2  & 4  & 4 \\
+		12 & 1 & 1 & 1 & 1  & 1  & 1  & 1  & 1  & 1  & 1  & 2  & 2 \\
+		13 & 1 & 1 & 1 & 1  & 1  & 1  & 1  & 1  & 2  & 1  & 4  & 4 \\
+		14 & 0 & 0 & 1 & 1  & 1  & 1  & 2  & 2  & 8  & 2  & 8  & 8 \\
+		15 & 0 & 0 & 0 & 0  & 0  & 0  & 1  & 1  & 4  & 1  & 8  & 8 \\
+		16 & 0 & 0 & 0 & 0  & 0  & 0  & 0  & 1  & 2  & 0  & 8  & 8 \\
+		17 & 0 & 0 & 1 & 2  & 2  & 2  & 2  & 2  & 2  & 2  & 4  & 4 \\
+		18 & 0 & 0 & 0 & 0  & 1  & 1  & 2  & 2  & 2  & 2  & 4  & 4 \\
+		19 & 0 & 0 & 0 & 0  & 0  & 0  & 0  & 1  & 2  & 0  & 2  & 4 \\
+		20 & 0 & 0 & 1 & 1  & 1  & 1  & 1  & 2  & 2  & 2  & 4  & 4 \\
+		21 & 0 & 0 & 0 & 1  & 2  & 2  & 2  & 8  & 16 & 4  & 32 & 32 \\
+		22 & 0 & 0 & 0 & 0  & 0  & 0  & 2  & 2  & 2  & 2  & 4  & 4 \\
+		23 & 0 & 0 & 0 & 0  & 0  & 0  & 2  & 2  & 2  & 2  & 4  & 4 \\
+		24 & 0 & 0 & 1 & 1  & 2  & 2  & 2  & 2  & 2  & 2  & 2  & 2 \\
+		25 & 0 & 0 & 0 & 1  & 1  & 1  & 1  & 2  & 2  & 2  & 4  & 4 \\
+		26 & 1 & 1 & 1 & 4  & 8  & 8  & 16 & 16 & 16 & 16 & 16 & 32 \\
+		27 & 0 & 1 & 2 & 2  & 2  & 2  & 4  & 8  & 8  & 4  & 8  & 8 \\
+		28 & 0 & 0 & 0 & 1  & 2  & 2  & 2  & 4  & 4  & 2  & 8  & 8 \\
+		29 & 0 & 0 & 0 & 1  & 2  & 2  & 2  & 2  & 2  & 2  & 2  & 2 \\
+		30 & 0 & 0 & 0 & 0  & 0  & 0  & 0  & 0  & 0  & 0  & 4  & 4 \\
+		31 & 0 & 0 & 1 & 1  & 1  & 1  & 1  & 1  & 1  & 1  & 8  & 8 \\
+		32 & 0 & 0 & 1 & 2  & 2  & 2  & 4  & 4  & 4  & 4  & 4  & 8 \\
+		33 & 0 & 0 & 0 & 0  & 0  & 0  & 0  & 0  & 4  & 0  & 4  & 4 \\
+		34 & 0 & 0 & 0 & 0  & 0  & 0  & 1  & 2  & 4  & 1  & 4  & 4 \\
+	\end{tabular}
+	\caption{Transform repartition for non-symmetrical \acs{MDTC} systems on
+	$4\times4$ \acsp{TU}}
+	\label{tab:config_nonsym_mdtc_4}
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\small
+	\def\arraystretch{0.85}
+	\begin{tabular}{c|rrrrrrrrrrrr}
+		\diagbox{\acs{IPM}}{System} &
+		1 & 2 & 4 & 8  & 12 & 16 & 24 & 32 & 48 & 64 & 96 & 128 \\
+		\hline
+		0  & 1 & 4 & 4 & 4 & 4 & 8  & 32 & 32 & 64 & 128 & 128 & 128 \\
+		1  & 0 & 0 & 1 & 4 & 8 & 16 & 16 & 32 & 64 & 64  & 128 & 128 \\
+		2  & 0 & 0 & 0 & 0 & 0 & 0  & 0  & 0  & 1  & 1   & 1   & 4 \\
+		3  & 0 & 0 & 0 & 0 & 0 & 0  & 0  & 0  & 1  & 1   & 1   & 2 \\
+		4  & 0 & 0 & 0 & 1 & 1 & 1  & 1  & 1  & 1  & 1   & 2   & 8 \\
+		5  & 0 & 0 & 0 & 0 & 0 & 1  & 1  & 1  & 1  & 2   & 4   & 16 \\
+		6  & 0 & 0 & 0 & 1 & 1 & 1  & 2  & 2  & 2  & 2   & 2   & 8 \\
+		7  & 0 & 0 & 0 & 0 & 0 & 0  & 0  & 1  & 1  & 1   & 4   & 4 \\
+		8  & 0 & 0 & 1 & 1 & 1 & 1  & 1  & 2  & 4  & 8   & 8   & 8 \\
+		9  & 0 & 0 & 1 & 1 & 2 & 2  & 2  & 2  & 4  & 8   & 8   & 16 \\
+		10 & 1 & 2 & 2 & 4 & 4 & 4  & 8  & 16 & 16 & 32  & 32  & 64 \\
+		11 & 0 & 0 & 1 & 1 & 2 & 2  & 2  & 4  & 8  & 8   & 8   & 16 \\
+		12 & 0 & 0 & 0 & 0 & 2 & 2  & 2  & 2  & 2  & 2   & 2   & 4 \\
+		13 & 0 & 0 & 0 & 1 & 1 & 2  & 2  & 2  & 2  & 2   & 2   & 4 \\
+		14 & 0 & 0 & 0 & 1 & 1 & 1  & 1  & 1  & 1  & 2   & 2   & 4 \\
+		15 & 0 & 0 & 0 & 0 & 0 & 1  & 1  & 1  & 1  & 1   & 4   & 16 \\
+		16 & 0 & 0 & 0 & 0 & 0 & 0  & 0  & 1  & 1  & 1   & 1   & 2 \\
+		17 & 0 & 0 & 0 & 0 & 0 & 0  & 1  & 1  & 1  & 2   & 2   & 4 \\
+		18 & 0 & 0 & 0 & 0 & 1 & 1  & 2  & 2  & 2  & 2   & 2   & 4 \\
+		19 & 0 & 0 & 0 & 0 & 0 & 0  & 0  & 0  & 0  & 0   & 0   & 2 \\
+		20 & 0 & 0 & 0 & 0 & 0 & 1  & 1  & 1  & 1  & 1   & 2   & 4 \\
+		21 & 0 & 0 & 0 & 1 & 1 & 2  & 2  & 2  & 2  & 2   & 2   & 2 \\
+		22 & 0 & 0 & 0 & 0 & 1 & 1  & 1  & 1  & 1  & 1   & 2   & 8 \\
+		23 & 0 & 0 & 0 & 0 & 1 & 1  & 2  & 2  & 2  & 2   & 2   & 2 \\
+		24 & 0 & 0 & 0 & 1 & 2 & 2  & 2  & 2  & 2  & 2   & 2   & 8 \\
+		25 & 0 & 0 & 1 & 1 & 2 & 2  & 2  & 2  & 2  & 2   & 4   & 4 \\
+		26 & 1 & 2 & 2 & 4 & 8 & 8  & 8  & 8  & 8  & 8   & 64  & 64 \\
+		27 & 0 & 0 & 1 & 1 & 2 & 4  & 4  & 8  & 8  & 16  & 16  & 32 \\
+		28 & 0 & 0 & 0 & 1 & 1 & 1  & 1  & 1  & 1  & 2   & 4   & 4 \\
+		29 & 0 & 0 & 0 & 0 & 1 & 1  & 1  & 1  & 1  & 1   & 1   & 4 \\
+		30 & 0 & 0 & 0 & 0 & 0 & 0  & 1  & 2  & 2  & 2   & 2   & 2 \\
+		31 & 0 & 0 & 0 & 0 & 0 & 0  & 1  & 1  & 1  & 1   & 1   & 2 \\
+		32 & 0 & 0 & 0 & 0 & 0 & 0  & 0  & 1  & 2  & 2   & 2   & 8 \\
+		33 & 0 & 0 & 0 & 0 & 0 & 0  & 0  & 1  & 1  & 2   & 2   & 8 \\
+		34 & 0 & 0 & 0 & 0 & 0 & 0  & 0  & 0  & 0  & 0   & 2   & 16 \\
+	\end{tabular}
+	\caption{Transform repartition for non-symmetrical \acs{MDTC} systems on
+	$8\times8$ \acsp{TU}}
+	\label{tab:config_nonsym_mdtc_8}
+\end{table}
+
+\clearpage
+
+\section{Symmetrical \acs{MDTC} systems}
+\label{sec:symmetrical_mdtc_systems}
+
+\begin{table}[h]
+	\centering
+	\small
+	\def\arraystretch{0.85}
+	\begin{tabular}{c|rrrrrrrrrrrr}
+		\diagbox{\acs{IPM}}{System} &
+		1 & 2 & 4 & 8  & 12 & 16 & 24 & 32 & 48 & 64 & 96 & 128 \\
+		\hline
+		0  & 0 & 2 & 2 & 2  & 2  & 16 & 16 & 16 & 32 & 16 & 32 & 32 \\
+		1  & 0 & 2 & 4 & 8  & 8  & 8  & 8  & 8  & 32 & 32 & 32 & 32 \\
+		2  & 0 & 0 & 0 & 4  & 4  & 4  & 4  & 4  & 8  & 8  & 8  & 8 \\
+		3  & 0 & 1 & 1 & 1  & 1  & 8  & 8  & 8  & 8  & 8  & 16 & 16 \\
+		4  & 0 & 1 & 1 & 2  & 2  & 8  & 8  & 8  & 32 & 16 & 32 & 32 \\
+		5  & 1 & 2 & 2 & 2  & 2  & 4  & 4  & 4  & 16 & 4  & 16 & 16 \\
+		6  & 0 & 0 & 0 & 0  & 0  & 4  & 4  & 4  & 4  & 4  & 4  & 4 \\
+		7  & 0 & 1 & 1 & 2  & 2  & 2  & 2  & 2  & 8  & 4  & 8  & 8 \\
+		8  & 1 & 1 & 1 & 1  & 1  & 1  & 1  & 1  & 4  & 4  & 4  & 4 \\
+		9  & 1 & 1 & 1 & 2  & 2  & 2  & 2  & 2  & 16 & 2  & 16 & 16 \\
+		10 & 2 & 2 & 4 & 16 & 16 & 32 & 32 & 32 & 32 & 32 & 32 & 32 \\
+	\end{tabular}
+	\caption{Transform repartition for symmetrical \acs{MDTC} systems on
+	$4\times4$ \acsp{TU}}
+	\label{tab:config_sym_mdtc_4}
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\small
+	\def\arraystretch{0.85}
+	\begin{tabular}{c|rrrrrrrrrrrr}
+		\diagbox{\acs{IPM}}{System} &
+		1 & 2 & 4 & 8  & 12 & 16 & 24 & 32 & 48 & 64 & 96 & 128 \\
+		\hline
+		0  & 1 & 2 & 4 & 4 & 16 & 16 & 32 & 32 & 32 & 32 & 128 & 128 \\
+		1  & 0 & 0 & 1 & 4 & 8  & 8  & 16 & 32 & 32 & 64 & 64  & 128 \\
+		2  & 0 & 0 & 0 & 0 & 2  & 2  & 2  & 2  & 8  & 16 & 16  & 32 \\
+		3  & 0 & 0 & 0 & 2 & 4  & 4  & 4  & 4  & 16 & 16 & 16  & 32 \\
+		4  & 0 & 0 & 1 & 2 & 2  & 2  & 2  & 4  & 4  & 4  & 16  & 16 \\
+		5  & 0 & 0 & 0 & 2 & 2  & 2  & 2  & 4  & 8  & 16 & 16  & 32 \\
+		6  & 0 & 0 & 1 & 2 & 4  & 4  & 4  & 4  & 8  & 8  & 8   & 32 \\
+		7  & 0 & 0 & 2 & 2 & 2  & 2  & 2  & 2  & 4  & 8  & 16  & 64 \\
+		8  & 0 & 1 & 2 & 2 & 2  & 2  & 8  & 16 & 16 & 16 & 16  & 16 \\
+		9  & 2 & 2 & 4 & 4 & 4  & 4  & 16 & 16 & 16 & 64 & 64  & 64 \\
+		10 & 1 & 2 & 2 & 8 & 8  & 16 & 16 & 32 & 64 & 64 & 64  & 64 \\
+	\end{tabular}
+	\caption{Transform repartition for symmetrical \acs{MDTC} systems on
+	$8\times8$ \acsp{TU}}
+	\label{tab:config_sym_mdtc_8}
+\end{table}
+
+\section{Symmetrical \acs{DTT}-based \acs{MDTC} systems}
+\label{sec:symmetrical_dtt_based_mdtc_systems}
+
+\begin{table}[h]
+	\centering
+	\small
+	\def\arraystretch{0.85}
+	\begin{tabular}{c|rrr|rrr}
+		& \multicolumn{3}{c|}{$4\times4$} & \multicolumn{3}{c}{$8\times8$} \\
+		\diagbox{\acs{IPM}}{System} & 1 & 2 & 4 & 1 & 2 & 4\\
+		\hline
+		0  & 8 & 8 & 8 & 2 & 4 & 16 \\
+		1  & 2 & 4 & 4 & 2 & 4 & 16 \\
+		2  & 0 & 0 & 0 & 0 & 2 & 4 \\
+		3  & 4 & 4 & 4 & 1 & 1 & 2 \\
+		4  & 2 & 2 & 2 & 0 & 1 & 4 \\
+		5  & 2 & 2 & 2 & 1 & 2 & 4 \\
+		6  & 0 & 1 & 1 & 1 & 1 & 1 \\
+		7  & 2 & 2 & 2 & 0 & 0 & 0 \\
+		8  & 2 & 2 & 2 & 0 & 0 & 0 \\
+		9  & 1 & 1 & 1 & 0 & 0 & 0 \\
+		10 & 4 & 8 & 8 & 2 & 8 & 8 \\
+	\end{tabular}
+	\caption{Transform repartition for symmetrical \acs{DTT}-based \acs{MDTC}
+	systems on $4\times4$ and $8\times8$ \acsp{TU}}
+	\label{tab:config_sym_dtt}
+\end{table}
+
 \backmatter
 
-\bibliographystyle{abbrv} % numbers
-%\bibliographystyle{apalike} % Surname et al. 2014
-%\bibliographystyle{alpha} % ABC14
-\bibliography{refs}
-
-\label{cha:index}
 \printindex
+\label{cha:index}
 \addcontentsline{toc}{chapter}{Index}
 \thispagestyle{empty}
 
