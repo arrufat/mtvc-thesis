@@ -3213,7 +3213,7 @@ which already showed high gains using the \ac{MDDT} technique (see
 This sequence has the particularity of presenting a large amount of directional
 patterns, which lead to bit-rate savings of over 25\%.
 The \ac{BD}-rate curves for this sequence are presented in
-figure~\ref{fig:mdtc_bdrate_bdrill}.
+figure~\ref{fig:mdtc_bdrate_bdrill_mdtc}.
 For low bit-rates, corresponding to \acp{QP} of 32 and 37, the bitstream size
 is almost kept untouched, but the \ac{PSNR} is substantially improved.
 For higher bit-rates, the improvements are present in both axis.
@@ -3222,13 +3222,14 @@ This behaviour has been observed for most of the sequences.
 \begin{figure}[tb]
 	\centering
 	\ifthenelse{\usepdfs = 0}
-	{\input{./figures/bdrate_bdrill_wvga_plot.tex}}
-	{\includegraphics{./figures/bdrate_bdrill_wvga_plot.pdf}}
+	{\input{./figures/bdrate_bdrill_wvga_mdtc_plot.tex}}
+	{\includegraphics{./figures/bdrate_bdrill_wvga_mdtc_plot.pdf}}
 	\caption[\acs{BD}-rate curves for \acs{MDTC} system on
 	\emph{BasketballDrill}]
 	{\acs{BD}-rate curves of \emph{BasketballDrill} for the non-separable high
-	performance \acs{MDTC} system}
-	\label{fig:mdtc_bdrate_bdrill}
+	performance \acs{MDTC} system.
+	This curve represents a bit-rate improvement of 25.06\% over \acs{HEVC}.}
+	\label{fig:mdtc_bdrate_bdrill_mdtc}
 \end{figure}
 
 An example of visual improvements are provided in
@@ -3705,6 +3706,8 @@ in~\cite{bossen-12-common-test-conditions} for the \ac{HEVC} test set.
 Incomplete transforms have been enabled for $4\times4$ and $8\times8$
 \acp{TU} in order to make the system comparable to the \ac{MDTC} systems from
 the previous section.
+In particular, 8 additional transforms have been designed for $4\times4$
+\acp{TU} and 32 for $8\times8$ \acp{TU}.
 
 The results of encoding the \ac{HEVC} test set using incomplete transforms are
 detailed in table~\ref{tab:bd_rate_it}.
@@ -3814,6 +3817,26 @@ savings of more that 8\% using this approach.
 	\label{fig:it_perf_4_8}
 \end{figure}
 
+Figure~\ref{fig:mdtc_bdrate_bdrill_inc_tr} shows the \ac{BD}-rate curves of
+standard \ac{HEVC} and the \ac{MDTC} system using incomplete transforms on
+$4\times4$ and $8\times8$ on the \emph{BasketballDrill} sequence.
+The bit-rate savings are over 8\% and it can be seen that the quality of the
+sequence improves at low bit-rates (\acs{QP} 37), while effects are less
+important as the \acs{QP} increases.
+
+\begin{figure}[tb]
+	\centering
+	\ifthenelse{\usepdfs = 0}
+	{\input{./figures/bdrate_bdrill_wvga_inc_tr_plot.tex}}
+	{\includegraphics{./figures/bdrate_bdrill_wvga_inc_tr_plot.pdf}}
+	\caption[\acs{BD}-rate curves for incomplete transforms on
+	\emph{BasketballDrill}]
+	{\acs{BD}-rate curves of \emph{BasketballDrill} for the \acs{MDTC} system
+	using incomplete transforms.
+	This curve represents a bit-rate improvement of 8.22\% over \acs{HEVC}.}
+	\label{fig:mdtc_bdrate_bdrill_inc_tr}
+\end{figure}
+
 \subsection{Coding complexity}
 \label{sub:it_coding_complexity}
 
@@ -3898,9 +3921,6 @@ solution for low bit-rate video applications, since the signal tends to be
 sparser than for high-quality video applications.
 As a result, incomplete transforms can improve the quality of low bit-rate
 video while reducing the decoding complexity.
-
-% TODO
-\todo{maybe add PSNR curve of BasketballDrill to illustrate lower bit-rates.}
 
 \chapter{Simplifications of \acs{MDTC} system for storage requirements}
 \label{cha:real_world_system}

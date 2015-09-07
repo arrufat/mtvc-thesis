@@ -1,0 +1,51 @@
+\begin{tikzpicture}
+
+	\pgfplotsset{/tikz/font={\small}}
+	\begin{axis}[
+			xlabel={Bitrate (Mbps)},
+			ylabel={PSNR (dB)},
+			grid=both,
+			scale only axis,
+			width=0.9\textwidth,
+			height=0.3\textheight,
+			scaled x ticks = false,
+			x tick label style={
+				/pgf/number format/.cd,
+				set thousands separator={\thinspace},
+				/tikz/.cd
+			},
+			xtick={0,3,...,24},
+			ytick={32,34,36,...,44},
+			y tick label style={
+				/pgf/number format/.cd,
+				set decimal separator={.},
+				fixed,
+				fixed zerofill,
+				precision=0,
+				/tikz/.cd
+			},
+			xmin=0, xmax=21,
+			ymin=32, ymax=44,
+			% legend entries={HEVC,HEVC-MDTC},
+			legend style={nodes=right},
+			legend pos= south east
+		]
+
+		\addplot [mark=*,mark size=1pt, blue, thick, dashed] table {
+		20.8089288	41.7621
+		11.313408	38.3717
+		6.0750904	35.4066
+		3.3555608	32.7673
+		};
+		\addlegendentry{HEVC}
+
+		\addplot [mark=*,mark size=1pt, red, thick] table {
+		20.3708848	41.7809
+		10.9011288	38.5696
+		5.9389184	35.8291
+		3.3554960	33.2623
+		};
+		\addlegendentry{HEVC-Inc.\ Tr.}
+
+	\end{axis}
+\end{tikzpicture}
