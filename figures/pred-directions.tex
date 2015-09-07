@@ -1,27 +1,47 @@
 \definecolor{greenish}{RGB}{0,145,0}
-\begin{tikzpicture}[scale=1.5]
+\begin{tikzpicture}[scale=1]
 
     \def\startx{0}
     \def\starty{0}
-    \def\radius{2.5}
+    \def\radius{3.75}
     \def\startangle{45}
     \def\colour{red}
 
 	\draw (-0.4, 0.6) node {\small 0: \color{\colour}{Planar}};
-	\draw (-0.54, 0.5) node[below] {\small 1: \color{\colour}{DC}};
+	\draw (-0.6, 0.5) node[below] {\small 1: \color{\colour}{DC}};
 
-    \foreach \direction in {2,3,...,34}
+	\newcounter{direction}
+	\setcounter{direction}{2}
+    \foreach \position in {-32, -26, -21, -17, -13, -9, -5, -2, 0, 2, 5, 9,
+	13, 17, 21, 26, 32, -26, -21, -17, -13, -9, -5, -2, 0, 2, 5, 9, 13, 17,
+	21, 26, 32}
     {%
-        % set the angle of current prediction direction 
-        \pgfmathsetmacro{\angle}{\startangle - (\direction - 2) * 180 / 32}
+        % set the angle of current prediction direction label
+        % \pgfmathsetmacro{\labelangle}{\startangle - (\thedirection - 2) * 180 / 32}
+
+        \ifthenelse{\thedirection < 19}
+		{\pgfmathsetmacro{\angle}{-\position / 32 * 45}}
+		{\pgfmathsetmacro{\angle}{-90 - \position / 32 * 45}}
         % horizontal directions (vertical scanning)
-        \ifthenelse{\direction > 5 \AND \direction < 15}{\def\colour{blue}};
+        \ifthenelse{\thedirection > 5 \AND \thedirection < 15}{\def\colour{blue}};
         % vertical directions (horizontal scanning)
-        \ifthenelse{\direction > 21 \AND \direction < 31}{\def\colour{greenish}};
+        \ifthenelse{\thedirection > 21 \AND \thedirection < 31}{\def\colour{greenish}};
         % draw the prediction direction lines with the appropriate colour
-        \draw[-latex,\colour, thin] (\startx,\starty) --++ (\angle:\radius);
+        \draw[-latex,\colour, thick] (\startx,\starty) --++ (\angle:\radius);
+
         % label each prediction direction
-        \draw(\angle:\radius + 0.2) node {\small \direction};
+        % \ifthenelse{\thedirection < 27}
+		% {\pgfmathsetmacro{\labelangle}{\angle}}
+		% {\pgfmathsetmacro{\labelangle}{\angle - 180}}
+        % \draw(\angle:\radius + 0.25) node[rotate=\labelangle] {\small \thedirection};
+
+		% only draw labels for pair IPMs
+		\def\odd{\intcalcMod{\thedirection}{2}}
+		\ifthenelse{\odd = 0}
+		{\draw(\angle:\radius + 0.2) node {\small \thedirection};}{};
+
+		% update direction for next iteration
+		\stepcounter{direction}
     }
 
 \end{tikzpicture}

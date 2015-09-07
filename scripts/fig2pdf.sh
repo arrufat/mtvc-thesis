@@ -18,7 +18,7 @@ do
 	echo "\\usepackage{mathptmx}"                                                      >> ${TMPFILE}
 	echo "\\usepackage[scaled]{helvet}"                                                >> ${TMPFILE}
 	echo "\\usepackage[usenames,dvipsnames]{xcolor}"                                   >> ${TMPFILE}
-	echo "\\usepackage{ifthen}"                                                        >> ${TMPFILE}
+	echo "\\usepackage{ifthen,intcalc}"                                                >> ${TMPFILE}
 	echo "\\usepackage{pgfplots,tikz}"                                                 >> ${TMPFILE}
 	echo "\\usetikzlibrary{shapes,arrows,fit,calc,decorations.markings,intersections}" >> ${TMPFILE}
 	echo "\\usepgfplotslibrary{fillbetween}"                                           >> ${TMPFILE}
