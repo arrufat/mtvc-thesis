@@ -2,6 +2,7 @@
 \def\myauthor{Adrià Arrufat}
 \def\mytitle{Multiple transforms for video coding}
 \def\usepdfs{1} % whether to use pre-generated pdfs with 'make figures'
+\def\useINSAcover{0} % whether to use the INSA front and back covers
 
 \usepackage[british]{babel} % locale settings
 \usepackage{geometry} % page configuration
@@ -113,11 +114,12 @@
 
 \begin{document}
 \frontmatter
-\maketitle
 % front cover
-% \includepdf[pages={2}]{./cover-mtvc-thesis-INSA-UEB.pdf}
-% \cleardoublepage
-% \includepdf[pages={4}]{./cover-mtvc-thesis-INSA-UEB.pdf}
+\ifthenelse{\useINSAcover = 1}
+{\includepdf[pages={2}]{./cover-mtvc-thesis-INSA-UEB.pdf}
+\cleardoublepage
+\includepdf[pages={4}]{./cover-mtvc-thesis-INSA-UEB.pdf}}
+{\maketitle}
 
 \chapter*{Acknowledgements}
 \label{cha:acknowledgements}
@@ -6416,9 +6418,10 @@ boundary in kB.
 \thispagestyle{empty}
 
 % back cover
-% \newpage
-% \thispagestyle{empty}
-% \mbox{}
-% \includepdf[pages={3}]{./cover-mtvc-thesis-INSA-UEB.pdf}
+\ifthenelse{\useINSAcover = 1}
+{\newpage
+\thispagestyle{empty}
+\mbox{}
+\includepdf[pages={3}]{./cover-mtvc-thesis-INSA-UEB.pdf}}{}
 
 \end{document}
