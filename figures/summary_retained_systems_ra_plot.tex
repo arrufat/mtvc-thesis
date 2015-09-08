@@ -1,0 +1,203 @@
+\begin{tikzpicture}
+	\pgfplotsset{/tikz/font={\small}}
+	\draw (0,20.7) node {}; % added to avoid crop
+	\begin{axis}[
+		grid=both,
+		width=0.9\textwidth,
+		height=0.9\textheight,
+		x tick label style={
+			/pgf/number format/.cd,
+			fixed,
+			fixed zerofill,
+			precision=1,
+		},
+		x dir=reverse,
+		y dir=reverse,
+		xmax=0.5, xmin=-6,
+		xlabel={Y BD-rate (\%)},
+		enlarge x limits=false,
+		enlarge y limits=0.04,
+		legend style={
+			at={(0.99,0.48)},
+			cells={anchor=west},
+			},
+		xbar interval,
+		ytick=data,
+		ytick align=inside,
+		symbolic y coords={
+			NebutaFestival,
+			PeopleOnStreet,
+			SteamLocTrain,
+			Traffic,
+			BasketballDrive,
+			BQTerrace,
+			Cactus,
+			Kimono1,
+			ParkScene,
+			BasketballDrill,
+			BQMall,
+			PartyScene,
+			RaceHorses\_480p,
+			BasketballPass,
+			BlowingBubbles,
+			BQSquare,
+			RaceHorses\_240p,
+			FourPeople,
+			Johnny,
+			KristenAndSara,
+			BasketDrillText,
+			ChinaSpeed,
+			SlideEditing,
+			SlideShow,
+			Overall,
+		},
+		area legend,
+		]
+
+		\addlegendentry{DTT 4 kB}
+		\addplot coordinates {
+		(-0.07,NebutaFestival)
+		(-0.99,PeopleOnStreet)
+		( 0.21,SteamLocTrain)
+		(-1.84,Traffic)
+		(-0.25,BasketballDrive)
+		(-0.97,BQTerrace)
+		(-1.44,Cactus)
+		(-0.41,Kimono1)
+		(-1.95,ParkScene)
+		(-1.18,BasketballDrill)
+		(-1.29,BQMall)
+		(-1.67,PartyScene)
+		(-0.77,RaceHorses\_480p)
+		(-0.80,BasketballPass)
+		(-1.44,BlowingBubbles)
+		(-1.28,BQSquare)
+		(-0.83,RaceHorses\_240p)
+		(-2.68,FourPeople)
+		(-2.12,Johnny)
+		(-2.43,KristenAndSara)
+		(-1.28,BasketDrillText)
+		(-1.08,ChinaSpeed)
+		(-2.13,SlideEditing)
+		(-2.64,SlideShow)
+		(-1.31,Overall)
+		};
+
+		\addlegendentry{MDTC 16 kB}
+		\addplot coordinates {
+		(-0.08,NebutaFestival)
+		(-1.27,PeopleOnStreet)
+		( 0.20,SteamLocTrain)
+		(-2.78,Traffic)
+		(-0.35,BasketballDrive)
+		(-1.52,BQTerrace)
+		(-1.94,Cactus)
+		(-0.57,Kimono1)
+		(-2.46,ParkScene)
+		(-2.08,BasketballDrill)
+		(-1.95,BQMall)
+		(-2.60,PartyScene)
+		(-1.15,RaceHorses\_480p)
+		(-1.18,BasketballPass)
+		(-2.10,BlowingBubbles)
+		(-2.11,BQSquare)
+		(-1.01,RaceHorses\_240p)
+		(-3.83,FourPeople)
+		(-3.10,Johnny)
+		(-3.46,KristenAndSara)
+		(-2.36,BasketDrillText)
+		(-2.39,ChinaSpeed)
+		(-5.11,SlideEditing)
+		(-5.06,SlideShow)
+		(-2.09,Overall)
+		};
+
+		\addlegendentry{MDTC 32 kB}
+		\addplot coordinates {
+		(-0.09,NebutaFestival)
+		(-1.52,PeopleOnStreet)
+		( 0.27,SteamLocTrain)
+		(-3.41,Traffic)
+		(-0.51,BasketballDrive)
+		(-1.69,BQTerrace)
+		(-2.28,Cactus)
+		(-0.68,Kimono1)
+		(-3.00,ParkScene)
+		(-1.99,BasketballDrill)
+		(-2.28,BQMall)
+		(-2.76,PartyScene)
+		(-1.33,RaceHorses\_480p)
+		(-1.45,BasketballPass)
+		(-2.21,BlowingBubbles)
+		(-2.12,BQSquare)
+		(-1.25,RaceHorses\_240p)
+		(-4.47,FourPeople)
+		(-3.52,Johnny)
+		(-3.85,KristenAndSara)
+		(-2.39,BasketDrillText)
+		(-2.36,ChinaSpeed)
+		(-5.14,SlideEditing)
+		(-5.02,SlideShow)
+		(-2.29,Overall)
+		};
+
+		\addlegendentry{MDTC 64 kB}
+		\addplot coordinates {
+		(-0.09,NebutaFestival)
+		(-1.71,PeopleOnStreet)
+		( 0.26,SteamLocTrain)
+		(-3.81,Traffic)
+		(-0.57,BasketballDrive)
+		(-1.87,BQTerrace)
+		(-2.52,Cactus)
+		(-0.81,Kimono1)
+		(-3.26,ParkScene)
+		(-2.25,BasketballDrill)
+		(-2.51,BQMall)
+		(-2.98,PartyScene)
+		(-1.52,RaceHorses\_480p)
+		(-1.71,BasketballPass)
+		(-2.39,BlowingBubbles)
+		(-2.35,BQSquare)
+		(-1.43,RaceHorses\_240p)
+		(-5.06,FourPeople)
+		(-4.00,Johnny)
+		(-4.32,KristenAndSara)
+		(-2.59,BasketDrillText)
+		(-2.50,ChinaSpeed)
+		(-5.22,SlideEditing)
+		(-5.43,SlideShow)
+		(-2.53,Overall)
+		};
+
+		\addlegendentry{MDTC 128 kB}
+		\addplot coordinates {
+		(-0.11,NebutaFestival)
+		(-2.03,PeopleOnStreet)
+		( 0.23,SteamLocTrain)
+		(-4.25,Traffic)
+		(-0.51,BasketballDrive)
+		(-2.07,BQTerrace)
+		(-2.63,Cactus)
+		(-0.99,Kimono1)
+		(-3.61,ParkScene)
+		(-2.61,BasketballDrill)
+		(-2.63,BQMall)
+		(-3.10,PartyScene)
+		(-1.47,RaceHorses\_480p)
+		(-1.71,BasketballPass)
+		(-2.57,BlowingBubbles)
+		(-2.56,BQSquare)
+		(-1.52,RaceHorses\_240p)
+		(-5.53,FourPeople)
+		(-4.34,Johnny)
+		(-4.71,KristenAndSara)
+		(-2.85,BasketDrillText)
+		(-2.72,ChinaSpeed)
+		(-5.56,SlideEditing)
+		(-5.74,SlideShow)
+		(-2.73,Overall)
+		};
+
+	\end{axis}
+\end{tikzpicture}

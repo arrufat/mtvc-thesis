@@ -5663,8 +5663,9 @@ coding configurations, as well as the encoding complexity.
 The actual results per sequence of the \ac{HEVC} test set for \acs{AI} and
 \acs{RA} are provided in tables~\ref{tab:final_systems_ai}
 and~\ref{tab:final_systems_ra}, respectively.
-Moreover, a graphical representation of the \acs{AI} bit-rate savings is shown
-in figure~\ref{fig:final_systems_ai}.
+Moreover, a graphical representation of the \acs{AI} coding configuration
+bit-rate savings is shown in figure~\ref{fig:final_systems_ai} and in
+figure~\ref{fig:final_systems_ra} for \ac{RA}.
 
 \begin{table}[tb]
 	\centering
@@ -5754,9 +5755,21 @@ in figure~\ref{fig:final_systems_ai}.
 \end{figure}
 \begin{figure}[tb]
 	\centering
-	\includegraphics{./figures/summary_retained_systems_plot.pdf}
-	\caption{Bar chart graphically summarising the retained \acs{MDTC} systems in \acs{AI}}
+	\ifthenelse{\usepdfs = 0}
+	{\input{./figures/summary_retained_systems_ai_plot.tex}}
+	{\includegraphics{./figures/summary_retained_systems_ai_plot.pdf}}
+	\caption{Bar chart graphically summarising the retained \acs{MDTC} systems
+	in \acs{AI}}
 	\label{fig:final_systems_ai}
+\end{figure}
+\begin{figure}[tb]
+	\centering
+	\ifthenelse{\usepdfs = 0}
+	{\input{./figures/summary_retained_systems_ra_plot.tex}}
+	{\includegraphics{./figures/summary_retained_systems_ra_plot.pdf}}
+	\caption{Bar chart graphically summarising the retained \acs{MDTC} systems
+	in \acs{RA}}
+	\label{fig:final_systems_ra}
 \end{figure}
 
 \begin{table}[tb]
