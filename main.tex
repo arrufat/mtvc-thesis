@@ -4968,31 +4968,33 @@ and~\ref{cha:real_world_system} propose two different approaches to yield the
 system less complex:
 
 Chapter~\ref{cha:incomplete_transforms} simplifies the system by designing
-transforms that make use of only base vector.
-This makes transforming a block less complex than using a regular transform,
+transforms that make use of only one base vector.
+This makes transforming a block less complex than with a regular transform,
 even if the incomplete transform is non-separable.
 Benefits of this approach are observed on the decoder, being less complex than
-that of \ac{HEVC}, while providing limited bit-rate savings with regards to
-the \ac{MDTC} systems presented previously.
+that of \ac{HEVC}, while still providing bit-rate savings.
 
-Chapter~\ref{cha:real_world_system} proposes several ways of reducing the
-complexity, especially the storage requirements:
-taking advantage of the symmetries that might exist within different \acp{IPM}
-as well as using a different number of transforms in each mode.
-These two approaches provide notable savings in the \acs{ROM} required to
-store the transforms.
-Consequently, the encoder complexity was slightly decreased using
-non-homogeneous systems, since there are less transforms to test in each
-\ac{IPM}.
+Chapter~\ref{cha:real_world_system} proposes two ways of reducing the
+complexity of separable \ac{MDTC} systems, especially the storage
+requirements:
+\begin{itemize}
+	\item Taking advantage of the symmetries that might exist within different
+		\acp{IPM}.
+	\item Using a different number of transforms in each \ac{IPM}.
+\end{itemize}
+Both approaches provide notable savings in the \acs{ROM} required to store the
+transforms.
+Besides, the encoder complexity is slightly decreased using non-homogeneous
+systems, since there are less transforms to test in each \ac{IPM}.
 
-However, even if the main motivation for the approaches above is to reduce
-the complexity of the high performance \ac{MDTC} system presented in
-Chapter~\ref{cha:mdtc}, the improvements have only been focused in the
+However, even if the main motivation of the approaches above is to reduce the
+complexity of the high performance \ac{MDTC} system presented in
+Chapter~\ref{cha:mdtc}, the improvements have only been focused on the
 \acs{ROM} axis, leaving the encoder and decoder complexities decreases to be a
-side effect of the storage limitation.
+side effect of the storage constraint.
 
-This Chapter proposes an approach that takes into account the storage
-requirements, the encoding complexity and the decoding complexity.
+This Chapter proposes an simplification approach that takes into account the
+storage requirements, the encoding complexity and the decoding complexity.
 
 \section{The discrete trigonometric transform family (\acsp{DCT} \& \acsp{DST})}
 \label{sec:the_dtt_family}
@@ -5022,9 +5024,13 @@ interest in video coding applications:
 The interest of the \acp{DTT} in this Chapter is motivated by the existing
 fast algorithms for transform implementation, which are notably less complex
 than a full matrix multiplication required by generic block transforms.
-The algorithmic complexity for a \ac{DTT} is in the order of $N^2\log_2(N)$
-instead of the $N^3$, where $N$ stands for the transform
+The algorithmic complexity for a 1D \ac{DTT} is in the order of $N\log_2(N)$
+instead of the $N^2$, where $N$ stands for the transform
 size~\cite{puschel-08-algorithms-dct-dst}.
+Table~\ref{tab:comparison_dtt_separable} compares the number of operations
+required for a regular separable 2D transform and a \ac{DTT} using a fast
+algorithm.
+Result are presented for both $4\times4$ and $8\times8$ \acp{TU}.
 
 Since \acp{DTT} coefficients can be computed using and analytical formula,
 their storage requirement is negligible.
@@ -5034,6 +5040,7 @@ As a result, the storage amount necessary per transform is $N^2$ bytes.
 For \acp{RDOT}, the required memory is $3N^2$ bytes per transform, as the
 horizontal and vertical transform are stored along with a dedicated scanning
 pattern.
+Storage values are compared in table~\ref{tab:comparison_dtt_separable}.
 
 Nevertheless, these transforms are a restrained subset of the orthogonal
 transform class, as such, their performance in compression is expected to be
@@ -5053,14 +5060,14 @@ lower than that of \acp{RDOT}.
 	\end{tabular}
 	\caption{Comparison of \acs{ROM} and complexity between \acsp{DTT} and
 	regular separable transforms}
-	\label{tab:compariston_dtt_separable}
+	\label{tab:comparison_dtt_separable}
 \end{table}
 
 To sum up, \acp{DTT} are able to divide the storage requirements of separable
 transforms by a factor of 3 and present a lower computational complexity due
 to fast algorithms.
-This Chapter explores if the \acs{ROM} and complexity reductions balance the
-expected losses in bit-rate savings regarding separable \acp{RDOT}.
+This Chapter explores whether the \acs{ROM} and complexity reductions balance
+the expected losses in bit-rate savings regarding separable \acp{RDOT}.
 
 The formal definition of the 8 types of \ac{DCT} and \ac{DST} can be found in
 tables~\ref{tab:dcts_def} and~\ref{tab:dsts_def}, respectively.
@@ -5073,17 +5080,19 @@ their inverse transforms~\cite{reznik-13-relationship-dct-dst,
 saxena-13-fast-transforms-intra-coding}, detailed in
 table~\ref{tab:dtt_relationships}.
 Since all inverse \acsp{DCT} and \acsp{DST} can be expressed in terms of a
-direct transform, there are 16 different transforms in total.
+direct transform, there are 16 unique 1D transforms in total.
 Combining them as a horizontal and vertical transforms leads to a total of 256
-unique transforms, which are able to capture different kinds of residual
+unique 2D transforms, which are able to capture different kinds of residual
 patterns.
 Some of these transforms are displayed in figure~\ref{fig:some_dtts}.
 
 As an observation, using an orthogonal transform $\A$ for the rows of a block
 and another orthogonal transform $\B$ for the resulting columns does not
 result in the same signal in the transform domain as if the operations are
-carried out the other way around if $\A\neq\B$.
-Nonetheless, both resulting signals can be expressed in terms of the other:
+carried out the other way around if $\B\neq\A$.
+Nonetheless, both resulting signals can be expressed in terms of the other.
+Assuming $\x$ is the input signal and $\X$ its representation in the transform
+domain:
 \begin{align}
 	\X = \B{\left(\A\x^T\right)}^T = \B \x \A^T \\
 	\X = \A{\left(\B\x^T\right)}^T = \A \x \B^T
@@ -5096,29 +5105,57 @@ If instead of transforming $\x$ directly, a transposition is applied before:
 	{\left(\B\x\A^T\right)}^T
 \end{align}
 Meaning that a transposition in the spatial domain is equivalent to invert the
-order of the row and column transforms and then transpose the result.
+order in which the row and column transforms are applied and then transpose
+the result.
+Additionally, if a different scanning is allowed per transform, transposing or
+not a signal in the spatial domain become equivalent operations, since the
+only difference is the order in which the transform coefficients are output,
+but their values remain the same, resulting in fewer combinations than 256.
 
 In order to expand the number of transforms available, three geometrical
 operations have been considered:
 \begin{itemize}
 	\item Residual transposition: $\x^T$
 	\item Horizontal mirroring: $\curvearrowupdown\x$
-	% \item Vertical mirroring $\displaystyle\x\limits^\curvearrowleftright$.
-	\item Vertical mirroring $\x\limits^
+	% \item Vertical mirroring: $\displaystyle\x\limits^\curvearrowleftright$
+	\item Vertical mirroring: $\x\limits^
 		{\rotatebox[origin=c]{-90}{\curvearrowupdown}}$
 \end{itemize}
 These operators can be combined, resulting into $2^3=8$ different operations.
 By applying these pixel permutations to the residual before the transform
-stage, the number of transforms can be increased from 256 to 2048.
-Finally, if both transforms are related between each other as $\A^T=\B$,
-equations above can all be written in terms of $\A$ and $\A^T$.
+stage, the number of 2D transforms can be increased from 256 to 2048.
 
-Finally, if a different scanning is allowed per transform, both ensembles of
-operations are equivalent, since the only difference is the order in which the
-transform coefficients are output, but their values remain the same, resulting
-in fewer combinations than 256.
-These and other relations will be taken into account when designing
+These kind of relations will be taken into account when designing
 \acs{DTT}-based \acs{MDTC} systems in the next Section.
+
+\begin{table}[tb]
+	\centering
+	\small
+	\begin{tabular}{l|l}
+		Direct transform & Inverse transform \\
+		\hline\hline
+		\hspace{0.5cm} DCT-I    & \hspace{0.75cm} DCT-I    \\
+		\hspace{0.5cm} DCT-II   & \hspace{0.75cm} DCT-III  \\
+		\hspace{0.5cm} DCT-III  & \hspace{0.75cm} DCT-II   \\
+		\hspace{0.5cm} DCT-IV   & \hspace{0.75cm} DCT-IV   \\
+		\hspace{0.5cm} DCT-V    & \hspace{0.75cm} DCT-V    \\
+		\hspace{0.5cm} DCT-VI   & \hspace{0.75cm} DCT-VII  \\
+		\hspace{0.5cm} DCT-VII  & \hspace{0.75cm} DCT-VI   \\
+		\hspace{0.5cm} DCT-VIII & \hspace{0.75cm} DCT-VIII \\
+		\hline
+		\hspace{0.5cm} DST-I    & \hspace{0.75cm} DST-I    \\
+		\hspace{0.5cm} DST-II   & \hspace{0.75cm} DST-III  \\
+		\hspace{0.5cm} DST-III  & \hspace{0.75cm} DST-II   \\
+		\hspace{0.5cm} DST-IV   & \hspace{0.75cm} DST-IV   \\
+		\hspace{0.5cm} DST-V    & \hspace{0.75cm} IDST-V   \\
+		\hspace{0.5cm} DST-VI   & \hspace{0.75cm} DST-VII  \\
+		\hspace{0.5cm} DST-VII  & \hspace{0.75cm} DST-VI   \\
+		\hspace{0.5cm} DST-VIII & \hspace{0.75cm} DST-VIII \\
+	\end{tabular}
+	\caption{Relationships between the different members of the \acs{DTT}
+	family}
+	\label{tab:dtt_relationships}
+\end{table}
 
 \begin{figure}[tb]
 	\centering
@@ -5321,61 +5358,33 @@ These and other relations will be taken into account when designing
 	\label{tab:dsts_def}
 \end{table}
 
-\begin{table}[tb]
-	\centering
-	\small
-	\begin{tabular}{l|l}
-		Direct transform & Inverse transform \\
-		\hline\hline
-		\hspace{0.5cm} DCT-I    & \hspace{0.75cm} DCT-I    \\
-		\hspace{0.5cm} DCT-II   & \hspace{0.75cm} DCT-III  \\
-		\hspace{0.5cm} DCT-III  & \hspace{0.75cm} DCT-II   \\
-		\hspace{0.5cm} DCT-IV   & \hspace{0.75cm} DCT-IV   \\
-		\hspace{0.5cm} DCT-V    & \hspace{0.75cm} DCT-V    \\
-		\hspace{0.5cm} DCT-VI   & \hspace{0.75cm} DCT-VII  \\
-		\hspace{0.5cm} DCT-VII  & \hspace{0.75cm} DCT-VI   \\
-		\hspace{0.5cm} DCT-VIII & \hspace{0.75cm} DCT-VIII \\
-		\hline
-		\hspace{0.5cm} DST-I    & \hspace{0.75cm} DST-I    \\
-		\hspace{0.5cm} DST-II   & \hspace{0.75cm} DST-III  \\
-		\hspace{0.5cm} DST-III  & \hspace{0.75cm} DST-II   \\
-		\hspace{0.5cm} DST-IV   & \hspace{0.75cm} DST-IV   \\
-		\hspace{0.5cm} DST-V    & \hspace{0.75cm} IDST-V   \\
-		\hspace{0.5cm} DST-VI   & \hspace{0.75cm} DST-VII  \\
-		\hspace{0.5cm} DST-VII  & \hspace{0.75cm} DST-VI   \\
-		\hspace{0.5cm} DST-VIII & \hspace{0.75cm} DST-VIII \\
-	\end{tabular}
-	\caption{Relationships between the different members of the \acs{DTT}
-	family}
-	\label{tab:dtt_relationships}
-\end{table}
-
 \section{Design of \acs{DTT}-based \acs{MDTC} systems}
 \label{sec:design_dtt_based_mdtc_systems}
 
 The \ac{RDOT} metric, defined in \S\ref{eqn:rdot_metric} has proved to be a
-good way of designing transforms that offers a balance between the distortion
+good way of designing transforms that offer a balance between the distortion
 introduced by the quantisation and the sparsity of transformed coefficients.
 Nonetheless, the \ac{RDOT} metric has also been used in
 Chapters~\ref{cha:mddt} and~\ref{cha:mdtc} to measure the appropriateness of a
 given transform to compactly represent a residual in the rate-distortion
 plane.
 By using this metric, one is able to evaluate the performance of a transform
-on a residual and define a set of residuals of the transforms which give the
-best rate-distortion.
-In practice, this metric can bee seen as a way of rating transforms.
+on a residual and define a set of residuals for which a transform gives the
+best rate-distortion trade-off.
+In practice, this metric this metric is able to rate a transform, i.e.\ its
+appropriateness with respect to a set of residuals.
 
-Due to the fact that \ac{MDTC} systems learnt using the \acs{RDOT} metric lead
-to significant bit-rate savings with respect to \ac{HEVC}, it will be used in
-this Chapter to design an \ac{DTT}-based \ac{MDTC} system.
+Due to the fact that \ac{MDTC} systems learnt using the \acs{RDOT} metric
+leads to significant bit-rate savings over \ac{HEVC}, it is also used in this
+Chapter to design a \ac{DTT}-based \ac{MDTC} system.
 The learning method is based on algorithm~\ref{alg:clustering} for the
 classification part:
 residuals from the learning set are assigned to the transform that provide the
 lowest \acs{RDOT} metric value.
 The main difference is that, when using \acp{DTT}, transforms are already
 learnt, so the learning phase of the algorithm can be skipped.
-Instead, all transforms will be tested against the learning set, and the only
-the set of transforms that provide the lowest \ac{RDOT} metric will be
+Instead, all transforms will be tested against the learning set, and only the
+set of transforms that provide the lowest \ac{RDOT} metric will be
 retained.
 
 As explained in the previous Section, in order to expand the transform space
@@ -5384,8 +5393,8 @@ of \ac{DST} and their inverse versions, 8 spatial pixel permutations have also
 been considered.
 The chosen permutations are combinations of transposed and mirrored
 (vertically and horizontally) versions of residuals so as not to break pixel
-correlations and relative distances within a block.
-Using \acp{DTT} together with the proposed residual modifications leads to
+correlations and relative pixel distances within a block.
+Using \acp{DTT} together with the proposed residual modifications leads to a
 total of 2048 possible transform combinations.
 In order to find the optimal \acs{DTT}-based \ac{MDTC}system, one would have
 to compute the best set of $N$ transforms from the 2048 available giving the
@@ -5403,7 +5412,7 @@ possible transform combinations.
 Fortunately, due to the nature of the \ac{DTT} family, there are many
 redundancies within the transform combinations.
 For instance, for $4\times4$ transforms, the 2048 list reduced to 256
-unique transforms, with the exception of a shuffling in the transform domain.
+unique transforms, if a re-ordering is allowed in the transform domain.
 As an example, for $N=4$ additional transforms, the number of combinations
 that need to be tested is:
 \begin{align}
@@ -5425,34 +5434,35 @@ instead of:
 	\right) =
 	\num{730862190080}\approx\num{7.31e11}
 \end{align}
-Meaning that the number of possible combinations has been reduced by more than
-a factor of 4000.
+Meaning that the number of possible combinations is reduced by more than a
+factor of 4000.
 
 In order to find a good combination of transforms and permutations, all
 combinations are put into a list, which is iterated through.
 Then, the first $N$ transforms are used to classify the residuals into $N$
 groups, that is, each residual is assigned to the transform that gives the
 lowest value of the \ac{RDOT} metric defined in~\eqref{eqn:rdot_metric}.
-Afterwards, the transform $N+1$ is replaced in each group and, if it makes the
-global \acs{RDOT} metric lower, it replaces the outperformed transform,
-otherwise is discarded and the same thing is done for the next transform of
-the list.
+Afterwards, the transform $N+1$ tentatively replaces each transform and, if it
+makes the global \acs{RDOT} metric lower, it replaces the outperformed
+transform, otherwise it is discarded.
+The same step is carried out for the next transform until the end of the list.
 
-The sub-optimality of this approach is well-known and the classification
-algorithm is subject to be improved, but this simple method will allow to
-determine the validity of the approach.
+This approach does not provide the global optimal and the classification
+algorithm is subject to be improved.
+Nonetheless this simple method allows to determine the validity of the
+approach.
+Furthermore, the classification algorithm becomes even less optimal when the
+number of additional transforms increases.
 
-Since \acp{DTT} are low complexity transforms, with regards regular separable
+Since \acp{DTT} have a lower complexity transforms than regular separable
 transforms, the main objective in this Chapter is to build low complexity
 \ac{MDTC} systems, with high emphasis in the decoding time and \acs{ROM}
 requirements.
-Furthermore, the classification algorithm becomes even less optimal when the
-number of the additional transforms increases.
 
 \section{Performances of \acs{DTT}-based \acs{MDTC} systems}
 \label{sec:performances_dtt_based_mdtc_systems}
 
-In the previous Chapter, two approaches were proposed to improve the existing
+In the previous Chapter, two approaches are proposed to improve the existing
 separable \ac{MDTC} systems in the \acs{ROM} --- Y \ac{BD}-rate plane:
 using a different number of transforms per \ac{IPM} and exploiting prediction
 residuals symmetries to re-use the same transforms amongst symmetrical
@@ -5461,6 +5471,14 @@ residuals symmetries to re-use the same transforms amongst symmetrical
 the best trade-off in the three axis: \acs{ROM}, \ac{BD}-rate and even
 encoding complexity.
 
+As in Chapter~\ref{cha:real_world_system}, in order to build iterated
+non-homogeneous symmetrical \ac{MDTC} systems, several configurations have
+been learnt per \ac{IPM} in both $4\times4$ and $8\times8$ \ac{TU} sizes.
+This configurations enable from 1 to 16 additional transforms for $4\times4$
+\acp{TU} and from 1 to 32 for $8\times8$ \acp{TU} in steps of powers of 2.
+
+Due to the will of designing low complexity systems, only configurations of 1,
+2 and 4 kB have been assembled.
 Table~\ref{tab:non_hom_sym_dtt_mdtc} contains the iterated non-homogeneous
 DTT-based \acs{MDTC} systems for 1, 2 and 4 kB.
 A comparison with previously designed systems (the symmetrical and
@@ -5468,7 +5486,7 @@ non-symmetrical versions of the iterated non-homogeneous \acs{MDTC} systems)
 are presented in figures~\ref{fig:vmdtc_dtt_iter_sym_rom}
 and~\ref{fig:vmdtc_dtt_iter_sym_cmplx} for \acs{ROM} and encoding complexity,
 respectively.
-The fist figure reveals how the \ac{DTT}-based \acs{MDTC} systems outperform
+The first figure reveals how the \ac{DTT}-based \acs{MDTC} systems outperform
 the \ac{RDOT}-based \acs{MDTC} systems in the \acs{ROM} --- Y \acs{BD}-rate
 plane.
 However, due to the low storage requirements of the \acp{DTT}, more transforms
@@ -5535,11 +5553,11 @@ Despite having 256 \acp{DTT} from where to choose, only 15 different
 transforms are used with different levels of repetition.
 The most used transforms are the \acs{DCT}-IV--\acs{DCT}-IV,
 \acs{DCT}-III--\acs{DCT}-IV, the \acs{DST}-VII--\acs{DCT}-IV and the
-\acs{DCT}-V--\acs{DCT}-IV.
+\acs{DCT}-V--\acs{DCT}-IV pairs.
 For $8\times8$ blocks, the system uses 55 additional transforms, of which only
 20 are unique.
 From these unique transforms, there are two combinations that stand out: the
-DST\_VII-\acs{DST}-VII and the \acs{DST}\_VII-DCT\_V.
+\acs{DST}\_VII-\acs{DST}-VII and the \acs{DST}\_VII-DCT\_V pairs.
 Moreover, the \acs{DST}\_VII and the \acs{DCT}\_V appear frequently in the
 other combinations.
 The usage of this transforms is summarised  in
