@@ -16,7 +16,7 @@
 \usepackage{amsmath, amssymb}
 \usepackage{MnSymbol} % for the \curvearrowupdown symbol
 \usepackage{tocbibind} % see http://www.howtotex.com/packages/how-to-add-bibliography-and-more-to-table-of-contents/
-\usepackage[Lenny]{fncychap}
+\usepackage[Lenny]{fncychap} % style for chapters
 \ChTitleVar{\Huge\sf\bfseries}
 \usepackage{titlesec,titletoc} % to modify titles and add partial tocs
 \titleformat*{\section}{\Large\bfseries\sffamily}
@@ -70,8 +70,7 @@
 	pdfsubject={video coding},
 	pdfkeywords={video, image, transform},
 	pdfinfo={
-		% CreationDate={D:20150121111947},
-		CreationDate={D:20150317093606}
+		CreationDate={D:20150317093606},
 		%ModDate={...}
 	},
 }
@@ -152,12 +151,12 @@ Nowadays, video services play a major role in information exchanges around the
 world.
 Despite the progress achieved in the last years with video coding standards,
 improvements are still required as new formats emerge:
-as \ac{HFR}, \ac{HDR} and \ac{HD} formats, become more and more common, new
-needs for video compression appear that must exploit properties in these
+as \ac{HFR}, \ac{HDR} and \ac{HD} formats become more and more common, new
+needs for video compression appear which must exploit properties in these
 domains to achieve higher compression rates.
 
 All these formats are made realistic in terms of service deployment thanks to
-the fact that every 10 years, the compression efficiency doubles for
+the fact that around every 10 years, the compression efficiency doubles for
 equivalent quality.
 In 2003, the H.264/\acs{MPEG}-4 \acs{AVC} standard was defined, providing
 a compression rate of around 50\% with regards \acs{MPEG}-2, defined
@@ -200,8 +199,7 @@ Accordingly, this thesis has been organised into the following Chapters:
 \begin{enumerate}
 	[labelindent=3.8em,leftmargin=!,label={\bf Chapter \arabic{enumi}}]
 	\item starts with an introduction to the basics of video coding and some
-		essential concepts inside modern video coding standards for this
-		thesis.
+		essential concepts for this thesis on modern video coding standards.
 		The focus is quickly put on the transform stage and its crucial role
 		in the video coding scheme.
 
@@ -213,35 +211,36 @@ Accordingly, this thesis has been organised into the following Chapters:
 		In order to conceive those transforms, two design methods are studied:
 		the \ac{KLT} and a \ac{RDOT}.
 
-		The \ac{KLT} is a well-known transform design method to conceive
+		The \ac{KLT} defines a well-known transform design method to conceive
 		transforms that minimise the distortion under the high-resolution
 		quantisation hypothesis and to provide optimal bit-allocation via
 		signal decorrelation in the transform domain.
 
-		The \ac{RDOT}, presented in details in this thesis, is another design
-		method that tries to output a signal which is as sparse as possible
-		while minimising the distortion introduced by the quantisation.
+		The \ac{RDOT}, presented in details in this thesis, describes another
+		design method that tries to output a signal which is as sparse as
+		possible while minimising the distortion introduced by the
+		quantisation.
 
 	\item compares the \ac{KLT} and \ac{RDOT} design methods introduced in the
-		previous Chapter by using multiple transforms is through the \ac{MDDT}
-		technique, where one adapted transform (\ac{KLT} or \ac{RDOT}) is
-		provided per \acl{IPM}.
+		previous Chapter by using multiple transforms in a modified version of
+		\ac{HEVC} through the \ac{MDDT} technique, where one adapted transform
+		(\ac{KLT} or \ac{RDOT}) is provided per \acl{IPM}.
 
 		This experiment questions the optimality of the \ac{KLT} for video
 		signals.
-		Moreover, the impact of transform separability impact on video coding
-		in terms of bit-rate savings and coding complexity is reconsidered.
+		Moreover, the impact of transform separability on video coding in
+		terms of bit-rate savings and coding complexity is reconsidered.
 
 	\item extends the \ac{MDDT} system by introducing the \ac{MDTC} system.
 		The main idea is to provide several transforms in each \acl{IPM}.
 		These transforms compete against each other in the same way that block
 		sizes and \aclp{IPM} do.
-		\ac{MDTC} systems are able to offer notable bit-rate savings but their
-		encoding and decoding complexity is important, as well as their
-		storage requirements for the used transforms.
+		\ac{MDTC} systems are able to offer notable bit-rate savings at the
+		expense of encoding and decoding complexity and the storage
+		requirements for the used transforms.
 		Therefore, the following Chapters of the thesis contain approaches on
-		how the \ac{MDTC} system can be simplified whilst keeping bit-rate
-		improvements.
+		simplifying the \ac{MDTC} system whilst keeping bit-rate improvements.
+
 	\item explores a new way of simplifying non-separable \ac{MDTC} systems,
 		which provided the most promising results in the previous Chapter, by
 		using incomplete transforms.
@@ -249,36 +248,39 @@ Accordingly, this thesis has been organised into the following Chapters:
 		Incomplete transforms are low complexity transforms where, instead of
 		using all the basis vectors for the non-separable transforms, only the
 		first one is retained.
-		They are used as a companion of the default \acs{HEVC} transform.
+		They are used as companions of the default \acs{HEVC} transforms.
+
 	\item presents different methods for reducing the storage requirements of
 		\ac{MDTC} systems.
 		The proposed methods are based on the fact that not all \aclp{IPM}
-		present the same behaviour inside \ac{HEVC} in terms of usage
+		present a uniform behaviour inside \ac{HEVC} in terms of usage
 		frequency and signalling.
 		Therefore, not all \aclp{IPM} need the same number of transforms,
 		which allows for a reduction of signalling, encoding complexity and
 		storage.
 
-		Moreover, symmetries observed in \aclp{IPM} are exploited to reduce
-		the storage requirements while having low impact on the bit-rate
-		savings.
+		Moreover, symmetries observed in \aclp{IPM} are exploited to further
+		reduce the storage requirements while having low impact on the
+		bit-rate savings.
 
-	\item replaces the \ac{RDOT}-based \ac{MDTC} system with another one
-		making use of \acp{DTT}.
+	\item replaces the \ac{RDOT}-based \ac{MDTC} system with another one based
+		on \acp{DTT}.
 
-		\acp{DTT} have the advantage of being expressed compactly via an
-		analytical formula, which reduces notably the storage
-		requirements.
+		\acp{DTT} can be expressed compactly via an analytical formula, which
+		reduces notably the storage requirements.
 		And, since they are backed up by fast algorithms, they make suitable
 		candidates for low complexity systems that have no impact on the
 		decoding complexity compared to \acs{HEVC}.
 
 	\item is a summary of the work carried out in this thesis in order to
 		provide a better overview of the achievements of systems making use of
-		multiple transforms
+		multiple transforms.
 		Since many different systems offering various trade-offs between
 		complexity and performance are presented in this thesis, the most
 		relevant are grouped in this Chapter for an easier comparison.
+
+	\item concludes on the thesis results and presents some perspectives for
+		future work on multiple transforms for video coding.
 \end{enumerate}
 
 \section*{Thesis contributions}
@@ -296,7 +298,7 @@ amongst which:
 \end{itemize}
 
 The thesis ends with a summary of the thesis objectives, followed by the
-conclusions and the perspectives for future work based on the multiple use of
+conclusions and the perspectives for future work based on the use of multiple
 transforms for video coding.
 
 \acresetall % reset all acronym expansions
@@ -6112,11 +6114,6 @@ Another way would be to remove the transform selection from the \ac{RDOQ}
 and select it by computing directly the \ac{RDOT} metric value for all
 available transforms.
 
-\bibliographystyle{abbrv} % numbers
-%\bibliographystyle{apalike} % Surname et al. 2014
-%\bibliographystyle{alpha} % ABC14
-\bibliography{refs}
-
 \appendix
 
 \chapter{Publications}
@@ -6425,6 +6422,11 @@ boundary in kB.
 \end{table}
 
 \backmatter
+
+\bibliographystyle{abbrv} % numbers
+%\bibliographystyle{apalike} % Surname et al. 2014
+%\bibliographystyle{alpha} % ABC14
+\bibliography{refs}
 
 \printindex
 \label{cha:index}
