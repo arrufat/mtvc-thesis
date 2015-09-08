@@ -310,9 +310,6 @@ transforms for video coding.
 \section{Introduction to video coding}
 \label{sec:introduction_to_video_coding}
 
-\subsection{The need for video coding}
-\label{sub:the_need_for_video_coding}
-
 The purpose of video coding is to compress video streams, which consist of a
 sequence of images that, at some point, will be either transmitted or stored.
 Compressing means reducing the quantity of information so that the amount of
@@ -325,7 +322,8 @@ of the \ac{RGB} channels, requires:
 \[
 	\frac{1920\times\SI{1080}{pix}}{\SI{1}{image}}
 	\times \frac{\SI{25}{images}}{\SI{1}{s}}
-	\times \SI{3}{channels} \times \frac{\SI{8}{bits}}{\SI{1}{channel}}
+	\times \frac{\SI{3}{channels}}{\SI{1}{pix}}
+	\times \frac{\SI{8}{bits}}{\SI{1}{channel}}
 	\approx \SI{1.2}{\giga bit/\second}
 \]
 
@@ -350,24 +348,22 @@ compression techniques.
 As a network operator, being also an \ac{ISP} that delivers video services
 such as live TV streaming or video on demand services, Orange is, therefore,
 particularly motivated by compression schemes allowing better trade-offs
-between the quantity and quality of videos served and the amount of clients
-reachable.
+between the quantity and quality of served videos and the amount of reachable
+clients.
 
 \section{The video coding system}
 \label{sec:the_video_coding_system}
 
-The video coding system describes a work-flow to work with video
-sequences.
-It is composed of several stages, starting from the video acquisition at
-the source and ending at the video display.
+The video coding system describes a work-flow to process with video sequences.
+It is composed of several stages:
+from the video acquisition at the source and to the video display.
 A good understanding of each part is crucial in order to be able to take the
 proper decisions when delivering a video coding solution.
 
 This section presents a scheme containing the most important concepts
 used in state-of-the-art video codecs.
-
-Figure~\ref{fig:video_coding_system} describes how a complete video coding
-system can be organised as a block diagram.
+Figure~\ref{fig:video_coding_system} describes a way in which a complete video
+coding system can be organised as a block diagram.
 The composing blocks are explained more in details in the following
 subsections.
 
@@ -383,7 +379,7 @@ subsections.
 \subsection{Pre-processing}
 \label{sub:pre_processing}
 
-After the digital video has been captured at the source, which may be of many
+Once the digital video has been captured at the source, which may be of many
 different sorts such as natural scenes or synthetic computer-generated
 content, it may need to be processed in order to be encoded.
 Usually, the pre-processing stage can include some filtering, scaling and
@@ -418,10 +414,10 @@ Colour space conversions are used to change the colour representation of the
 content to better fit the \ac{HVS} and to decorrelate the components for
 better coding efficiency.
 
-Usually, the colour space at the source is in the \ac{RGB} format, but
-since the \ac{HVS} is more sensible to light variations than to colour
-variations, the grey scale version of the image, which contains the light
-information (luma) is separated from the colour information
+Often, the colour space at the source is in the \ac{RGB} format, but since the
+\ac{HVS} is more sensible to light variations than to colour variations, the
+grey scale version of the image, which contains the light information (luma)
+is separated from the colour information
 (chroma)~\cite{poynton-95-color-space}.
 The family colour spaces where the luma is separated from chroma are usually
 referred to as YUV colour spaces.
@@ -541,10 +537,14 @@ the following subsections.
 \label{sub:partitioning}
 \index{partitioning}
 \index{quad-tree}
+\index{CTB}
+\index{CB}
+\index{PU}
+\index{TU}
 
 In order to process the video frames, they are exhaustively partitioned into
 non-overlapping blocks.
-Sub-partitioning an image allows for a better matching with the spatial
+Sub-partitioning an image allows for a better matching to the spatial
 distribution of energy.
 The subdivision blocks ease, as well,  the succeeding stages of prediction and
 transform:
@@ -557,9 +557,10 @@ This is due to the quad-tree partitioning that is implemented in \ac{HEVC}.
 The figure provides a partitioning for a certain level of quantisation.
 It can be seen that the image has been divided into uniform regions.
 
-The optimal choice of the block size is left to the encoder.
-In \ac{HEVC}, the \ac{PU} size does not always match the \ac{TU} size,
-allowing a \ac{PU} to be split into four \acp{TU}.
+The optimal choice of the block size is left to the encoder, through \acp{CTB}
+in \ac{HEVC}.
+Each \ac{CTB} can be split into four \acp{CB}, which can also be split into
+four \acp{PU}, which can finally split into four \acp{TU}.
 
 \subsection{Prediction}
 \label{sub:prediction}
@@ -592,12 +593,13 @@ the prediction source:
 \begin{itemize}
 	\item Intra prediction, also called spatial prediction, for those blocks
 		predicted using information within the same frame.
-	\item Inter prediction, also called temporal prediction for those blocks
+	\item Inter prediction, also called temporal prediction, for those blocks
 		predicted from frames other than the one under consideration.
 \end{itemize}
 
 Figure~\ref{fig:part_orig_pred_res_image} (b) provides an example of an intra
-predicted picture using the partitioning from above.
+predicted picture using the partitioning from
+figure~\ref{fig:part_orig_pred_res_image} (a).
 Figure~\ref{fig:part_orig_pred_res_image} (c) displays the residual image (the
 difference between the original and predicted images).
 This image evidences the parts of the image that could not be predicted and
@@ -623,8 +625,8 @@ will have to be encoded and transmitted.
 \index{intra prediction}
 
 Intra prediction, sometimes referred to as spatial prediction, is used to
-eliminate spatial redundancies by removing the correlation with local regions
-of a picture.
+eliminate spatial redundancies by removing the correlation within local
+regions of a picture.
 The basic principle of intra prediction is based on the fact that the texture
 of a picture region is similar to the texture of its neighbourhood and can be
 predicted from there.
@@ -633,9 +635,9 @@ Images coded using this technique exclusively are named I-frames.
 Different models of predictions can be used through projections of adjacent
 decoded blocks.
 These models include directional projections, gradient projections (called
-planar) and the projection of the mean value (called DC).
-These \acp{IPM} are used to derive the predictions of the current block from
-its the available boundaries, formed by reconstructed blocks.
+Planar) and the projection of the mean value (called DC).
+The \acp{IPM} are used to derive the predictions of the current block from its
+the available boundaries, formed by reconstructed blocks.
 
 \subsubsection{Inter prediction}
 \label{ssub:inter_prediction}
@@ -646,7 +648,7 @@ consecutive images share many similarities, and that some of their component
 regions will move as a whole.
 Since the encoding order is not necessarily the same as the viewing one, inter
 predictions can have their origins in either past or future frames, and also
-combine the two origins.
+combine both origins.
 This feature facilitates movement tracking across frames.
 Images that are predicted using only one image either from the past or from
 the future are called predicted images or P-frames.
@@ -655,8 +657,8 @@ images.
 
 At the encoder side, an extra operation, called motion estimation, is
 carried out.
-This stage searches for the best matching area in the reference picture
-for the current prediction block.
+This stage searches the best matching area in the reference picture for the
+current prediction block.
 It is one of the most complex parts of video coders in terms of computational
 requirements.
 Once a good prediction has been found, a motion vector is created, indicating
@@ -741,6 +743,9 @@ number of bits thanks to the \ac{CABAC}.
 
 \subsection{Intra coding in \acs{HEVC}}
 \label{sub:intra_coding_in_hevc}
+\index{PU}
+\index{TU}
+\index{scanning}
 
 This subsection explains some particularities of the intra coding inside
 \ac{HEVC}.
@@ -753,25 +758,23 @@ A detailed explanation on how predictions are derived from the block
 boundaries using those prediction modes can be found in Chapter 6
 of~\cite{wien-15-hevc}.
 
+Depending on the selected \ac{IPM}, residuals present different patterns, and
+so do their transformed coefficients.
 The top-right part of figure~\ref{fig:mdcs} presents the average \ac{HEVC}
 $4\times4$ residuals by scanning mode, together with their average
-representation in transform domain though the \acs{DST}-VII.
-Depending on the selected \ac{IPM}, residuals present different patterns, and
-so do their transforms.
-The average residual profiles have lower (dark) values near the
-available borders, which increase with the distance from the
-boundaries: residuals issued from horizontal and vertical \acp{IPM} only
-have the left and upper borders available, respectively, whereas the
-remaining \acp{IPM} tend to have both borders available.
-It can also be observed that the scanning patterns match reasonably well
-the transform coefficients in each case, sorting them in an increasing
-order.
+representation in transform domain through the \acs{DST}-VII.
+The average residual profiles have lower (dark) values near the available
+borders, which increase with the distance from the boundaries: residuals
+issued from horizontal and vertical \acp{IPM} only have the left and upper
+borders available, respectively, whereas the remaining \acp{IPM} tend to have
+both borders available.
+It can also be observed that the scanning patterns match reasonably well the
+transformed coefficients in each case, sorting them in an increasing order.
 
-These patterns in the transform domain will determine different scanning
-orders (in different colours), as presented in the lower part of
-figure~\ref{fig:mdcs}.
-An adapted mode to different patterns ensures, in average, a correct order of
-the coefficients that will group all the null values together.
+These patterns in the transform domain determine different scanning orders (in
+different colours), as presented in the lower part of figure~\ref{fig:mdcs}.
+An adapted mode to each pattern ensures, in average, a correct order of the
+coefficients that will group all the null values together.
 The patterns are described for $4\times4$ blocks, and the same pattern is used
 on higher block sizes, which are recursively split into 4 sub-blocks until
 size $4\times4$ is reached~\cite{sole-12-transform-coefficient-coding}.
@@ -832,13 +835,14 @@ size $4\times4$ is reached~\cite{sole-12-transform-coefficient-coding}.
 \section{Encoder control}
 \label{sec:encoder_control}
 \index{encoder control}
+\index{Lagrange}
 
 The encoder control is used by essentially all blocks in the diagram
 from figure~\ref{fig:hybrid_video_coding_scheme}.
-This set of operations allow the encoder to take decisions related to coding
+This set of operations allows the encoder to take decisions related to coding
 based on the application requirements.
 These decisions include the block sizes and the prediction to use.
-For each block size and kind of prediction, the encoder computes the
+For each block size and type of prediction, the encoder computes the
 distortion, using its own decoder, and estimates the rate as illustrated in
 figure~\ref{fig:rate_distortion_scheme}.
 
@@ -883,9 +887,9 @@ Usually, $I$ is the reference image and $K$ the coded image.
 \label{ssub:peak_signal_to_noise_ratio}
 \index{PSNR}
 
-The \ac{PSNR} is also an objective measure of quality that computes the ratio
-between the maximum possible value of a signal and the power of the noise that
-affects the fidelity of its approximation.
+The \ac{PSNR} is an objective measure of quality that computes the ratio
+between the maximum possible value of a signal and the energy of the noise
+that affects the fidelity of its approximation.
 It is usually defined in a logarithmic scale to cope with the wide range that
 signals might have.
 Defining the \ac{PSNR} in terms of the \ac{MSE} from~\eqref{eqn:mse}, it can
@@ -901,15 +905,15 @@ the maximum pixel values writes: $MAX = 2^{8} - 1 = 255$.
 \subsection{Rate-distortion optimisation}
 \label{sub:rate_distortion_optimisation}
 \index{RDO}
+\index{Lagrange}
 
-In order to carry out the most sensible decision at each time, the encoder
-uses a \ac{RDO} criterion
-\cite{sullivan-98-rdo-video-compression}.
+In order to carry out the most sensible decision each time, the encoder uses a
+\ac{RDO} criterion~\cite{sullivan-98-rdo-video-compression}.
 
 Each time the encoder has to make a decision about choosing a
 particular block size for the partitioning or a prediction mode, it
 checks the distortion that decision might cause as well as an estimation
-of the bit rate needed.
+of the bit-rate needed.
 The encoder performs this computation iteratively on the same block,
 exploring many different coding possibilities and finally selects the
 one that provides the best score in terms of rate and distortion.
@@ -928,10 +932,10 @@ using a Lagrange measure.
 
 As seen in the previous subsections, computing the distortion is
 reasonably straightforward.
-However, estimating the bit rate is a bit more delicate, since the whole
+However, estimating the bit-rate is a bit more delicate, since the whole
 entropy coder cannot be run each time the encoder explores the different
-possibilities for a block, since it has a huge impact on complexity.
-As a consequence, an estimation of the bit rate is often used in the \ac{RDO}
+possibilities for a block because it has a huge impact on complexity.
+As a consequence, an estimation of the bit-rate is often used in the \ac{RDO}
 loop.
 
 \section{Bj{\o}ntegaard Delta measurements}
@@ -951,7 +955,7 @@ figure~\ref{fig:bdsnr_bdrate}:
 \begin{enumerate}[label = (\alph{enumi})]
 	\item \ac{BD}-\ac{PSNR}: computes the relative quality improvement
 		in \si{\decibel}.
-	\item \ac{BD}-rate: computes the relative savings in bit rate for an
+	\item \ac{BD}-rate: computes the relative savings in bit-rate for an
 		equivalent distortion in percent.
 \end{enumerate}
 
@@ -970,14 +974,14 @@ figure~\ref{fig:bdsnr_bdrate}:
 \end{figure}
 
 The \ac{BD}-rate measurement is extensively used in this thesis to
-appreciate the performance of the proposed systems, as is the metric used by
-\acs{JCT-VC} in standardisation.
+appreciate the performance of the proposed systems, as it is the metric used
+by \acs{JCT-VC} in standardisation.
 
 \section{Conclusions}
 \label{sec:conclusions_video_coding}
 
-This chapter presented the motivation for video compression as well as some
-general concepts concerning an overview of the video coding system.
+This Chapter has presented the motivation for video compression as well as
+some general concepts concerning an overview of the video coding system.
 
 Current video coders exploit redundancies existing within images of the video
 sequence via predictions.
@@ -6188,7 +6192,7 @@ encoder to perform better decisions regarding block sizes, prediction modes
 and transforms.
 Different systems are proposed to accommodate trade-offs between complexity
 and performance.
-Bit rate reductions in the range of 2\% to 7\% are reported, depending on
+Bit-rate reductions in the range of 2\% to 7\% are reported, depending on
 complexity.
 
 \subsection{Image coding with incomplete transforms for HEVC}
