@@ -5978,6 +5978,14 @@ coding.
 Different levels of performances are provided depending on the allowed
 complexity on the encoder side.
 
+The iterative design described in Chapter~\ref{cha:real_world_system} has
+allowed creating a continuum of systems, satisfying different \acs{ROM}
+requirements.
+Although the system design has been carried out for different \acs{ROM}
+constraint, a system could be conceived for any point.
+This means that systems using more than 128 kB are possible and can provide
+higher bit-rate savings.
+
 \chapter{Conclusions and future work}
 \label{cha:conclusions_and_future_work}
 
@@ -6140,6 +6148,8 @@ The current way of indicating the chosen transform to the decoder is via a
 very simplistic approach:
 during the \ac{RDO} loop, the encoder tests all transforms in each \ac{TU} and
 selects the one that provides the best trade-off in terms of rate-distortion.
+Then, a flag is used to indicate that a transform different from those of
+\ac{HEVC} is used, and signalled with a fixed length codeword.
 This approach has the advantage of being very flexible, allowing a \ac{PU}
 that has been split into four \acp{TU} to have different transforms.
 
@@ -6148,6 +6158,11 @@ level instead of per \ac{TU}, transform signalling would be reduced by a
 factor of 4, although all transforms in a \ac{PU} would be identical.
 It seems reasonable to think that more bit-rate savings could be achieved by
 using this new signalling scheme.
+
+Another improvement in signalling might come by not using fixed length
+codewords, but favouring some transforms instead with shorted codewords.
+This approach will also allow using a number of transforms different from a
+power of 2.
 
 Additional a different signalling method could be implemented for transforms,
 instead of the simplistic fixed length code word.
