@@ -4995,6 +4995,9 @@ side effect of the storage constraint.
 
 This Chapter proposes an simplification approach that takes into account the
 storage requirements, the encoding complexity and the decoding complexity.
+It is also worth-noticing that the systems described in this Chapter are in
+early stages of development and, therefore, not as mature as the systems
+presented previously.
 
 \section{The discrete trigonometric transform family (\acsp{DCT} \& \acsp{DST})}
 \label{sec:the_dtt_family}
@@ -5446,6 +5449,7 @@ Afterwards, the transform $N+1$ tentatively replaces each transform and, if it
 makes the global \acs{RDOT} metric lower, it replaces the outperformed
 transform, otherwise it is discarded.
 The same step is carried out for the next transform until the end of the list.
+using a different number of transforms per \ac{IPM} and exploiting prediction
 
 This approach does not provide the global optimal and the classification
 algorithm is subject to be improved.
@@ -5473,14 +5477,20 @@ encoding complexity.
 
 As in Chapter~\ref{cha:real_world_system}, in order to build iterated
 non-homogeneous symmetrical \ac{MDTC} systems, several configurations have
-been learnt per \ac{IPM} in both $4\times4$ and $8\times8$ \ac{TU} sizes.
-This configurations enable from 1 to 16 additional transforms for $4\times4$
+been previously learnt per \ac{IPM} in both $4\times4$ and $8\times8$ \ac{TU}
+sizes.
+These configurations enable from 1 to 16 additional transforms for $4\times4$
 \acp{TU} and from 1 to 32 for $8\times8$ \acp{TU} in steps of powers of 2.
 
 Due to the will of designing low complexity systems, only configurations of 1,
 2 and 4 kB have been assembled.
 Table~\ref{tab:non_hom_sym_dtt_mdtc} contains the iterated non-homogeneous
 DTT-based \acs{MDTC} systems for 1, 2 and 4 kB.
+A detailed description of the number of transforms used in each \ac{IPM} for
+$4\times4$ and $8\times8$ \acp{TU} can be found in
+appendix~\ref{cha:transform_usage_in_mdtc_systems}, more precisely in
+table~\ref{tab:config_sym_dtt}.
+
 A comparison with previously designed systems (the symmetrical and
 non-symmetrical versions of the iterated non-homogeneous \acs{MDTC} systems)
 are presented in figures~\ref{fig:vmdtc_dtt_iter_sym_rom}
@@ -5489,9 +5499,13 @@ respectively.
 The first figure reveals how the \ac{DTT}-based \acs{MDTC} systems outperform
 the \ac{RDOT}-based \acs{MDTC} systems in the \acs{ROM} --- Y \acs{BD}-rate
 plane.
-However, due to the low storage requirements of the \acp{DTT}, more transforms
-can be fit for a given \acs{ROM} constraint, leading to more coding
-possibilities, and thus to more encoding complexity.
+The sub-optimality of the learning algorithm can be observed as the number of
+additional \acp{DTT} increases:
+the \ac{DTT}-based \ac{MDTC} system gets closer to the \ac{RDOT}-based
+\ac{MDTC} systems.
+Due to the low storage requirements of the \acp{DTT}, more transforms can be
+fit for a given \acs{ROM} constraint, leading to more coding possibilities,
+and thus to more encoding complexity.
 Moreover, the \acp{DTT} have been implemented as separable transforms inside
 the encoder, therefore, there is room for improvement in terms of encoding
 complexity once they make use of fast algorithms.
@@ -5510,10 +5524,6 @@ complexity once they make use of fast algorithms.
 	\acs{ROM} constraints}
 	\label{tab:non_hom_sym_dtt_mdtc}
 \end{table}
-
-Appendix~\ref{cha:transform_usage_in_mdtc_systems} contains the transform
-configuration for the systems shown in table~\ref{tab:non_hom_sym_mdtc} for
-both $4\times4$ and $8\times8$ \acp{TU} in table~\ref{tab:config_sym_dtt}.
 
 \begin{figure}[tb]
 	\centering
@@ -5636,10 +5646,17 @@ instead of using \ac{RDOT}-based \ac{MDTC} systems, \acp{RDOT} are replaced by
 The coefficients of these trigonometric transforms can be deduced
 analytically, hence the only storage requirement is the scanning pattern.
 Although fast algorithms exist for \acp{DTT}, this Chapter has implemented
-them as regular separable transforms, since it was intended to be just a proof
-of concept.
-As a result, the encoding and decoding times presented in this Chapter do not
-represent the values that an actual implementation would have.
+them as regular separable transforms.
+As a result, the encoding and decoding times presented here do not represent
+the values that an actual implementation would have.
+
+Finally, the \ac{DCT}-based \ac{MDTC} systems explored in this Chapter are
+preliminary, but still very competitive and promising with regards to the more
+complex approaches using separable \acp{RDOT}.
+As such, coding complexity is subject to further improvements when \ac{DTT}
+are implemented using fast algorithms.
+Moreover, revisiting the learning algorithm to fix its sub-optimality can lead
+to even better performances of the \ac{DTT}-based \ac{MDTC} systems.
 
 \chapter{Proposed \acs{MDTC} configurations}
 \label{cha:proposed_mdtc_configurations}
@@ -5949,6 +5966,17 @@ figure~\ref{fig:final_systems_ra} for \ac{RA}.
 	\caption{Y \acs{BD}-rate (\%) for proposed \acs{MDTC} systems in \acs{RA}}
 	\label{tab:final_systems_ra}
 \end{table}
+
+\section{Conclusions}
+\label{sec:summary_conclusions}
+
+This Chapter summarises and groups the most representative separable \ac{MDTC}
+systems designed in this thesis.
+
+The retained systems prove the interest of using multiple transforms for video
+coding.
+Different levels of performances are provided depending on the allowed
+complexity on the encoder side.
 
 \chapter{Conclusions and future work}
 \label{cha:conclusions_and_future_work}
