@@ -5987,18 +5987,18 @@ complexity on the encoder side.
 \section*{Thesis objectives}
 \label{sec:thesis_objectives}
 
-The main objective of this thesis was to provide a set of tools and systematic
+The objective of this thesis is to provide a set of tools and systematic
 methods of designing multiple transforms to be used in video coders.
-In order to design perfoming learning algorithms, the \ac{RDOT} metric, based
-on the $\ell_0$ norm was chosen.
-The appropriateness of this design method is justified in
-Chapter~\ref{cha:transform_coding}.
+In order to design performing learning algorithms, the \ac{RDOT} metric, based
+on the $\ell_0$ norm was selected.
+The appropriateness of this design method is justified over the traditional
+\ac{KLT} in Chapter~\ref{cha:transform_coding}.
 
 The methodology for learning adapted transforms based on the \ac{RDOT} metric
 and presented in Chapters~\ref{cha:transform_coding},~\ref{cha:mddt}
 and~\ref{cha:mdtc} consists of the following steps:
 \begin{enumerate}
-	\item Select a representative set of learning sequences.
+	\item Select a set of learning sequences.
 	\item Encode the sequences with \ac{HEVC} using an \ac{AI} configuration.
 	\item Extract the residuals (difference between original and predicted
 		blocks) for the desired \ac{TU} sizes, grouped by \ac{IPM}.
@@ -6021,33 +6021,31 @@ the following ways:
 \begin{itemize}
 	\item Learning transforms for \ac{TU} sizes other than $4\times4$ and
 		$8\times8$, such as $16\times16$ and $32\times32$.
-	\item Learning transforms for inter prediction residuals.
+	\item Learning transforms for inter prediction residuals by encoding in
+		\ac{RA} instead of \ac{AI}.
 \end{itemize}
 
 \section*{Conclusions}
 \label{sec:final_conclusions}
 
 This thesis has proved that state-of-the-art video coding standards, such as
-\ac{HEVC}, can still be improved by designing multiple transforms adapted to
-video coding.
+\ac{HEVC}, can be improved by designing multiple transforms adapted to video
+coding.
 
 The design of the transforms is carried out off-line through a learning.
 Despite the fact that off-line learning techniques might have known issues
-such as over learning, if the learning set is chosen wisely, the resulting
-transforms can be used of all sequences.
-This way, implementing hardware implementations of the transforms are
-possible, since transforms coefficients are known.
+such as over learning, if the learning set is chosen wisely (using several
+resolution, frame rates and sources), the resulting transforms can be used
+outside the sequences of the learning set with good performances.
+This way, hardware implementations of the transforms are possible, since
+transforms coefficients are known.
 
 Moreover, off-line learning has been possible thanks to the \ac{RDOT} design
 introduced in~\cite{sezer-08-sparse-orthonormal-transforms}.
 The \ac{RDOT} metric, based on the $\ell_0$ norm, has served as a good
 approximation of the one implemented in \ac{RDO} loop  from \ac{HEVC}.
-As a result, well performing transforms have been learnt without the need of
-encoding a single sequence.
 
-Before presenting the concluding on the results of the work carried out in
-this thesis, in order to place the obtained results into context, the
-following points should be kept in mind:
+The following points should be kept in mind:
 \begin{itemize}
 	\item Every 10 years, a new video codec is standardised halving the
 		bit-rate required for an equivalent perceived quality.
@@ -6060,6 +6058,16 @@ following points should be kept in mind:
 
 With those points stated, the results in this thesis have proved the interest
 in using multiple transforms for video coding.
+
+The first attempt is to compare the performances of the \ac{KLT} against the
+\ac{RDOT} through the \ac{MDDT} technique.
+Improvements of over 1 \ac{BD}-rate point are obtained when using the
+\ac{RDOT} design, which takes into account the sparsity of the signal in the
+transform domain.
+
+In order to put the use of multiple transforms further, the \ac{MDTC} is born
+as an evolution of the \ac{MDDT} where more than one transform is available in
+each \ac{IPM}.
 Depending on the desired complexity and bit-rate savings trade-off, this
 technique alone is able to obtain bit-rate savings of 7\%, for non-separable
 transforms, and around 4\% for separable transforms.
@@ -6067,9 +6075,27 @@ transforms, and around 4\% for separable transforms.
 However, to obtain those levels of performance, first obtained in
 Chapter~\ref{cha:mdtc}, the encoding complexity and the storage requirements
 are too high for a commercial system.
-For this reason, Chapter~\ref{cha:real_world_system} provides different
-systematic ways to reduce the storage requirements for the \ac{MDTC} systems.
+For this reason, Chapters~\ref{cha:real_world_system} and~\ref{cha:dtt}
+provide different systematic ways to reduce the storage requirements for the
+\ac{MDTC} systems.
 As a side effect, the encoding complexity is also reduced.
+
+Chapter~\ref{cha:dtt} present the \ac{DTT}-based \ac{MDTC} systems as a
+simplification of the \ac{MDTC} systems used throughout this thesis.
+Despite the early stages of the work, \acp{DTT} have proved their interest by
+being a very competitive approach in terms of bit-rate savings, complexity and
+storage requirements.
+However, the learning algorithm for these systems is known to be sub-optimal
+when using a large number of \acp{DTT}.
+For this reason, improvements in the learning algorithm are essential to
+continue improving the \ac{DTT} approach.
+
+The last Chapter groups some of the most representative \ac{MDTC} systems
+presented in this thesis.
+Thanks to the learning methods and simplifications presented in
+Chapter~\ref{cha:real_world_system} and~\ref{cha:dtt}, a continuum of systems
+can be designed which are able to satisfy different complexity and bit-rate
+savings trade-offs.
 
 \section*{Perspectives for future work}
 \label{sec:perspectives_for_future_work}
@@ -6082,16 +6108,18 @@ techniques proposed that have been carried out in this thesis.
 \label{sub:learning_set}
 
 In Chapters~\ref{cha:mddt},~\ref{cha:mdtc}
-and~\ref{cha:incomplete_transforms}, the learning set that was used was
-included in the test set for historical reasons.
+and~\ref{cha:incomplete_transforms}, the test set that was used included in
+the learning set to be in the best possible conditions and validate the
+approach that the use of multiple transforms in video coding provide bit-rate
+savings.
 Due to the promising results obtained in those Chapters, in order to make sure
-there was no over-learning, he learning set was replaced by a completely
+there was no over-learning, he learning set is replaced by a completely
 independent set of sequences in Chapter~\ref{cha:real_world_system}.
 The new learning set provides many more residuals from which to learn the
 transforms, but is less heterogeneous, since all frames come from the same
 sequence, which implies same frame rate, resolution, filters, etc.
 
-Chapter~\ref{cha:real_world_system} has shown that there can be a small impact
+Chapter~\ref{cha:real_world_system} shows that there can be a small impact
 due to transform over-learning to the learning set.
 However, choosing a more diversified learning set in terms of resolution,
 frame rate and contents, the over-learning effect impact can be lowered.
@@ -6100,6 +6128,10 @@ even with a learning set that is nothing like the test set, good results can
 be achieved.
 Moreover, due to the fact that the short film is publicly available in raw
 format, makes the results reproducible.
+
+Therefore, using a learning set made up from sequences coming from different
+sources, at different resolutions, frame rates and contents can lead to better
+performing transforms.
 
 \subsection*{Signalling}
 \label{sub:signalling}
@@ -6163,6 +6195,26 @@ set of transforms by implementing a fast decision mode.
 Another way would be to remove the transform selection from the \ac{RDOQ}
 and select it by computing directly the \ac{RDOT} metric value for all
 available transforms.
+
+\subsection*{Further study of \acs{DTT}-based \acs{MDTC} systems}
+\label{sub:further_study_of_dtt_based_mdtc_systems}
+
+The \ac{DCT}-based \ac{MDTC} systems introduced in Chapter~\ref{cha:dtt} have
+come late in the work presented in this thesis.
+Accordingly, these systems have not been studied with the same level of detail
+as the \ac{RDOT}-based \ac{MDTC} systems.
+
+Despite the low level of maturity of the approach using \acp{DTT}, these
+systems have presented very promising trade-offs in the \acs{ROM} --- Y
+\ac{BD}-rate plane.
+As a consequence, a thorough study on the \ac{DTT} family, their properties
+and fast algorithm implementations might lead to improvements in the encoding
+and decoding complexities.
+Besides, the algorithm used to design the \ac{MDTC} systems is sub-optimal,
+since the computational complexity of choosing the best set of $N$ transforms
+amongst the 256 available unique 2D transforms is high, and grows with $N$.
+Improvements to the learning algorithm would lead to better choices regarding
+the transforms used in each \ac{IPM}.
 
 \appendix
 
