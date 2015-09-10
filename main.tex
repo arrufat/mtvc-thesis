@@ -115,10 +115,11 @@
 \frontmatter
 % front cover
 \ifthenelse{\useINSAcover = 1}
-{\includepdf[pages={2}]{./cover-mtvc-thesis-INSA-UEB.pdf}
-\cleardoublepage
-\includepdf[pages={4}]{./cover-mtvc-thesis-INSA-UEB.pdf}}
-{\maketitle}
+{
+	\includepdf[pages={2}]{./cover-mtvc-thesis-INSA-UEB.pdf}
+	\cleardoublepage
+	\includepdf[pages={4}]{./cover-mtvc-thesis-INSA-UEB.pdf}
+}{\maketitle}
 
 \chapter*{Acknowledgements}
 \label{cha:acknowledgements}
@@ -139,13 +140,13 @@
 
 \mainmatter
 
-\addcontentsline{toc}{chapter}{\protect\numberline{}General introduction}
 \chapter*{General introduction}
 \label{cha:general_intoduction}
+\addcontentsline{toc}{chapter}{\protect\numberline{}General introduction}
 
-\addcontentsline{toc}{section}{\protect\numberline{}Context}
 \section*{Context}
 \label{sec:context}
+\addcontentsline{toc}{section}{\protect\numberline{}Context}
 
 Nowadays, video services play a major role in information exchanges around the
 world.
@@ -284,8 +285,8 @@ Accordingly, this thesis has been organised into the following Chapters:
 \end{enumerate}
 
 \section*{Thesis contributions}
-\addcontentsline{toc}{section}{\protect\numberline{}Thesis contributions}
 \label{sec:thesis_contributions}
+\addcontentsline{toc}{section}{\protect\numberline{}Thesis contributions}
 
 Work carried out in this thesis contains several objectives and contributions,
 amongst which:
