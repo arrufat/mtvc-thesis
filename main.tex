@@ -2847,9 +2847,9 @@ used with \acp{RDOT}, especially in their non-separable design.
 
 This Chapter is focused on improving upon the \ac{MDDT} technique by
 increasing the number of available transforms.
-The main idea is to provide a fixed number of transforms per \acf{IPM} that
-compete against each other in the \ac{RDO} loop, in the same ways as block
-sizes and \acp{IPM} do.
+The main idea is to provide a fixed number of transforms in each \acf{IPM}
+that compete against each other in the \ac{RDO} loop, in the same ways as
+block sizes and \acp{IPM} do.
 This implies that, for a given block size and \ac{IPM}, there is no longer a
 unique transform, but a set of them, and the encoder selects the one that
 provides the best trade-off in terms of rate-distortion.
@@ -2906,7 +2906,7 @@ The chosen transform design is the \ac{RDOT}, since, as demonstrated in the
 previous Chapter, it provides significant improvements in terms of bit-rate
 savings with respect to the \ac{KLT}.
 However, in this Chapter, more than one \ac{RDOT} will be learnt per \ac{IPM},
-in stead of one, using the same learning set:
+using the same learning set:
 residuals issued from an \ac{AI} \ac{HEVC} coding of classes B and C from the
 \ac{HEVC} test set, grouped by \ac{IPM}.
 For each \ac{IPM}, $2^N$ transforms are learnt, in addition to the \ac{HEVC}
@@ -2920,8 +2920,8 @@ steps are:
 	\item For the $2^N$ classes that are not assigned to the \ac{HEVC}
 		transform, learn a separable or non-separable transform, depending on
 		the desired configuration.
-	\item Evaluate each residual using the RDOT metric and assign it to the
-		transform that minimises the value.
+	\item Evaluate each residual using the \ac{RDOT} metric and assign it to
+		the transform that minimises the value.
 	\item Repeat steps 2 and 3 until convergence.
 \end{enumerate}
 An example for $N=1\Rightarrow2^N=2$ additional transforms is provided in
@@ -3027,7 +3027,7 @@ decoding complexity.
 
 The main reason for learning $1+2^N$ transform configurations, with the first
 one being the default \ac{HEVC} transform for the target block size, has been
-compatibility, as mentioned in the previous Section.
+backward compatibility, as mentioned in the previous Section.
 Since the default transforms are kept, the encoder is able to choose them and
 reproduce the same coding choices as \ac{HEVC} in case they provide the best
 trade-off.
@@ -3225,7 +3225,7 @@ gained.
 
 There are some sequences that stand out, notably the \emph{BasketballDrill},
 which already showed high gains using the \ac{MDDT} technique (see
-\ref{ssub:mddt_bit_rate_savings}).
+\S\ref{ssub:mddt_bit_rate_savings}).
 This sequence has the particularity of presenting a large amount of directional
 patterns, which lead to bit-rate savings of over 25\%.
 The \ac{BD}-rate curves for this sequence are presented in
@@ -3255,7 +3255,7 @@ yet, and the two other sub-figures the result of coding that block using
 \ac{HEVC} and the non-separable high performance \ac{MDTC}, respectively.
 The comparison is pertinent, as both sequences have the same bit-rate at
 \ac{QP} 37 (around \SI{3.3}{\mega bps}, see
-figure~\ref{fig:mdtc_bdrate_bdrill}).
+figure~\ref{fig:mdtc_bdrate_bdrill_mdtc}).
 It is easy to see the improvements made by the \ac{MDTC} system along the
 diagonal patterns of the image:
 The lines are cut when coding with \ac{HEVC} but they remain continuous using
@@ -3291,8 +3291,8 @@ systems explore many more coding alternatives, which leads to significant
 increments in terms of encoding time:
 up to 20 times the complexity of the reference \ac{HEVC} encodings for the
 high performance \acs{MDTC} system.
-The separable version presents a much lower complexity, even if it is 8 times
-more complex than the one of \ac{HEVC}.
+The separable version presents a much lower complexity, even if it is 8
+times higher than the one of \ac{HEVC}.
 
 The decoding time is increased due to the lack of efficient fast algorithms
 for the designed \acp{RDOT}, as in the \ac{MDDT} systems.
@@ -3303,9 +3303,10 @@ On the other hand, the decoding complexity can increase slightly with the
 number of transforms, since it becomes less likely to use the default
 \ac{HEVC} transform.
 
-In terms of decoding time, the low complexity \ac{MDTC} system provides a
-better performance than the \ac{MDDT} (around 0.6 \ac{BD}-rate points), with
-the only burden being on the encoding time.
+For the same decoding time, the low complexity \ac{MDTC} system provides
+higher bit-rate savings (around 0.6 \ac{BD}-rate points) than the \ac{MDDT}
+using $4\times4$ and $8\times8$ \acp{TU}, with the only burden being on the
+encoding time.
 
 Table~\ref{tab:mdtc_summary} contains the complexity figures for the low
 complexity and high performance \ac{MDTC} systems.
@@ -3424,7 +3425,7 @@ complexity, 3\% added decoding complexity and around \SI{8}{\kilo B} of
 Next Chapters will explore different ways of simplifying the \ac{MDTC} systems
 in three important dimensions of codec design:
 encoding complexity, decoding complexity and storage
-requirements to keep most part of the bit-rate savings.
+requirements while trying to keep most part of the bit-rate savings.
 
 \chapter{Incomplete transforms}
 \label{cha:incomplete_transforms}
