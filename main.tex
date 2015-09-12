@@ -5034,15 +5034,15 @@ size~\cite{puschel-08-algorithms-dct-dst}.
 Table~\ref{tab:comparison_dtt_separable} compares the number of operations
 required for a regular separable 2D transform and a \ac{DTT} using a fast
 algorithm.
-Result are presented for both $4\times4$ and $8\times8$ \acp{TU}.
+Results are presented for both $4\times4$ and $8\times8$ \acp{TU}.
 
 Since \acp{DTT} coefficients can be computed using and analytical formula,
 their storage requirement is negligible.
 However, a scanning matrix is still required to sort the transformed
 coefficients in a globally decreasing order to ease the entropy coding stage.
-As a result, the storage amount necessary per transform is $N^2$ bytes.
+As a result, the necessary storage amount per transform is $N^2$ bytes.
 For \acp{RDOT}, the required memory is $3N^2$ bytes per transform, as the
-horizontal and vertical transform are stored along with a dedicated scanning
+horizontal and vertical transforms are stored along with a dedicated scanning
 pattern.
 Storage values are compared in table~\ref{tab:comparison_dtt_separable}.
 
@@ -5365,7 +5365,7 @@ These kind of relations will be taken into account when designing
 \section{Design of \acs{DTT}-based \acs{MDTC} systems}
 \label{sec:design_dtt_based_mdtc_systems}
 
-The \ac{RDOT} metric, defined in \S\ref{eqn:rdot_metric} has proved to be a
+The \ac{RDOT} metric, defined in \S\ref{eqn:rdot_metric}, has proved to be a
 good way of designing transforms that offer a balance between the distortion
 introduced by the quantisation and the sparsity of transformed coefficients.
 Nonetheless, the \ac{RDOT} metric has also been used in
@@ -5375,7 +5375,7 @@ plane.
 By using this metric, one is able to evaluate the performance of a transform
 on a residual and define a set of residuals for which a transform gives the
 best rate-distortion trade-off.
-In practice, this metric this metric is able to rate a transform, i.e.\ its
+In practice, this metric is able to rate a transform, i.e.\ its
 appropriateness with respect to a set of residuals.
 
 Due to the fact that \ac{MDTC} systems learnt using the \acs{RDOT} metric
@@ -5449,20 +5449,19 @@ lowest value of the \ac{RDOT} metric defined in~\eqref{eqn:rdot_metric}.
 Afterwards, the transform $N+1$ tentatively replaces each transform and, if it
 makes the global \acs{RDOT} metric lower, it replaces the outperformed
 transform, otherwise it is discarded.
-The same step is carried out for the next transform until the end of the list.
-using a different number of transforms per \ac{IPM} and exploiting prediction
+The same step is carried out for the next transform until the end of the list,
+using a different number of transforms per \ac{IPM} and exploiting prediction.
 
 This approach does not provide the global optimal and the classification
 algorithm is subject to be improved.
-Nonetheless this simple method allows to determine the validity of the
+Nevertheless, this simple method allows to determine the validity of the
 approach.
 Furthermore, the classification algorithm becomes even less optimal when the
 number of additional transforms increases.
 
-Since \acp{DTT} have a lower complexity transforms than regular separable
-transforms, the main objective in this Chapter is to build low complexity
-\ac{MDTC} systems, with high emphasis in the decoding time and \acs{ROM}
-requirements.
+Since \acp{DTT} have a lower complexity than regular separable transforms, the
+main objective in this Chapter is to build low complexity \ac{MDTC} systems,
+with high emphasis in the decoding time and \acs{ROM} requirements.
 
 \section{Performances of \acs{DTT}-based \acs{MDTC} systems}
 \label{sec:performances_dtt_based_mdtc_systems}
@@ -6089,7 +6088,7 @@ provide different systematic ways to reduce the storage requirements for the
 \ac{MDTC} systems.
 As a side effect, the encoding complexity is also reduced.
 
-Chapter~\ref{cha:dtt} present the \ac{DTT}-based \ac{MDTC} systems as a
+Chapter~\ref{cha:dtt} presents the \ac{DTT}-based \ac{MDTC} systems as a
 simplification of the \ac{MDTC} systems used throughout this thesis.
 Despite the early stages of the work, \acp{DTT} have proved their interest by
 being a very competitive approach in terms of bit-rate savings, complexity and
@@ -6186,9 +6185,6 @@ terms of rate-distortion.
 
 \subsection*{Coding complexity}
 \label{sub:coding_complexity}
-
-Throughout this work, all results have been obtained almost neglecting the
-encoding complexity.
 
 The presented solutions to reduce the storage requirements for \ac{MDTC}
 systems in Chapter~\ref{cha:real_world_system} have reduced the encoding
