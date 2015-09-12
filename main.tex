@@ -3445,7 +3445,7 @@ important, sometimes in the order of several MB.
 
 This Chapter presents an attempt at making non-separable transforms usable for
 video coding applications.
-The work presented in this here is mainly based on the one published
+The work presented here is mainly based on the one published
 in~\cite{arrufat-15-inc-transforms}.
 
 \section{Motivations of incomplete transforms}
@@ -3548,10 +3548,10 @@ complexity when decoding a signal, since there will be one coefficient
 different from zero, decoding implies multiplying the base vector by the
 transformed coefficient.
 
-In image coding, a separable two-dimensional is expressed as
+In image coding, a separable two-dimensional transform is expressed as
 in~\eqref{eqn:sep_transform}.
 Assuming the image is composed of $8\times8$ blocks, $\x$ stands for the
-$8\times8$ pixels, and $\X$ their frequency representation.
+$8\times8$ pixels, and $\X$ their representation in the transform domain.
 $\A$ is the $8\times8$ 1D transform.
 The usual transform used in image coding is the \ac{DCT}-II, whose fast
 algorithm requires in the order of 12 multiplications and 29 additions per
@@ -3595,7 +3595,7 @@ This section adapts the learning method for incomplete transforms.
 
 The learning phase of incomplete transforms uses the same method presented in
 \S\ref{sec:rdot}, particularly in~\eqref{eqn:rdot-nsep}.
-The design of an incomplete transform take one extra step apart from those
+The design of an incomplete transform takes one extra step apart from those
 required in the \ac{RDOT} learning:
 after the hard-thresholding of the coefficients, only the first coefficient is
 kept.
@@ -3615,11 +3615,11 @@ blocks, the same one used in Chapters~\ref{cha:mddt} and~\ref{cha:mdtc}.
 
 In Chapter~\ref{cha:mdtc} the use of multiple transforms inside each \ac{IPM}
 was introduced.
-A decision was made to keep the default \ac{HEVC} transform in each \ac{TU}
-size for compatibility reasons.
-However, since incomplete transforms are designed with a strong sparsity
+A decision has been made to keep the default \ac{HEVC} transform in each
+\ac{TU} size for compatibility reasons.
+Besides, since incomplete transforms are designed with a strong sparsity
 constraint on the quantised coefficients, a complete transform is needed to
-guarantee that all signals can be expressed in the transform domain at a
+guarantee that all signals can be expressed in the transform domain for a
 chosen level of fidelity.
 By using the same design as in the previous Chapter (one main transform plus
 $2^N$ incomplete transforms), signals would be able to have a fall-back
@@ -3631,7 +3631,7 @@ almost untouched from algorithm~\ref{alg:clustering}, described in
 \S\ref{sub:mdtc_learning_algorithm}, only the design of the transform has been
 modified by just keeping the first coefficient after the hard-thresholding.
 After that, residuals are evaluated using the \ac{RDOT} metric to assign them
-to a particular transform.
+to the best transform.
 
 To illustrate the effectiveness of the learning process,
 figure~\ref{fig:it_num_zero} presents how an increase on the number of
@@ -3689,7 +3689,6 @@ none of the \ac{DCT} bases expresses that direction.
 \section{Incomplete transforms in video coding}
 \label{sec:it_video_coding}
 
-The usefulness of incomplete transforms has also been applied to \ac{HEVC}.
 To evaluate the performance of the approach, a set of $4\times4$ and
 $8\times8$ incomplete transforms is designed for each \ac{HEVC} \ac{IPM}.
 At the encoder, for each block, the best \ac{IPM}/transform pair is selected,
@@ -3871,13 +3870,13 @@ faster.
 On the decoder side, the situation changes in favour of the incomplete
 transforms with regards to \ac{HEVC}.
 Since all coding choices are made by the encoder and the decoder only has to
-apply the signalled transform, which as equal (if the \ac{DCT}/\ac{DST} is
-chosen) or lower complexity, the decoding complexity is a bit lower that that
-of \ac{HEVC}.
+apply the signalled transform.
+Therefore, the decoder is of equal complexity, whenever the \ac{DCT}/\ac{DST}
+is chosen, or lower, if incomplete transforms are used, than that of
+\ac{HEVC}.
 
 The actual results for encoding and decoding complexity are contained in
 table~\ref{tab:it_complexity}.
-The decoder presents complexities a bit lower than \ac{HEVC}.
 
 \begin{table}[tb]
 	\centering
@@ -3927,15 +3926,15 @@ the number of non-zero coefficients can been reduced to around two thirds of
 its original value.
 
 Experimental results on \ac{HEVC} prove that the sparsity improvements can
-lead to bit-rate savings of around 1\% with peaks of up to 8\%, while keeping
+lead to bit-rate savings of 1.4\% with peaks of up to 8\%, while keeping
 the decoding complexity lower than that of \ac{HEVC}.
-As a result, incomplete transforms provide an example of application for
+As a result, incomplete transforms constitute an example of application for
 non-separable transforms that can lead to bit-rate savings for reasonable
 encoding complexity and storage amounts.
 On the decoder side, incomplete transforms require less operations per block
 than \ac{HEVC} transforms, leading to a decrease on the decoding complexity.
 
-Summing up, \ac{MDTC} systems using incomplete transforms constitute a more
+Summing up, \ac{MDTC} systems using incomplete transforms represent a more
 lightweight alternative to \ac{RDOT}-based \ac{MDTC} systems presented in
 Chapter~\ref{cha:mdtc} that are able to provide improvements over \ac{HEVC}
 across a wide range of bit-rate with low decoding complexity.
