@@ -2143,8 +2143,7 @@ scenario to evaluate their performances in video coding.
 \section{Introduction}
 \label{sec:mddt_introduction}
 
-The previous Chapter has introduced two different approaches on designing
-adapted transforms.
+The previous Chapter has introduced two different transform design approaches.
 In order to test their performances for video coding, a technique called
 \ac{MDDT} is developed in this section.
 The principle of the \ac{MDDT} lies on using an adapted transform learnt
@@ -2159,7 +2158,7 @@ phase, but is was finally discarded in favour of a new transform, the
 \index{MDDT}
 
 Depending on the selected prediction mode, transformed coefficients might
-present different patterns, making low and high values to appear at different
+present different patterns, making low and high values appear at different
 block positions.
 This heterogeneity can be harmful for the entropy coding, which is one of the
 reasons why different scanning patterns exist in
@@ -2208,22 +2207,22 @@ specialisation, which means having an adapted transform for each one of the 35
 
 A possible implementation of the \ac{MDDT} inside a video coding scheme is
 illustrated in figure~\ref{fig:mddt_enc}.
-The encoder works in the same way as the hybrid coder from
+This encoder works in the same way as the hybrid encoder from
 figure~\ref{fig:hybrid_video_coding_scheme}, with the exception that, in this
 case, each \ac{IPM} will be tested in the \ac{RDO} loop with its corresponding
 transform.
-Three examples of residuals are shown: for \ac{IPM} 10, 18 and 26, which are
-obtained as the differences between the predictions derived from their
-corresponding \acp{IPM} and the original image.
-\ac{IPM} 10 stands for a horizontal prediction from left blocks, 18 is for the
-diagonal, from upper and left blocks and 26 for the vertical prediction upper
-blocks.
-When inside the \ac{RDO} loop, each \ac{IPM} is tested against its residual
-using the assigned transform.
+Three examples of residuals are shown:
+for \acp{IPM} 10, 18 and 26, which are obtained as the differences between the
+predictions derived from their corresponding \acp{IPM} and the original image.
+The \ac{IPM} 10 stands for a horizontal prediction from left blocks, 18 for
+the diagonal, from upper and left blocks and 26 for the vertical prediction
+from the upper blocks.
+When inside the \ac{RDO} loop, each intra prediction residual is tested using
+the assigned transform.
 Then, the \ac{IPM} offering the best rate-distortion trade-off is selected and
 signalled into the bitstream.
 
-On the decoder side (figure~\ref{fig:mddt_dec}), the only information needed
+On the decoder side (figure~\ref{fig:mddt_dec}), the only needed information
 to decode the block is represented in coloured blocks:
 the transformed coefficients and the used \ac{IPM}.
 No additional information has to be sent to the decoder, with regards to the
@@ -2326,7 +2325,7 @@ In the following section, the \ac{MDDT} is re-implemented using both
 transforms designs from \S\ref{sec:the_karhunen_loeve_transform} (\ac{KLT})
 and \S\ref{sec:rdot} (\ac{RDOT}), in both separable and non-separable manners,
 to empirically compare its performance with regards to the current standard,
-\ac{HEVC} and show the merits of the transform designs.
+\ac{HEVC} and unveil the merits of the transform designs.
 
 \section{Design and implementation of \acs{MDDT} systems}
 \label{sec:mddt_design_and_implementation}
@@ -2343,7 +2342,7 @@ form of an article~\cite{arrufat-14-mddt-rdot}.
 The transform designs presented in the previous Chapter, namely the \ac{KLT}
 and the \ac{RDOT}, are tested in this Section, through the \ac{MDDT}
 technique.
-This experiment unveils the ability of each design approach to adapt to a
+This experiment reveals the ability of each design approach to adapt to a
 particular kind of signals and to fit the video coding demands.
 
 To design a transform, a learning set is needed.
@@ -2406,7 +2405,7 @@ Some examples of $4\times4$ learnt \acp{RDOT} are presented in
 figure~\ref{fig:rdot_4x4_bases}.
 Although it is complicated to compare transform bases visually, non-separable
 transforms have captured the main direction for diagonal \acp{IPM} (2, 6, 18).
-These directions can be observed in the base vectors, especially in the fist
+These directions can be observed in the base vectors, especially in the first
 ones, as their patters exhibit the direction of the \ac{IPM}.
 Separable transforms are not able to capture accurately those directions by
 construction, since they combine transforms operating row and column wise.
@@ -2465,7 +2464,7 @@ with regards to \ac{HEVC} using the \ac{BD}-rate metric.
 \label{ssub:mddt_bit_rate_savings}
 
 Tables~\ref{tab:mddt_ai} and~\ref{tab:mddt_ra} contain the performances of
-different \ac{MDDT} systems for \ac{AI} and \ac{RA} configurations,
+different \ac{MDDT} systems for \ac{AI} and \ac{RA} coding configurations,
 respectively, for the different sequence classes of the \ac{HEVC} test set.
 The last line of the table represents the average bit-rate savings for all
 sequences (it does not correspond to the averaged bit-rate savings per class).
@@ -2552,8 +2551,9 @@ the \ac{RDOT}-based \ac{MDDT} outperforms the \ac{KLT} in every case
 (separability, \ac{TU} size, class and coding configuration).
 
 It is also worth-noticing the impact of separability:
-non-separable configurations provide systematically higher gains than the
-separable ones, especially for those systems involving $8\times8$ \acp{TU}.
+non-separable configurations provide systematically higher bit-rate savings
+than the separable ones, especially for those systems involving $8\times8$
+\acp{TU}.
 
 For the combined $4\times4$ and $8\times8$ system in \ac{AI} the bit-rate
 savings are over 3\% and almost 2\% in \ac{RA}.
@@ -2673,12 +2673,14 @@ in \ac{AI}.
 	\label{fig:detailed_mddt_bd_rate}
 \end{figure}
 
-As a final note on the results, all transforms learnt for the presented
-\ac{MDDT} systems have used residuals issued from \ac{AI} coding
-configurations and have only been enabled for intra coded residuals in
-\ac{HEVC}.
+As a reminder, all transforms learnt for the presented \ac{MDDT} systems have
+used residuals issued from \ac{AI} coding configurations and have only been
+enabled for intra coded residuals in \ac{HEVC}.
 Nonetheless, around two thirds of the bit-rate savings achieved for the
 \ac{AI} coding configurations have been achieved in \ac{RA}.
+This is due to the fact that I-frames, and intra coded blocks in \ac{RA} are
+of higher quality, and serve, therefore, as better references to derive the
+temporal predictions.
 
 A final comment on the designed transforms regarding the scanning of the
 transformed coefficients:
@@ -2700,8 +2702,8 @@ instance, a $16\times16$ \ac{TU} provides a better rate-distortion trade-off
 than splitting it into $8\times8$ \acp{TU}, the $4\times4$ will not be
 explored.
 Since the \ac{MDDT} system improves $4\times4$ and $8\times8$ \acp{TU}, it
-becomes more likely that a split $16\times16$ \ac{TU} into four $8\times8$
-\acp{TU} works better than without splitting.
+becomes more likely that splitting a $16\times16$ \ac{TU} into four $8\times8$
+\acp{TU} works better than not splitting.
 In that case, the $4\times4$ \acp{TU} will also be explored, which will lead
 to an increase in complexity with regards to \ac{HEVC}, as more coding
 possibilities are being explored.
@@ -2756,9 +2758,9 @@ nearest integer.
 More advanced quantisation techniques could have been implemented that would
 lead to lower degradations~\cite{britanak-06-dct-and-dst}.
 The rounding method does not guarantee that the transform remains orthogonal
-and that the compaction property in the \ac{RDOT} is retained, althoug
-experiments done with this quantisation show that observed losses are in the
-order of 0.2 \ac{BD}-rate points.
+and that the energy preservation property in the \ac{RDOT} is retained,
+although experiments done with this quantisation show that observed losses are
+in the order of 0.2 \ac{BD}-rate points.
 Taking all of this into account, the storage requirements for a non-separable
 transform for $N\times N$ \acp{TU} is:
 \begin{equation}
@@ -2813,7 +2815,7 @@ of \ac{BD}-rate than the \ac{KLT} all over the tested sequences, with no
 losses for any of them.
 Bit-rate savings between around 2--3\% are achieved when using the
 \ac{RDOT}-based \ac{MDDT}, which validate the transfom design over the
-\ac{KLT}-based design, providing bit-rate savings around 1 point lower.
+\ac{KLT}-based design, providing bit-rate savings around 1 point below.
 Consequently, the \ac{KLT} will no longer be considered in the upcoming
 sections, only systems designed using the \ac{RDOT} metric will be considered.
 
@@ -2824,7 +2826,7 @@ Therefore, the increase in complexity is only due to the fact that transforms
 are implemented as matrix multiplications due to the lack of fast algorithms
 for general orthogonal transforms.
 
-The following chapter presents an improvement of the \ac{MDDT}, which will
+The following Chapter presents an improvement of the \ac{MDDT}, which will
 allow transforms to be more adapted to intra prediction residuals and provide
 new coding alternatives to \ac{HEVC}.
 
