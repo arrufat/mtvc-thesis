@@ -1150,10 +1150,10 @@ within a block:
 complex relationships between distant pixels can be handled regardless their
 position in the block.
 
-Due to the high amount of operations needed to transform a block, using
+Due to the high amount of operations needed to transform a block using
 non-separable transforms, separable transforms are widely used in video
 coding.
-A block is transformed using horizontal and vertical separable transforms
+A block is transformed separately using horizontal and vertical transforms
 $\A_h, \A_v$ for its rows and columns, respectively, as:
 \begin{equation}
 	\X = \A_v {\left(\A_h \, \x^T\right)}^T = \A_v \, \x \, \A_h^T
@@ -1227,7 +1227,7 @@ different modellings of the rate constraint.
 \label{sec:the_karhunen_loeve_transform}
 \index{KLT}
 The components of source signals within a residual block tend to be correlated
-between them.
+amongst them.
 This correlation is expressed in terms of a correlation matrix containing the
 linear inter pixel correlations.
 For two $N$-dimensional signals $\x,\y$, the covariance signal between them
@@ -1313,7 +1313,7 @@ Where:
 \index{eigen vectors}
 
 As a result, the \ac{KLT} is a transform whose base vectors are the
-eigenvalues of the correlation matrix of the input signal.
+eigenvectors of the correlation matrix of the input signal.
 
 \subsection{Particular case on natural images: the \acs{DCT}}
 \label{sub:particular_case_dct}
@@ -1433,8 +1433,8 @@ Intra prediction residuals present a correlation matrix that can be modelled
 using a Toeplitz tridiagonal matrix, as the one
 in~\eqref{eqn:tridiagonal_matrix}~\cite{han-10-spatial-adaptive-transform,
 yueh-05-eigenvalues-tridiagonal}.
-Those eigenvalues can be expressed in a closed form using the \ac{DST}-VII
-from~\eqref{eqn:dst_vii}.
+The eigenvalues of that correlation matrix can be expressed in a closed form
+using the \ac{DST}-VII from~\eqref{eqn:dst_vii}.
 
 \begin{equation}
 	\tilde\R_x =
@@ -1467,7 +1467,6 @@ base vector from the \ac{DST}.
 The use of the \ac{DST} in \ac{HEVC} over the \ac{DCT} on $4\times4$
 blocks leads to a bit-rate reduction of 1\% on
 average~\cite{sullivan-12-overview-hevc}.
-
 An explanation on the adoption of the \ac{DST} into \ac{HEVC} is detailed in
 Chapter~\ref{cha:mddt}, more precisely in \S\ref{sub:dst_and_mddt}.
 
@@ -1512,8 +1511,8 @@ Where $\x_i$ are the input signals, i.e.\ a block of the training set,
 $\c_i$ are its quantised transformed coefficients using the transform
 $\A$.
 $\A^T$ is its transposed matrix, as $\A$ is chosen orthogonal.
-The constraint in the cost function is the average $\ell_0$ norm of the
-coefficients, i.e.\ the number of non-zero coefficients.
+The constraint in the cost function is the $\ell_0$ norm of the coefficients,
+i.e.\ the number of non-zero coefficients.
 Finally, $\lambda$ is the Lagrange multiplier that tunes the constraint.
 
 The fact that this transform design strives to obtain sparse signals in the
@@ -1522,12 +1521,11 @@ standard, \ac{HEVC}.
 There are numerous syntax elements in \ac{HEVC} that deal with sparsity:
 for a given transformed residual, the position of the last non-zero value is
 signalled, meaning that, instead of explicitly transmitting all the following
-zeroes, it is indicated that from that point onwards, all the following values
-are zero.
+zeroes, it is indicated that from that point onwards, all the values are zero.
 More generally, flags indicating whether the individual coefficients are
 significant or not are also part of the standard syntax.
-Increasing the number of zeros of the quantised coefficients in the transform
-domain seems therefore a good objective.
+Therefore, increasing the number of zeros of the quantised coefficients in the
+transform domain seems a good objective.
 
 A thorough study of~\eqref{eqn:rdot-nsep} analysing its properties and
 consequences is detailed below.
@@ -1536,8 +1534,8 @@ consequences is detailed below.
 \label{sub:the_rdot_metric}
 \index{RDOT metric}
 
-The value that \acp{RDOT} minimise is expressed
-in~\eqref{eqn:rdot_metric} for a single signal.
+The value that \ac{RDOT} minimises is expressed in~\eqref{eqn:rdot_metric} for
+a single signal.
 This metric depends exclusively on the quantisation step $\Delta$ and the
 used transform $\A$.
 It is shown in \S\ref{sub:the_lagrange_multiplier} that the Lagrange
@@ -1584,8 +1582,8 @@ as demonstrated in \S\ref{sub:the_lagrange_multiplier}:
 \subsubsection{Optimal transform for given coefficients}
 \label{ssub:optimal_transform_for_given_coefficients}
 
-Once the optimal coefficients have been found, the transform $\A$, chose
-orthogonal, is be updated to provide the mapping between $\x$ and $\c$ while
+Once the optimal coefficients have been found, the transform $\A$, chosen
+orthogonal, is updated to provide the mapping between $\x$ and $\c$ while
 minimising the reconstruction error.
 \begin{equation}
 	\A_{opt} = \arg\min\limits_{\A}
@@ -1661,9 +1659,9 @@ $\Pb=\I$:
 	\V^T\A_{opt}^T\U=\I\quad \Rightarrow \quad \A_{opt} = \U\V^T
 \end{equation}
 
-Summing up, the optimal transform is obtained using the SVD decomposition of
-the covariance matrix between the output signal (the transformed and quantised
-coefficients) and the input signal (the intra prediction residuals).
+Summing up, the optimal transform is obtained using the \ac{SVD} of the
+covariance matrix between the output signal (the transformed and quantised
+coefficients) and the input signal (the prediction residuals).
 
 \subsection{Separable \acs{RDOT} design}
 \label{sub:separable_rdot_design}
@@ -1678,7 +1676,7 @@ Due to computational complexity issues, non-separable transforms are hardly
 used in performing solutions.
 A lower complexity approach involves separable transforms, which may not be
 able to concentrate the energy in the transform domain as well as their
-non-separable counterparts, as explained in \S{sub:separability}.
+non-separable counterparts, as explained in \S\ref{sub:separability}.
 In order to design and learn separable transforms, the design and learning
 methods have to be adapted.
 In the case of the \ac{KLT}, it is straightforward to see that one can learn a
@@ -1700,7 +1698,7 @@ two step transformation in~\eqref{eqn:sep_transform}:
 
 Where $\x$ is the two-dimensional block to transform, $\A_h$ is the horizontal
 transform, used to transform the rows of $\x$ and $A_v$ is the vertical
-transform, used to transform the columns of $\x$.
+transform, used to transform the resulting columns.
 
 The equation to be optimised using separable transforms reads as follows:
 \begin{equation}
@@ -1716,8 +1714,10 @@ This minimisation problem can be solved in a similar way to the non-separable
 version.
 
 \subsubsection{Optimal coefficients for a given transform}
+
 As in the non-separable problem, the optimal coefficients $\c_i$ are found by
-hard-thresholding the components of $\X_i=\A_v\x_i\A_h^T$ with $\sqrt{\lambda}$.
+hard-thresholding the components of $\X_i=\A_v\x_i\A_h^T$ with
+$\nicefrac{\Delta}{2}$.
 
 \subsubsection{Optimal vertical transform for given coefficients}
 The vertical transform needs to be updated accordingly:
@@ -1740,12 +1740,14 @@ Then the optimal transform is given by:
 \end{equation}
 
 \subsubsection{Optimal coefficients for updated vertical transform}
+
 As in the non-separable problem, the optimal coefficients $\c_i$ are
 determined by hard-thresholding the components of $\X=\A_{v_{opt}}\x_i\A_h^T$
-with $\sqrt{\lambda}$. However, this time the optimal vertical
+with $\nicefrac{\Delta}{2}$. However, this time the optimal vertical
 transform from the previous step is used.
 
 \subsubsection{Optimal horizontal transform for given coefficients}
+
 Similarly, the horizontal transform needs to be updated accordingly:
 \begin{equation}
 	\A_{h_{opt}} = \text{arg}\min\limits_{\A_h}
@@ -1765,7 +1767,8 @@ The optimal transform is given by:
 	\A_{h_{opt}} = \U\V^T
 \end{equation}
 
-Hence, the vertical transform are obtained in two alternated steps.
+Hence, the optimal transform are obtained in two iteratively alternated steps
+until convergence.
 
 \subsection{The Lagrange multiplier and the zero norm}
 \label{sub:the_lagrange_multiplier}
@@ -1838,9 +1841,9 @@ and $\Gamma(z)$ is the gamma function, defined as:
 The Laplace and normal or Gaussian \acp{PDF} are achieved with
 $\gamma=1$ and $\gamma=2$, respectively.
 The uniform distribution can even be reached by making $\gamma\to\infty$.
-However, from figure~\ref{fig:probability_density_functions} one can see that
-$1\le\gamma\le2$ for video
-residuals~\cite{li-08-laplacian-modeling-dct-coefficients}.
+However, from figure~\ref{fig:probability_density_functions} one could
+approximate the video coding residuals \ac{PDF} with
+$1\le\gamma\le2$~\cite{li-08-laplacian-modeling-dct-coefficients}.
 
 In Sezer's work~\cite{sezer-11-phd,sezer-08-sparse-orthonormal-transforms},
 the optimal value of the Lagrange multiplier $\lambda$ has been claimed
@@ -2010,8 +2013,8 @@ Again, deriving with respect to $\Delta$:
 	f\left(-\frac{\Delta}{2}\right)\right]
 \end{equation}
 Combining previous equations using~\eqref{eqn:diff_lagrange_multiplier},
-is made clear that the optimal Lagrange multiplier $\lambda$ does not
-depend on the residuals \ac{PDF}:
+is made clear that the optimal Lagrange multiplier $\lambda$ does not depend
+on the residuals \ac{PDF}:
 \begin{equation}
 	\frac{\Delta^2}{8}\left[
 	f\left(\frac{\Delta}{2}\right)+f\left(-\frac{\Delta}{2}\right)\right]
@@ -2024,27 +2027,27 @@ depend on the residuals \ac{PDF}:
 	\boxed{\lambda = \frac{\Delta^2}{4}}
 \end{equation}
 
-This fact makes the $\ell_0$ norm suitable even for distributions
-that cannot be modelled after a \ac{GGD}.
+This fact makes the $\ell_0$ norm suitable even for distributions that cannot
+be modelled after a \ac{GGD}.
 The independence from the \ac{PDF} comforts the choice of the $\ell_0$
 norm over other models that might provide a more realistic and accurate
-approximation of the rate, such as the H.
+approximation of the rate, such as the entropy.
 
 An example of the $\ell_0$ norm independence from the \ac{PDF} is provided
 below.
-Consider the following scenario: some residuals \acp{PDF} that follow
-\ac{GGD} with different exponents $\gamma$.
-Consider, as well, a quantisation step $\Delta=14.256$, issued from a
-\ac{QP} 27 in \ac{HEVC}.
+Consider the following scenario: some residuals \acp{PDF} that follow \ac{GGD}
+with different exponents $\gamma$.
+Consider, as well, a quantisation step $\Delta=14.256$, issued from a \ac{QP}
+27 in \ac{HEVC}.
 It has been demonstrated previously, that $J(\lambda)$
 from~\eqref{eqn:rdot_metric} achieves its minimum value at
 $\lambda=\frac{\Delta^2}{4}\approx50.81$, independently from the
 residuals \ac{PDF} when modelling the rate with the $\ell_0$ norm.
 
-However, if instead of using the $\ell_0$ norm, entropy is used, it can
-no longer be assumed that the optimal value of $\lambda$ providing the
-best trade-off between distortion and rate does not depend on the
-residuals \ac{PDF}.
+However, if instead of using the $\ell_0$ norm, entropy (H) is used, it can no
+longer be assumed that the optimal value of $\lambda$ providing the best
+trade-off between distortion and rate does not depend on the residuals
+\ac{PDF}.
 Due to the complexity of the calculations involved then using the
 entropy together with a uniform quantiser, the dependence to the
 \ac{PDF} will be evidenced through the example from
@@ -2118,15 +2121,16 @@ complexity.
 
 Two different approaches of transform design have been studied:
 the \ac{KLT} and the \ac{RDOT}.
-The \ac{KLT} defines the optimal transform for Gaussian sources with a
+The \ac{KLT} defines the transform providing optimal bit allocation under the
 high-resolution hypothesis.
 The \ac{DCT} and \ac{DST} used in \ac{HEVC} have been obtained from the
 \ac{KLT} for particular kinds of signals.
 
-The \ac{RDOT} finds the optimal balance between the distortion
-introduced and a rate constraint, expressed in terms of signal sparseness.
-A detailed study on its design based on the $\ell_0$ norm has been carried out
-to justify the appropriateness of the approach, lacking in current literature.
+The \ac{RDOT} finds the optimal balance between the distortion introduced by
+the quantiser and a rate constraint, expressed in terms of signal sparseness.
+A detailed study on its design, based on the $\ell_0$ norm, has been carried
+out to justify the appropriateness of the approach, lacking in current
+literature.
 
 In the next chapter, both transform designs will be tested in a real
 scenario to evaluate their performances in video coding.
