@@ -5710,7 +5710,6 @@ and~\ref{tab:final_systems_ra}, respectively.
 Moreover, a graphical representation of the \acs{AI} coding configuration
 bit-rate savings is shown in figure~\ref{fig:final_systems_ai} and in
 figure~\ref{fig:final_systems_ra} for \ac{RA}.
-Performances are comparable to the ones presented throughout the thesis.
 
 \begin{table}[tb]
 	\centering
@@ -6125,7 +6124,7 @@ the learning set to be in the best possible conditions and validate the
 approach that the use of multiple transforms in video coding provide bit-rate
 savings.
 Due to the promising results obtained in those Chapters, in order to make sure
-there was no over-learning, he learning set is replaced by a completely
+there was no over-learning, the learning set is replaced by a completely
 independent set of sequences in Chapter~\ref{cha:real_world_system}.
 The new learning set provides many more residuals from which to learn the
 transforms, but is less heterogeneous, since all frames come from the same
@@ -6133,8 +6132,8 @@ sequence, which implies same frame rate, resolution, filters, etc.
 
 Chapter~\ref{cha:real_world_system} shows that there can be a small impact
 due to transform over-learning to the learning set.
-However, choosing a more diversified learning set in terms of resolution,
-frame rate and contents, the over-learning effect impact can be lowered.
+However, the over-learning effect impact could be lowered by choosing a more
+diversified learning set in terms of resolution, frame rate and contents.
 The choice of \emph{Tears of Steel} short film was made to make a point:
 even with a learning set that is nothing like the test set, good results can
 be achieved.
@@ -6164,12 +6163,9 @@ It seems reasonable to think that more bit-rate savings could be achieved by
 using this new signalling scheme.
 
 Another improvement in signalling might come by not using fixed length
-codewords, but favouring some transforms instead with shorted codewords.
+codewords, but favouring some transforms instead with shorter codewords.
 This approach will also allow using a number of transforms different from a
 power of 2.
-
-Additional a different signalling method could be implemented for transforms,
-instead of the simplistic fixed length code word.
 By signalling some transforms using less bits, they would be used more often
 than those with longer code words, leading to possible bit-rate savings.
 Nevertheless, for this approach to work properly, the signalling cost of the
