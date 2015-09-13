@@ -4971,7 +4971,7 @@ Nevertheless, the presented system has a level of complexity which is too
 high to be used in commercial applications.
 As a result, the Chapters~\ref{cha:incomplete_transforms}
 and~\ref{cha:real_world_system} propose two different approaches to yield the
-system less complex:
+system less complex.
 
 Chapter~\ref{cha:incomplete_transforms} simplifies the system by designing
 transforms that make use of only one base vector.
@@ -4984,9 +4984,9 @@ Chapter~\ref{cha:real_world_system} proposes two ways of reducing the
 complexity of separable \ac{MDTC} systems, especially the storage
 requirements:
 \begin{itemize}
+	\item Using a different number of transforms in each \ac{IPM}.
 	\item Taking advantage of the symmetries that might exist within different
 		\acp{IPM}.
-	\item Using a different number of transforms in each \ac{IPM}.
 \end{itemize}
 Both approaches provide notable savings in the \acs{ROM} required to store the
 transforms.
@@ -4999,8 +4999,9 @@ Chapter~\ref{cha:mdtc}, the improvements have only been focused on the
 \acs{ROM} axis, leaving the encoder and decoder complexities decreases to be a
 side effect of the storage constraint.
 
-This Chapter proposes an simplification approach that takes into account the
-storage requirements, the encoding complexity and the decoding complexity.
+This Chapter proposes a simplification approach that takes into account the
+storage requirements, the encoding complexity and the decoding complexity at
+the same time.
 It is also worth-noticing that the systems described in this Chapter are in
 early stages of development and, therefore, not as mature as the systems
 presented previously.
@@ -5010,7 +5011,7 @@ presented previously.
 
 Chapter~\ref{cha:mddt} has highlighted the appropriateness of the \ac{RDOT}
 design method over the \ac{KLT} for video coding.
-However, for the sake of simplicity, an additional family of transforms is
+However, for the sake of simplicity, a different family of transforms is
 considered in this Chapter: the \acfp{DTT}.
 
 \acsp{DTT} are orthogonal transforms based on trigonometric functions.
@@ -5100,8 +5101,8 @@ and another orthogonal transform $\B$ for the resulting columns does not
 result in the same signal in the transform domain as if the operations are
 carried out the other way around if $\B\neq\A$.
 Nonetheless, both resulting signals can be expressed in terms of the other.
-Assuming $\x$ is the input signal and $\X$ its representation in the transform
-domain:
+Assuming $\x$ is the input signal and $\X$ stands for its representation in
+the transform domain:
 \begin{align}
 	\X = \B{\left(\A\x^T\right)}^T = \B \x \A^T \\
 	\X = \A{\left(\B\x^T\right)}^T = \A \x \B^T
@@ -5116,6 +5117,7 @@ If instead of transforming $\x$ directly, a transposition is applied before:
 Meaning that a transposition in the spatial domain is equivalent to invert the
 order in which the row and column transforms are applied and then transpose
 the result.
+
 Additionally, if a different scanning is allowed per transform, transposing or
 not a signal in the spatial domain become equivalent operations, since the
 only difference is the order in which the transform coefficients are output,
@@ -5384,7 +5386,7 @@ In practice, this metric is able to rate a transform, i.e.\ its
 appropriateness with respect to a set of residuals.
 
 Due to the fact that \ac{MDTC} systems learnt using the \acs{RDOT} metric
-leads to significant bit-rate savings over \ac{HEVC}, it is also used in this
+lead to significant bit-rate savings over \ac{HEVC}, it is also used in this
 Chapter to design a \ac{DTT}-based \ac{MDTC} system.
 The learning method is based on algorithm~\ref{alg:clustering} for the
 classification part:
@@ -5405,17 +5407,15 @@ The chosen permutations are combinations of transposed and mirrored
 correlations and relative pixel distances within a block.
 Using \acp{DTT} together with the proposed residual modifications leads to a
 total of 2048 possible transform combinations.
-In order to find the optimal \acs{DTT}-based \ac{MDTC}system, one would have
+In order to find the optimal \acs{DTT}-based \ac{MDTC} system, one would have
 to compute the best set of $N$ transforms from the 2048 available giving the
 lowest value of the \ac{RDOT} metric.
 This results into
 \begin{align}
-	\left(
-	\begin{matrix}
+	\begin{pmatrix}
 		2048 \\
 		N
-	\end{matrix}
-	\right)
+	\end{pmatrix}
 \end{align}
 possible transform combinations.
 Fortunately, due to the nature of the \ac{DTT} family, there are many
@@ -5425,12 +5425,10 @@ unique transforms, if a re-ordering is allowed in the transform domain.
 As an example, for $N=4$ additional transforms, the number of combinations
 that need to be tested is:
 \begin{align}
-	\left(
-	\begin{matrix}
+	\begin{pmatrix}
 		256 \\
 		4
-	\end{matrix}
-	\right) =
+	\end{pmatrix} =
 	\num{174792640}\approx\num{1.75e8}
 \end{align}
 instead of:
@@ -5498,7 +5496,7 @@ table~\ref{tab:config_sym_dtt}.
 
 A comparison with previously designed systems (the symmetrical and
 non-symmetrical versions of the iterated non-homogeneous \acs{MDTC} systems)
-are presented in figures~\ref{fig:vmdtc_dtt_iter_sym_rom}
+is presented in figures~\ref{fig:vmdtc_dtt_iter_sym_rom}
 and~\ref{fig:vmdtc_dtt_iter_sym_cmplx} for \acs{ROM} and encoding complexity,
 respectively.
 The first figure reveals how the \ac{DTT}-based \acs{MDTC} systems outperform
@@ -5572,8 +5570,8 @@ The most used transforms are the \acs{DCT}-IV--\acs{DCT}-IV,
 For $8\times8$ blocks, the system uses 55 additional transforms, of which only
 20 are unique.
 From these unique transforms, there are two combinations that stand out: the
-\acs{DST}\_VII-\acs{DST}-VII and the \acs{DST}\_VII-DCT\_V pairs.
-Moreover, the \acs{DST}\_VII and the \acs{DCT}\_V appear frequently in the
+\acs{DST}-VII--\acs{DST}-VII and the \acs{DST}-VII--\acs{DCT}-V pairs.
+Moreover, the \acs{DST}-VII and the \acs{DCT}-V appear frequently in the
 other combinations.
 The usage of this transforms is summarised  in
 tables~\ref{tab:dtt_combinations_4} and~\ref{tab:dtt_combinations_8} for
@@ -5658,7 +5656,7 @@ the values that an actual implementation would have.
 Finally, the \ac{DCT}-based \ac{MDTC} systems explored in this Chapter are
 preliminary, but still very competitive and promising with regards to the more
 complex approaches using separable \acp{RDOT}.
-As such, coding complexity is subject to further improvements when \ac{DTT}
+As such, coding complexity is subject to further improvements once \acp{DTT}
 are implemented using fast algorithms.
 Moreover, revisiting the learning algorithm to fix its sub-optimality can lead
 to even better performances of the \ac{DTT}-based \ac{MDTC} systems.
