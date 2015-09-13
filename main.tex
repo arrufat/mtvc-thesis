@@ -5674,13 +5674,13 @@ As a result, this chapter presents several interesting alternatives that offer
 different levels of trade-offs between the provided \acs{BD}-rate and the
 added complexity.
 
-In Chapters~\ref{cha:real_world_system} and~\ref{cha:dtt} various systems have
-been designed with complete independence from the \ac{HEVC} test set proposed
-in the \ac{CTC}~\cite{bossen-12-common-test-conditions}.
+In Chapters~\ref{cha:real_world_system} and~\ref{cha:dtt}, various systems
+have been designed with complete independence from the \ac{HEVC} test set
+proposed in the \ac{CTC}~\cite{bossen-12-common-test-conditions}.
 So as to provide results in well specified test conditions with a known set of
 test sequences, this Chapter evaluates the most interesting systems in terms
 of trade-off between complexity (\acs{ROM} and encoding time) and bit-rate
-savings.
+savings on the \ac{HEVC} test set.
 
 \section{Retained systems}
 \label{sec:retained_systems}
@@ -5710,6 +5710,7 @@ and~\ref{tab:final_systems_ra}, respectively.
 Moreover, a graphical representation of the \acs{AI} coding configuration
 bit-rate savings is shown in figure~\ref{fig:final_systems_ai} and in
 figure~\ref{fig:final_systems_ra} for \ac{RA}.
+Performances are comparable to the ones presented throughout the thesis.
 
 \begin{table}[tb]
 	\centering
@@ -6236,14 +6237,14 @@ the transforms used in each \ac{IPM}.
 \chapter{Publications}
 \label{cha:publications}
 
-\section{Conference papers}
+\section*{Conference papers}
 \label{sec:conference_papers}
 
-\subsection{Non-separable mode-dependent transforms for intra coding in HEVC}
-\subsubsection{IEEE VCIP 2014}
+\subsection*{Non-separable mode-dependent transforms for intra coding in HEVC}
+\subsubsection*{IEEE VCIP 2014}
 \paragraph{\textsf{Authors:}}
 	Adrià Arrufat, Pierrick Philippe and Olivier Déforges
-\subsubsection{Abstract}
+\subsubsection*{Abstract}
 
 Transform coding plays a crucial role in video coders.
 Recently, additional transforms based on the \acs{DST} and the \acs{DCT} have
@@ -6267,13 +6268,13 @@ those proposed transforms.
 This publication received the \emph{Best Paper Award} at IEEE VCIP 2014, which
 has held in Valletta, Malta in December 2014.
 
-\subsection{Rate-distortion optimised transform competition for intra coding in
+\subsection*{Rate-distortion optimised transform competition for intra coding in
 HEVC}
 \paragraph{\textsf{Authors:}}
 	Adrià Arrufat, Pierrick Philippe and Olivier Déforges
-\subsubsection{IEEE VCIP 2014}
+\subsubsection*{IEEE VCIP 2014}
 \label{sub:ieee_vcip_2014_tc}
-\subsubsection{Abstract}
+\subsubsection*{Abstract}
 \label{ssub:tc_abstract}
 
 State of the art video coders are based on prediction and transform coding.
@@ -6288,11 +6289,11 @@ additional coding possibilities.
 Reductions in \acs{BD}-rate of around 2\% are demonstrated when making these
 transforms available in \acs{HEVC}.
 
-\subsection{Mode-dependent transform competition in HEVC}
-\subsubsection{IEEE ICIP 2015}
+\subsection*{Mode-dependent transform competition in HEVC}
+\subsubsection*{IEEE ICIP 2015}
 \paragraph{\textsf{Authors:}}
 	Adrià Arrufat, Pierrick Philippe and Olivier Déforges
-\subsubsection{Abstract}
+\subsubsection*{Abstract}
 
 Transform coding plays a key role in state-of-the-art video coders, such as
 \acs{HEVC}.
@@ -6308,11 +6309,11 @@ and performance.
 Bit-rate reductions in the range of 2\% to 7\% are reported, depending on
 complexity.
 
-\subsection{Image coding with incomplete transforms for HEVC}
-\subsubsection{IEEE ICIP 2015}
+\subsection*{Image coding with incomplete transforms for HEVC}
+\subsubsection*{IEEE ICIP 2015}
 \paragraph{\textsf{Authors:}}
 	Adrià Arrufat, Pierrick Philippe and Anne-Flore Perrin
-\subsubsection{Abstract}
+\subsubsection*{Abstract}
 
 Overcomplete transforms have received considerable attention over the past
 years.
@@ -6325,7 +6326,7 @@ The solution has been implemented in the \acs{HEVC}  standard and compression
 gains of around 1\% on average are reported while reducing the decoder
 complexity in about 5\%.
 
-\section{Patent applications}
+\section*{Patent applications}
 \label{sec:patent_applications}
 
 \begin{enumerate}
@@ -6346,6 +6347,8 @@ complexity in about 5\%.
 		patent pending November 2015.
 \end{enumerate}
 
+\numberwithin{table}{chapter} % tables referred to chapters
+
 \chapter{Transform usage in \acs{MDTC} systems}
 \label{cha:transform_usage_in_mdtc_systems}
 
@@ -6354,7 +6357,7 @@ Chapters~\ref{cha:real_world_system} and~\ref{cha:dtt}.
 The \emph{System} top row represents the system label and upper \acs{ROM}
 boundary in kB.
 
-\section{Non-symmetrical \acs{MDTC} systems}
+\section*{Non-symmetrical \acs{MDTC} systems}
 \label{sec:non_symmetrical_mdtc_systems}
 
 \begin{table}[h]
@@ -6457,7 +6460,7 @@ boundary in kB.
 
 \clearpage
 
-\section{Symmetrical \acs{MDTC} systems}
+\section*{Symmetrical \acs{MDTC} systems}
 \label{sec:symmetrical_mdtc_systems}
 
 \begin{table}[h]
@@ -6510,7 +6513,7 @@ boundary in kB.
 	\label{tab:config_sym_mdtc_8}
 \end{table}
 
-\section{Symmetrical \acs{DTT}-based \acs{MDTC} systems}
+\section*{Symmetrical \acs{DTT}-based \acs{MDTC} systems}
 \label{sec:symmetrical_dtt_based_mdtc_systems}
 
 \begin{table}[h]
