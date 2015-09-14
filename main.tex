@@ -4133,12 +4133,10 @@ synthetic images, whereas the rest of sequences are exclusively composed of
 natural images issued from different sources at different frame rates and
 resolutions.
 
-Table~\ref{tab:cross_bdrate_learn} illustrates the impact of changing the
-learning set to design the high performance \ac{MDTC} system: losses of 0.4
-and 0.2 are observed for the \ac{AI} and \ac{RA} configurations, respectively
-for the \ac{HEVC} test set, which means that the new reference \ac{MDTC}
-system has bit-rate savings of 3.65\% on the \ac{HEVC} test set, instead of
-4.10\%.
+Table~\ref{tab:cross_bdrate_learn} shows the impact of changing the
+learning set to design the high performance \ac{MDTC} system: losses of 0.45
+are observed for the \ac{AI} coding configuration for the \ac{HEVC} test set,
+leading to bit-rate savings of 3.65\% instead of 4.1\%.
 
 \begin{table}[tb]
 	\centering
@@ -4394,7 +4392,7 @@ Consequently, the optimal combinations of non-homogeneous \ac{MDTC} systems
 have been found by setting a \acs{ROM} specification and selecting the
 combination of heterogeneous $4\times4$ and $8\times8$ systems that provide
 the best \ac{BD}-rate without exceeding the specified \acs{ROM}.
-The results of all systems combination can be found in the scatter plot of
+The results of all system combinations can be found in the scatter plot of
 figure~\ref{fig:vmdtc_combined}.
 It can bee seen that the points present a lower boundary, which corresponds to
 the best combinations for a given \acs{ROM}.
@@ -4561,8 +4559,7 @@ residuals from \ac{IPM} 9 (slightly diagonal up) and \ac{IPM} 11 (slightly
 diagonal down) can be related via a horizontal mirroring operation
 (top-bottom) or reflection.
 Since the second half is related to the first half transposed, this property
-applies around \ac{IPM} 26 in a similar fashion, through a vertical mirroring
-(left-right).
+applies around \ac{IPM} 26, through a vertical mirroring (left-right).
 Figures~\ref{fig:symmetry_transposed_mirror_4}
 and~\ref{fig:symmetry_transposed_mirror_8} contain illustrative examples of
 average profiles and they relations using these imposed symmetries.
@@ -4730,7 +4727,7 @@ residual and $\curvearrowupdown$ represents the horizontal mirroring operator
 Mirroring and transposing operations are used to make residuals compatible
 with the transforms learnt for the basic IPM set.
 These operations are only different ways of re-arranging the residual pixels
-in a consistent way, which come at no computational cost.
+consistently, which come at no computational cost.
 
 \subsection{Symmetries performances on video coding}
 \label{sub:symmetries_performances_on_video_coding}
@@ -4939,7 +4936,7 @@ non-homogeneous \ac{MDTC} systems for the same bit-rate savings.
 
 The second technique exploited existing symmetries to be able to re-use
 transforms from different \ac{IPM} by pre-processing residuals with
-transposition an mirroring operations.
+transposition and mirroring operations.
 This technique allows saving around two thirds of the \acs{ROM} presented for
 the \ac{MDTC} systems from Chapter~\ref{cha:mdtc}.
 
@@ -4949,8 +4946,9 @@ When combining both techniques, storage requirements can be reduced up to 75\%
 of the values presented in Chapter~\ref{cha:mdtc} for some systems.
 
 Regarding complexity, using a non-homogeneous number of transforms per
-\ac{IPM} decreases the decoding time, since less transforms need to be tested.
-On the other hand, symmetries allow to put more transforms without having an
+\ac{IPM} decreases the decoding time, since fewer transforms need to be
+tested.
+On the other hand, symmetries allow putting more transforms without having an
 impact to the \acs{ROM} requirements.
 As a result, the encoding complexity remains comparable to the one presented
 in Chapter~\ref{cha:mdtc}.
