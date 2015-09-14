@@ -1045,7 +1045,7 @@ modern video codecs, such as \ac{HEVC}.
 
 However, restraining ourselves to the two-dimensional case, one of the most
 visual and representative example of transforms are rotations.
-The example in figure~\ref{fig:transform_rotation} helps visualising the
+The example in figure~\ref{fig:transform_rotation} helps to visualise the
 transform role in signal compression.
 
 \begin{figure}[tb]
@@ -1126,10 +1126,10 @@ Afterwards the transform is applied normally:
 \begin{equation}
 	\X = \A \, \x
 \end{equation}
-where $\x$ is a $N \times N$ block, reshaped into a $N^2\times1$ vector
-and $\A$ is a $N^2 \times N^2$ matrix.
+Where $\x$ is an $N \times N$ block, reshaped into an $N^2\times1$ vector
+and $\A$ is an $N^2 \times N^2$ matrix.
 The main disadvantage of this approach is the number of calculations
-required to obtain the transformed signal: for a $N \times N$ block, the
+required to obtain the transformed signal: for an $N \times N$ block, the
 number of operations required to transform it in a non-separable way is:
 $N^4$ multiplications and $N^2(N^2-1)$ additions.
 
@@ -1318,6 +1318,7 @@ eigenvectors of the correlation matrix of the input signal.
 \index{DCT}
 \index{Markov}
 \index{AR}
+\index{Toeplitz matrix}
 
 One of the most used transforms in image and video coding is the
 \acf{DCT}.
@@ -1351,7 +1352,6 @@ matrix~\cite{akansu-12-toeplitz-approximation}:
 	\end{pmatrix}
 	\label{eqn:toeplitz_matrix}
 \end{equation}
-\index{Toeplitz matrix}
 The \ac{KLT} for this kind of processes, that is, the eigenvectors of
 $\R_\x$, tends to the \ac{DCT} as $\rho\to1$~\cite{britanak-06-dct-and-dst}.
 The \ac{DCT}-II can be expressed compactly as:
@@ -1693,7 +1693,6 @@ two step transformation in~\eqref{eqn:sep_transform}:
 \begin{equation*}
   \X = {\A_v\left( \A_h \x^T \right)}^T = \A_v \x \A_h^T
 \end{equation*}
-
 Where $\x$ is the two-dimensional block to transform, $\A_h$ is the horizontal
 transform, used to transform the rows of $\x$ and $A_v$ is the vertical
 transform, used to transform the resulting columns.
