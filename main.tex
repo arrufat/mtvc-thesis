@@ -390,8 +390,8 @@ colour space conversions on the raw (uncompressed) video sequence.
 \label{ssub:up-sampling_and_down-sampling}
 
 The video captured at the source might not have the desired resolution.
-Consequently, scaling operations should be applied at source so as to assure
-the minimum impact to quality.
+Consequently, scaling operations should be applied at source to assure the
+minimum impact to quality.
 
 The sequences used in this thesis are centred around the \ac{HD} formats (720p
 and 1080p).
@@ -527,7 +527,7 @@ level of fidelity.
 The key features to achieve such a small bitstream are the signal
 prediction and the transformation and quantisation of the prediction error.
 
-The encoder includes a decoder, represented inside a blue box, to be
+A decoder is included in the encoder, represented inside a blue box, to be
 able to perform its coding decisions based on what the decoder would do
 while decoding a bitstream.
 
@@ -561,7 +561,7 @@ It can be seen that the image has been divided into uniform regions.
 The optimal choice of the block size is left to the encoder, through \acp{CTB}
 in \ac{HEVC}.
 Each \ac{CTB} can be split into four \acp{CB}, which can also be split into
-four \acp{PU}, which can finally split into four \acp{TU}.
+four \acp{PU}, which can finally be split into four \acp{TU}.
 
 \subsection{Prediction}
 \label{sub:prediction}
@@ -575,7 +575,7 @@ This technique is known as \ac{DPCM} in the literature.
 Those block estimations are carried out by the prediction module, using some
 information from previously processed blocks.
 This way, predictable information present in the original blocks is removed
-and the energy of the resulting signal is lowered so that it requires less
+and the energy of the resulting signal is lowered so that it requires fewer
 bits for a given distortion.
 This is a result of the source coding
 theory~\cite{jayant-84-digital-coding-waveforms}.
@@ -638,7 +638,7 @@ decoded blocks.
 These models include directional projections, gradient projections (called
 Planar) and the projection of the mean value (called DC).
 The \acp{IPM} are used to derive the predictions of the current block from its
-the available boundaries, formed by reconstructed blocks.
+available boundaries, formed by reconstructed blocks.
 
 \subsubsection{Inter prediction}
 \label{ssub:inter_prediction}
@@ -675,8 +675,6 @@ block, computed as the difference between the original and the predicted
 blocks.
 The goal of the transform is to concentrate the residual signal into as few
 coefficients as possible in the transform domain.
-The residual signal is transformed from the spatial domain using the
-transform to the transform or frequency domain.
 In the spatial domain, the residual signal is spread among the pixels of the
 blocks, while the objective of transform domains is to concentrate as much as
 possible the residual signal into a few transform domain coefficients
@@ -916,9 +914,9 @@ particular block size for the partitioning or a prediction mode, it
 checks the distortion that decision might cause as well as an estimation
 of the bit-rate needed.
 The encoder performs this computation iteratively on the same block,
-exploring many different coding possibilities and finally selects the
-one that provides the best score in terms of rate and distortion.
-This is called the \ac{RDO} loop.
+exploring different coding possibilities and finally selects the one that
+provides the best score in terms of rate and distortion.  This is called the
+\ac{RDO} loop.
 For instance, in \ac{HEVC}, it allows choosing the best \ac{PU} size
 (4,8,16,32,64), \ac{TU} size (4,8,16,32), \ac{IPM} (0,1,\ldots,34), prediction
 source (intra, inter), amongst others.
@@ -1861,7 +1859,7 @@ The problem will be tackled in two separate steps:
 	\item Compute the rate constraint and derive it.
 \end{enumerate}
 It has been decided to normalise the~\eqref{eqn:rdot_metric} by $N$ (the
-signal dimension) so as to simplify the equations.
+signal dimension) to simplify the equations.
 This scaling factor does not affect the solution.
 
 \subsubsection{Derivation of the distortion function}
@@ -5677,10 +5675,10 @@ added complexity.
 In Chapters~\ref{cha:real_world_system} and~\ref{cha:dtt}, various systems
 have been designed with complete independence from the \ac{HEVC} test set
 proposed in the \ac{CTC}~\cite{bossen-12-common-test-conditions}.
-So as to provide results in well specified test conditions with a known set of
-test sequences, this Chapter evaluates the most interesting systems in terms
-of trade-off between complexity (\acs{ROM} and encoding time) and bit-rate
-savings on the \ac{HEVC} test set.
+In order to as to provide results in well specified test conditions with a
+known set of test sequences, this Chapter evaluates the most interesting
+systems in terms of trade-off between complexity (\acs{ROM} and encoding time)
+and bit-rate savings on the \ac{HEVC} test set.
 
 \section{Retained systems}
 \label{sec:retained_systems}
