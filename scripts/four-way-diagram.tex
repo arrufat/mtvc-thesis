@@ -25,20 +25,22 @@
 % \def\bdrmax{-5}
 % \def\rommax{128}
 
+\pgfmathsetmacro{\adjbdrmax}{\bdrmax * 10}
+\pgfmathsetmacro{\adjbdr}{\bdr * 10}
 \pgfmathsetmacro{\adjenc}{\enc / 100}
 \pgfmathsetmacro{\adjencmax}{\encmax / 100}
-\pgfmathsetmacro{\logrom}{ln (\rom) / ln (2)}
-\pgfmathtruncatemacro{\logrommax}{ln (\rommax) / ln (2) + 0.5}
+\pgfmathsetmacro{\logrom}{10 * ln (\rom) / ln (2)}
+\pgfmathtruncatemacro{\logrommax}{10 * ln (\rommax) / ln (2) + 0.5}
 \pgfmathsetmacro{\adjdec}{- (\dec-100)/10}
 \pgfmathsetmacro{\adjdecmax}{- (\decmax-100)/10}
 
 \begin{tikzpicture}[scale=\scale]
 
-    \draw[style=help lines, ystep=1, xstep=1] (\adjdecmax,\bdrmax) grid
+    \draw[style=help lines, ystep=10, xstep=1] (\adjdecmax,\adjbdrmax) grid
 	(\adjencmax,\logrommax);
 
 	\filldraw[black, fill=blue, opacity=0.5, thick]
-	(\adjdec,0)--(0,\logrom)--(\adjenc,0)--(0,\bdr)--cycle;
+	(\adjdec,0)--(0,\logrom)--(\adjenc,0)--(0,\adjbdr)--cycle;
 
 	% \node[above left] at (\adjdec,0) {\tiny\dec\%};
 	% \node[above right] at (\adjenc,0) {\tiny\enc\%};
@@ -47,7 +49,7 @@
 	
 	% draw vertical axis
 	\draw[->] (0,0) -- (0,\logrommax) node [above] {\small ROM: \rom\ kB};
-	\draw[->] (0,0) -- (0,\bdrmax) node [below] {\small BD-rate: \bdr\%};
+	\draw[->] (0,0) -- (0,\adjbdrmax) node [below] {\small BD-rate: \bdr\%};
 	% draw horizontal axis
 	\draw[->] (0,0) -- (\adjencmax,0) node [above,rotate=-90] {\small Enc.: \enc\%};
 	\draw[->] (0,0) -- (\adjdecmax,0) node [above,rotate=90] {\small Dec.: \dec\%};
