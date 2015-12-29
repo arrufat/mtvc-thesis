@@ -16,8 +16,8 @@ This document has been built on Arch Linux using the following packages:
 ## Building the document
 
 The building process is done by a `Makefile` based on the `latexmk` command.
-The advantage of `latexmk` is that it is in charge of rebuilding the document as many times as necessary, including bibliography.
-The forced `latexmk` back-end is `lualatex`.
+The advantage of `latexmk` is that it is in charge of rebuilding the document as many times as necessary, including the bibliography, the index and the cross-references.
+The preferred `latexmk` back-end in this project is `lualatex`.
 The `Makefile` options are described below:
 
 ### make (build)
@@ -30,11 +30,11 @@ It generates PDFs for all figures and plots, so that they don't have to be creat
 
 ### make clean
 
-It performs a simple clean of temporary files. It is equivalent to `latexmk -c`.
+It performs a simple cleaning of temporary files. It is equivalent to `latexmk -c`. The generated PDF is kept.
 
 ### make reset
 
-It cleans all the temporary files in the main directory.
+It cleans all the temporary files in the main directory. The generated PDF file is kept
 
 ### make continuous
 
