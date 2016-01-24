@@ -560,7 +560,7 @@ State-of-the-art video coding standards such as \acs{AVC} and \acs{HEVC} use a
 hybrid video coding scheme.
 The overall coding structure appeared in H.261, in 1988.
 Since then, all video coding standards and recommendations issued by
-\acs{VCEG} and the \acs{MPEG} use this coding structure.
+\acs{VCEG} and the \acs{MPEG} use this coding structure~\cite{wien-15-hevc}.
 
 The hybrid video coding scheme is named after its use of both temporal
 prediction and transform coding techniques for the prediction error.
@@ -600,7 +600,7 @@ the following subsections.
 
 In order to process the video frames, they are exhaustively partitioned into
 non-overlapping blocks.
-Sub-partitioning an image allows for a better matching to the spatial
+Sub-partitioning a picture allows for a better matching to the spatial
 distribution of energy.
 The subdivision blocks ease, as well,  the succeeding stages of prediction and
 transform:
@@ -611,7 +611,7 @@ rectangular blocks of different sizes to be used, as illustrated in
 figure~\ref{fig:part_orig_pred_res_image} (a).
 This is due to the quad-tree partitioning that is implemented in \ac{HEVC}.
 The figure provides a partitioning for a certain level of quantisation.
-It can be seen that the image has been divided into uniform regions.
+It can be seen that the picture has been divided into uniform regions.
 
 The optimal choice of the block size is left to the encoder, through \acp{CTB}
 in \ac{HEVC}.
@@ -622,10 +622,10 @@ four \acp{PU}, which can finally be split into four \acp{TU}.
 \label{sub:prediction}
 \index{prediction}
 
-Instead of coding the blocks coming from the original source image directly,
+Instead of coding the blocks coming from the original source picture directly,
 the encoder computes an estimation of the block pixel values, which is then
 subtracted from the original pixels, generating the residual block.
-This technique is known as \ac{DPCM} in the literature.
+This technique is known as \ac{DPCM} in the literature~\cite{cutler-52-dpcm}.
 
 Those block estimations are carried out by the prediction module, using some
 information from previously processed blocks.
@@ -648,17 +648,17 @@ Commonly, predictions are of two types, depending on the origin of
 the prediction source:
 \begin{itemize}
 	\item Intra prediction, also called spatial prediction, for those blocks
-		predicted using information within the same frame.
+		predicted using information within the same picture.
 	\item Inter prediction, also called temporal prediction, for those blocks
-		predicted from frames other than the one under consideration.
+		predicted from pictures other than the one under consideration.
 \end{itemize}
 
 Figure~\ref{fig:part_orig_pred_res_image} (b) provides an example of an intra
 predicted picture using the partitioning from
 figure~\ref{fig:part_orig_pred_res_image} (a).
-Figure~\ref{fig:part_orig_pred_res_image} (c) displays the residual image (the
-difference between the original and predicted images).
-This image evidences the parts of the image that could not be predicted and
+Figure~\ref{fig:part_orig_pred_res_image} (c) displays the residual picture (the
+difference between the original and predicted pictures).
+This image evidences the parts of the picture that could not be predicted and
 will have to be encoded and transmitted.
 
 \begin{figure}[tb]
@@ -666,13 +666,13 @@ will have to be encoded and transmitted.
 	\subfloat[Partitioning]
 	{\includegraphics[width=0.5\linewidth]{./figures/partitioning-orig-all-001.png}}
 	\\
-	\subfloat[Predicted Image]
+	\subfloat[Predicted Picture]
 	{\includegraphics[width=0.5\linewidth]{./figures/pred_image-all-001.png}}
 	\\
-	\subfloat[Residual Image]
+	\subfloat[Residual Picture]
 	{\includegraphics[width=0.5\linewidth]{./figures/res_image-all-001.png}}
-	\caption{Example of an image at different encoding points for a
-	certain level of quantisation}
+	\caption{Example of a picture at different encoding points for \acs{AI}
+	main configuration at QP 32}
 	\label{fig:part_orig_pred_res_image}
 \end{figure}
 
@@ -686,7 +686,7 @@ regions of a picture.
 The basic principle of intra prediction is based on the fact that the texture
 of a picture region is similar to the texture of its neighbourhood and can be
 predicted from there.
-Images coded using this technique exclusively are named I-frames.
+Pictures coded using this technique exclusively are named I-frames.
 
 Different models of predictions can be used through projections of adjacent
 decoded blocks.
@@ -700,16 +700,16 @@ available boundaries, formed by reconstructed blocks.
 \index{inter prediction}
 
 Inter prediction, or temporal prediction, takes advantage of the fact that
-consecutive images share many similarities, and that some of their component
+consecutive pictures share many similarities, and that some of their component
 regions will move as a whole.
 Since the encoding order is not necessarily the same as the viewing one, inter
 predictions can have their origins in either past or future frames, and also
 combine both origins.
 This feature facilitates movement tracking across frames.
-Images that are predicted using only one image either from the past or from
-the future are called predicted images or P-frames.
-Bi-predicted images or B-frames have prediction origins in two different
-images.
+Pictures that are predicted using only one picture either from the past or
+from the future are called predicted pictures or P-frames.
+Bi-predicted pictures or B-frames have prediction origins in two different
+pictures.
 
 At the encoder side, an extra operation, called motion estimation, is
 carried out.
@@ -718,7 +718,7 @@ current prediction block.
 It is one of the most complex parts of video coders in terms of computational
 requirements.
 Once a good prediction has been found, a motion vector is created, indicating
-the offset that has to be applied in the block from the reference image.
+the offset that has to be applied in the block from the reference picture.
 
 \subsection{Transform}
 \label{sub:transform}
@@ -769,6 +769,24 @@ It is worth noticing that the quantisation is the only non-reversible step in
 the whole hybrid video coding scheme, which induces lossy video coding.
 Lossless (or near-lossless) video coding can be attained by not using
 quantisation in the process.
+
+\subsection{Loop filters}
+\label{sub:loop_filters}
+\index{Loop filters}
+
+Loop filters have the goal of improving the quality of the reconstructed
+picture for display purposes.
+Being located within the loop, these filters have a strong impact on the
+overall performance of the video coding scheme.
+
+These filters can be classified into two classes, depending on their target
+region.
+The fist class is applied to a region of a picture or even a complete picture,
+whereas filters from the second class operate on a local spatial domain of the
+picture.
+
+A detailed explanation on how these filters improve the picture quality is
+explained in \S 2.4.6 and \S 9 of~\cite{wien-15-hevc}.
 
 \subsection{Entropy coding}
 \label{sub:entropy_coding}
@@ -881,8 +899,8 @@ size $4\times4$ is reached~\cite{sole-12-transform-coefficient-coding}.
 	{\input{figures/mdcs-vert.tex}}
 	{\includegraphics{figures/mdcs-vert.pdf}}}
 	\caption[\acs{HEVC} intra prediction modes and scannings for $4\times4$\acsp{TU}]
-	{\acs{HEVC} \aclp{IPM} related to their average residual signals and their
-	appropriate scanning in the transform domain for $4\times4$ \acsp{TU}}
+	{\acs{HEVC} \aclp{IPM} referred to their scanning patterns together with
+	some average residual examples in the transform domain for $4\times4$ \acsp{TU}}
 	\label{fig:mdcs}
 \end{figure}
 
@@ -904,11 +922,13 @@ The appropriate set of choices, mainly among the prediction modes and block
 sizes, is performed by comparing the Lagrange values, which balance the
 distortion and rates obtained for each coding choice.
 
-Depending on the coding configuration, the encoder may also decide whether to
-use references from the current image or from other images.
-The \ac{AI} configuration, encodes each image independently from the rest,
-whereas in the \ac{RA} configuration, the images conforming the sequences are
-organised into \acp{GOP}, formed by an I-frame, and several P and B-frames.
+Depending on the coding configuration defined in the \acs{JCT-VC} \ac{CTC},
+the encoder may also decide whether to use references from the current picture
+or from other pictures.
+The \ac{AI} configuration encodes each picture independently from the rest,
+whereas in the \ac{RA} configuration, the pictures conforming the sequences
+are organised into \acp{GOP}, formed by an I-frame, and several P and
+B-frames.
 
 \begin{figure}[tb]
 	\centering
@@ -1012,6 +1032,9 @@ figure~\ref{fig:bdsnr_bdrate}:
 	\item \ac{BD}-rate: computes the relative savings in bit-rate for an
 		equivalent distortion in percent.
 \end{enumerate}
+
+The two encodings in figure~\ref{fig:bdsnr_bdrate}, labelled as REF and EXP,
+represent the reference and the experiment encodings, respectively.
 
 \begin{figure}[tb]
 	\centering
@@ -1225,8 +1248,11 @@ non-separable counterparts.
 The impact in performance due to separability will be studied in detail
 in Chapter~\ref{cha:mddt}.
 
-A non-separable transform can be expressed from a set of two separable
-transforms via the Kronecker product, denoted as $\otimes$.
+If a transform can be expressed by the Kronecker product, denoted as
+$\otimes$, of two separate transforms for horizontal and vertical directions,
+it might be considered to be separable.
+Moreover, a separable 2D transform can be equivalently be represented by a 1D
+operation as shown in~\eqref{eqn:kronecker}.
 \begin{equation}
 	\mathbf{A}\otimes\mathbf{B} =
 	\begin{bmatrix}
@@ -1234,6 +1260,7 @@ transforms via the Kronecker product, denoted as $\otimes$.
 		\vdots & \ddots & \vdots \\
 		a_{m1} \mathbf{B} & \cdots & a_{mn} \mathbf{B}
 	\end{bmatrix}
+	\label{eqn:kronecker}
 \end{equation}
 Where $\mathbf{A}$ is an $m \times n$ matrix and $\mathbf{B}$ is a $p \times
 q$ matrix.
@@ -1273,10 +1300,13 @@ However, different transform designs exist depending on how the bit-rate is
 estimated and modelled.
 
 Next sections will study different transform design approaches based on
-different modellings of the rate constraint.
+different modellings of the rate constraint, namely the \acs{KLT} (\S
+\ref{sec:klt}) and the \acs{RDOT} (\S
+\ref{sec:rdot}).
 \section{The Karhunen-Loève transform}
-\label{sec:the_karhunen_loeve_transform}
+\label{sec:klt}
 \index{KLT}
+
 The components of source signals within a residual block tend to be correlated
 amongst them.
 This correlation is expressed in terms of a correlation matrix containing the
@@ -1521,8 +1551,8 @@ average~\cite{sullivan-12-overview-hevc}.
 An explanation on the adoption of the \ac{DST} into \ac{HEVC} is detailed in
 Chapter~\ref{cha:mddt}, more precisely in \S\ref{sub:dst_and_mddt}.
 
-\subsection{Final note on the \acs{KLT}}
-\label{sub:final_note_on_the_klt}
+\subsubsection{Note on the \acs{KLT}}
+\label{ssub:note_on_the_klt}
 
 The \ac{KLT} is often presented as the optimal transform, sometimes even for
 all possible sources of signals.
@@ -1558,9 +1588,8 @@ The proposed \ac{RDOT} can be expressed as:
 	\right)
 	\label{eqn:rdot-nsep}
 \end{equation}
-Where $\x_i$ are the input signals, i.e.\ a block of the training set,
-$\c_i$ are its quantised transformed coefficients using the transform
-$\A$.
+Where $\x_i$ are the input signals, i.e.\ a block of the training set and
+$\c_i$ are its quantised transformed coefficients using the transform $\A$.
 $\A^T$ is its transposed matrix, as $\A$ is chosen orthogonal.
 The constraint in the cost function is the $\ell_0$ norm of the coefficients,
 i.e.\ the number of non-zero coefficients.
@@ -1847,8 +1876,8 @@ Using different transforms, modifies the resulting \ac{PDF}, but since the
 used transforms are orthogonal, the variance remains unaltered.
 Additionally, since residuals are computed as the difference between predicted
 and original blocks, they are prediction errors.
-These errors are generated by excess or defect evenly, evidenced by their
-zero-mean \ac{PDF}, which is symmetrical and centred around zero.
+These errors deviate evenly above and below from the actual value, evidenced
+by their zero-mean \ac{PDF}, which is symmetrical and centred around zero.
 \begin{figure}[tb]
 	\centering
 	\ifthenelse{\usepdfs = 0}
@@ -2098,10 +2127,9 @@ However, if instead of using the $\ell_0$ norm, entropy (H) is used, it can no
 longer be assumed that the optimal value of $\lambda$ providing the best
 trade-off between distortion and rate does not depend on the residuals
 \ac{PDF}.
-Due to the complexity of the calculations involved then using the
-entropy together with a uniform quantiser, the dependence to the
-\ac{PDF} will be evidenced through the example from
-figure~\ref{fig:j_lambda_qp}.
+Due to the complexity of the calculations involved then using the entropy
+together with a uniform quantiser, the dependency to the \ac{PDF} will be
+evidenced through the example from figure~\ref{fig:j_lambda_qp}.
 It shows that the value $J(\lambda)$ is plotted for various \acp{GGD} at
 different \ac{QP} values, which served as the hard-threshold value.
 When using the $\ell_0$ norm, $J(\lambda)$ reaches its minimum value at
@@ -2147,7 +2175,7 @@ $\Delta = 14.256$ and $\Delta = 25.504$ in \ac{HEVC}, respectively.
 	\ifthenelse{\usepdfs = 0}
 	{\input{./figures/dist_zero_qp_plot.tex}}
 	{\includegraphics{./figures/dist_zero_qp_plot.pdf}}
-	\caption{Distortion and $\ell_0$ norm with $\lambda_{opt}$ at
+	\caption{Distortion (\acs{MSE}) and $\ell_0$ norm with $\lambda_{opt}$ at
 	\acsp{QP} 27 and 32 for different \acsp{PDF}}
 	\label{fig:lambda_zero_norm_dist}
 \end{figure}
@@ -2328,7 +2356,8 @@ many studies, detailed below, were carried out in order to find better
 performing transform for these signals.
 
 Over the \ac{HEVC} standardisation phase, various techniques to improve the
-performance of \ac{AVC} were explored and designated as \ac{KTA}.
+performance of \ac{AVC} were explored and designated as
+\ac{KTA}~\cite{VCEG-AA06}.
 Amongst those techniques, in order to improve the coding performance of intra
 prediction residuals, an adapted transform for each \ac{IPM} (at that time 9,
 which evolved into 35 in \ac{HEVC}), was included in the \ac{KTA} software.
@@ -2372,7 +2401,7 @@ due to the lack of fast algorithms and limited gains, in both luma and
 chroma~\cite{JCTVC-J0021}.
 
 In the following section, the \ac{MDDT} is re-implemented using both
-transforms designs from \S\ref{sec:the_karhunen_loeve_transform} (\ac{KLT})
+transforms designs from \S\ref{sec:klt} (\ac{KLT})
 and \S\ref{sec:rdot} (\ac{RDOT}), in both separable and non-separable manners,
 to empirically compare its performance with regards to the current standard,
 \ac{HEVC} and unveil the merits of the transform designs.
@@ -2444,8 +2473,8 @@ sparser signals in the transform domain.
 Furthermore, figure~\ref{fig:rdot_metric_learning} also contains the \ac{RDOT}
 metric evaluated on the \ac{KLT}, both separable and non-separable, and the
 default \ac{HEVC} transforms.
-The use of this metric corroborates some points stated in
-\$\ref{sub:particular_case_dst} in the \ac{BD}-rate domain that justified the
+The use of this metric confirms some points stated in
+\S\ref{sub:particular_case_dst} in the \ac{BD}-rate domain that justified the
 use of the \ac{DST}-VII over the \ac{DCT}-II for $4\times4$ blocks:
 the value of the metric using the \ac{DST}-VII is notably lower than that of
 the \ac{DCT}-II, and the fact that the \ac{DST} for these blocks is close to
@@ -2495,14 +2524,14 @@ construction, since they combine transforms operating row and column wise.
 	\label{fig:rdot_4x4_bases}
 \end{figure}
 
-After having corroborated that the learning has output better performing
+After having confirming that the learning has output better performing
 transforms in terms of distortion and sparseness, their implementation on top
 of \ac{HEVC} is tested and discussed in the next section.
 
 \subsection{\acs{MDDT} results on video coding}
 \label{sub:mddt_results_on_video_coding}
 
-The \ac{MDDT} systems designed in the previous tested have been used in
+The \ac{MDDT} systems designed in the previous Section have been used in
 \ac{HEVC} using the common test conditions, defined by the
 \ac{JCT-VC}~\cite{bossen-12-common-test-conditions}, for \ac{AI} and \ac{RA}
 coding configurations.
@@ -2852,7 +2881,7 @@ During the learning phase, the \ac{RDOT} metric has presented coherent results
 with the knowledge acquired from literature regarding the \ac{KLT}, \ac{DCT}
 and \ac{DST}.
 These transforms have been evaluated using the \ac{RDOT} metric and have been
-corroborated by the results obtained in the \ac{BD}-rate domain:
+confirmed by the results obtained in the \ac{BD}-rate domain:
 for intra prediction residuals, the \ac{DST}-VII has a better \ac{BD}-rate
 score than the \ac{DCT}-II, and so does using the \ac{RDOT} metric.
 
@@ -2890,7 +2919,7 @@ new coding alternatives to \ac{HEVC}.
 \index{MDTC}
 
 Chapter~\ref{cha:mddt} revisited the existing \acf{MDDT} technique, its
-origins and motivation, and explained how it was discarded in the final
+origins and motivation, and summarised how it was discarded in the final
 \ac{HEVC} standard in favour of a more simplified approach using the \ac{DST}.
 However, the \ac{MDDT} technique has good potential in bit-rate savings when
 used with \acp{RDOT}, especially in their non-separable design.
@@ -2903,7 +2932,8 @@ block sizes and \acp{IPM} do.
 This implies that, for a given block size and \ac{IPM}, there is no longer a
 unique transform, but a set of them, and the encoder selects the one that
 provides the best trade-off in terms of rate-distortion.
-This evolution of the \ac{MDDT} system has been named \ac{MDTC} system.
+This evolution of the \ac{MDDT} system has been named \ac{MDTC}
+system~\cite{arrufat-15-mdtc}.
 
 Transform competition is not an entirely new concept in \ac{HEVC}.
 A rudimentary form of competition is present for $4\times4$ intra predicted
@@ -2974,9 +3004,11 @@ steps are:
 		the transform that minimises the value.
 	\item Repeat steps 2 and 3 until convergence.
 \end{enumerate}
-An example for $N=1\Rightarrow2^N=2$ additional transforms is provided in
-figure~\ref{fig:clustering}.
-This algorithm is subject to improvements, since the initial conditions are
+A conceptual example for $N=1\Rightarrow2^N=2$ additional transforms is provided in
+figure~\ref{fig:clustering}.This figure displays the residuals and how a they
+would be assigned to the transform that provides the lowest value of the
+\acs{RDOT} metric.
+The algorithm is subject to improvements, since the initial conditions are
 difficult to define.
 Consequently, in order to increase the confidence level of not ending up into
 a local minimum, several runs per learning are done with different
@@ -3282,7 +3314,7 @@ The \ac{BD}-rate curves for this sequence are presented in
 figure~\ref{fig:mdtc_bdrate_bdrill_mdtc}.
 For low bit-rates, corresponding to \acp{QP} of 32 and 37, the bitstream size
 is almost kept untouched, but the \ac{PSNR} is substantially improved.
-For higher bit-rates, the improvements are present in both axis.
+For higher bit-rates, the improvements are present in both axes.
 This behaviour has been observed for most of the sequences.
 
 \begin{figure}[tb]
@@ -3362,7 +3394,7 @@ Table~\ref{tab:mdtc_summary} contains the complexity figures for the low
 complexity and high performance \ac{MDTC} systems.
 A graphical version of the table is presented in
 figure~\ref{fig:four_way_mdtc_comparison}.
-All axis in the four diagrams have the same scaling factor in order to ease
+All axes in the four diagrams have the same scaling factor in order to ease
 the comparison among them.
 Using this representation, \acs{HEVC} would be a dot in the centre of the
 diagram, and an ideal system would only have one arrow downwards, meaning that
@@ -3520,7 +3552,7 @@ ensemble.
 		measure of the signal sparsity in the transform domain (the number of
 		coefficients set to zero).
 	\item The \ac{MDTC} system provides an overcomplete representation, as
-		\ac{HEVC} core transforms are completed with $2^N$ transforms.
+		\ac{HEVC} core transforms are complemented with $2^N$ transforms.
 		As such, $1+2^N$ sets of coefficients are computed on the encoding
 		side.
 		A selection amongst those is made through the transform signalling and
@@ -3572,7 +3604,7 @@ By construction, $v_1$ is orthogonal to $v_0$.
 
 However, there exists a secondary direction that cannot be represented
 compactly using the $(v_0,v_1)$ base vectors:
-both axis are required to describe the coordinates of those points.
+both axes are required to describe the coordinates of those points.
 Just by adding an extra axis, $w_0$, adapted to this secondary direction, an
 effective and sparser representation of those dots can be achieved.
 
@@ -3657,8 +3689,9 @@ The remaining vectors, albeit constituting a complete transform with the first
 base vector, are useless for the aim of the application.
 
 For consistency with previous Chapters, the learning set consists of
-prediction residuals issued from an \ac{HEVC} \ac{AI} coding for $8\times8$
-blocks, the same one used in Chapters~\ref{cha:mddt} and~\ref{cha:mdtc}.
+prediction residuals issued from an \ac{HEVC} \ac{AI} coding for $4\times4$
+and $8\times8$ blocks, the same one used in Chapters~\ref{cha:mddt}
+and~\ref{cha:mdtc}.
 
 \subsubsection{Multiple incomplete transforms}
 \label{ssub:it_multiple_incomplete_transforms}
@@ -3687,7 +3720,7 @@ To illustrate the effectiveness of the learning process,
 figure~\ref{fig:it_num_zero} presents how an increase on the number of
 incomplete transforms is able to provide a more sparse representation of
 the signal in the transform domain.
-This Illustration is based on the \ac{IPM} 6 for $8\times8$ blocks.
+This illustration is based on the \ac{IPM} 6 for $8\times8$ blocks.
 
 \begin{figure}[tp]
 	\centering
@@ -3869,7 +3902,8 @@ savings of more that 8\% using this approach.
 		All sequences &
 		Overall                  & -0.40 & -0.38 & -1.00 & -0.63 & -1.42 & -1.02 \\
 	\end{tabularx}
-	\caption{Y \acs{BD}-rate (\%) for low complexity and high performance \acs{MDTC} systems}
+	\caption{Y \acs{BD}-rate (\%) for \acs{MDTC} systems using incomplete
+	transforms}
 	\label{tab:bd_rate_it}
 \end{table}
 
@@ -3914,7 +3948,7 @@ This is due to the fact that incomplete transforms are used as a simplified
 This fact makes the encoder explore many coding possibilities that are
 unavailable to \ac{HEVC}.
 That being said, the increase in encoding complexity is lower than for a
-full-fledged \ac{MDTC} system, since testing incomplete transforms is much
+full-fledged \ac{MDTC} system, since testing of incomplete transforms is much
 faster.
 
 On the decoder side, the situation changes in favour of the incomplete
@@ -3989,7 +4023,7 @@ lightweight alternative to \ac{RDOT}-based \ac{MDTC} systems presented in
 Chapter~\ref{cha:mdtc} that are able to provide improvements over \ac{HEVC}
 across a wide range of bit-rate with low decoding complexity.
 
-\chapter{Simplifications of \acs{MDTC} system for storage requirements}
+\chapter{Simplifications of \acs{MDTC} systems for storage requirements}
 \label{cha:real_world_system}
 \chaptertoc
 
@@ -4054,7 +4088,7 @@ independent data set has been chosen and used to learn the transforms.
 In order to make all results available and reproducible, the sequence of
 choice from which residuals have been output is \emph{Tears of Steel}, a
 Creative Commons short film~\cite{blender-tearsofsteel}.
-The film features computed generated imagery and unique a resolution of
+The film features computed generated imagery and at a resolution of
 $1920\times800$ at a frame rate of \SI{24}{\hertz} and a length of
 \SI{12}{\minute} and \SI{14}{\second}.
 Although it is composed of more that 130 sub-sequences, all of them share the
@@ -4181,13 +4215,12 @@ sets.
 \end{figure}
 
 This comes as a reassuring fact, since the residuals from ToS have less
-variability in terms of camera filters, frame rate, resolution and come from
-synthetic images, whereas the rest of sequences are exclusively composed of
-natural images issued from different sources at different frame rates and
-resolutions.
+variability in terms of camera filters, frame rate, resolution and there are
+some synthetic objects, whereas the rest of sequences are exclusively composed
+of natural images issued from different sources, frame rates and resolutions.
 
-Table~\ref{tab:cross_bdrate_learn} shows the impact of changing the
-learning set to design the high performance \ac{MDTC} system: losses of 0.45
+Table~\ref{tab:cross_bdrate_learn} shows the impact of changing the learning
+set to design the high performance \ac{MDTC} system: losses of 0.45 \% points
 are observed for the \ac{AI} coding configuration for the \ac{HEVC} test set,
 leading to bit-rate savings of 3.65\% instead of 4.1\%.
 
@@ -4305,8 +4338,8 @@ performances seem to saturate with 16 and 32 additional transforms.
 	4s16--8s0 & \SI{26.25}{\kilo B} & -0.98\% & 322\% \\
 	4s32--8s0 & \SI{52.50}{\kilo B} & -1.01\% & 527\% \\
 	\end{tabular}
-	\caption{Summary of $4\times4$ homogeneous \acs{MDTC} systems learnt with
-	ToS on 59seq}
+	\caption{Summary of $4\times4$ homogeneous \acs{MDTC} systems on
+	59seq | ToS}
 	\label{tab:homogeneous_mdtc_4}
 \end{table}
 
@@ -4324,8 +4357,8 @@ performances seem to saturate with 16 and 32 additional transforms.
 	 4s0--8s64 & \SI{420.00}{\kilo B} & -3.07\% & 1041\% \\
 	4s0--8s128 & \SI{840.00}{\kilo B} & -3.33\% & 1970\% \\
 	\end{tabular}
-	\caption{Summary of $8\times8$ homogeneous \acs{MDTC} systems learnt with
-	ToS on 59seq}
+	\caption{Summary of $8\times8$ homogeneous \acs{MDTC} systems on
+	59seq | ToS}
 	\label{tab:homogeneous_mdtc_8}
 \end{table}
 
@@ -5020,7 +5053,7 @@ the \ac{MDTC} technique.
 Nevertheless, the presented system has a level of complexity which is too
 high to be used in commercial applications.
 As a result, the Chapters~\ref{cha:incomplete_transforms}
-and~\ref{cha:real_world_system} propose two different approaches to yield the
+and~\ref{cha:real_world_system} propose two different approaches to make the
 system less complex.
 
 Chapter~\ref{cha:incomplete_transforms} simplifies the system by designing
@@ -5441,7 +5474,7 @@ appropriateness with respect to a set of residuals.
 Due to the fact that \ac{MDTC} systems learnt using the \acs{RDOT} metric
 lead to significant bit-rate savings over \ac{HEVC}, it is also used in this
 Chapter to design a \ac{DTT}-based \ac{MDTC} system.
-The learning method is based on algorithm~\ref{alg:clustering} for the
+The learning method is based on Algorithm~\ref{alg:clustering} for the
 classification part:
 residuals from the learning set are assigned to the transform that provide the
 lowest \acs{RDOT} metric value.
@@ -5528,7 +5561,7 @@ using a different number of transforms per \ac{IPM} and exploiting prediction
 residuals symmetries to re-use the same transforms amongst symmetrical
 \acp{IPM}.
 \ac{MDTC} systems that make use of both techniques at the same time present
-the best trade-off in the three axis: \acs{ROM}, \ac{BD}-rate and even
+the best trade-off in the three axes: \acs{ROM}, \ac{BD}-rate and even
 encoding complexity.
 
 As in Chapter~\ref{cha:real_world_system}, in order to build iterated
@@ -5538,8 +5571,8 @@ sizes.
 These configurations enable from 1 to 16 additional transforms for $4\times4$
 \acp{TU} and from 1 to 32 for $8\times8$ \acp{TU} in steps of powers of 2.
 
-Due to the will of designing low complexity systems, only configurations of 1,
-2 and 4 kB have been assembled.
+Due to the intention of designing low complexity systems, only configurations
+of 1, 2 and 4 kB have been assembled.
 Table~\ref{tab:non_hom_sym_dtt_mdtc} contains the iterated non-homogeneous
 DTT-based \acs{MDTC} systems for 1, 2 and 4 kB.
 A detailed description of the number of transforms used in each \ac{IPM} for

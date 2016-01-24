@@ -68,6 +68,7 @@
 	\bloq{\x+3*\h,\y-16*\v}{InterPred}{text width=4.5em,fill=yellow!50}{Interframe\\Prediction};
 	\bloq{\x+3*\h,\y-20*\v}{MotionComp}{text width=4.5em,fill=yellow!50}{Motion\\Est./Comp.};
 	\bloq{\x+10*\h,\y-10*\v}{EntrCod}{text width=4.5em,fill=yellow!50}{Entropy\\Coding};
+	\bloq{\x+7*\h,\y-11.25*\v}{LoopFilters}{text width=4.5em,fill=yellow!50}{Loop\\Filters};
 	\bloq{\x+7*\h,\y-14*\v}{Reconst}{text width=6em,fill=white,minimum height=3em}{Reconst.\\images};
 
 	\draw[-latex,\thickness] (sequence) -- (add1) node [below right] {\textsf{$-$}};
@@ -75,7 +76,8 @@
 	\draw[-latex,\thickness] (Transf) -- (Quant);
 	\draw[-latex,\thickness] (InvQuant) -- (InvTransf);
 	\draw[-latex,\thickness] (InvTransf) -- (add2);
-	\draw[-latex,\thickness] (add2) -- (Reconst);
+	\draw[-latex,\thickness] (add2) -- (LoopFilters);
+	\draw[-latex,\thickness] (LoopFilters) -- (Reconst);
 	\draw[-latex,\thickness] (inter2) -- (add2);
 	\draw[-latex,\thickness] (inter3) -- (add1);
 	\draw[-latex,\thickness] (IntraPred) -- (inter4);
