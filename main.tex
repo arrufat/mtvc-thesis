@@ -216,7 +216,7 @@ In 2003, the H.264/\acs{MPEG}-4 \acs{AVC} standard was defined, providing
 a compression rate of around 50\% with regards \acs{MPEG}-2, defined
 in 1993.
 In January 2013, the H.265/\acs{HEVC} standard was released, which
-outperforms H.264/\acs{MPEG}-4 by 50\% in terms of bit-rate savings for
+outperforms H.264/\acs{MPEG}-4 by 50\% in terms of bitrate savings for
 equivalent perceptual quality~\cite{sullivan-12-overview-hevc}.
 
 \bigskip
@@ -233,7 +233,7 @@ standard for that time frame.
 \bigskip
 
 Being at the beginning of the post-\acs{HEVC} era, the first steps in this
-thesis strive to achieve important bit-rate savings over \acs{HEVC} by
+thesis strive to achieve important bitrate savings over \acs{HEVC} by
 relaxing complexity constraints.
 
 This thesis is strongly connected to the standardisation context.
@@ -283,17 +283,17 @@ Accordingly, this thesis has been organised into the following Chapters:
 		This experiment questions the optimality of the \ac{KLT} for video
 		signals.
 		Moreover, the impact of transform separability on video coding in
-		terms of bit-rate savings and coding complexity is reconsidered.
+		terms of bitrate savings and coding complexity is reconsidered.
 
 	\item extends the \ac{MDDT} system by introducing the \ac{MDTC} system.
 		The main idea is to provide several transforms in each \acl{IPM}.
 		These transforms compete against each other in the same way that block
 		sizes and \aclp{IPM} do.
-		\ac{MDTC} systems are able to offer notable bit-rate savings at the
+		\ac{MDTC} systems are able to offer notable bitrate savings at the
 		expense of encoding and decoding complexity and the storage
 		requirements for the used transforms.
 		Therefore, the following Chapters of the thesis contain approaches on
-		simplifying the \ac{MDTC} system whilst keeping bit-rate improvements.
+		simplifying the \ac{MDTC} system whilst keeping bitrate improvements.
 
 	\item explores a new way of simplifying non-separable \ac{MDTC} systems,
 		which provided the most promising results in the previous Chapter, by
@@ -315,7 +315,7 @@ Accordingly, this thesis has been organised into the following Chapters:
 
 		Moreover, symmetries observed in \aclp{IPM} are exploited to further
 		reduce the storage requirements while having low impact on the
-		bit-rate savings.
+		bitrate savings.
 
 	\item replaces the \ac{RDOT}-based \ac{MDTC} system with another one based
 		on \acp{DTT}.
@@ -383,7 +383,7 @@ of the \ac{RGB} channels, requires:
 
 Through this simple example, it is obvious that video coding is compulsory
 to stream or even store video files:
-the amount of bit-rate reported is this example is beyond the limit of current
+the amount of bitrate reported is this example is beyond the limit of current
 computing and service architectures and networks.
 
 Depending on the target quality, it is common to have compression rates
@@ -489,7 +489,7 @@ quality and represents an important part in the final bitstream.
 
 This stage converts the pre-processed raw video sequence into a coded video
 stream (called bitstream) to ease the storage and transmission.
-It is, at this point, where the bit-rate reduction takes place.
+It is, at this point, where the bitrate reduction takes place.
 The amount of bits required to represent the video stream is reduced by
 limiting the number of redundancies in the video and by introducing some
 approximations such as the quantisation step, while limiting the impact of
@@ -987,7 +987,7 @@ In order to carry out the most sensible decision each time, the encoder uses a
 Each time the encoder has to make a decision about choosing a
 particular block size for the partitioning or a prediction mode, it
 checks the distortion that decision might cause as well as an estimation
-of the bit-rate needed.
+of the bitrate needed.
 The encoder performs this computation iteratively on the same block,
 exploring different coding possibilities and finally selects the one that
 provides the best score in terms of rate and distortion.  This is called the
@@ -1006,10 +1006,10 @@ using a Lagrange measure.
 
 As seen in the previous subsections, computing the distortion is
 reasonably straightforward.
-However, estimating the bit-rate is a bit more delicate, since the whole
+However, estimating the bitrate is a bit more delicate, since the whole
 entropy coder cannot be run each time the encoder explores the different
 possibilities for a block because it has a huge impact on complexity.
-As a consequence, an estimation of the bit-rate is often used in the \ac{RDO}
+As a consequence, an estimation of the bitrate is often used in the \ac{RDO}
 loop.
 
 \section{Bj{\o}ntegaard Delta measurements}
@@ -1018,7 +1018,7 @@ loop.
 \index{BD-PSNR}
 
 Comparing two video coding techniques objectively might be complicated,
-as both the distortion and the bit-rate savings have to be taken into account
+as both the distortion and the bitrate savings have to be taken into account
 jointly.
 
 Metrics introduced by Gisle Bjøntegaard, know as \ac{BD} measurements have
@@ -1029,7 +1029,7 @@ figure~\ref{fig:bdsnr_bdrate}:
 \begin{enumerate}[label = (\alph{enumi})]
 	\item \ac{BD}-\ac{PSNR}: computes the relative quality improvement
 		in \si{\decibel}.
-	\item \ac{BD}-rate: computes the relative savings in bit-rate for an
+	\item \ac{BD}-rate: computes the relative savings in bitrate for an
 		equivalent distortion in percent.
 \end{enumerate}
 
@@ -1296,7 +1296,7 @@ those signals in the transform domain, as shown previously in
 Most transform design methods use the \ac{MSE} from~\eqref{eqn:mse} to
 evaluate the distortion introduced by a quantiser applied in the transform
 domain.
-However, different transform designs exist depending on how the bit-rate is
+However, different transform designs exist depending on how the bitrate is
 estimated and modelled.
 
 Next sections will study different transform design approaches based on
@@ -1546,7 +1546,7 @@ figure~\ref{fig:pred_scheme}.b can be spotted by comparing it to the first
 base vector from the \ac{DST}.
 
 The use of the \ac{DST} in \ac{HEVC} over the \ac{DCT} on $4\times4$
-blocks leads to a bit-rate reduction of 1\% on
+blocks leads to a bitrate reduction of 1\% on
 average~\cite{sullivan-12-overview-hevc}.
 An explanation on the adoption of the \ac{DST} into \ac{HEVC} is detailed in
 Chapter~\ref{cha:mddt}, more precisely in \S\ref{sub:dst_and_mddt}.
@@ -1576,7 +1576,7 @@ into account the sparsity of the output signal in their
 design~\cite{sezer-11-phd,sezer-08-sparse-orthonormal-transforms}.
 This transform, named \ac{RDOT}, unlike the \ac{KLT}, does not make use
 of the high-resolution assumption.
-Instead, the bit-rate constraint is modelled via the sparsity of the
+Instead, the bitrate constraint is modelled via the sparsity of the
 transformed coefficients, by the introduction of the $\ell_0$ norm, which
 counts the number of non-zero coefficients in a vector.
 The proposed \ac{RDOT} can be expressed as:
@@ -2536,17 +2536,17 @@ The \ac{MDDT} systems designed in the previous Section have been used in
 \ac{JCT-VC}~\cite{bossen-12-common-test-conditions}, for \ac{AI} and \ac{RA}
 coding configurations.
 The common test conditions consist in encoding each sequence at four different
-\ac{QP} values (22, 27, 32, 37) and computing the average bit-rate savings
+\ac{QP} values (22, 27, 32, 37) and computing the average bitrate savings
 with regards to \ac{HEVC} using the \ac{BD}-rate metric.
 
-\subsubsection{Bit-rate savings}
+\subsubsection{Bitrate savings}
 \label{ssub:mddt_bit_rate_savings}
 
 Tables~\ref{tab:mddt_ai} and~\ref{tab:mddt_ra} contain the performances of
 different \ac{MDDT} systems for \ac{AI} and \ac{RA} coding configurations,
 respectively, for the different sequence classes of the \ac{HEVC} test set.
-The last line of the table represents the average bit-rate savings for all
-sequences (it does not correspond to the averaged bit-rate savings per class).
+The last line of the table represents the average bitrate savings for all
+sequences (it does not correspond to the averaged bitrate savings per class).
 
 \begin{table}[tb]
 	\centering
@@ -2576,7 +2576,7 @@ sequences (it does not correspond to the averaged bit-rate savings per class).
 		\hline\hline
 		\centering Av. &  0.02 & -0.31 & -0.67 & -1.34 & -0.45 & -0.74 & -1.62 & -2.55 & -0.39 & -1.02 & -1.87 & -3.23 \\
 	\end{tabularx}
-	\caption{Average bit-rate savings (\%) for each \acs{HEVC} Class in \acs{AI}}
+	\caption{Average bitrate savings (\%) for each \acs{HEVC} Class in \acs{AI}}
 	\label{tab:mddt_ai}
 \end{table}
 
@@ -2608,7 +2608,7 @@ sequences (it does not correspond to the averaged bit-rate savings per class).
 		\hline\hline
 		\centering Av. &  0.01 & -0.24 & -0.37 & -0.85 & -0.17 & -0.38 & -0.80 & -1.47 & -0.16 & -0.60 & -0.97 & -1.93 \\
 	\end{tabularx}
-	\caption{Average bit-rate savings (\%) for each \acs{HEVC} Class in \acs{RA}}
+	\caption{Average bitrate savings (\%) for each \acs{HEVC} Class in \acs{RA}}
 	\label{tab:mddt_ra}
 \end{table}
 
@@ -2619,7 +2619,7 @@ The first column of both tables refers to the separable \ac{KLT}-based
 \ac{MDDT} for $4\times4$ \acp{TU}, which, as demonstrated
 in~\cite{jain-75-nearest-neighbors, jain-76-klt-random-process}, corresponds
 to the use of a \ac{DST}.
-The average bit-rate savings with regards to \ac{HEVC} for this system are
+The average bitrate savings with regards to \ac{HEVC} for this system are
 insignificant since \ac{HEVC} already uses the \ac{DST} for those blocks.
 
 The differences between both transform learning approaches (\ac{KLT} and
@@ -2630,19 +2630,19 @@ the \ac{RDOT}-based \ac{MDDT} outperforms the \ac{KLT} in every case
 (separability, \ac{TU} size, class and coding configuration).
 
 It is also worth-noticing the impact of separability:
-non-separable configurations provide systematically higher bit-rate savings
+non-separable configurations provide systematically higher bitrate savings
 than the separable ones, especially for those systems involving $8\times8$
 \acp{TU}.
 
-For the combined $4\times4$ and $8\times8$ system in \ac{AI} the bit-rate
+For the combined $4\times4$ and $8\times8$ system in \ac{AI} the bitrate
 savings are over 3\% and almost 2\% in \ac{RA}.
 The \ac{KLT} systems are about one point below.
 The detailed performances of the combined systems are included in
 table~\ref{tab:detailed_mddt_bd_rate}.
 Despite having used classes B and C for the transform learning, consistent
-bit-rate savings are achieved across different resolutions among classes.
+bitrate savings are achieved across different resolutions among classes.
 Moreover, classes D and E (not included in the learning set) present higher
-bit-rate savings than class B.
+bitrate savings than class B.
 It is also worth noticing that the \ac{RDOT} systems do not present losses for
 any sequence, which is not the case for the \ac{KLT}.
 
@@ -2718,13 +2718,13 @@ any sequence, which is not the case for the \ac{KLT}.
 		All Sequences
 		& Overall          & -0.39 & -1.02 & -1.87 &  -3.23 & -0.16 & -0.60 & -0.97 & -1.93 \\
 	\end{tabularx}
-	\caption{Detailed bit-rate savings (\%) for combined $4\times4$ \& $8\times8$
+	\caption{Detailed bitrate savings (\%) for combined $4\times4$ \& $8\times8$
 	\acs{MDDT} systems}
 	\label{tab:detailed_mddt_bd_rate}
 \end{table}
 
 A remarkable point stands out of the test set: the \emph{BasketballDrill}
-sequence from class C, with bit-rate savings of almost 12\% using the
+sequence from class C, with bitrate savings of almost 12\% using the
 non-separable \ac{RDOT} in \ac{AI}.
 This is due to the fact that this sequence presents strong directional
 patterns that cannot be dealt with separable transforms.
@@ -2732,7 +2732,7 @@ Almost all the performance is lost when using separable systems.
 For illustrative purposes, figure~\ref{fig:detailed_mddt_bd_rate} represents
 graphically the results from table~\ref{tab:detailed_mddt_bd_rate}.
 The behaviour in the \ac{RA} coding configuration is very similar to the
-\ac{AI}, with the bit-rate savings in \ac{RA} being around two thirds of those
+\ac{AI}, with the bitrate savings in \ac{RA} being around two thirds of those
 in \ac{AI}.
 
 \begin{figure}[tp]
@@ -2747,7 +2747,7 @@ in \ac{AI}.
 	{\input{./figures/mddt_perf_ra_plot.tex}}
 	{\includegraphics{./figures/mddt_perf_ra_plot.pdf}}}
 
-	\caption{Bit-rate savings for combined $4\times4$ \& $8\times8$ \acs{MDDT}
+	\caption{Bitrate savings for combined $4\times4$ \& $8\times8$ \acs{MDDT}
 	systems}
 	\label{fig:detailed_mddt_bd_rate}
 \end{figure}
@@ -2755,7 +2755,7 @@ in \ac{AI}.
 As a reminder, all transforms learnt for the presented \ac{MDDT} systems have
 used residuals issued from \ac{AI} coding configurations and have only been
 enabled for intra coded residuals in \ac{HEVC}.
-Nonetheless, around two thirds of the bit-rate savings achieved for the
+Nonetheless, around two thirds of the bitrate savings achieved for the
 \ac{AI} coding configurations have been achieved in \ac{RA}.
 This is due to the fact that I-frames, and intra coded blocks in \ac{RA} are
 of higher quality, and serve, therefore, as better references to derive the
@@ -2888,13 +2888,13 @@ score than the \ac{DCT}-II, and so does using the \ac{RDOT} metric.
 The designed transforms have been tested in a modified version of \ac{HEVC}
 using the \ac{MDDT} technique.
 Non-separable transforms present a significant improvement in terms of
-bit-rate savings over their separable counterparts.
+bitrate savings over their separable counterparts.
 Moreover, the \ac{RDOT} design approach has provided better results in terms
 of \ac{BD}-rate than the \ac{KLT} all over the tested sequences, with no
 losses for any of them.
-Bit-rate savings between around 2--3\% are achieved when using the
+Bitrate savings between around 2--3\% are achieved when using the
 \ac{RDOT}-based \ac{MDDT}, which validate the transfom design over the
-\ac{KLT}-based design, providing bit-rate savings around 1 point below.
+\ac{KLT}-based design, providing bitrate savings around 1 point below.
 Consequently, the \ac{KLT} will no longer be considered in the upcoming
 sections, only systems designed using the \ac{RDOT} metric will be considered.
 
@@ -2921,7 +2921,7 @@ new coding alternatives to \ac{HEVC}.
 Chapter~\ref{cha:mddt} revisited the existing \acf{MDDT} technique, its
 origins and motivation, and summarised how it was discarded in the final
 \ac{HEVC} standard in favour of a more simplified approach using the \ac{DST}.
-However, the \ac{MDDT} technique has good potential in bit-rate savings when
+However, the \ac{MDDT} technique has good potential in bitrate savings when
 used with \acp{RDOT}, especially in their non-separable design.
 
 This Chapter is focused on improving upon the \ac{MDDT} technique by
@@ -2969,7 +2969,7 @@ presented in~\cite{arrufat-15-mdtc}.
 \index{HEVC}
 
 Since the main purpose of the transforms in \ac{HEVC} is to compact the energy
-of the signal in order to increase the bit-rate savings, the design process is
+of the signal in order to increase the bitrate savings, the design process is
 developed as follows:
 the default \ac{HEVC} transforms for $4\times4$ and $8\times8$ luma blocks
 (the \ac{DST} and \ac{DCT}, respectively) are kept and a number of additional
@@ -2983,7 +2983,7 @@ the \ac{MDTC} system.
 \label{sub:mdtc_learning_algorithm}
 
 The chosen transform design is the \ac{RDOT}, since, as demonstrated in the
-previous Chapter, it provides significant improvements in terms of bit-rate
+previous Chapter, it provides significant improvements in terms of bitrate
 savings with respect to the \ac{KLT}.
 However, in this Chapter, more than one \ac{RDOT} will be learnt per \ac{IPM},
 using the same learning set:
@@ -3101,7 +3101,7 @@ The gap is even more important for $8\times8$ blocks.
 
 This section presents the performances of the \ac{MDTC} systems designed in
 the previous section on the full \ac{HEVC} test set.
-Systems are evaluated in terms of bit-rate savings, encoding complexity and
+Systems are evaluated in terms of bitrate savings, encoding complexity and
 decoding complexity.
 
 \subsection{Signalling the transforms in the bitstream}
@@ -3150,7 +3150,7 @@ transformed residuals.
 This fact contributes to the saturation in \ac{BD}-rate when the number of
 transforms is high.
 
-For $4\times4$ transforms, bit-rate savings of almost 2.5\% can be achieved,
+For $4\times4$ transforms, bitrate savings of almost 2.5\% can be achieved,
 whereas 6\% are obtained when using only $8\times8$ transforms on the
 \ac{HEVC} test set.
 
@@ -3188,10 +3188,10 @@ summarised in table~\ref{tab:bd_rate_mdtc}.
 The first thing to notice is that almost no losses are observed with regards
 to \ac{HEVC} on any sequence: only \emph{SteamLocomotiveTrain} presents small
 losses in the \ac{RA} coding configuration.
-On the one hand, the low complexity system is able to achieve average bit-rate
+On the one hand, the low complexity system is able to achieve average bitrate
 savings of around 3.8\% with non-separable transforms, and around 2.4\% with
 separable transforms.
-On the other hand, the high complexity system provides average bit-rate
+On the other hand, the high complexity system provides average bitrate
 savings of over 4\% for its separable version, and over 7\% for the
 non-separable one.
 Around two thirds of the gain observed in the \ac{AI} coding configuration are
@@ -3309,12 +3309,12 @@ There are some sequences that stand out, notably the \emph{BasketballDrill},
 which already showed high gains using the \ac{MDDT} technique (see
 \S\ref{ssub:mddt_bit_rate_savings}).
 This sequence has the particularity of presenting a large amount of directional
-patterns, which lead to bit-rate savings of over 25\%.
+patterns, which lead to bitrate savings of over 25\%.
 The \ac{BD}-rate curves for this sequence are presented in
 figure~\ref{fig:mdtc_bdrate_bdrill_mdtc}.
-For low bit-rates, corresponding to \acp{QP} of 32 and 37, the bitstream size
+For low bitrates, corresponding to \acp{QP} of 32 and 37, the bitstream size
 is almost kept untouched, but the \ac{PSNR} is substantially improved.
-For higher bit-rates, the improvements are present in both axes.
+For higher bitrates, the improvements are present in both axes.
 This behaviour has been observed for most of the sequences.
 
 \begin{figure}[tb]
@@ -3326,7 +3326,7 @@ This behaviour has been observed for most of the sequences.
 	\emph{BasketballDrill}]
 	{\acs{BD}-rate curves of \emph{BasketballDrill} for the non-separable high
 	performance \acs{MDTC} system.
-	This curve represents a bit-rate improvement of 25.06\% over \acs{HEVC}.}
+	This curve represents a bitrate improvement of 25.06\% over \acs{HEVC}.}
 	\label{fig:mdtc_bdrate_bdrill_mdtc}
 \end{figure}
 
@@ -3335,14 +3335,14 @@ figure~\ref{fig:mdtc_bdrill_visual}.
 The first sub-figure displays the original block, which has not been coded
 yet, and the two other sub-figures the result of coding that block using
 \ac{HEVC} and the non-separable high performance \ac{MDTC}, respectively.
-The comparison is pertinent, as both sequences have the same bit-rate at
+The comparison is pertinent, as both sequences have the same bitrate at
 \ac{QP} 37 (around \SI{3.3}{\mega bps}, see
 figure~\ref{fig:mdtc_bdrate_bdrill_mdtc}).
 It is easy to see the improvements made by the \ac{MDTC} system along the
 diagonal patterns of the image:
 The lines are cut when coding with \ac{HEVC} but they remain continuous using
 \ac{MDTC} thanks to the non-separability of the used transforms.
-For the rest of the sequences, since the bit-rate savings are much lower, the
+For the rest of the sequences, since the bitrate savings are much lower, the
 visual improvements are, in general,  not easy to spot.
 Nevertheless, no specific artefacts have been noticed when using the \ac{MDTC}
 technique for either systems.
@@ -3386,7 +3386,7 @@ number of transforms, since it becomes less likely to use the default
 \ac{HEVC} transform.
 
 For the same decoding time, the low complexity \ac{MDTC} system provides
-higher bit-rate savings (around 0.6 \ac{BD}-rate points) than the \ac{MDDT}
+higher bitrate savings (around 0.6 \ac{BD}-rate points) than the \ac{MDDT}
 using $4\times4$ and $8\times8$ \acp{TU}, with the only burden being on the
 encoding time.
 
@@ -3483,11 +3483,11 @@ Chapter.
 Despite the learning algorithm being subject to some improvements, the
 potential of using multiple non-separable transforms in video coding is
 unveiled:
-average bit-rate savings of more than 7\% can be achieved in \ac{AI}
+average bitrate savings of more than 7\% can be achieved in \ac{AI}
 configurations, with peaks of up to 25\% for some sequences containing large
 amounts of diagonal patterns.
 The interest of using multiple separable transforms has also been shown, with
-bit-rate savings of around 4\% on average in \ac{AI}.
+bitrate savings of around 4\% on average in \ac{AI}.
 
 However, in order to achieve those gains, the encoder complexity is affected
 by a factor of 8--20, depending on separability.
@@ -3497,8 +3497,8 @@ Storage requirements are also important, if not prohibitive, especially for
 non-separable transforms.
 
 \ac{MDTC} systems have also proved to be able to provide different trade-offs
-in terms of bit-rate savings, complexity and storage requirements.
-Bit-rate savings of 3.78\% can be achieved with twice the encoding complexity,
+in terms of bitrate savings, complexity and storage requirements.
+Bitrate savings of 3.78\% can be achieved with twice the encoding complexity,
 10\% added decoding complexity and around \SI{300}{\kilo B} of \acs{ROM}.
 In the separable version, savings of 1.66\% are obtained at 50\% added
 complexity, 3\% added decoding complexity and around \SI{8}{\kilo B} of
@@ -3507,7 +3507,7 @@ complexity, 3\% added decoding complexity and around \SI{8}{\kilo B} of
 Next Chapters will explore different ways of simplifying the \ac{MDTC} systems
 in three important dimensions of codec design:
 encoding complexity, decoding complexity and storage
-requirements while trying to keep most part of the bit-rate savings.
+requirements while trying to keep most part of the bitrate savings.
 
 \chapter{Incomplete transforms}
 \label{cha:incomplete_transforms}
@@ -3518,7 +3518,7 @@ requirements while trying to keep most part of the bit-rate savings.
 \index{incomplete transforms}
 
 Chapters~\ref{cha:mddt} and~\ref{cha:mdtc} have presented the potential of
-non-separable transforms in terms of bit-rate savings for video coding.
+non-separable transforms in terms of bitrate savings for video coding.
 However, they come at a cost:
 the amount of algorithmic operations needed to transform a block is highly
 increased with respect to a transform having a fast implementation.
@@ -3817,17 +3817,17 @@ However, as explained in \S\ref{sub:it_coding_complexity} and
 also much lower than a \ac{MDTC} system.
 
 When incomplete transforms are enabled only for $4\times4$ \acp{TU}, the
-system presents modest performances (around 0.4\% of bit-rate savings) for
+system presents modest performances (around 0.4\% of bitrate savings) for
 both \ac{AI} and \ac{RA} coding configurations.
 The system starts presenting more substantial performances when enabling
 incomplete transforms for $8\times8$ \acp{TU}, providing 1\% of average
-bit-rate savings.
+bitrate savings.
 If incomplete transforms are enabled for both \ac{TU} sizes, the average
-bit-rate savings achieve 1.4\% for the \ac{AI} coding configuration and 1\%
+bitrate savings achieve 1.4\% for the \ac{AI} coding configuration and 1\%
 for \ac{RA}.
 
 Sequences that performed exceptionally well using the \ac{MDTC} system due to
-their non-separable nature, such as \emph{BasketballDrill} present bit-rate
+their non-separable nature, such as \emph{BasketballDrill} present bitrate
 savings of more that 8\% using this approach.
 
 \begin{table}[tb]
@@ -3920,9 +3920,9 @@ savings of more that 8\% using this approach.
 Figure~\ref{fig:mdtc_bdrate_bdrill_inc_tr} shows the \ac{BD}-rate curves of
 standard \ac{HEVC} and the \ac{MDTC} system using incomplete transforms on
 $4\times4$ and $8\times8$ on the \emph{BasketballDrill} sequence.
-The bit-rate savings are over 8\% and it can be seen that the system behaves
+The bitrate savings are over 8\% and it can be seen that the system behaves
 virtually in the same way as the \ac{MDTC} systems presented in the previous
-Chapter for all bit-rate ranges.
+Chapter for all bitrate ranges.
 
 \begin{figure}[tb]
 	\centering
@@ -3933,7 +3933,7 @@ Chapter for all bit-rate ranges.
 	\emph{BasketballDrill}]
 	{\acs{BD}-rate curves of \emph{BasketballDrill} for the \acs{MDTC} system
 	using incomplete transforms.
-	This curve represents a bit-rate improvement of 8.22\% over \acs{HEVC}.}
+	This curve represents a bitrate improvement of 8.22\% over \acs{HEVC}.}
 	\label{fig:mdtc_bdrate_bdrill_inc_tr}
 \end{figure}
 
@@ -4010,10 +4010,10 @@ the number of non-zero coefficients can be reduced to around two thirds of
 its original value.
 
 Experimental results on \ac{HEVC} prove that the sparsity improvements can
-lead to bit-rate savings of 1.4\% with peaks of up to 8\%, while keeping
+lead to bitrate savings of 1.4\% with peaks of up to 8\%, while keeping
 the decoding complexity lower than that of \ac{HEVC}.
 As a result, incomplete transforms constitute an example of application for
-non-separable transforms that can lead to bit-rate savings for reasonable
+non-separable transforms that can lead to bitrate savings for reasonable
 encoding complexity and storage amounts.
 On the decoder side, incomplete transforms require fewer operations per block
 than \ac{HEVC} transforms, leading to a decrease on the decoding complexity.
@@ -4021,7 +4021,7 @@ than \ac{HEVC} transforms, leading to a decrease on the decoding complexity.
 Summing up, \ac{MDTC} systems using incomplete transforms represent a more
 lightweight alternative to \ac{RDOT}-based \ac{MDTC} systems presented in
 Chapter~\ref{cha:mdtc} that are able to provide improvements over \ac{HEVC}
-across a wide range of bit-rate with low decoding complexity.
+across a wide range of bitrate with low decoding complexity.
 
 \chapter{Simplifications of \acs{MDTC} systems for storage requirements}
 \label{cha:real_world_system}
@@ -4033,14 +4033,14 @@ across a wide range of bit-rate with low decoding complexity.
 
 Chapter~\ref{cha:mdtc} introduced the \acf{MDTC} system for video coding
 schemes.
-Significant bit-rate savings were obtained with regards to \ac{HEVC},
+Significant bitrate savings were obtained with regards to \ac{HEVC},
 especially when using the non-separable high-performance system, where many
 non-separable transforms were provided in each \acf{IPM}:
 up to 7\% on average for the \ac{AI} coding configuration.
 
 This chapter takes a look at different approaches to simplify the
 system presented in Chapter~\ref{cha:mdtc} in terms of storage requirements
-while trying to have minimum impact on its bit-rate savings.
+while trying to have minimum impact on its bitrate savings.
 
 \subsection{Discarding non-separable transforms}
 \label{sub:discarding_non_separable_transforms}
@@ -4058,7 +4058,7 @@ Non-separable transforms can definitively not accommodate a system with
 neither storage restrictions, nor coding complexity limitations.
 For this reason, this Chapter will only consider systems composed by separable
 transforms.
-As a consequence of ditching non-separable transforms, the average bit-rate
+As a consequence of ditching non-separable transforms, the average bitrate
 savings achievable on the \ac{HEVC} using separable high performance \ac{MDTC}
 systems are around 4\%, which will be used as a reference when comparing the
 simplified systems.
@@ -4140,7 +4140,7 @@ been tested and the value after the pipe to the learning set that has been
 used.
 Moreover, since the ToS learning set provides a larger number of residuals,
 more transforms have been learnt for the $8\times8$ blocks.
-Bit-rate savings are present for all transform configurations from both
+Bitrate savings are present for all transform configurations from both
 residuals sources on all test sets, and they coherently increase with the
 number of transforms.
 
@@ -4222,7 +4222,7 @@ of natural images issued from different sources, frame rates and resolutions.
 Table~\ref{tab:cross_bdrate_learn} shows the impact of changing the learning
 set to design the high performance \ac{MDTC} system: losses of 0.45 \% points
 are observed for the \ac{AI} coding configuration for the \ac{HEVC} test set,
-leading to bit-rate savings of 3.65\% instead of 4.1\%.
+leading to bitrate savings of 3.65\% instead of 4.1\%.
 
 \begin{table}[tb]
 	\centering
@@ -4235,9 +4235,9 @@ leading to bit-rate savings of 3.65\% instead of 4.1\%.
 		BC  & -4.10\% & -2.76\% & -3.54\% \\
 		ToS & -3.65\% & -2.62\% & -3.36\% \\
 	\end{tabular}
-	\caption[Bit-rate savings for separable high performance \acs{MDTC} using
+	\caption[Bitrate savings for separable high performance \acs{MDTC} using
 	different test sets]
-	{Bit-rate savings for separable high performance \acs{MDTC} using
+	{Bitrate savings for separable high performance \acs{MDTC} using
 	different test sets. This system uses 16 additional $4\times4$ transforms
 	and 32 additional $8\times8$ transforms.}
 	\label{tab:cross_bdrate_learn}
@@ -4321,8 +4321,8 @@ Where 4 and 8 stand for the transform sizes, t for the type, in this case s,
 meaning separable transforms, and N and M represent the number of additional
 transforms added in each \ac{IPM} for the respective transform size.
 The tables have information for each system about its \acs{ROM} requirements,
-the bit-rate savings and the encoding complexity with regards to \ac{HEVC}.
-Consistent bit-rate savings are observed when increasing the number of
+the bitrate savings and the encoding complexity with regards to \ac{HEVC}.
+Consistent bitrate savings are observed when increasing the number of
 transforms for both \ac{TU} sizes, even if the $4\times4$ transform
 performances seem to saturate with 16 and 32 additional transforms.
 
@@ -4441,7 +4441,7 @@ and more selectable \acs{ROM} operating points.
 
 Red lines in figure~\ref{fig:vmdtc_iter} represent the $4\times4$ only
 \ac{MDTC} systems.
-Homogeneous $4\times4$ systems start saturating in terms of bit-rate savings
+Homogeneous $4\times4$ systems start saturating in terms of bitrate savings
 after 8 additional transform in each \ac{IPM}.
 The non-homogeneous $4\times4$ system is able to achieve the same performances
 as the homogeneous system, with less \acs{ROM}.
@@ -4450,7 +4450,7 @@ The interest of the non-homogeneous systems is clearer when using $8\times8$
 transforms (blue lines), since the storage requirements are higher.
 In this case, a factor of almost two can be observed in terms of \acs{ROM} for
 the same \ac{BD}-rate in homogeneous and non-homogeneous systems.
-Moreover, it can be noticed that, for the $8\times8$ systems, the bit-rate
+Moreover, it can be noticed that, for the $8\times8$ systems, the bitrate
 savings are proportional, in a logarithmic scale, to the \acs{ROM}
 requirements and, consequently, to the number of transforms.
 
@@ -4474,7 +4474,7 @@ Each one of the points from the learnt systems has two coordinates: \acs{ROM}
 and \ac{BD}-rate.
 This means that, for a given \acs{ROM} constraint, one can find the
 combination of the $4\times4$ and $8\times8$ systems that offers the best
-trade-off in terms of storage requirements and bit-rate savings.
+trade-off in terms of storage requirements and bitrate savings.
 Consequently, the optimal combinations of non-homogeneous \ac{MDTC} systems
 have been found by setting a \acs{ROM} specification and selecting the
 combination of heterogeneous $4\times4$ and $8\times8$ systems that provide
@@ -4494,7 +4494,7 @@ the best combinations for a given \acs{ROM}.
 	{All possible combinations of $4\times4$ and $8\times8$
 	non-homogeneous systems based on independent selection of the appropriate
 	number of $4\times4$ and $8\times8$ transforms.
-	The lower boundary shows the hypothetical bit-rate savings that could be
+	The lower boundary shows the hypothetical bitrate savings that could be
 	obtained if there were no penalty when combining independently designed
 	$4\times4$ and $8\times8$ transforms.}
 	\label{fig:vmdtc_combined}
@@ -4506,10 +4506,10 @@ table~\ref{tab:non_hom_mdtc}.
 Information about their actual \acs{ROM} requirements, \ac{BD}-rate and
 encoding complexity are provided.
 There are some remarkable points, such as the system at \SI{8}{\kilo B},
-which can achieve bit-rate savings of 1.8\% with an encoding complexity
+which can achieve bitrate savings of 1.8\% with an encoding complexity
 slightly higher than twice of \ac{HEVC}'s.
 Another interesting point is the \SI{64}{\kilo B} system, being able to
-provide bit-rate savings of 3\% at roughly seven times the complexity of
+provide bitrate savings of 3\% at roughly seven times the complexity of
 \ac{HEVC}.
 
 \begin{table}[tb]
@@ -4825,7 +4825,7 @@ $4\times4$ and $8\times8$ \ac{MDTC} systems, respectively in the \acs{ROM} and
 \ac{BD}-rate plane.
 As demonstrated before, for the full-symmetrical \ac{MDTC} systems, \acs{ROM}
 is decreased to around one third of its original value.
-Bit-rate savings also experiment some losses, tending to decrease as the
+Bitrate savings also experiment some losses, tending to decrease as the
 number of transforms increases, since symmetrical systems are more constrained
 than non-symmetrical systems.
 The encoding complexity for symmetrical system is equivalent to the one for
@@ -4906,7 +4906,7 @@ transforms for the $4\times4$ \acp{TU} and 32 for the $8\times8$ \acp{TU}.
 The symmetrical \acs{MDTC} system presents slightly better performances for
 the 59seq test set than the non-symmetrical one.
 Consequently, exploiting intra prediction residual symmetries can be
-considered to have no global impact on bit-rate savings.
+considered to have no global impact on bitrate savings.
 
 \begin{figure}[tb]
 	\centering
@@ -5007,7 +5007,7 @@ more transforms are used in Planar, DC, horizontal and vertical modes.
 
 \ac{MDTC} systems presented in Chapter~\ref{cha:mdtc} proved the fact that
 using multiple transforms competing against each other inside every \ac{IPM}
-is able to provide bit-rate savings of up to 7\% when using non-separable
+is able to provide bitrate savings of up to 7\% when using non-separable
 transforms, and up to 4\% when using separable transforms.
 
 Nonetheless, the storage requirements for those transforms is not negligible.
@@ -5020,7 +5020,7 @@ In Chapter~\ref{cha:mdtc} all \acp{IPM} were using the same number of
 transforms, which could be sub-optimal, since not all \acp{IPM} are used
 equally in \ac{HEVC}.
 Around a factor of two in terms of \acs{ROM} has been saved when using
-non-homogeneous \ac{MDTC} systems for the same bit-rate savings.
+non-homogeneous \ac{MDTC} systems for the same bitrate savings.
 
 The second technique exploited existing symmetries to be able to re-use
 transforms from different \ac{IPM} by pre-processing residuals with
@@ -5061,7 +5061,7 @@ transforms that make use of only one base vector.
 This makes transforming a block less complex than with a regular transform,
 even if the incomplete transform is non-separable.
 Benefits of this approach are observed on the decoder, being less complex than
-that of \ac{HEVC}, while still providing bit-rate savings.
+that of \ac{HEVC}, while still providing bitrate savings.
 
 Chapter~\ref{cha:real_world_system} proposes two ways of reducing the
 complexity of separable \ac{MDTC} systems, especially the storage
@@ -5163,7 +5163,7 @@ To sum up, \acp{DTT} are able to divide the storage requirements of separable
 transforms by a factor of 3 and present a lower computational complexity due
 to fast algorithms.
 This Chapter explores whether the \acs{ROM} and complexity reductions balance
-the expected losses in bit-rate savings regarding separable \acp{RDOT}.
+the expected losses in bitrate savings regarding separable \acp{RDOT}.
 
 The formal definition of the 8 types of \ac{DCT} and \ac{DST} can be found in
 tables~\ref{tab:dcts_def} and~\ref{tab:dsts_def}, respectively.
@@ -5472,7 +5472,7 @@ In practice, this metric is able to rate a transform, i.e.\ its
 appropriateness with respect to a set of residuals.
 
 Due to the fact that \ac{MDTC} systems learnt using the \acs{RDOT} metric
-lead to significant bit-rate savings over \ac{HEVC}, it is also used in this
+lead to significant bitrate savings over \ac{HEVC}, it is also used in this
 Chapter to design a \ac{DTT}-based \ac{MDTC} system.
 The learning method is based on Algorithm~\ref{alg:clustering} for the
 classification part:
@@ -5766,12 +5766,12 @@ proposed in the \ac{CTC}~\cite{bossen-12-common-test-conditions}.
 In order to provide results in well specified test conditions with a known set
 of test sequences, this Chapter evaluates the most interesting systems in
 terms of trade-off between complexity (\acs{ROM} and encoding time) and
-bit-rate savings on the \ac{HEVC} test set.
+bitrate savings on the \ac{HEVC} test set.
 
 \section{Retained systems}
 \label{sec:retained_systems}
 
-Some interesting systems in terms of bit-rate savings, encoding time, decoding
+Some interesting systems in terms of bitrate savings, encoding time, decoding
 time and storage requirements have been selected to cover different complexity
 and performance trade-offs.
 The retained systems have been designed using a non-homogeneous number of
@@ -5788,13 +5788,13 @@ systems are:
 \end{itemize}
 
 Table~\ref{tab:summary_final_systems} contains a detailed summary of the
-bit-rate savings obtained with each system in both \acs{AI} and \acs{RA}
+bitrate savings obtained with each system in both \acs{AI} and \acs{RA}
 coding configurations, as well as the encoding complexity.
 The actual results per sequence of the \ac{HEVC} test set for \acs{AI} and
 \acs{RA} are provided in tables~\ref{tab:final_systems_ai}
 and~\ref{tab:final_systems_ra}, respectively.
 Moreover, a graphical representation of the \acs{AI} coding configuration
-bit-rate savings is shown in figure~\ref{fig:final_systems_ai} and in
+bitrate savings is shown in figure~\ref{fig:final_systems_ai} and in
 figure~\ref{fig:final_systems_ra} for \ac{RA}.
 
 \begin{table}[tb]
@@ -6074,7 +6074,7 @@ requirements.
 Although the system design has been carried out for different \acs{ROM}
 constraint, a system could be conceived for any point.
 This means that systems using more than 128 kB are possible and can provide
-higher bit-rate savings.
+higher bitrate savings.
 
 \chapter{Conclusions and future work}
 \label{cha:conclusions_and_future_work}
@@ -6146,8 +6146,8 @@ approximation of the one implemented in \ac{RDO} loop  from \ac{HEVC}.
 The following points should be kept in mind:
 \begin{itemize}
 	\item Every 10 years, a new video codec is standardised halving the
-		bit-rate required for an equivalent perceived quality.
-	\item \acs{HEVC} provided 23\% of bit-rate savings with regards \acs{AVC}
+		bitrate required for an equivalent perceived quality.
+	\item \acs{HEVC} provided 23\% of bitrate savings with regards \acs{AVC}
 		in \acs{AI} coding configuration with about twice the
 		complexity~\cite{JCTVC-M0329}.
 	\item A video standard is the result of hard-work and negotiations between
@@ -6166,8 +6166,8 @@ transform domain.
 In order to put the use of multiple transforms further, the \ac{MDTC} is born
 as an evolution of the \ac{MDDT} where more than one transform is available in
 each \ac{IPM}.
-Depending on the desired complexity and bit-rate savings trade-off, this
-technique alone is able to obtain bit-rate savings of 7\%, for non-separable
+Depending on the desired complexity and bitrate savings trade-off, this
+technique alone is able to obtain bitrate savings of 7\%, for non-separable
 transforms, and around 4\% for separable transforms.
 
 However, to obtain those levels of performance, first obtained in
@@ -6181,7 +6181,7 @@ As a side effect, the encoding complexity is also reduced.
 Chapter~\ref{cha:dtt} presents the \ac{DTT}-based \ac{MDTC} systems as a
 simplification of the \ac{MDTC} systems used throughout this thesis.
 Despite the early stages of the work, \acp{DTT} have proved their interest by
-being a very competitive approach in terms of bit-rate savings, complexity and
+being a very competitive approach in terms of bitrate savings, complexity and
 storage requirements.
 However, the learning algorithm for these systems is known to be sub-optimal
 when using numerous \acp{DTT}.
@@ -6192,7 +6192,7 @@ The last Chapter groups some of the most representative \ac{MDTC} systems
 presented in this thesis.
 Thanks to the learning methods and simplifications presented in
 Chapter~\ref{cha:real_world_system} and~\ref{cha:dtt}, a continuum of systems
-can be designed which are able to satisfy different complexity and bit-rate
+can be designed which are able to satisfy different complexity and bitrate
 savings trade-offs.
 
 \section*{Perspectives for future work}
@@ -6208,7 +6208,7 @@ techniques proposed that have been carried out in this thesis.
 In Chapters~\ref{cha:mddt},~\ref{cha:mdtc}
 and~\ref{cha:incomplete_transforms}, the test set that was used included in
 the learning set to be in the best possible conditions and validate the
-approach that the use of multiple transforms in video coding provide bit-rate
+approach that the use of multiple transforms in video coding provide bitrate
 savings.
 Due to the promising results obtained in those Chapters, in order to make sure
 there was no over-learning, the learning set is replaced by a completely
@@ -6246,7 +6246,7 @@ that has been split into four \acp{TU} to have different transforms.
 However, if transforms were signalled one level upwards, that is, at a \ac{PU}
 level instead of per \ac{TU}, transform signalling would be reduced by a
 factor of 4, although all transforms in a \ac{PU} would be identical.
-It seems reasonable to think that more bit-rate savings could be achieved by
+It seems reasonable to think that more bitrate savings could be achieved by
 using this new signalling scheme.
 
 Another improvement in signalling might come by not using fixed length
@@ -6254,7 +6254,7 @@ codewords, but favouring some transforms instead with shorter codewords.
 This approach will also allow using a number of transforms different from a
 power of 2.
 By signalling some transforms using fewer bits, they would be used more often
-than those with longer code words, leading to possible bit-rate savings.
+than those with longer code words, leading to possible bitrate savings.
 Nevertheless, for this approach to work properly, the signalling cost of the
 transform should be taken into account during the learning step in order to
 minimise the mismatch between the learning and the testing phases.
@@ -6343,7 +6343,7 @@ Subsequently, the additional designed transforms are applied to the latest
 Results show that coding performance is improved compared to the standard.
 Additional results show that the coding performance can be significantly
 further improved by using non-separable transforms.
-Bit-rate reductions in the range of 2\% over \acs{HEVC} are achieved with
+Bitrate reductions in the range of 2\% over \acs{HEVC} are achieved with
 those proposed transforms.
 
 \paragraph{Note}
@@ -6389,7 +6389,7 @@ encoder to perform better decisions regarding block sizes, prediction modes
 and transforms.
 Different systems are proposed to accommodate trade-offs between complexity
 and performance.
-Bit-rate reductions in the range of 2\% to 7\% are reported, depending on
+Bitrate reductions in the range of 2\% to 7\% are reported, depending on
 complexity.
 
 \subsection*{Image coding with incomplete transforms for HEVC}
@@ -6416,14 +6416,14 @@ complexity in about 5\%.
 \subsubsection*{Abstract}
 
 The use of multiple transforms in video coding can lead to substantial
-bit-rate savings.
+bitrate savings.
 However, these savings come at the expense of increased coding complexity
 and storage requirements, which challenge the usability of this approach.
 In this paper, a systematic procedure is proposed to design low complexity
 systems making use of transform competition.
 Multiple trade-offs accommodating the complexity are unveiled and it is
 demonstrated that they can keep a certain level of performance.
-Compared to the \acs{HEVC} standard, some of them provide bit-rate savings
+Compared to the \acs{HEVC} standard, some of them provide bitrate savings
 around 2\% with a 50\% increase in the encoding time, using less than
 \SI{4}{\kilo B} of extra \acs{ROM} and no added decoding complexity.
 
