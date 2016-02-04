@@ -6623,9 +6623,16 @@ boundary in kB.
 \addcontentsline{toc}{chapter}{Index}
 \thispagestyle{empty}
 
+% jury
+\ifthenelse{\useINSAcover = 1}
+{
+\thispagestyle{empty}
+\mbox{}
+\includepdf[pages={5}]{./cover/attestation-reussite+jury.pdf}}{}
+
 % back cover
 \ifthenelse{\useINSAcover = 1}
-{\newpage
+{
 \thispagestyle{empty}
 \mbox{}
 \includepdf[pages={3}]{./cover/cover-mtvc-thesis-INSA-UEB.pdf}}{}
