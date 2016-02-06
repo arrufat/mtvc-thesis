@@ -2,7 +2,7 @@
 \def\myauthor{Adrià Arrufat}
 \def\mytitle{Multiple transforms for video coding}
 \def\usepdfs{1} % whether to use pre-generated pdfs with 'make figures'
-\def\useINSAcover{1} % whether to use the INSA front and back covers
+\def\useINSAcover{0} % whether to use the INSA front and back covers
 
 \usepackage[british]{babel} % locale settings
 \usepackage{geometry} % page configuration
@@ -820,7 +820,7 @@ In \acs{HEVC}, the entropy coding is named \ac{CABAC}.
 \index{scanning}
 
 This subsection explains some particularities of the intra coding inside
-\ac{HEVC}, as the work carried out in this thesis will focus on the intra
+\ac{HEVC}, as the work carried out in this thesis focuses on the intra
 coding and take advantage of them.
 
 With regards to previous standards, such as H.264/\acs{MPEG}-4 \ac{AVC}, which
@@ -945,7 +945,7 @@ B-slices.
 \subsection{Distortion measures}
 \label{sub:distortion_measures}
 
-This section will present the two distortion measures for objective quality
+This section presents the two distortion measures for objective quality
 used in this thesis.
 Although other measures exist, such as \ac{SSIM}~\cite{wang-04-ssim},
 which is designed to improve on traditional methods such as the \acs{MSE} and
@@ -953,8 +953,8 @@ the \acs{PSNR}, explained in detail below.
 
 The reason for using the traditional methods over other ones is to be able to
 provide more consistent comparisons with existing techniques present in
-standardisation, even if they have proven to be inconsistent with the
-\ac{HVS}.
+standardisation, which use the \acs{BD} measurements based on the \acs{PSNR},
+even if they have can be inconsistent with the \ac{HVS}.
 
 \subsubsection{Mean squared error}
 \label{ssub:mean_squared_error}
@@ -1091,8 +1091,8 @@ This thesis will focus on the extension of the choices for the transform
 stage.
 Currently, the decision of the prediction source (intra or inter), the block
 sizes and \acp{IPM} are based on a single transform, usually the \ac{DCT}-II.
-However, a single transform is unlikely provide optimal signal compaction for
-all kinds of possible signals.
+However, a single transform is unlikely to provide optimal signal compaction
+for all kinds of possible signals.
 
 This thesis focuses on the extension of the choices for the transform
 stage, as set of transforms will be provided such that the encoder is able to
@@ -1115,12 +1115,12 @@ In the previous Chapter, transforms were identified as an important part in
 current video coding standards.
 This Chapter studies the design and properties that make transforms useful in
 video coding.
-Although this Chapter is mainly a summary of the literature, a technical
-novelty is brought in \S\ref{sub:the_lagrange_multiplier}.
+Although this Chapter is mainly a summary of the literature, a detailed
+mathematical analysis on the $\ell_0$ norm is presented in
+\S\ref{sub:the_lagrange_multiplier}.
 
 A transform is a mathematical transfer function of a signal from a
 representation domain to another.
-
 The high energy compaction offered by transform process has led this technique
 to be part of all the international video coding standards.
 
@@ -2543,7 +2543,7 @@ construction, since they combine transforms operating row and column wise.
 	\label{fig:rdot_4x4_bases}
 \end{figure}
 
-After having confirming that the learning has output better performing
+After having confirmed that the learning has output better performing
 transforms in terms of distortion and sparseness, their implementation on top
 of \ac{HEVC} is tested and discussed in the next section.
 
@@ -3202,7 +3202,7 @@ set in \ac{AI} and \ac{RA} coding configurations, named:
 	\item High performance system: 16 additional transforms per \ac{IPM} for
 		$4\times4$ \acp{TU} and 32 for $8\times8$ \acp{TU}.
 \end{itemize}
-The number of transforms per block size have been chosen to guarantee that
+The number of transforms per block size has been chosen to guarantee that
 enough residuals are available for transform learning in each \ac{IPM} and
 that the obtained performances are not counterbalanced by the transform
 signalling.
@@ -4239,8 +4239,9 @@ sets.
 
 This comes as a reassuring fact, since the residuals from ToS have less
 variability in terms of camera filters, frame rate, resolution and there are
-some synthetic objects, whereas the rest of sequences are exclusively composed
-of natural images issued from different sources, frame rates and resolutions.
+some computer generated textures, whereas the rest of sequences are
+exclusively composed of natural images issued from different sources, frame
+rates and resolutions.
 
 Table~\ref{tab:cross_bdrate_learn} shows the impact of changing the learning
 set to design the high performance \ac{MDTC} system: losses of 0.45 \% points
