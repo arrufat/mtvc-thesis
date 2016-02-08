@@ -4,7 +4,7 @@
 \def\usepdfs{1} % whether to use pre-generated pdfs with 'make figures'
 \def\useINSAcover{0} % whether to use the INSA front and back covers
 
-\usepackage[british]{babel} % locale settings
+\usepackage[british,french]{babel} % locale settings
 \usepackage{geometry} % page configuration
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
 % font configuration
@@ -41,7 +41,7 @@
 \usepackage{tabularx} % for fixed width tables
 \usepackage{diagbox} % for diagonal separator in tables
 \usepackage{fancyhdr} % customise headers and footers
-\usepackage{pdfpages}
+\usepackage{pdfpages} % to include external pages from pdfs
 
 % lines and paragraphs
 % \usepackage{setspace}
@@ -68,7 +68,7 @@
 	pdfauthor={\myauthor},
 	pdftitle={\mytitle},
 	pdfsubject={video coding},
-	pdfkeywords={video, image, transform, coding, compression},
+	pdfkeywords={video, image, transform, coding, compression, phd, thesis},
 	pdfinfo={
 		CreationDate={D:20150317093606},
 		%ModDate={...}
@@ -112,6 +112,9 @@
 \author{\myauthor}
 
 \begin{document}
+
+\selectlanguage{british}
+
 \frontmatter
 % front cover
 \ifthenelse{\useINSAcover = 1}
@@ -177,6 +180,143 @@ community for making all this kind of knowledge available on-line.
 Last but not least, I want to thank my parents, for bearing me on endless
 phone conversations almost every day and having supported me through all
 these years.
+
+\chapter*{French summary}
+\label{cha:french_summary}
+\addcontentsline{toc}{chapter}{French summary}
+
+\selectlanguage{french}
+
+Les codeurs vidéo état de l'art utilisent des transformées pour assurer une
+représentation compacte du signal.
+L'étape de transformée constitue le domaine dans lequel s'effectue la
+compression, pourtant peu de variabilité dans les transformées est observé
+dans la littérature: habituellement, une fois que la taille d'un bloc est
+sélectionné, la transformée est figée, habituellement de type Transformée en
+Cosinus Discrète (TCD).
+
+D'autres transformées autres que cette transformée, qui constitue le choix de
+facto, ont récemment reçu une attention en application de codage vidéo.
+Par exemple, dans la dernière norme de compression vidéo appelée HEVC (High
+Efficiency Video Coding, codage vidéo à haute efficacité), la Transformée en
+Sinus Discrète (TSD) est également utilisée pour traiter les blocs issus de la
+prédiction pour les tailles $4\times4$.
+De plus, pour ces blocs particuliers, HEVC a le choix complémentaire de ne pas
+transformer le bloc, par utilisation du signal transformSkip.
+Ce fait révèle l'intérêt croissant pour étendre les choix entre transformées
+pour accommoder les insatiables besoins en compression vidéo.
+
+Cette thèse se concentre sur l'amélioration des performances en codage vidéo
+par l'utilisation de multiples transformées.
+Les résultats sont présentés pour le codage des images Intra, c'est-à-dire des
+images qui ne sont codées qu'à partir de données locales à celle-ci.
+Dans cette configuration la norme de compression HEVC (publiée en 2013), qui
+représente la solution la plus aboutie en la matière, améliore la performance
+de compression du précédent standard appelé AVC (publié en 2003) de 22\%.
+
+HEVC obtient cette amélioration par la démultiplication des alternatives de
+codage comme l'utilisation de plusieurs tailles de bloc (4, 8, 16, 32 et 64)
+et modes de prédiction (35 modes) pour générer le signal résiduel (différence
+entre les pixels de l'image originale et l'image issue de la prédiction) qui
+est ensuite transformé par une transformée donnée selon la taille
+sélectionnée.
+L'objectif pour le codeur est de trouver le meilleur compromis entre la
+distorsion apportée par la quantification et le débit nécessaire pour
+transmettre les valeurs approximées.
+On se rend compte que HEVC investit une part importante dans la génération de
+résidus, mais peu d'alternatives existent quant à la transformée.
+
+Cette thèse est motivée par le fait que l'utilisation de plusieurs
+transformées permet d'obtenir une représentation plus parcimonieuse du signal
+que dans le cas d'une seule transformée.
+Comme ce thème est relativement peu abordé en codage vidéo, cette thèse tente
+de combler le vide pour considérer des transformées autres que la transformée
+en cosinus discrète.
+
+Pour ce faire, un aspect de cette thèse concerne la conception de transformées
+en utilisant deux techniques qui sont détaillées dans ce manuscrit.
+L'approche traditionnelle à base de transformées de Karhunen-Loève (KLT) et
+une transformée optimisée débit distorsion nommée RDOT.
+La KLT est une transformée qui a pour vocation à minimiser la distorsion sous
+une hypothèse de haute résolution au travers d'une allocation de bit optimale,
+cela implique une décorrélation du signal dans le domaine transformé.
+La RDOT quant à elle, essaie de rendre le signal le plus parcimonieux possible
+tout en limitant la quantité de distorsion induite par la quantification.
+
+La première approche basée transformée multiples est au travers d'une
+technique nommée MDDT (Mode Dependent Directional Transform).
+Celle-ci consiste à utiliser une transformée adaptée, par le biais d'une KLT
+ou d'une RDOT, pour chaque mode de prédiction intra.
+Par une utilisation de transformées séparables, un petit gain est observé par
+rapport à HEVC (de l'ordre de 0.5\% du débit est économisé).
+Néanmoins, l'utilisation de transformées non-séparables révèle des gains
+tangibles de l'ordre de 2.4\% lorsque les transformées sont adaptées au
+travers de la RDOT.
+Ce gain est plus favorable que celui observé lorsque les transformées sont
+construites à partir de l'approche KLT: celle-ci n'améliore HEVC que de
+1.8\%.
+Les résultats de cette étude sont résumées dans l'article intitulé
+``Non-separable mode dependent transforms for intra coding in HEVC'' présenté
+à la conférence VCIP 2014.
+Ce chapitre conclut que les transformées basées sur la RDOT ont de meilleures
+performances que celles basée KLT.
+
+Dans l'objectif d'étendre l'approche MDDT, le chapitre suivant décrit une
+approche nommée MDTC (Mode-Dependent Transform Competition) dans la quelle
+chaque mode de prédiction est équipé de plusieurs transformées.
+Lors du codage, ces transformées entrent en compétition de la même façon que
+les modes de prédiction et tailles de blocs sont sélectionnés.
+Ce système apporte des gains de l'ordre de 7\% pour des transformées
+non-séparables et 4\% pour les transformées séparables, en comparaison avec
+HEVC.
+Les résultats de ce chapitre sont publiés dans l'article ``Mode-dependent
+transform competition for HEVC'' publié lors de la conférence ICIP 2015.
+Néanmoins la complexité de tels systèmes est notoire, à la fois en ressources
+de calcul et en espace de stockage: un facteur de 10 en temps de codage et la
+complexité de décodage est accrue de 40\% par rapport à HEVC.
+Le stockage des transformées requiert en outre plus de 300 kilo-octets.
+
+En conséquence les chapitres suivants de la thèse développent des approches
+permettant de simplifier visant à simplifier les systèmes MDTC tout en
+conservant dans la mesure du possible l'amélioration en débit.
+Comme les transformées non-séparables apportent les gains les plus
+prometteurs, le chapitre 5, présente une approche plus simple permettant
+d'utiliser néanmoins les transformées non-séparables.
+Ces travaux ont été publiés dans la référence ``Image coding with incomplete
+transform competition for HEVC'' présentée à la conférence ICIP 2015.
+L'approche développée consiste à ne plus utiliser l'ensemble des vecteurs de
+base lors de la transformation, mais de ne conserver que la première base.
+Un ensemble de transformées incomplète est ainsi produit et utilisé en
+complément de la transformée HEVC qui conserve sa base complète.
+Des gains en compression de l'ordre de 1\% sont observés avec cette technique,
+avec une complexité au décodeur notablement abaissée par rapport aux
+précédentes approches: elle devient même plus faible que celle de HEVC.
+
+Finalement, une procédure de construction de systèmes MDTC à basse complexité
+est présentée.
+Ces travaux sont repris dans la publication ``Low complexity transform
+competition for HEVC'' acceptée à la conférence ICASSP 2016.
+Cette approche à basse complexité s'appuie sur trois composantes qui sont
+évaluées: tout d'abord une sélection du nombre adéquat de transformées par
+mode est effectuée, ce qui permet de réduire le nombre de transformées et
+limiter l'espace de stockage et la complexité de codage.
+De plus des symétries entre modes de prédiction sont exploitées pour réduire
+la ROM d'un facteur 3.
+Pour terminer l'utilisation de transformées trigonométriques (DTT, Discrete
+Trigonometric Transforms) est motivé par existence d'algorithmes rapides.
+L'ensemble de ces contributions réunies permet de proposer un système d'une
+complexité d'encodage de 50\% accrue par rapport à l'état de l'art avec une
+complexité ajoutée, au niveau décodage et stockage, mineure.
+
+En conclusion les résultats de cette thèse montrent que les transformées
+multiples apportent des gains significatifs en comparaison avec le plus récent
+standard de codage vidéo.
+Des gains très substantiels par rapport à HEVC sont apportés si l'on néglige
+les aspects complexité.
+Néanmoins pour des systèmes réalistes des gains tangibles sont obtenus pour
+des complexités compétitives.
+
+\selectlanguage{british}
 
 % \setcounter{tocdepth}{5}
 \tableofcontents
@@ -6688,6 +6828,7 @@ boundary in kB.
 \thispagestyle{empty}
 \mbox{}
 \includepdf[pages={5}]{./cover/attestation-reussite+jury.pdf}}{}
+\cleardoublepage
 
 % back cover
 \ifthenelse{\useINSAcover = 1}
