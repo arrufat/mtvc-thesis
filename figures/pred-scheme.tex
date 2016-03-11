@@ -25,26 +25,26 @@
 	\draw[step=1,black!75,thick] (-4,0) grid (-3,-1);
 
 	% \foreach \direction in {2,3,...,34}
-	\newcounter{direction}
-	\setcounter{direction}{2}
+	\newcounter{dir}
+	\setcounter{dir}{2}
     \foreach \position in {-32, -26, -21, -17, -13, -9, -5, -2, 0, 2, 5, 9,
 	13, 17, 21, 26, 32, -26, -21, -17, -13, -9, -5, -2, 0, 2, 5, 9, 13, 17,
 	21, 26, 32}
 	{%
 		% set the angle of current prediction direction 
-		\pgfmathsetmacro{\angle}{\startangle - (\thedirection - 2) * 180 / 32 + 180}
-        \ifthenelse{\thedirection < 19}
+		\pgfmathsetmacro{\angle}{\startangle - (\thedir - 2) * 180 / 32 + 180}
+        \ifthenelse{\thedir < 19}
 		{\pgfmathsetmacro{\angle}{-\position / 32 * 45 + 180}}
 		{\pgfmathsetmacro{\angle}{-90 - \position / 32 * 45 + 180}}
-		\ifthenelse{\thedirection < 18}{\def\oper{cos}}{\def\oper{sin}}
+		\ifthenelse{\thedir < 18}{\def\oper{cos}}{\def\oper{sin}}
 		\pgfmathsetmacro{\radnew}{abs(\radius / \oper(\angle))}
-		\ifthenelse{\thedirection = 2 \OR \thedirection = 10 \OR \thedirection = 18 \OR \thedirection = 26 \OR \thedirection = 34}
+		\ifthenelse{\thedir = 2 \OR \thedir = 10 \OR \thedir = 18 \OR \thedir = 26 \OR \thedir = 34}
 		{\draw[opacity=0] (-4.5,-1.5) --++ (\angle:\radnew + 0.15) node
-		[opacity=1] {\small \textsf{\thedirection}};}{}
+		[opacity=1] {\small \textsf{\thedir}};}{}
 
 		\draw[middlearrow={latex reversed}] (-4.5,-1.5) --++ (\angle:\radnew);
 
 		% update direction for next iteration
-		\stepcounter{direction}
+		\stepcounter{dir}
 	}
 \end{tikzpicture}
