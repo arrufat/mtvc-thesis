@@ -1,0 +1,3 @@
+[submodule "scripts/ghstats"]
+	path = scripts/ghstats
+	url = https://github.com/kefir500/ghstats.git
