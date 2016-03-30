@@ -6,7 +6,7 @@ SOURCE		= $(shell grep -l '\\documentclass' *.tex)
 OBJECTS		= $(SOURCE:.tex=.bbl) $(SOURCE:.tex=.nav) $(SOURCE:.tex=.snm) $(SOURCE:.tex=.synctex.gz) $(SOURCE:.tex=.ptc)
 MKFIGURES	= ../scripts/fig2pdf.sh
 FIGURES		= $(wildcard ../figures/*.tex)
-REL_NAME	= mtvc_thesis_slides
+REL_NAME	= mtvc-thesis-slides
 
 .PHONY: figures
 
