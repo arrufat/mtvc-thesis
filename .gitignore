@@ -10,8 +10,11 @@ figures/build
 *.lof
 *.log
 *.lot
+*.nav
+*.out
 *.pdf
 *.ptc
+*.snm
 *.swp
 *.synctex.gz
 *.toc
