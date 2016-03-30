@@ -1,0 +1,69 @@
+\begin{tikzpicture}
+	\pgfplotsset{/tikz/font={\scriptsize}}
+	\begin{axis}[
+			xlabel={iteration},
+			ylabel={RDOT metric},
+			grid=both,
+			scale only axis,
+			width=0.8\textwidth,
+			height=0.7\textheight,
+			scaled y ticks = false,
+			x tick label style={
+				/pgf/number format/.cd,
+				set thousands separator={\thinspace},
+				set decimal separator={.},
+				fixed,
+				fixed zerofill,
+				precision=0,
+				/tikz/.cd
+			},
+			y tick label style={
+				/pgf/number format/.cd,
+				set decimal separator={.},
+				fixed,
+				fixed zerofill,
+				precision=1,
+				/tikz/.cd
+			},
+			% xtick={0.20,0.22,...,0.50},
+			ytick={0,0.5,...,100},
+			xmin=0, xmax=1000,
+			ymin=33, ymax=36.5,
+			legend style={nodes=right},
+			legend pos= north east,
+			unbounded coords=jump,
+		]
+
+		\pgfplotstableread{figures/rdot_learning_4.dat}\table
+		\addplot[black, dotted, thick]
+		table[x=iter,y=dct,col sep=tab] from \table;
+		\addlegendentry{DCT-II}
+
+		\pgfplotstableread{figures/rdot_learning_4.dat}\table
+		\addplot[black, dashed, thick]
+		table[x=iter,y=dst,col sep=tab] from \table;
+		\addlegendentry{DST-VII}
+
+		\pgfplotstableread{figures/rdot_learning_4.dat}\table
+		\addplot[blue, dashed, thick, smooth]
+		table[x=iter,y=klt_sep,col sep=tab] from \table;
+		\addlegendentry{S-KLT}
+
+		\pgfplotstableread{figures/rdot_learning_4.dat}\table
+		\addplot[blue, thick]
+		table[x=iter,y=klt_nsep,col sep=tab] from \table;
+		\addlegendentry{NS-KLT}
+
+		\pgfplotstableread{figures/rdot_learning_4.dat}\table
+		\addplot[red, dashed, thick]
+		table[x=iter,y=rdot_sep,col sep=tab] from \table;
+		\addlegendentry{S-RDOT}
+
+		\pgfplotstableread{figures/rdot_learning_4.dat}\table
+		\addplot[red, thick, smooth]
+		table[x=iter,y=rdot_nsep,col sep=tab] from \table;
+		\addlegendentry{NS-RDOT}
+
+	\end{axis}
+
+\end{tikzpicture}

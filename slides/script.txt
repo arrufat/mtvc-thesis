@@ -1,0 +1,495 @@
+--- 1 ---
+
+Good morning.
+Thank you madam president
+
+I'm going to present the work done during the last three years for my PhD,
+entitled "Multiple transforms for video coding", which is focused on improving
+the video coding quality by enabling the use of multiple transforms at the
+same time.
+This work has been directed by Olivier Déforges from INSA of Rennes and
+supervised by Pierrick Philippe from Orange.
+
+--- 2 ---
+
+I will start with a general introduction to the context into which this work
+is placed, the main motivations for video compression and how state-of-the-art
+video coders work.
+
+--- 3 ---
+
+We are now in the era of the Internet and videos.
+Last year, video streaming represented around 70% of the Internet traffic, and
+Cisco has forecast that in 5 years they will represent more than 80%.
+
+Carrying out my PhD work in a company inside the telecommunications sector who
+is a content and Internet service provider, makes it obvious the fact that
+video files need to be compressed in order to reach more clients with more
+content using the same infrastructure.
+
+Moreover, as new formats emerge such as 4K and new applications like virtual
+reality require improved quality, there is a continuous need for video
+compression.
+
+In this graph, extracted from Cisco's forecast, we can see the amount of data
+that video streaming represents with regards to other common activities.
+The Y-axis contains Exa bytes per month (Giga, Tera, Peta), 10 to the
+power of 15.
+
+--- 4 ---
+
+One very important part of the context in this PhD is the standardisation.
+All the work has been done on top of and compared to HEVC, which was released
+in 2013.
+Since I the start of my PhD coincided with the beginning of the
+standardisation phase of a future video coder, my first works began with an
+exploratory period in which complexity constraints were relaxed.
+However, we always kept in mind that we wanted to come out with a suitable
+video coding solution for a future video coder for around 2020.
+
+--- 5 ---
+
+Now, let's take a quick look at a simplified video coding scheme which
+contains the basic ideas that will be useful for the rest of the presentation.
+
+A video encoder works with video files, which are just sequences of images.
+It is a very complex problem, so, instead of treating each image as a whole,
+images are split into blocks.
+These blocks are then predicted using previous information, then transformed,
+quantised and binarised into the bitstream.
+The encoder then performs the inverse quantisation and transform to
+reconstruct the image, which is used to derive the predictions.
+These predictions can be made from the same images (intra) or from other
+images (inter).
+All this is performed in a rate-distortion optimisation loop that allows the
+encoder to choose the best block size via a quad-tree model, prediction, etc.
+
+We will focus on the transform stage in this diagram.
+
+--- 6 ---
+
+In this section we will introduce the concept of the transform, have a look at
+the kind of signals they process and how are they designed.
+Moreover, we will also test different designs.
+
+--- 7 ---
+
+A transform is a mathematical function that maps a signal from one domain
+to another. It is just a change of basis.
+
+The simplest example is a 2D rotation.
+Here we need both coordinates x0,x1 to represent the signal, but applying a
+rotation of 60 degrees counter-clockwise, we only need one coordinate, so we
+have halved the amount of data.
+
+We want these transforms
+	- to be of low complexity for real time applications,
+	  especially on the decoder side for low-end devices.
+	- To achieve a compact representation of the signal.
+	- To be orthogonal: invertible for perfect reconstruction and the
+	  inverse is computed quickly.
+
+
+--- 8 ---
+
+Another important aspect of transforms is separability.
+Transforms can be separable or non-separable.
+Non-separable transforms have the advantage of being more performing, since
+they can exploit any linear correlation within a block, contrary to separable
+transforms, who can only decorrelate pixels sharing the same row or column.
+However, non-separable transforms more complex.
+Here's an example for a 4x4 block:
+A separable transform would process the rows, then the columns, but a
+non-separable transform, would process all the pixels at once.
+
+--- 9 ---
+
+As we saw in the video encoder diagram, transforms process residual blocks or
+prediction errors.
+That is, the difference between the original block and the predicted block.
+They have really different aspects, but the same transform is used for all of
+them.
+
+These residuals are generated as combinations of Transform Unit sizes (TUs)
+and predictions, which can be performed spatially (the same image) or
+temporally (other images).
+The choice is made by the encoder in the rate-distortion optimisation loop.
+
+--- 10 ---
+
+In this thesis, I have put special focus on intra prediction residuals, so I
+will explain them with a bit more detail.
+
+In grey we have the parts of the image that have already been reconstructed
+and are available at the encoder side.
+In white we have the block we are trying to predict.
+HEVC has 35 different ways of predicting, called modes: a gradient and mean
+value projections and 33 directional prediction modes.
+These directional prediction use the reconstructed image to predict the block
+following particular directions, such as horizontal, diagonal or vertical.
+Residuals tend to have lower values near the borders from which the prediction
+was computed, and higher values far from the boundaries.
+
+--- 11 ---
+
+Transforms are design to achieve a good trade-off between the rate required to
+transmit the transformed signal and the distortion introduced by the
+quantisation.
+
+We usually find in literature that the optimal transform is the KLT.
+But this is true assuming there's a large amount of bits to transmit the
+coefficients, the so called, high-resolution quantisation hypothesis.
+However, this hypothesis is not valid for video coding, since signals are
+heavily quantised.
+As a result, Sezer proposed an alternative design approach focusing on
+sparsity, which we are going to see in the next slide.
+
+--- 12 ---
+
+The rate-distortion optimised transform (RDOT) minimises the distortion and
+the number of significant coefficients using a simple model for the rate
+constraint: the zero norm, which counts the number of non-zero
+coefficients.
+This sparsity approach fits into the video coding syntax elements.
+
+The RDOT is computed as follows:
+This first term contains the difference between the original residuals and the
+inverse transform of the transform quantised coefficients, that is, the
+reconstruction, so it models the distortion.
+The second term contains the zero norm of the transform and quantised
+coefficients, which corresponds to the number non-zero values.
+During my PhD, we proved that the optimal value of lambda does not depend on
+the residuals PDF.
+
+The objective is, for a given set of x_i's, find the transform A that
+minimises J(lambda).
+
+This can be done with an iterative algorithm in which for an initial
+transform, the optimal coefficients are computed, the transform is updated,
+and so on.
+
+Next slide compares different transforms using this metric.
+
+--- 13 ---
+
+We have evaluated the 4x4 DCT-II from HEVC to our set of residuals, to obtain
+this value, then we have evaluated the DST, which is the actual transform used
+in HEVC for these kind of blocks.
+The DST provides bit-rate savings, and the behaviour is very similar in this
+RDOT domain.
+The DST was computed as an approximation of the KLT, which gives slightly
+better results, but not very significant.
+Then we test the non-separable KLT, which works better.
+Now we test the iterative design for our RDOTs.
+First separable, and then non-separable.
+They seem to have promising results, but we need to test them into a real
+scenario, encoding video files.
+
+--- 14 ---
+
+For this reason we used the MDDT to learn a transform adapted to each one of
+the prediction modes of HEVC.
+The learnt transforms replace the default HEVC transforms and therefore, do
+not require any extra signalling with regards to HEVC.
+
+--- 15 ---
+
+In the Y axis we have what we called the BD-rate, which stands for the amount
+of bit-rate saved at equivalent quality, so the more negative it is the
+better, meaning that we need less bit-rate to achieve the same thing.
+
+The separable KLT performs slightly better than HEVC, but its non-separable
+version adds a significant improvement.
+
+The RDOT version overcomes the KLT in both separable and non-separable
+approaches, notably.
+Moreover, no sequence presents losses when using RDOTs.
+
+--- 16 ---
+
+Here's a table summarising the tested systems.
+RDOTs present more favourable BD-rates.
+The encoding time is the same, and has slightly increase due to the lack of
+fast algorithms for these transforms, and higher for non-separable versions.
+The same applies to the decoding time.
+And the ROM stands for the storage requirements for the transforms.
+Their coefficients need to be stored, and we are using 1 byte per coefficient
+and there are 35 transforms per TU.
+
+The main ideas to retain from this experiment are:
+- That separability allows for higher bit-rate savings.
+- That we are keeping the RDOT design for its higher performance from now on.
+
+So the next experiment will be to find out the limits of this technique.
+
+--- 17 ---
+
+This section will introduce a brand new system: the mode dependent transform
+competition, which consists in adding multiple transforms adapted to each IPM.
+
+--- 18 ---
+
+The main motivations are the residual variability inside the same IPM and the
+fact that RDOT-based systems gave better results than KLT-based ones.
+
+The design of the system, built on top of HEVC has a conservative approach:
+The default transform is kept and a flag indicates whether it is used.
+In case it is not used, the flag is raised and a fixed-length codeword
+indicates the selected transform.
+The learning algorithm is based on the RDOT metric and detailed in the
+following slide.
+
+--- 19 ---
+
+In order to learn multiple transforms adapted to the same data set, a first
+random classification is performed, and then for each subgroup, a RDOT is
+learnt in the same way as for the MDDT systems.
+Once they are learnt, the residuals are reclassified accordingly, then we
+update the transforms, and so on.
+
+--- 20 ---
+
+This slide shows how the RDOT metric is minimised when adding more transforms.
+We start at 35, which is the value of the DST, then we replace it with
+separable and non separable RDOT, and finally we start adding RDOT to
+complement the DST.
+We can see how the metric decreases with the number of transforms.
+
+--- 21 ---
+
+A test sequence has been encoded with all those different MDTC systems and the
+results in the BD-rate domain are pretty much aligned with the RDOT metric.
+However, in this case, since we need to signal the transform so that the
+stream is decodable, the BD-rate saturates, and after a certain point, it will
+get worse.
+
+Having validated experimentally the approach, we have designed a system with
+16 transforms for 4x4 TUs and 32 transforms for 8x8 TUs in its separable and
+non-separable versions.
+
+--- 22 ---
+
+The separable version has an average of around 4.1% bit-rate improvements with
+regards to HEVC, and the non-separable version of around 7.1%.
+All sequences present a gain, and there are some, such as BasketballDrill,
+with 25% of bit-rate savings when using non-separable transforms, due to the
+large amount of diagonal patterns, which separable transforms are not able to
+treat.
+We can note that most of the gain is lost with separable transforms.
+
+The visual improvements for this sequence an be appreciated here:
+some lines are lost when using HEVC, but maintained with our approach.
+Both sequences have a bit-rate of around 3 Mbps.
+
+--- 23 ---
+
+Summary slide of the MDTC system.
+- Important BD-rates: between 4 and 7%.
+- Notably increased encoding time: between 8 and 20 times slower.
+- Same decoding time as MDDT.
+- Significant amount of storage requirements.
+
+Since this thesis in inscribed inside a standardisation context, next steps
+will focus on simplifying the system to make them usable.
+
+--- 24 ---
+
+In order to simplify the MDTC systems, we have chosen to tackle the problem
+from the storage requirements.
+Since the storage requirements is tightly related to the number of transforms
+and the number of transforms is related to the system complexity.
+
+--- 25 ---
+
+The first thing to keep in mind is that non-separable transforms have been
+discarded.
+Despite the fact that they provide higher gains, their storage requirements
+(in the order of MB) and their complexity seem just too high.
+So, from now on, only separable transforms will be considered.
+
+--- 26 ---
+
+All systems designed up to now are making use of the same number of transforms
+across all IPMs.
+However the IPM usage is not uniform, leading us to think that it might be
+wiser to put more transforms in modes that are more likely to be used than
+into rare ones.
+
+--- 27 ---
+
+Another interesting aspect is that, due to the nature of how predictions are
+derived, one can observe some symmetries across the 33 directional IPMs:
+
+Residuals issued from modes 19-34 are closely related to the transposed
+version of residuals from 2-18.
+So it's like we can fold this diagram like this.
+
+But we can take these symmetries one step further:
+Residuals from predictions 2 to 10, present an horizontal symmetry axis:
+errors done downwards are closely related to mirrored versions of errors down
+upwards.
+
+These equations present the operations needed to be done depending on the IPM.
+Since they are all different ways of reading the residual values, they come at
+no computational cost.
+
+--- 28 ---
+
+In order to see how systems are improved in the ROM - BD-rate plane, systems
+have been drawn.
+The Y axis represents the bit-rate savings and the X-axis the amount of ROM
+taken by the transforms. We want to be as close as possible to the lower left
+corner, of course.
+4x4 systems making use of the same number of transforms per IPM are here.
+Then 8x8 systems with the same number of transforms per IPM, and finally
+combined systems using both 4x4 and 8x8 TUs.
+
+We have created an algorithm that, for a given ROM constraint it selects the
+best amount of transforms per IPM, taking into account the symmetries that
+exist across IPMs.
+As a result, we are able to design systems like these ones.
+The bit-rate savings increase linearly with the log of the ROM.
+
+Moreover, ROM savings of more than 50% are observed for the same BD-rate.
+
+--- 29 ---
+
+This slide presents some interesting working points of custom MDTC systems.
+
+The main points to retain are:
+- We can reduce ROM
+- The maximum value of BD-rate has not been increased
+- Coding complexity remains more or less the same
+
+--- 30 ---
+
+The final Chapter of my thesis, and this presentation, as well, is a
+simplification of MDTC systems that use Discrete Trigonometric Transforms.
+
+--- 31 ---
+
+There are two notable reasons for using them:
+- They are backed up with fast algorithms
+- Their coefficients can be computed analytically
+- They are more easily pushed into a standard
+
+--- 32 ---
+
+Here there are some examples of DTTs.
+
+The first two, in bold, are used in HEVC, the other ones are combinations of
+different types of DTTs.
+
+Note that we can use a different transform for the rows and for the columns,
+so we can increase our space of available transforms.
+
+--- 33 ---
+
+So the question now is: how do we design a system making use of these
+transforms, if the transforms are already designed.
+Using the RDOT metric again.
+
+Well, there are 8 DCTs, 8 DSTs and their inverses:
+If we combine all of them, with some geometrical manipulations, such as
+mirroring operations and transpositions, we end up with 2018 transforms.
+However, if we allow a difference in the scanning order of the result, the
+number of different transforms is 256.
+
+So now, when we want to design a system making use of N transforms, we need to
+chose the N transforms that minimise the RDOT value.
+For N=4 there are 1.75 x 10 to the power of 8 combinations.
+
+Since this Chapter came late during the PhD work, we designed a sub-optimal
+algorithm, that does not work well with big N's.
+
+For these systems, all the non-homogeneous repartition and the symmetries from
+the other approach still apply.
+
+--- 34 ---
+
+So, retaking the point where we left:
+With our naive systems, and our system making use of symmetries, we can now
+place DTT-based MDTC systems.
+And we continue to improve the trade-off between the ROM and the BD-rate.
+Learnings have not gone further than 4 kB, since the suboptimality of the
+learning algorithm became too evident.
+
+--- 35 ---
+
+Finally, a comparison table between DTT and RDOT based MDTC systems.
+
+For the same amount of ROM, DTT systems provide better BD-rates, while the
+encoding complexity is a bit higher.
+This is due to the fact that more transforms are available and, therefore, more
+coding possibles are explored.
+
+The decoding time, however, remains constant and equivalent to that of HEVC
+thanks to the fast algorithms.
+
+This is still a work in progress, so better results are expected by improving
+the learning algorithm.
+
+--- 36 ---
+
+So now, we are going to talk about what can be concluded from this work and
+what are the possible next steps.
+
+--- 37 ---
+
+This thesis shows that there is still a lot of room for improvement in video
+coders.
+Just by improving a single block of the whole coding scheme, I was able to
+obtain 7% bit-rate savings when using non-separable transforms, 4% separable
+and 2% (right now) using DTTs.
+
+HEVC gained about 20% in intra coding with regards to AVC in 10 years by
+revisiting the whole scheme.
+
+I have also showed that a systematic and almost unsupervised learning system
+can be performed off-line using the RDOT metric.
+Some mathematical aspects have been proved, such as the independence from the
+residuals PDF.
+
+--- 38 ---
+
+All these work has given place to 4 articles presented in international
+conferences and one more submitted.
+One of the already presented paper obtained the best paper award at VCIP 2014.
+
+Moreover, 5 patent applications have been filled.
+
+--- 39 ---
+
+What about next?
+
+The most obvious steps are to extend the system:
+- we have only enabled transform competition for 4x4 and 8x8 TUs, but we could
+  use them for 16x16 and 32x32, as well.
+- we have only worked in intra coding (although when encoding in RA, we have
+  2/3 of the gains of AI)
+- we have only worked on the luma component, but we could also use it for the
+  chroma
+
+One aspect that we have not tackled is the encoding complexity:
+we wanted to see what was the potential of this technique while being
+reasonable on the decoder side.
+We are performing an exhaustive search amongst all available transforms, which
+might be not necessary.
+
+We are using a simple approach to signal the transforms: maybe a smarted
+signalling system with variable length codes could be used, or try to guess
+the transform from a certain context.
+Moreover, the quantisation of the transform was done quickly to the nearest
+integer.
+Having a better quantisation might slightly improve the system.
+
+One final note before finishing, is that the use of multiple transforms is a
+subject of interest these days.
+Future video formats that are starting to take shape with the KTA2 are using a
+very similar approach to the DTT-based MDTC system.
+
+--- 40 ---
+
+That's the end of my presentation.
+
+Thank you for your attention.

@@ -1,0 +1,90 @@
+\pgfmathsetmacro{\nodebasesize}{1} % A node with a value of one will have this diameter
+\pgfmathsetmacro{\nodeinnersep}{0.1}
+
+\newcommand{\propnode}[5]{% position, name, options, value, label
+	\pgfmathsetmacro{\minimalwidth}{sqrt (#4*\nodebasesize)}
+	\node[#3,minimum width=\minimalwidth*1cm,inner sep=\nodeinnersep*0cm,circle,draw] 
+	(#2) at (#1) {#5};
+}
+
+\tikzstyle{bloq} = [rectangle, draw, text badly centered, minimum height=1em, inner sep=1mm]
+\newcommand{\bloq}[4]{% position, name options, label
+	\node[bloq,#3] (#2) at (#1) {\tiny\textsf{#4}}; 
+}
+\newcommand{\add}[2]{%position, name
+	\draw (4,4) circle [radius=0.3] node (add) {\tiny\textsfi$+$};
+}
+
+\tikzstyle{frame} =
+[rectangle, fill=white, draw, text centered, minimum width=4em, minimum height=2em]
+
+\begin{tikzpicture}[scale=1.2,x=1em,y=1em]
+
+% INPUT VIDEO SEQUENCE
+	\draw (-2.35,0) node[above] {\tiny \textsf{Input Video Sequence}};
+	\draw (-2,-3) node[above] {\tiny \textsf{Split into blocks}};
+	\draw (-2,-3.5) node[above] {\tiny \textsf{Quad-tree partitioning}};
+	\node[frame] at (-2.3,-0.7){};
+	\node[frame] at (-2.2,-0.8){};
+	\node[frame] at (-2.1,-0.9){};
+	\node[frame] (sequence) at (-2,-1){};
+	% \draw (-2,-1) --++ (0,0.85);
+	% \draw (-2,-1) --++ (0,-0.85);
+	% \draw (-2,-1) --++ (3.85,0);
+	% \draw (-2,-1) --++ (-1.65,0);
+
+	\filldraw[fill=blue!20, draw=blue!50,dashed,thick] 
+	(1.5,-2) -- (15,-2) -- (15,-11.2) -- (1.5,-11.2) -- cycle;
+	\node[below right] at (2,-2) {\tiny\textsf{Decoder}};
+	\node[] at (2.75,-10.75) {\tiny\textsf{Intra/Inter}};
+
+	\propnode{2,-1}{add1}{fill=green!50}{0}{\tiny$+$}
+	\propnode{12,-6.5}{add2}{fill=green!50}{0}{\tiny$+$}
+	\propnode{0.75,-1}{inter1}{fill=black}{0.005}{}
+	\propnode{2,-6.5}{inter2}{fill=black}{0.005}{}
+	\propnode{2,-8.75}{inter3}{fill=black}{0.005}{}
+	\propnode{3.5,-7.5}{inter4}{fill=black}{0.005}{}
+	\propnode{3.5,-10}{inter5}{}{0.005}{}
+	\propnode{12,-1}{inter7}{fill=black}{0.005}{}
+	\propnode{12.4,-6.5}{inter8}{fill=black}{0.005}{}
+	\propnode{8.5,-8.75}{inter9}{fill=black}{0.005}{}
+
+	\draw (add1) node[above] {\tiny\textsf{\hspace{3em}residuals}};
+
+	\bloq{6,-1}{Transf}{text width=2.5em,fill=red!50}{Transform};
+	\bloq{10,-1}{Quant}{text width=2em,fill=yellow!50}{Quant.};
+	\bloq{6,-7.5}{IntraPred}{text width=2.5em,fill=yellow!50}{Intraframe\\[-1em]Prediction};
+	\bloq{12,-3}{InvQuant}{text width=3.5em,fill=yellow!50}{Inv. Quant.};
+	\bloq{12,-4.75}{InvTransf}{text width=3.5em,fill=red!50}{Inv. Transform};
+	\bloq{6,-10}{MotionComp}{text width=2.5em,fill=yellow!50}{Motion\\[-1em]Est./Comp.};
+	\bloq{19,-6.5}{EntrCod}{text width=2.5em,fill=yellow!50}{Entropy\\[-1em]Coding};
+	\bloq{12,-8.75}{Reconst}{text width=3.2em,fill=white}{Reconst.\\[-0.5em]image};
+
+	\draw[-latex,thick] (sequence) -- (add1) node [below right] {\tiny\textsf{$-$}};
+	\draw[-latex,thick] (add1) -- (Transf);
+	\draw[-latex,thick] (Transf) -- (Quant);
+	\draw[-latex,thick] (InvQuant) -- (InvTransf);
+	\draw[-latex,thick] (InvTransf) -- (add2);
+	\draw[-latex,thick] (add2) -- (Reconst);
+	\draw[-latex,thick] (inter2) -- (add2);
+	\draw[-latex,thick] (inter3) -- (add1);
+	\draw[-latex,thick] (IntraPred) -- (inter4);
+	\draw[-latex,thick] (MotionComp) -- (inter5);
+	\draw[thick] (inter3) -- (inter4);
+	\draw[dotted,help lines, thick] (inter3) -- (inter5);
+	%\draw[dotted,thin] (inter3) --++ (-40:1em) arc (-40:40:1em);
+	\draw[-latex,thick] (Reconst) --++ (5, 0)
+	node [below,text width=2em] {\tiny\textsf{Output Video\\[-1em]Signal}};
+	\draw[-latex,thick] (EntrCod) --++ (3,0) node[right] {\tiny\textsf{bitstream}};
+	\draw[-latex,thick] (Quant) -| (InvQuant);
+	\draw[-latex,thick] (Quant) -| (EntrCod);
+	\draw (19,-1) node (TransCoeff) [right,text width=2em] {\tiny\textsf{Quant. Transf.\\[-1em]Coeffs}};
+	\draw[thick] (Reconst) -- (inter9);
+	\draw[-latex,thick] (inter9) |- (IntraPred);
+	\draw[-latex,thick] (inter9) |- (MotionComp);
+	%\draw[-latex,thick] (inter1) |- (inter8) -- (MotionComp);
+	\draw[-latex,thick] (inter1) -- (0.75,-12) -- (6,-12) -| (MotionComp);
+	%\draw[latex-,thick] (EntrCod) --++ (-6,0) node [above, midway]{\tiny\textsf{Control Data}};
+	\draw[latex-,thick] (EntrCod) --++ (add2) node [above, midway]{\tiny\textsf{Prediction data}};
+
+\end{tikzpicture}

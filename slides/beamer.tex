@@ -1,0 +1,1036 @@
+\pdfminorversion=5 % to make it compatible with impressive
+\documentclass[10pt]{beamer} % add gray to options to make it B&W
+
+\def\myauthor{Adrià Arrufat}
+\def\mytitle{Multiple transforms for video coding}
+\def\myinstitute{Orange Labs and IETR/INSA --- Rennes, France}
+\def\mydate{11th December 2015}
+
+\usetheme{Berlin} % Antibes is also a nice theme
+\usecolortheme{lily}
+\usefonttheme{professionalfonts}
+% \setbeamercolor{frametitle}{fg=black}
+% \beamertemplateballitem
+\definecolor{blueish}{RGB}{51,51,179}
+\setbeamercolor{alerted text}{fg=blueish}
+% \setbeamertemplate{footline}[frame number]
+% add the frame number without destroying the template
+\expandafter\def\expandafter\insertshorttitle\expandafter{%
+  \insertshorttitle\hfill%
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\mydate}
+\beamertemplatenavigationsymbolsempty % remove bottom naviation bar
+
+\title{\mytitle}
+\author{\myauthor}
+\institute{\myinstitute}
+\date{\mydate \\ 
+	{\footnotesize Director: Olivier Déforges}\\
+	{\footnotesize Supervisor: Pierrick Philippe}\\
+	École Doctorale Matisse
+}
+
+\usepackage[T1]{fontenc}
+% \usepackage{mathptmx}
+\usepackage[scaled]{helvet}
+\usepackage{courier}
+\usepackage[helvet]{sfmath}
+\usepackage{MnSymbol} % for the \curvearrowupdown symbol
+\usepackage{nameref} % get section name
+\usepackage{subfig}
+\usepackage{ifthen}
+\usepackage{siunitx} % consistent units and number support
+\usepackage{multirow}
+\usepackage{diagbox}
+\usepackage{subfig} % subfloat environment
+\makeatletter
+\newcommand*{\currentname}{\@currentlabelname}
+\makeatother
+
+\usepackage{pgfplots,tikz}
+\pgfplotsset{compat=1.12}
+\usetikzlibrary{shapes,arrows,fit,calc,decorations.markings,intersections}
+\usepgfplotslibrary{fillbetween}
+
+\hypersetup{
+	unicode=true,
+	pdfencoding=auto,
+	pdfauthor={\myauthor},
+	pdftitle={\mytitle},
+	pdfsubject={video coding},
+	pdfkeywords={coding, image, video, transform},
+	pdfinfo={
+		CreationDate={D:20151017143523},
+		%ModDate={...}
+	},
+}
+
+\AtBeginSection[]
+{%
+	\frame<handout:0>
+	{%
+		\frametitle{Outline}
+		\tableofcontents[currentsection,hideallsubsections]
+	}
+}
+
+% custom definitions
+\def\x{\mathbf{x}}
+\def\X{\mathbf{X}}
+\def\c{\mathbf{c}}
+\def\A{\mathbf{A}}
+\def\D{\mathbf{D}}
+\def\Y{\mathbf{Y}}
+\def\U{\mathbf{U}}
+\def\V{\mathbf{V}}
+\def\I{\mathbf{I}}
+\def\P{\mathbf{P}}
+\def\C{\mathbf{C}}
+\def\y{\mathbf{y}}
+\def\a{\mathbf{a}}
+\def\L{\boldsymbol{\Lambda}}
+
+\usebackgroundtemplate{%
+\begin{tikzpicture}[remember picture, overlay]%
+	\node at (current page.center) {\includegraphics[width=0.9\paperwidth]{background}};%
+\end{tikzpicture}}
+
+\begin{document}
+
+\maketitle
+
+\usebackgroundtemplate{}
+\section{General introduction}
+\subsection{Context}
+\begin{frame}{Era of the Internet and videos}
+	\only<1>{
+	\begin{block}{Current situation}
+		\begin{itemize}
+			\item In 2014: around 70\% of Internet traffic was due to video
+				streaming
+			\item Forecast for 2019: more than 80\%\footnote{Cisco Visual
+				Networking Index: Forecast and Methodology, 2014--2019 White
+				Paper}
+		\end{itemize}
+	\end{block}
+	\begin{minipage}{0.49\textwidth}
+		\begin{block}{Continuous need for video compression}
+			\begin{itemize}
+				\item {\bf New formats} emerge
+				\item New applications require {\bf improved video quality}
+				\item Need to decrease the bit-rate to stream/store videos
+			\end{itemize}
+		\end{block}
+	\end{minipage}
+	\begin{minipage}{0.49\textwidth}
+		\includegraphics[width=\textwidth]{./figures/8K_UHD,_4K_SHD,_FHD_and_SD.eps}
+	\end{minipage}
+	}
+	\only<2>
+	{
+	\input{./figures/internet_forecast_plot.tex}
+	}
+\end{frame}
+
+\begin{frame}{Standardisation}
+	\begin{block}{Video coding standards}
+		\begin{itemize}
+			\item The work is inscribed inside a standardisation context
+			\item Latest standard, HEVC, was released in 2013
+		\end{itemize}
+	\end{block}
+	\begin{block}{Working context}
+		\begin{itemize}
+			\item Beginning of the standardisation phase
+			\item Exploratory phase with relaxed complexity constraints
+			\item Goal: achieve a suitable solution for a video coding
+				standard for around 2020.
+		\end{itemize}
+	\end{block}
+	\centering
+	\input{./figures/standards_timeline.tex}
+\end{frame}
+
+\subsection{Video coding fundamentals}
+
+\begin{frame}{The hybrid video coding scheme}
+	\framesubtitle{Used in most video coding standards}
+	\only<1>{\input{./figures/simp_hybrid_video_coding_scheme_1.tex}}
+	\only<2>{\input{./figures/simp_hybrid_video_coding_scheme_2.tex}}
+\end{frame}
+
+\section{Transform coding}
+
+\subsection{Introduction}
+
+\begin{frame}{Introduction to transforms}
+	\begin{block}{Definition}
+		\begin{itemize}
+			\item A transform is a mathematical function of a signal from a
+				representation domain to another, e.g.\ a rotation (2D)
+			\item A transform is a change of basis
+		\end{itemize}
+	\end{block}
+	\begin{minipage}{0.40\textwidth}
+		\begin{block}{Desirable properties}
+			\begin{itemize}
+				\item Low complexity
+					\begin{itemize}
+						\item real time
+						\item battery drain
+					\end{itemize}
+				\item Compact representation
+				\item Orthogonality
+					\begin{itemize}
+						\item perfect reconstruction
+						\item easily invertible
+					\end{itemize}
+			\end{itemize}
+		\end{block}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.58\textwidth}
+		\vspace{2em}
+		\input{./figures/transform_rotation_plot.tex}
+	\end{minipage}
+\end{frame}
+\begin{frame}{Separability and non-separability}
+	\begin{block}{Pros \& Cons}
+		\begin{minipage}{0.48\textwidth}
+			\begin{block}{Non-separable}
+				\begin{itemize}
+					\item Able to exploit any linear correlation within a
+						block
+					\item They require $\approx N^4$ operations
+				\end{itemize}
+			\end{block}
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.48\textwidth}
+			\begin{block}{Separable}
+				\begin{itemize}
+					\item Able to decorrelate pixels sharing
+						rows or columns
+					\item They require $\approx 2 N^3$ operations
+				\end{itemize}
+			\end{block}
+		\end{minipage}
+	\end{block}
+	\only<1>{\input{./figures/block_linearisation_1.tex}}
+	\only<2>{\input{./figures/block_linearisation_2.tex}}
+	\only<3>{\input{./figures/block_linearisation_3.tex}}
+\end{frame}
+
+\begin{frame}{What kind of data is processed by transforms?}
+	\framesubtitle{Particular case of HEVC}
+	\begin{minipage}{0.38\textwidth}
+		\begin{block}{Residual blocks}
+			\begin{itemize}
+				\item Difference between:
+					\begin{itemize}
+						\item original block
+						\item predicted block
+					\end{itemize}
+				\item Examples:\\[0.5em]
+					\includegraphics[width=0.25\textwidth]{./figures/res_ipm10.png}
+					\hfill
+					\includegraphics[width=0.25\textwidth]{./figures/res_ipm18.png}
+					\hfill
+					\includegraphics[width=0.25\textwidth]{./figures/res_ipm26.png}
+				\item The same transform is used for all of them
+			\end{itemize}
+		\end{block}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.58\textwidth}
+		\begin{block}{They are generated as different combinations of}
+			\begin{itemize}
+				\item transform units (TUs): 32, 16, 8, 4
+				\item predictions
+					\begin{itemize}
+						\item spatial or intra: 0,1,\ldots,34
+						\item temporal or inter
+					\end{itemize}
+			\end{itemize}
+		\end{block}
+		\begin{block}{The choice is made by the encoder}
+			\begin{itemize}
+				\item it selects the best combination in terms of:
+					\begin{itemize}
+						\item distortion
+						\item rate
+					\end{itemize}
+			\end{itemize}
+		\end{block}
+	\end{minipage}
+\end{frame}
+
+\begin{frame}{The intra prediction scheme}
+	\framesubtitle{Intra Prediction Modes (IPMs)}
+	\begin{minipage}{0.48\textwidth}
+		\input{./figures/pred-scheme.tex}
+	\end{minipage}
+	\begin{minipage}{0.48\textwidth}
+		\includegraphics[width=0.25\textwidth]{./figures/residuals_4_10.png}
+		\hfill \small Average residual for IPM 10
+
+		\vspace{1em}
+
+		\includegraphics[width=0.25\textwidth]{./figures/residuals_4_18.png}
+		\hfill \small Average residual for IPM 18
+
+		\vspace{1em}
+
+		\includegraphics[width=0.25\textwidth]{./figures/residuals_4_26.png}
+		\hfill \small Average residual for IPM 26
+	\end{minipage}
+\end{frame}
+
+\subsection{Transform design}
+
+\begin{frame}{How are transforms conceived?}
+	\begin{block}{The trade-off}
+		$J(\lambda) = \text{Distortion} + \lambda \; \text{Rate}$
+	\end{block}
+	\begin{block}{State of the art}
+		\begin{itemize}
+			\item KLT $\to$ Optimal transform assuming
+				\begin{itemize}
+					\item large amount of bits $\to$ High-resolution
+						quantisation hypothesis
+				\end{itemize}
+			\item Hypothesis for optimality is not valid in video
+				coding
+			\item RDOT $\to$ Alternative design approach$^{[1]}$
+				\begin{itemize}
+					\item focused on signal sparsity in the transform domain
+				\end{itemize}
+		\end{itemize}
+	\end{block}
+	\begin{block}{References}
+		\scriptsize
+		% $[1]$ A. Arrufat --- Non-separable mode-dependent transforms for intra
+		% coding in HEVC \\
+		$[1]$ O.G. Sezer --- Sparse orthonormal transforms for image
+		compression, 2008\\
+	\end{block}
+\end{frame}
+
+\begin{frame}{The rate-distortion optimised transform}
+	\begin{block}{RDOT design features}
+		\begin{itemize}
+			\item Minimise the distortion and the number of significant coefficients
+			\item Use a simple model for the bit-rate
+				\begin{itemize}
+					\item $\ell_0$ norm: number of non-zero coefficients
+				\end{itemize}
+			\item Sparsity suits video coding syntax elements
+		\end{itemize}
+	\end{block}
+	\begin{block}{The RDOT equation}
+		\vspace{-4em}
+		$$J(\lambda)=\sum_{\forall i}
+		\underbrace{{\Vert\x_i-\A^T\cdot
+		\c_i\Vert}^2}_{\text{Distortion}}
+		+\lambda
+		\underbrace{{\Vert\c_i\Vert}_0}_{\text{rate}}
+		\qquad\text{with}
+		\begin{cases}
+			\x_i & \text{\small residuals}\\
+			\A   & \text{\small transform}\\
+			\c_i & \text{\small transf.\ \& quant.\ coeff.}\\
+			\lambda & \text{\small Lagrange multiplier \tiny (PDF independent)}
+		\end{cases}$$
+	\end{block}
+	\vspace{-2em}
+	\begin{itemize}
+		\item iterative algorithm
+	\end{itemize}
+	\begin{block}{Objective}
+		\vspace{-0.5em}
+		\begin{itemize}
+			\item For a given set of residuals $\x_i$'s
+			\item Find the transform $\A$ that minimises $J(\lambda)$
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}{RDOT metric for different transforms on $4\times4$ residuals}
+	\vfill
+	\only<1>{\input{./figures/rdot_learning_4_1_plot.tex}}
+	\only<2>{\input{./figures/rdot_learning_4_2_plot.tex}}
+	\only<3>{\input{./figures/rdot_learning_4_3_plot.tex}}
+	\only<4>{\input{./figures/rdot_learning_4_4_plot.tex}}
+	\only<5>{\input{./figures/rdot_learning_4_5_plot.tex}}
+	\only<6>{\input{./figures/rdot_learning_4_6_plot.tex}}
+\end{frame}
+
+\begin{frame}{Experiment: Using the transforms in HEVC}
+	\only<1>{
+	\framesubtitle{Mode-dependent directional transforms (MDDT) for $4\times4$
+	and $8\times8$ TUs}
+	\begin{block}{Learning phase}
+		\vspace{-0.5em}
+		\begin{itemize}
+			\item Learn an adapted transform to each of the 35 IPMs (MDDT)
+			\item Replace the default HEVC transforms (no additional
+				signalling) with:
+				\begin{itemize}
+					\item KLT
+					\item RDOT
+				\end{itemize}
+		\end{itemize}
+	\end{block}
+	\vspace{-0.5em}
+	\begin{block}{Decoding scheme}
+		\vspace{0.5em}
+		\input{./figures/mddt_dec.tex}
+	\end{block}}
+	% \only<2>{
+	% \framesubtitle{Common Test Conditions used at JCT-VC}
+	% \begin{block}{Guidelines used to compare video encoding performances}
+	% 	\vspace{-0.5em}
+	% 	\begin{itemize}
+	% 		\item Encode sequences at 4 different qualities (QP 22, 27, 32,
+	% 			37)
+	% 		\item Measure the bit-rate savings (BD-rate) in \%. Example:
+	% 			-16.39\%
+	% 	\end{itemize}
+	% 	\vspace{-0.5em}
+	% 	\begin{center}
+	% 		\input{./figures/bd_rate_plot.tex}
+	% 	\end{center}
+	% \end{block}
+	% }
+\end{frame}
+
+\begin{frame}{MDDT performances on the HEVC test set}
+	\framesubtitle{Y BD-rate (\%) on AI for $4\times4$ and $8\times8$ blocks}
+	\input{./figures/mddt_perf_ai_plot.tex}
+\end{frame}
+
+\begin{frame}{Conclusions}
+	\begin{block}{Performance over HEVC}
+		\scriptsize
+		\centering
+		\begin{tabular}{c|rr|rr}
+			\multicolumn{1}{c}{}
+			& \multicolumn{2}{c|}{KLT}
+			& \multicolumn{2}{c}{RDOT} \\
+			\multicolumn{1}{c}{}
+			& \multicolumn{1}{c}{sep} & \multicolumn{1}{c|}{non-sep}
+			& \multicolumn{1}{c}{sep} & \multicolumn{1}{c}{non-sep} \\
+			\hline\hline
+			Y BD-rate & -0.39\% & -1.87\% & -1.02\% & -3.23\% \\
+			Encoding  & 108\% & 112\% & 108\% & 112\% \\
+			Decoding  & 105\% & 120\% & 105\% & 120\% \\
+			ROM &
+			\SI{8.20}{\kilo B} & \SI{148.75}{\kilo B} &
+			\SI{8.20}{\kilo B} & \SI{148.75}{\kilo B}\\
+		\end{tabular}
+	\end{block}
+
+	\begin{block}{Transform design}
+		\begin{itemize}
+			\item RDOT design provides significant better results than the KLT
+				design
+			\item Separability plays an important role on the performance
+				\begin{itemize}
+					\item complexity (encoding/decoding)
+					\item storage requirements
+					\item bit-rate savings
+				\end{itemize}
+		\end{itemize}
+	\end{block}
+	\begin{block}{Next steps}
+		\begin{itemize}
+			\item Find out the limits of this technique
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\section[MDTC]{Mode-dependent transform competition}
+
+\begin{frame}{Mode-dependent transform competition (MDTC)}
+	\begin{block}{Motivations}
+		\begin{itemize}
+			\item Residual variability even inside the same IPM
+			\item Significantly better results using RDOTs in MDDT than KLTs
+		\end{itemize}
+	\end{block}
+	\begin{block}{Multiple transform design for HEVC}
+		\begin{itemize}
+			\item Conservative approach $\to$ $1+2^N$ transforms
+				\begin{itemize}
+					\item default transform (DCT/DST) + additional RDOTs
+					\item signalling $\to$ flag plus fixed length codeword
+				\end{itemize}
+			\item Learning algorithm $\to$ based on the RDOT metric
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\subsection{Multiple transform design}
+\begin{frame}{\currentname}
+	\framesubtitle{Classic clustering method: classify/update}
+	\begin{minipage}{0.49\textwidth}
+		\small
+		\begin{block}{Using the RDOT metric}
+			\begin{itemize}
+				\item $J(\lambda)=\displaystyle\sum_{\forall i}
+					{\Vert\x_i-\A^T\cdot \c_i\Vert}^2
+					+\lambda {\Vert\c_i\Vert}_0$
+				\item It is used to evaluate a transform
+					\begin{itemize}
+						\scriptsize
+						\item compute the optimal transform for a set of
+							residuals
+						\item assign each residual to the transform that
+							minimises $J(\lambda)$
+					\end{itemize}
+				\item It allows creating an iterative clustering algorithm
+			\end{itemize}
+		\end{block}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.49\textwidth}
+		\includegraphics[width=\textwidth]{./figures/clustering.pdf}
+	\end{minipage}
+\end{frame}
+
+\begin{frame}{Learning results}
+	\only<1>{
+	\framesubtitle{Averaged RDOT metric for $4\times4$ blocks across all IPMs}
+	\vspace{1em}
+	\input{./figures/rdot_ntransforms_4_plot.tex}
+	}
+	% \only<2>{
+	% \framesubtitle{Averaged RDOT metric for $8\times8$ blocks}
+	% \vspace{1em}
+	% \input{./figures/rdot_ntransforms_8_plot.tex}
+	% }
+\end{frame}
+
+\subsection{Results in video coding on top of HEVC}
+
+\begin{frame}{\currentname}
+	\only<1>{
+	\framesubtitle{Y BD-rate (\%) for $4\times4$ blocks}
+	\vspace{1em}
+	\input{./figures/bdrate_ntransforms_4_plot.tex}
+	}
+	% \only<2>{
+	% \framesubtitle{Bit-rate savings for $8\times8$ blocks}
+	% \vspace{1em}
+	% \input{./figures/bdrate_ntransforms_8_plot.tex}
+	% }
+\end{frame}
+
+\begin{frame}{MDTC performances in detail}
+	\only<1>{
+	\begin{block}{Y BD-rate (\%) for High Performance System:
+		$4\times4:1+16\,\,\&\,\,8\times8:1+32$}
+		\input{./figures/mdtc_high_perf_plot.tex}
+	\end{block}}
+	\only<2>{\framesubtitle{Graphical improvement at QP 37 on BasketballDrill
+	(3 Mbps)}}
+	\only<2>{
+	\begin{figure}[tb]
+		\centering
+		\subfloat[Original]
+		{\includegraphics[width=0.30\linewidth]
+		{./figures/bdrill_orig_crop.png}}
+		\hfill
+		\subfloat[HEVC]
+		{\includegraphics[width=0.30\linewidth]
+		{./figures/bdrill_hevc_qp37_crop.png}}
+		\hfill
+		\subfloat[MDTC]
+		{\includegraphics[width=0.30\linewidth]
+		{./figures/bdrill_mdtc_qp37_crop.png}}
+		\caption{Comparison between HEVC and MDTC}
+	\end{figure}}
+\end{frame}
+
+\begin{frame}{Conclusions}
+	\centering
+	\begin{block}{Performances}
+		\scriptsize
+		\centering
+		\begin{tabular}{ccc}
+			\multicolumn{1}{c}{} &
+			\multicolumn{2}{c}{\multirow{2}{2.75cm}{\centering $4\times4$: 1+16 $\quad 8\times8$: 1+32}} \\
+			\multicolumn{1}{c}{} & & \\
+			\cline{2-3}
+			\multicolumn{1}{c}{} & \multicolumn{1}{c|}{sep.} & non-sep. \\
+			\hline
+			\hline
+			\multicolumn{1}{c|}{Y BD-rate} & \multicolumn{1}{c|}{-4.10\%}   & -7.10\% \\
+			\multicolumn{1}{c|}{Enc. Time} & \multicolumn{1}{c|}{800\%  }   & 2000\% \\
+			\multicolumn{1}{c|}{Dec. Time} & \multicolumn{1}{c|}{105\%  }   & 120\% \\
+			\multicolumn{1}{c|}{ROM}       & \multicolumn{1}{c|}{236.25 kB} & 4.51 MB \\
+		\end{tabular}
+	\end{block}
+	\begin{block}{Next steps}
+		\begin{itemize}
+			\item Important bit-rate savings thanks to transform competition
+			\item Non-separable transforms are very complex
+				\begin{itemize}
+					\item encoding/decoding complexity
+					\item storage requirements
+				\end{itemize}
+			\item Simplify MDTC systems to make them usable
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\section[MDTC simplifications]{Simplifications of the MDTC systems}
+
+\AtBeginSubsection[]
+{
+    \frame<handout:0>
+    {
+        \frametitle{Outline}
+        \tableofcontents
+        [sectionstyle=show/shaded,subsectionstyle=show/shaded/hide,
+		subsubsectionstyle=hide/hide/hide]
+    }
+}
+
+% \subsection{Incomplete transforms}
+
+% \begin{frame}{\currentname}
+% 	\begin{block}{Motivations}
+% 		\begin{itemize}
+% 			\item Use of non-separable transforms at low complexity
+% 			\item Focus on decoding complexity
+% 		\end{itemize}
+% 	\end{block}
+% 	\begin{minipage}{0.45\textwidth}
+% 		\centering
+% 		\only<1>{
+% 		\input{./figures/pred-scheme-6.tex}
+% 		}
+% 		\only<2>{
+% 		\includegraphics[width=0.8\linewidth]{./figures/dct8-bases.png}
+	% 	\small{DCT-II $8\times8$}
+	% 	}
+	% \end{minipage}
+	% \hfill
+	% \begin{minipage}{0.53\textwidth}
+	% 	\centering
+	% 	\only<1>{
+	% 	\includegraphics[width=0.6\linewidth]{./figures/avg-residual-s8-p06.png}
+		% \small{$8\times8$ residual from IPM 6}
+		% }
+		% \only<2>{
+		% \begin{block}{``Sparse reconstruction''}
+		% 	\centering
+		% 	\vspace{1em}
+		% 	\includegraphics[width=0.8\linewidth]{./figures/inc_tr_32.png}
+% 			{\small 32 $\;8\times8$ incomplete transforms for IPM 6}
+% 		\end{block}
+% 		\vspace{3em}
+% 		}
+% 	\end{minipage}
+% \end{frame}
+
+% \begin{frame}{Incomplete transform design}
+% 	\begin{block}{Motivations}
+% 		\begin{itemize}
+% 			\item Use of non-separable transforms at low complexity
+% 			\item Focus on decoding complexity
+% 		\end{itemize}
+% 	\end{block}
+% 	\begin{block}{Rate-distortion optimisation}
+% 	\vspace{-0.25cm}
+% 		$$J(\lambda)=\displaystyle\sum_{\forall i}
+% 		{\Vert\x_i-\A^T\cdot \c_i\Vert}^2
+% 		+\lambda {\Vert\c_i\Vert}_0$$
+% 	\end{block}
+% 	\vspace{-0.5cm}
+% 	\begin{block}{Particular case for incomplete transforms}
+% 		\begin{itemize}
+% 			\item ${\Vert\cdot\Vert}_0 = 1$
+% 			\item The first base vector can be seen as a pattern with a gain
+% 		\end{itemize}
+% 	\end{block}
+% 	\vspace{-0.25cm}
+% 	\begin{block}{Signalling advantages for HEVC}
+% 		\begin{itemize}
+% 			\item No need to transmit the last significant position when using
+% 				incomplete transforms
+% 		\end{itemize}
+% 	\end{block}
+% \end{frame}
+
+% \begin{frame}{Coding complexity reduction}
+% 	\begin{block}{Operations required for a DCT-II $8\times8$}
+% 		\begin{itemize}
+% 			\item DCT-II 1D: 12 multiplications and 29 additions
+% 			\item There are 8 rows and 8 columns
+% 			\item Total: 192 multiplications and 464 additions
+% 		\end{itemize}
+% 	\end{block}
+% 	\begin{block}{Incomplete transform}
+% 		\begin{itemize}
+% 			\item Direct: 64 multiplications and 63 additions
+% 			\item Inverse: 64 multiplications
+% 			\item Bonus:
+% 				\begin{itemize}
+% 					\item non-separable transform
+% 					\item less complex than the default transform
+% 				\end{itemize}
+% 		\end{itemize}
+% 	\end{block}
+% \end{frame}
+
+% \begin{frame}{Sparsity increase with the number of transforms}
+% 	\framesubtitle{with regards to the DCT at comparable distortion}
+% 	\centering
+% 	\input{./figures/it_num_zero_plot.tex}
+% \end{frame}
+
+% \begin{frame}{MDTC with incomplete transforms performances on the HEVC test set}
+% 	\framesubtitle{Y BD-rate (\%) for system using
+% 	$4\times4:1+8\quad\&\quad8\times8:1+32$}
+% 	\centering
+% 	\input{./figures/it_perf_4_8_plot.tex}
+% \end{frame}
+
+% \begin{frame}{Conclusions}
+% 	\begin{block}{Performances summary}
+% 		\centering
+% 		\small
+% 		\begin{tabular}{l|r|r|r}
+% 			& \multicolumn{1}{c|}{$4\times4$}
+% 			& \multicolumn{1}{c|}{$8\times8$}
+% 			& \multicolumn{1}{c}{$4\times4$ \& $8\times8$} \\
+% 			\hline\hline
+% 			Y BD-rate & -0.40\%  & -1.00\%  & -1.42\% \\
+% 			Encoding  & 210\%    & 250\%    & 340\% \\
+% 			Decoding  & \bf 97\% & \bf 99\% & \bf 100\% \\
+% 			ROM       & 4.38 kB  & 70 kB    & 74.38 kB\\
+% 		\end{tabular}
+% 	\end{block}
+% 	\begin{block}{Interesting points}
+% 		\begin{itemize}
+% 			\item Usage of multiple incomplete transforms to complement a main one
+% 			\item Non-separable transforms with reasonable complexity
+% 			\item Extend the system for bigger block sizes: 16 and 32
+% 		\end{itemize}
+% 	\end{block}
+% \end{frame}
+
+\subsection{ROM limitations on MDTC systems}
+
+\subsubsection{Different number of transforms per IPM}
+
+\begin{frame}{\currentname}
+	\begin{block}{Observations}
+		\begin{itemize}
+			\item Proposed MDTC uses the same number of transforms in all IPMs
+			\item IPM usage is not uniform: there are some favoured modes
+				(MPM)
+		\end{itemize}
+	\end{block}
+	\input{./figures/ipm_hist_bdrill_qp22_4_8_plot.tex}
+\end{frame}
+
+\subsubsection{Symmetries in intra prediction residuals}
+
+\begin{frame}{\currentname}
+	\begin{block}{Observations}
+		\begin{itemize}
+			\item Residuals coming from specific IPMs present geometrical
+				relations
+			\item With proper manipulation, transforms can be reused
+		\end{itemize}
+	\end{block}
+	\vspace{-0.5em}
+	\begin{minipage}{0.48\textwidth}
+		\begin{block}{Graphical interpretation}
+			\centering
+			\input{./figures/sym-pred-directions.tex}
+		\end{block}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.48\textwidth}
+		\begin{block}{Operations applied to blocks}
+			$$\X =
+			\begin{cases}
+				\A \, \x & \;\;\, 0 \le \text{IPM} \le 10 \\
+				\A \, \curvearrowupdown\x & 11 \le \text{IPM} \le 18 \\
+				\A \, \curvearrowupdown\x^T & 19 \le \text{IPM} \le 25 \\
+				\A \, \x^T & 26 \le \text{IPM} \le 34 \\
+			\end{cases}$$
+		\end{block}
+		\vfill$\,$
+	\end{minipage}
+\end{frame}
+
+\subsubsection{Results on the ROM --- BD-rate plane}
+
+\begin{frame}{\currentname}
+
+	\only<1>{\input{./figures/vmdtc_iter_plot_1.tex}}
+	\only<2>{\input{./figures/vmdtc_iter_plot_2.tex}}
+	\only<3>{\input{./figures/vmdtc_iter_plot_3.tex}}
+	\only<4>{\input{./figures/vmdtc_iter_plot_4.tex}}
+	
+\end{frame}
+
+\begin{frame}{Summary and conclusions}
+	\begin{block}{Systems on demand (performances on the HEVC test set)}
+		\vspace{1em}
+		\centering
+		\begin{tabular}{l|r|r|r|r}
+			System
+			& \multicolumn{1}{c|}{16 kB}
+			& \multicolumn{1}{c|}{32 kB}
+			& \multicolumn{1}{c|}{64 kB}
+			& \multicolumn{1}{c}{128 kB} \\
+			\hline\hline
+			Y BD-rate & -2.87\%  & -3.21\%  & -3.55\%  & -3.79\%\\
+			Encoding  & 372\%    & 481\%    & 761\%    & 1297\%\\
+			Decoding  & 105\%    & 105\%    & 105\%    & 105\%\\
+			% ROM       & 15.84 kB & 31.92 kB & 63.84 kB & 123.38 kB\\
+		\end{tabular}
+	\end{block}
+	\begin{block}{Remarkable points}
+		\begin{itemize}
+			\item ROM can be reduced up to a third of its original value
+			\item Bit-rate savings are maintained
+			\item Coding complexity remains more or less untouched
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\subsection{MDTC systems based on Discrete Trigonometric Transforms}
+
+\begin{frame}{Discrete Trigonometric Transforms (DTTs)}
+\framesubtitle{DCTs and DSTs}
+\begin{block}{DTT strengths}
+	\begin{itemize}
+		\item Fast algorithms
+			\begin{itemize}
+				\item number of operations in the order of $N\log_2 N$ instead
+					of $N^2$
+			\end{itemize}
+		\item Transform coefficients can be computed analytically
+			\begin{itemize}
+				\item notable reduction in storage requirements
+			\end{itemize}
+		\item They can be more easily pushed into a standard
+	\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Examples of $4\times4$ DTTs}
+	
+\begin{figure}[tb]
+	\centering
+	\subfloat[\bf DCT-II --- DCT-II]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_017_DCT_IIxDCT_II.png}}
+	\hfill
+	\subfloat[\bf DST-VII --- DST-VII]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_238_DST_VIIxDST_VII.png}}
+	\hfill
+	\subfloat[DCT-IV --- DCT-IV]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_051_DCT_IVxDCT_IV.png}}
+	\hfill
+	\subfloat[DCT-III --- DCT-IV]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_035_DCT_IIIxDCT_IV.png}}
+
+	\subfloat[DST-VII --- DCT-IV]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_227_DST_VIIxDCT_IV.png}}
+	\hfill
+	\subfloat[DST-V --- DCT-IV]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_067_DCT_VxDCT_IV.png}}
+	\hfill
+	\subfloat[DST-VII --- DCT-V]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_228_DST_VIIxDCT_V.png}}
+	\hfill
+	\subfloat[DST-VII --- DST-II]
+	{\includegraphics[width=0.20\linewidth]
+	{./figures/dtts_4/dtt_105_DCT_VIIxDST_II.png}}
+
+	% \caption{$4\times4$ DTT combination examples}
+	% \label{fig:some_dtts}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Designing a DTT-based MDTC system}
+	\begin{block}{Using the RDOT metric to classify}
+		\begin{itemize}
+			\item Transforms are already known (8 DCTs, 8 DSTs and their
+				inverses)
+			\item There are 256 possible transforms
+			% \item Combining horizontal and vertical transforms with geometrical pre-processing:
+			% 	\begin{itemize}
+			% 		\item 2048 combinations
+			% 		\item 256 combinations allowing a scanning after transforms
+			% 	\end{itemize}
+			\item Complexity of the classifying algorithm:
+				\begin{itemize}
+					\item selection the best combination of $N$ transforms
+						amongst 256
+					\item example for $N=4$:
+						\vspace{-0.5em}
+						\begin{align}
+							\begin{pmatrix}
+								256 \\
+								4
+							\end{pmatrix} =
+							\num{174792640}\approx\num{1.75e8}
+						\end{align}
+				\end{itemize}
+			\item The algorithm suboptimality increases with $N$
+			\item Symmetries and non-homogeneous repartition of transforms are
+				used with DTTs
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}{Performances of DTT-based MDTC systems}
+	\only<1>{\input{./figures/vmdtc_iter_plot_4.tex}}
+	\only<2>{\input{./figures/vmdtc_iter_plot_5.tex}}
+\end{frame}
+
+\begin{frame}{Summary}
+	\begin{block}{DTT-based MDTC system compared to RDOT-based ones}
+		\vspace{1em}
+		\begin{tabular}{l|r|r|r||r|r|r}
+			& \multicolumn{3}{c||}{DTT} & \multicolumn{3}{c}{RDOT}\\
+			System
+			% \multirow{2}{2cm}{\diagbox{System}{Measure}}
+			& \multicolumn{1}{c|}{1 kB}
+			& \multicolumn{1}{c|}{2 kB}
+			& \multicolumn{1}{c||}{4 kB}
+			& \multicolumn{1}{c|}{1 kB}
+			& \multicolumn{1}{c|}{2 kB}
+			& \multicolumn{1}{c}{4 kB} \\
+			\hline\hline
+			Y BD-rate & -1.28\% & -1.54\% & -1.86\% & -0.89\% & -1.25\% & -1.71\% \\
+			Encoding  &   164\% &   177\% &   230\% &   126\% &   150\% &   175\% \\
+			Decoding  &   100\% &   100\% &   100\% &   105\% &   105\% &   105\% \\
+		\end{tabular}
+	\end{block}
+	\begin{block}{Remarkable points}
+		\begin{itemize}
+			% \item No fast algorithms were used in this experiment
+			\item Almost 2\% bit-rate savings with low complexity
+			\item Performances could be higher by improving the learning
+				algorithm
+			\item DTTs make transforms for bigger block sizes more reasonable
+				\begin{itemize}
+					\item room for improvement when using $16\times16$ or even
+						$32\times32$ transforms
+				\end{itemize}
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\section{Conclusions}
+
+\subsection*{Conclusions}
+
+\begin{frame}{\currentname}
+	\begin{block}{Interest of multiple transforms for video coding}
+		\begin{itemize}
+			% \item Several working solutions have been implemented providing
+			% 	significant bit-rate savings over HEVC
+			\item This technique alone is able to achieve significant bit-rate
+				savings over HEVC, depending on complexity:
+				\begin{itemize}
+					\item non-separable transforms: up to 7\%
+					\item separable transforms: up to 4\%
+					\item DTTs: 2\% (in progress)
+					\item reminder: HEVC improves intra coding by 22\% over
+						AVC
+				\end{itemize}
+			\item Systematic on demand design with the RDOT metric
+				\begin{itemize}
+					\item the $\ell_0$ has proved to be a robust rate
+						approximation
+					\item independence from residuals PDF has been proved
+				\end{itemize}
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\subsection*{Perspectives and future work}
+
+\begin{frame}{\currentname}
+	\begin{block}{Immediate action points}
+		\begin{itemize}
+			\item extend the system
+				\begin{itemize}
+					\item bigger TU sizes
+					\item inter coding (gain in RA is about 2/3 of AI)
+					\item chroma
+				\end{itemize}
+			\item coding complexity
+				\begin{itemize}
+					\item incomplete transforms
+					\item exhaustive search might not be necessary
+				\end{itemize}
+			\item transform signalling and quantisation
+		\end{itemize}
+	\end{block}
+	\begin{block}{Multiple transforms in future video formats}
+		\begin{itemize}
+			\item Multiple transforms are part of the preliminary draft for a
+				future video coder by ITU and MPEG
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}{Publications}
+	\begin{block}{Conference papers}
+		\begin{itemize}
+			\item 2 VCIP 2014 presented papers
+			\item 2 ICIP 2015 presented papers
+			\item 1 ICASSP 2016 submitted paper
+		\end{itemize}
+	\end{block}
+	\begin{block}{Patents}
+		\begin{itemize}
+			\item 5 filled patent applications
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\usebackgroundtemplate{%
+\begin{tikzpicture}[remember picture, overlay]%
+	\node at (current page.center) {\includegraphics[width=0.9\paperwidth]{background}};%
+\end{tikzpicture}}
+
+\begin{frame}
+	\Huge
+	Thank you for your attention
+	\definecolor{protonblue}{RGB}{102,102,153}
+	\vspace{1em}
+	\Large
+	Questions?
+	\vspace{0.75cm}
+	\thispagestyle{empty}
+	\vfill
+	\begin{flushright}
+		\normalsize
+		Adrià Arrufat
+		\footnotesize{%
+			\bf \color{protonblue}\href{mailto:adria.arrufat@protonmail.ch}
+			{\texttt{adria.arrufat@protonmail.ch}}}
+	\end{flushright}
+\end{frame}
+
+\usebackgroundtemplate{}
+
+\end{document}

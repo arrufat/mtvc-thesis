@@ -1,0 +1,89 @@
+\begin{tikzpicture}[scale=1.0]
+\tikzstyle{every node}=[font=\scriptsize]
+	\tikzset{middlearrow/.style={
+		decoration={markings,
+			mark= at position 0.9 with {\arrow{#1}} ,
+		},
+		postaction={decorate}
+	}
+}
+
+	\def\startx{-0.75}
+	\def\starty{0}
+	\def\radius{3.0}
+	\def\startangle{45}
+	\def\colour{black}
+	\def\thickness{help lines}
+	\def\hdist{2}
+	\def\startangle{45}
+	\def\radius{0.707}
+	\def\thickness{black!50}
+	\def\selmode{ }
+	\pgfmathsetmacro{\nodebasesize}{1} % A node with a value of one will have this diameter
+	\pgfmathsetmacro{\nodeinnersep}{0.1}
+	\tikzstyle{bloq} = [rectangle, draw, text badly centered, minimum height=2em, inner sep=1mm]
+	\newcommand{\bloq}[4]{% position, name options,
+		label \node[bloq,#3](#2) at (#1) {\textsf{#4}};
+	}
+	\newcommand{\propnode}[5]{% position, name, options, value, label
+		\pgfmathsetmacro{\minimalwidth}{sqrt(#4*\nodebasesize)}
+		\node[#3,minimum width=\minimalwidth*1cm,inner sep=\nodeinnersep*0cm,circle,draw] 
+		(#2) at (#1) {#5};
+	}
+
+	\tikzstyle{frame} =
+	[rectangle, fill=white, draw, text centered, minimum width=4em, minimum height=2em]
+
+	\filldraw[fill=black!15, draw=black] (-6,-2) rectangle (-5,-1);
+	\filldraw[fill=black!15, draw=black] (-6,-1) rectangle (-5,0);
+	\filldraw[fill=black!15, draw=black] (-5,-1) rectangle (-4,0);
+	\filldraw[fill=black!15, draw=black] (-6,-2) rectangle (-5,-3);
+	\filldraw[fill=black!15, draw=black] (-4,0) rectangle (-3,-1);
+
+	\draw[step=0.25,help lines] (-6,-2) grid (-4,0);
+	\draw[step=0.25,help lines] (-6,-2) grid (-5,-3);
+	\draw[step=0.25,help lines] (-4,0) grid (-3,-1);
+	\draw[step=1,black,thick] (-6,-2) grid (-4,0);
+	\draw[step=1,black,thick] (-6,-2) grid (-5,-3);
+	\draw[step=1,black,thick] (-4,0) grid (-3,-1);
+
+	\foreach \direction in {2,4,...,34}
+	{%
+		% set the angle of current prediction direction 
+		\pgfmathsetmacro{\angle}{\startangle - (\direction - 2) * 180 / 32 + 180}
+		\ifthenelse{\direction < 18}{\def\oper{cos}}{\def\oper{sin}}
+		\pgfmathsetmacro{\radnew}{abs(\radius / \oper(\angle))}
+		% draw the prediction direction lines with the appropriate colour
+		\ifthenelse{\direction = 22}{\def\thickness{thick}\def\selmode{$k$}};
+		\draw[\colour, \thickness, middlearrow={latex reversed}] (-4.5,-1.5) --++ (\angle:\radnew);
+	}
+
+	\draw(-4.5,-0.85) node[above] {\small \textsf{IPM} $k$};
+
+	\draw[dotted](\startx,\starty -0.5) ++ (0,-2);
+
+	\bloq{\startx,\starty-1.25}{ipk}{text width=4.5em,fill=yellow!50}{IPM $k$}
+	\bloq{\startx-\hdist,\starty-2.25}{coefk}{text width=4.5em,fill=yellow!50}{coefficients}
+
+	\bloq{\startx+\hdist,\starty-1.25}{predk}{text width=4.5em}{prediction $k$}
+	\bloq{\startx,\starty-2.25}{trk}{text width=4.5em}{transform $k$}
+
+	\bloq{\startx+\hdist,\starty-2.25}{res}{text width=4.5em}{residual}
+
+	\bloq{\startx+2.3*\hdist,\starty-1.75}{rec}{text width=5em}{reconstruction}
+
+	\draw[-latex] (ipk) -- (predk);
+	
+	\draw[-latex] (ipk) -- (trk);
+
+	\draw[-latex] (coefk) -- (trk);
+
+	\draw[-latex] (trk) -- (res);
+
+	\propnode{\startx+3.25,-1.75}{add1}{fill=green!50}{0}{\small+}
+
+	\draw[-latex] (predk) --++ (1,0) -| (add1);
+	\draw[-latex] (res) --++ (1,0) -| (add1);
+	\draw[-latex] (add1) -- (rec);
+
+\end{tikzpicture}

@@ -1,0 +1,48 @@
+\definecolor{greenish}{RGB}{0,145,0}
+\begin{tikzpicture}[scale=0.6]
+
+    \def\startx{0}
+    \def\starty{0}
+    \def\radius{3.75}
+    \def\startangle{45}
+    \def\colour{black}
+
+	\draw (-0.55, 0.6) node {\footnotesize 0: \color{\colour}{Planar}};
+	\draw (-0.9, 0.5) node[below] {\footnotesize 1: \color{\colour}{DC}};
+
+	\newcounter{direction}
+	\setcounter{direction}{2}
+    \foreach \position in {-32, -26, -21, -17, -13, -9, -5, -2, 0, 2, 5, 9,
+	13, 17, 21, 26, 32, -26, -21, -17, -13, -9, -5, -2, 0, 2, 5, 9, 13, 17,
+	21, 26, 32}
+    {%
+        % set the angle of current prediction direction label
+        % \pgfmathsetmacro{\labelangle}{\startangle - (\thedirection - 2) * 180 / 32}
+
+        \ifthenelse{\thedirection < 19}
+		{\pgfmathsetmacro{\angle}{-\position / 32 * 45}}
+		{\pgfmathsetmacro{\angle}{-90 - \position / 32 * 45}}
+        % horizontal directions (vertical scanning)
+        % \ifthenelse{\thedirection > 5 \AND \thedirection < 15}{\def\colour{blue}};
+        % vertical directions (horizontal scanning)
+        % \ifthenelse{\thedirection > 21 \AND \thedirection < 31}{\def\colour{greenish}};
+        % draw the prediction direction lines with the appropriate colour
+        \draw[-latex,\colour] (\startx,\starty) --++ (\angle:\radius);
+
+		% only draw labels for pair IPMs
+		\def\odd{\intcalcMod{\thedirection}{2}}
+		\ifthenelse{\odd = 0}
+		{
+			\ifthenelse{\thedirection < 27}
+			{
+				\draw(\angle:\radius + 0.3) node[rotate=\angle] {\footnotesize \thedirection};
+			}{
+				\draw(\angle:\radius + 0.3) node[rotate=180+\angle] {\footnotesize \thedirection};
+			};
+		}{};
+
+		% update direction for next iteration
+		\stepcounter{direction}
+    }
+
+\end{tikzpicture}

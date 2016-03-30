@@ -1,0 +1,68 @@
+%% Creator: Inkscape inkscape 0.91, www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file '8K_UHD,_4K_SHD,_FHD_and_SD.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{6761.963bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.53187869)%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{8K_UHD,_4K_SHD,_FHD_and_SD.pdf}}%
+    \put(0.68624496,0.43508313){\color[rgb]{1,1,1}\makebox(0,0)[lb]{\smash{8K UHD}}}%
+    \put(0.07955722,0.51174725){\color[rgb]{0.26666667,0.26666667,0.26666667}\makebox(0,0)[rb]{\smash{4320}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{8K_UHD,_4K_SHD,_FHD_and_SD.pdf}}%
+    \put(0.34835491,0.21005971){\color[rgb]{1,1,1}\makebox(0,0)[lb]{\smash{4K UHD}}}%
+    \put(0.07955722,0.25620016){\color[rgb]{0.26666667,0.26666667,0.26666667}\makebox(0,0)[rb]{\smash{2160}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{8K_UHD,_4K_SHD,_FHD_and_SD.pdf}}%
+    \put(0.22389401,0.09056778){\color[rgb]{1,1,1}\makebox(0,0)[lb]{\smash{FHD}}}%
+    \put(0.07955722,0.12842661){\color[rgb]{0.26666667,0.26666667,0.26666667}\makebox(0,0)[rb]{\smash{1080}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{8K_UHD,_4K_SHD,_FHD_and_SD.pdf}}%
+    \put(0.07955722,0.07637072){\color[rgb]{0.26666667,0.26666667,0.26666667}\makebox(0,0)[rb]{\smash{576}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{8K_UHD,_4K_SHD,_FHD_and_SD.pdf}}%
+    \put(0.10629502,0.03023027){\color[rgb]{1,1,1}\makebox(0,0)[lb]{\smash{SD}}}%
+    \put(0.07955722,0.04442734){\color[rgb]{0.26666667,0.26666667,0.26666667}\makebox(0,0)[rb]{\smash{or 480}}}%
+    \put(0.07955722,0.00065306){\color[rgb]{0.26666667,0.26666667,0.26666667}\makebox(0,0)[rb]{\smash{0}}}%
+  \end{picture}%
+\endgroup%

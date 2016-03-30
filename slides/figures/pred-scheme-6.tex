@@ -1,0 +1,58 @@
+\begin{tikzpicture}[scale=1.5]
+
+	\tikzset{middlearrow/.style={
+		decoration={markings,
+			mark= at position 0.95 with {\arrow{#1}} ,
+		},
+		postaction={decorate}
+	}
+}
+
+	\def\startangle{45}
+	\def\radius{0.707106781}
+	\def\thickness{thin}
+	\def\colour{black}
+
+	\filldraw[fill=black!15, draw=black!75] (-6,-2) rectangle (-5,-1);
+	\filldraw[fill=black!15, draw=black!75] (-6,-1) rectangle (-5,0);
+	\filldraw[fill=black!15, draw=black!75] (-5,-1) rectangle (-4,0);
+	\filldraw[fill=black!15, draw=black!75] (-6,-2) rectangle (-5,-3);
+	\filldraw[fill=black!15, draw=black!75] (-4,0) rectangle (-3,-1);
+
+	\draw[step=0.25,help lines] (-6,-2) grid (-4,0);
+	\draw[step=0.25,help lines] (-6,-2) grid (-5,-3);
+	\draw[step=0.25,help lines] (-4,0) grid (-3,-1);
+	\draw[step=1,black!75,thick] (-6,-2) grid (-4,0);
+	\draw[step=1,black!75,thick] (-6,-2) grid (-5,-3);
+	\draw[step=1,black!75,thick] (-4,0) grid (-3,-1);
+
+	% \foreach \direction in {2,3,...,34}
+	% \newcounter{direction} % defined in a previously imported file
+	\setcounter{direction}{2}
+    \foreach \position in {-32, -26, -21, -17, -13, -9, -5, -2, 0, 2, 5, 9,
+	13, 17, 21, 26, 32, -26, -21, -17, -13, -9, -5, -2, 0, 2, 5, 9, 13, 17,
+	21, 26, 32}
+	{%
+		% set the angle of current prediction direction 
+		\pgfmathsetmacro{\angle}{\startangle - (\thedirection - 2) * 180 / 32 + 180}
+        \ifthenelse{\thedirection < 19}
+		{\pgfmathsetmacro{\angle}{-\position / 32 * 45 + 180}}
+		{\pgfmathsetmacro{\angle}{-90 - \position / 32 * 45 + 180}}
+		\ifthenelse{\thedirection < 18}{\def\oper{cos}}{\def\oper{sin}}
+		\pgfmathsetmacro{\radnew}{abs(\radius / \oper(\angle))}
+		\ifthenelse{\thedirection = 2 \OR \thedirection = 10 \OR \thedirection = 18 \OR \thedirection = 26 \OR \thedirection = 34}
+		{\draw[opacity=0] (-4.5,-1.5) --++ (\angle:\radnew + 0.15) node
+		[opacity=1] {\footnotesize \textsf{\thedirection}};}{}
+
+		\ifthenelse{\thedirection = 6}
+		{\draw[opacity=0] (-4.5,-1.5) --++ (\angle:\radnew + 0.15) node
+		[opacity=1, red] {\footnotesize \textsf{\thedirection}};}{}
+
+		\ifthenelse{\thedirection = 6}{\def\colour{red} \def\thickness{thick}}{}
+
+		\draw[middlearrow={latex reversed}, \thickness, \colour] (-4.5,-1.5) --++ (\angle:\radnew);
+
+		% update direction for next iteration
+		\stepcounter{direction}
+	}
+\end{tikzpicture}

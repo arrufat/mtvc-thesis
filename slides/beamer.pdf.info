@@ -1,0 +1,185 @@
+PageProps = {
+  1:	{
+	  'title': "Title",
+	},
+  2:	{
+	  'overview': False,
+	  'title': "General introduction",
+	},
+  3:	{
+	  'title': "Era of the Internet and Videos",
+	},
+  4:	{
+	  'overview': False,
+	  'title': "Era of the Internet and Videos",
+	},
+  5:	{
+	  'title': "Standardisation",
+	},
+  6:	{
+	  'title': "Hybrid video coding scheme",
+	},
+  7:	{
+	  'overview': False,
+	  'title': "Hybrid video coding scheme",
+	},
+  8:	{
+	  'overview': False,
+	  'title': "Transform coding",
+	},
+  9:	{
+	  'title': "Introduction to transforms",
+	},
+  10:	{
+	  'title': "Separability and non-separability",
+	},
+  11:	{
+	  'overview': False,
+	  'title': "Separability and non-separability",
+	},
+  12:	{
+	  'overview': False,
+	  'title': "Separability and non-separability",
+	},
+  13:	{
+	  'title': "What kind of data is processed by transforms?",
+	},
+  14:	{
+	  'title': "The intra prediction scheme",
+	},
+  15:	{
+	  'title': "How are transforms conceived",
+	},
+  16:	{
+	  'title': "The rate-distortion optimised transform",
+	},
+  17:	{
+	  'title': "RDOT metric for different transforms",
+	},
+  18:	{
+	  'overview': False,
+	  'title': "RDOT metric for different transforms",
+	},
+  19:	{
+	  'overview': False,
+	  'title': "RDOT metric for different transforms",
+	},
+  20:	{
+	  'overview': False,
+	  'title': "RDOT metric for different transforms",
+	},
+  21:	{
+	  'overview': False,
+	  'title': "RDOT metric for different transforms",
+	},
+  22:	{
+	  'overview': False,
+	  'title': "RDOT metric for different transforms",
+	},
+  23:	{
+	  'title': "Experiment: Using the transforms in HEVC",
+	},
+  24:	{
+	  'title': "MDDT performances on the HEVC test set",
+	},
+  25:	{
+	  'title': "Conclusions MDDT",
+	},
+  26:	{
+	  'overview': False,
+	  'title': "Mode-dependent transform competition",
+	},
+  27:	{
+	  'title': "Mode-dependent transform competition",
+	},
+  28:	{
+	  'title': "Multiple transform design",
+	},
+  29:	{
+	  'title': "Learning results",
+	},
+  30:	{
+	  'title': "Results in video coding on top of HEVC",
+	},
+  31:	{
+	  'title': "MDTC performances in detail",
+	},
+  32:	{
+	  'overview': False,
+	  'title': "MDTC performances in detail",
+	},
+  33:	{
+	  'title': "Conclusions MDTC",
+	},
+  34:	{
+	  'overview': False,
+	  'title': "Simplifications of the MDTC systems",
+	},
+  35:	{
+	  'overview': False,
+	  'title': "ROM limitations on MDTC systems",
+	},
+  36:	{
+	  'title': "Different number of transforms per IPM",
+	},
+  37:	{
+	  'title': "Symmetries in intra prediction residuals",
+	},
+  38:	{
+	  'title': "Results on the ROM - BD-rate plane",
+	},
+  39:	{
+	  'overview': False,
+	  'title': "Results on the ROM - BD-rate plane",
+	},
+  40:	{
+	  'overview': False,
+	  'title': "Results on the ROM - BD-rate plane",
+	},
+  41:	{
+	  'overview': False,
+	  'title': "Results on the ROM - BD-rate plane",
+	},
+  42:	{
+	  'title': "Summary and conclusions ROM limitations",
+	},
+  43:	{
+	  'overview': False,
+	  'title': "MDTC systems based on DTTs",
+	},
+  44:	{
+	  'title': "Discrete Trigonometric Transforms",
+	},
+  45:	{
+	  'title': "Examples of 4x4 DTTs",
+	},
+  46:	{
+	  'title': "Designing a DTT-based MDTC system",
+	},
+  47:	{
+	  'overview': False,
+	  'title': "Performances of DTT-based MDTC systems",
+	},
+  48:	{
+	  'title': "Performances of DTT-based MDTC systems",
+	},
+  49:	{
+	  'title': "Summary DTT-based MDTC systems",
+	},
+  50:	{
+	  'overview': False,
+	  'title': "Conclusions",
+	},
+  51:	{
+	  'title': "Conclusions",
+	},
+  52:	{
+	  'title': "Perspectives and future work",
+	},
+  53:	{
+	  'title': "Publications",
+	},
+  54:	{
+	  'title': "Thank you",
+	},
+}
