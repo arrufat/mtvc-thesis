@@ -3,6 +3,9 @@
 This is the `README` containing building instructions for the LaTeX document
 from source.
 
+The official version has been to the archiving system of the University of Rennes 1 and can be downloaded here:
+https://hal-univ-rennes1.archives-ouvertes.fr/UR1-THESES/tel-01303759
+
 ## Dependencies
 
 This document has been built on Arch Linux using the following packages:
