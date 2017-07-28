@@ -1,7 +1,7 @@
 \documentclass[11pt,a4paper,openright,twoside]{book}
 \def\myauthor{Adrià Arrufat}
 \def\mytitle{Multiple transforms for video coding}
-\def\usepdfs{1} % whether to use pre-generated pdfs with 'make figures'
+\def\usepdfs{0} % whether to use pre-generated pdfs with 'make figures'
 \def\useINSAcover{0} % whether to use the INSA front and back covers
 
 \usepackage[british,french]{babel} % locale settings
@@ -124,9 +124,8 @@
 	\includepdf[pages={4}]{./cover/cover-mtvc-thesis-INSA-UEB.pdf}
 }{\maketitle}
 
-\chapter*{Acknowledgements}
+\chapter{Acknowledgements}
 \label{cha:acknowledgements}
-\addcontentsline{toc}{chapter}{Acknowledgements}
 
 First of all, I would like to thank my PhD supervisor, Pierrick Philippe from
 Orange Labs.
@@ -182,9 +181,8 @@ Last but not least, I want to thank my parents, for bearing me on endless
 phone conversations almost every day and having supported me through all
 these years.
 
-\chapter*{French summary}
+\chapter{French summary}
 \label{cha:french_summary}
-\addcontentsline{toc}{chapter}{French summary}
 
 \selectlanguage{french}
 
@@ -322,9 +320,8 @@ des complexités compétitives.
 % \setcounter{tocdepth}{5}
 \tableofcontents
 \cleardoublepage
-\chapter*{List of Acronyms}
+\chapter{List of Acronyms}
 \label{cha:glossary}
-\addcontentsline{toc}{chapter}{List of Acronyms}
 \input{./acronyms.tex}
 \cleardoublepage
 \listoffigures
@@ -332,11 +329,9 @@ des complexités compétitives.
 \listoftables
 \cleardoublepage
 
-\mainmatter
-
-\chapter*{General introduction}
+\chapter{General introduction}
 \label{cha:general_intoduction}
-\addcontentsline{toc}{chapter}{\protect\numberline{}General introduction}
+% \addcontentsline{toc}{chapter}{\protect\numberline{}General introduction}
 
 \section*{Context}
 \label{sec:context}
@@ -495,6 +490,8 @@ amongst which:
 The thesis ends with a summary of the thesis objectives, followed by the
 conclusions and the perspectives for future work based on the use of multiple
 transforms for video coding.
+
+\mainmatter
 
 \acresetall % reset all acronym expansions
 
@@ -1199,7 +1196,9 @@ represent the reference and the experiment encodings, respectively.
 	{\includegraphics{./figures/bd_psnr_plot.pdf}}}
 	\hfill
 	\subfloat[\acs{BD}-rate]
-	{\includegraphics{./figures/bd_rate_plot.pdf}}
+	{\ifthenelse{\usepdfs = 0}
+	{\input{./figures/bd_rate_plot.tex}}
+	{\includegraphics{./figures/bd_rate_plot.pdf}}}
 	\caption{Schematic representation of rate-distortion plots using the
 	\acs{BD} measurements}
 	\label{fig:bdsnr_bdrate}
@@ -1457,8 +1456,8 @@ estimated and modelled.
 
 Next sections will study different transform design approaches based on
 different modellings of the rate constraint, namely the \acs{KLT} (\S
-\ref{sec:klt}) and the \acs{RDOT} (\S
-\ref{sec:rdot}).
+\ref{sec:klt}) and the \acs{RDOT} (\S \ref{sec:rdot}).
+
 \section{The Karhunen-Loève transform}
 \label{sec:klt}
 \index{KLT}
@@ -6250,9 +6249,6 @@ higher bitrate savings.
 \chapter{Conclusions and future work}
 \label{cha:conclusions_and_future_work}
 
-% remove chapter title from header from now on (unnumbered chapters)
-\pagestyle{empty}
-
 \section*{Thesis objectives}
 \label{sec:thesis_objectives}
 
@@ -6826,7 +6822,6 @@ boundary in kB.
 \printindex
 \label{cha:index}
 \addcontentsline{toc}{chapter}{Index}
-\thispagestyle{empty}
 
 % jury
 \ifthenelse{\useINSAcover = 1}
