@@ -14,7 +14,6 @@
 \usepackage{courier}
 % mathematical symbols
 \usepackage{amsmath, amssymb}
-\usepackage{MnSymbol} % for the \curvearrowupdown symbol
 \usepackage{tocbibind} % see http://www.howtotex.com/packages/how-to-add-bibliography-and-more-to-table-of-contents/
 \usepackage[Lenny]{fncychap} % style for chapters
 \ChTitleVar{\Huge\sf\bfseries}
@@ -4837,7 +4836,7 @@ average profiles and they relations using these imposed symmetries.
 		\pgfmathtruncatemacro{\directionm}{20-\direction}
 		%
 		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
-		$\quad\curvearrowupdown\directionm$
+		$\quad\updownarrow\directionm$
 		\raisebox{\depth}{\scalebox{1}[-1]{ % vertical mirror
 		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directionm.png}
 		}}
@@ -4857,13 +4856,13 @@ average profiles and they relations using these imposed symmetries.
 		%
 		\pgfmathtruncatemacro{\directionm}{20-\direction}
 		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
-		$\quad\curvearrowupdown\directionm$
+		$\quad\updownarrow\directionm$
 		\raisebox{\depth}{\scalebox{1}[-1]{ % vertical mirror
 		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directionm.png}
 		}}
 		%
 		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
-		$\quad\curvearrowupdown\directiontm^T$ % rotation 90 = transposition + mirror
+		$\quad\updownarrow\directiontm^T$ % rotation 90 = transposition + mirror
 		\includegraphics[scale=\scalefactor,angle=90]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiontm.png}
 		\par
 }
@@ -4894,7 +4893,7 @@ average profiles and they relations using these imposed symmetries.
 		\pgfmathtruncatemacro{\directionm}{20-\direction}
 		%
 		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
-		$\quad\curvearrowupdown\directionm$
+		$\quad\updownarrow\directionm$
 		\raisebox{\depth}{\scalebox{1}[-1]{ % vertical mirror
 		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directionm.png}
 		}}
@@ -4914,13 +4913,13 @@ average profiles and they relations using these imposed symmetries.
 		%
 		\pgfmathtruncatemacro{\directionm}{20-\direction}
 		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
-		$\quad\curvearrowupdown\directionm$
+		$\quad\updownarrow\directionm$
 		\raisebox{\depth}{\scalebox{1}[-1]{ % vertical mirror
 		\includegraphics[scale=\scalefactor]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directionm.png}
 		}}
 		%
 		\pgfmathtruncatemacro{\directiontm}{52-\directiont}
-		$\quad\curvearrowupdown\directiontm^T$ % rotation 90 = transposition + mirror
+		$\quad\updownarrow\directiontm^T$ % rotation 90 = transposition + mirror
 		\includegraphics[scale=\scalefactor,angle=90]{./figures/residuals_profile_\size x\size/residuals-\size x\size-\directiontm.png}
 		\par
 }
@@ -4942,8 +4941,8 @@ table~\ref{tab:relations_ipm_residuals}.
 	\begin{tabular}{c|ccc}
 	\bf IPM &
 	${(\cdot)}^T$ &
-	\bf $\curvearrowupdown(\cdot)$ &
-	\bf $\curvearrowupdown{(\cdot)}^T$ \\[1ex]
+	\bf $\updownarrow(\cdot)$ &
+	\bf $\updownarrow{(\cdot)}^T$ \\[1ex]
 	\hline\hline
 	\bf 0       & ---           & ---    & ---    \\
 	\bf 1       & ---           & ---    & ---    \\
@@ -4969,13 +4968,13 @@ depending on the \ac{IPM}:
 	\X =
 	\begin{cases}
 		\A \, \x & \;\;\, 0 \le \ac{IPM} \le 10 \\
-		\A \, \curvearrowupdown\x & 11 \le \ac{IPM} \le 18 \\
-		\A \, \curvearrowupdown\x^T & 19 \le \ac{IPM} \le 25 \\
+		\A \, \updownarrow\x & 11 \le \ac{IPM} \le 18 \\
+		\A \, \updownarrow\x^T & 19 \le \ac{IPM} \le 25 \\
 		\A \, \x^T & 26 \le \ac{IPM} \le 34 \\
 	\end{cases}
 \end{equation}
 Where $\A$ is a transform designed for the basic IPM set, $\x$ is the current
-residual and $\curvearrowupdown$ represents the horizontal mirroring operator
+residual and $\updownarrow$ represents the horizontal mirroring operator
 (top-bottom).
 Mirroring and transposing operations are used to make residuals compatible
 with the transforms learnt for the basic IPM set.
@@ -5383,9 +5382,8 @@ In order to expand the number of transforms available, three geometrical
 operations have been considered:
 \begin{itemize}
 	\item Residual transposition: $\x^T$
-	\item Horizontal mirroring: $\curvearrowupdown\x$
-	% \item Vertical mirroring: $\overset{\curvearrowleftright}{\x}$
-	\item Vertical mirroring: $\overset{{\rotatebox[origin=c]{-90}{\curvearrowupdown}}}{\x}$
+	\item Horizontal mirroring: $\updownarrow\x$
+	\item Vertical mirroring: $\overset{\leftrightarrow}{\x}$
 \end{itemize}
 These operators can be combined, resulting into $2^3=8$ different operations.
 By applying these pixel permutations to the residual before the transform

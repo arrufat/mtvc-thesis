@@ -38,12 +38,18 @@ complexity, especially on the decoder side.
 
 This document has been built on Arch Linux using the following packages:
 
-- `bash` (for generating plots)
-- `texlive-core`
-- `texlive-fontsextra`
+- `gnuplot` (for generating plots)
+- `texlive-basic`
+- `texlive-bin`
+- `texlive-binextra`
+- `texlive-fontsrecommended`
+- `texlive-langfrench`
+- `texlive-latex`
 - `texlive-latexextra`
+- `texlive-latexrecommended`
+- `texlive-luatex`
+- `texlive-mathscience`
 - `texlive-pictures`
-- `texlive-science`
 
 ## Building the document
 
@@ -83,6 +89,3 @@ It performs:
 - make reset (cleans up all temporary files)
 
 The result should be a file named `mtvc-thesis.pdf`.
-
-
-
