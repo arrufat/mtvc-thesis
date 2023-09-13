@@ -43,6 +43,7 @@ This document has been built on Arch Linux using the following packages:
 - `texlive-bin`
 - `texlive-binextra`
 - `texlive-fontsrecommended`
+- `texlive-fontutils`
 - `texlive-langfrench`
 - `texlive-latex`
 - `texlive-latexextra`

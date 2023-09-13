@@ -1,4 +1,4 @@
-\pdfminorversion=5 % to make it compatible with impressive
+% \pdfminorversion=5 % to make it compatible with impressive
 \documentclass[10pt]{beamer} % add gray to options to make it B&W
 
 \def\myauthor{Adrià Arrufat}
@@ -34,7 +34,6 @@
 \usepackage[scaled]{helvet}
 \usepackage{courier}
 \usepackage[helvet]{sfmath}
-\usepackage{MnSymbol} % for the \curvearrowupdown symbol
 \usepackage{nameref} % get section name
 \usepackage{subfig}
 \usepackage{ifthen}
@@ -759,8 +758,8 @@
 			$$\X =
 			\begin{cases}
 				\A \, \x & \;\;\, 0 \le \text{IPM} \le 10 \\
-				\A \, \curvearrowupdown\x & 11 \le \text{IPM} \le 18 \\
-				\A \, \curvearrowupdown\x^T & 19 \le \text{IPM} \le 25 \\
+				\A \, \updownarrow\x & 11 \le \text{IPM} \le 18 \\
+				\A \, \updownarrow\x^T & 19 \le \text{IPM} \le 25 \\
 				\A \, \x^T & 26 \le \text{IPM} \le 34 \\
 			\end{cases}$$
 		\end{block}
